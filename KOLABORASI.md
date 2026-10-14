@@ -108,6 +108,7 @@ Sebelum menyunting file bersama (bagian 1), tambahkan baris di sini, commit, dan
 | File | Dikunci oleh | Sejak | Alasan |
 | --- | --- | --- | --- |
 | `package.json`, lockfile, semua config (bagian 1), `.env.example`, `src/types/` | daliondroid | 2026-10-15 | T-02 scaffolding (dikunci lebih dulu oleh farrelzaki atas nama daliondroid) |
+| `supabase/migrations/` | farrelzaki | 2026-10-15 | T-03 skema DB awal |
 
 Agen **tidak boleh** menyunting file bersama yang sedang dikunci orang lain.
 
