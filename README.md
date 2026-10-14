@@ -34,13 +34,13 @@ Folder `Data/` berisi dataset yang sudah dikumpulkan dan diaudit (14 Okt 2026):
 
 ## Menjalankan
 
-Belum tersedia — menunggu scaffolding (task T-02 di `KOLABORASI.md`).
+Belum tersedia — menunggu scaffolding (task T-02 milik dalion di `KOLABORASI.md`).
 
 ## Cara Kerja Dengan Agen AI
 
 Repo ini memakai aturan kerja untuk agen AI (Claude Code, Codex, Cursor, Copilot, Gemini/Antigravity):
 
-- `KOLABORASI.md` (di-commit) — protokol identitas, papan task, aturan Git mode `satu-branch`.
+- `KOLABORASI.md` (di-commit) — anggota (farrelzaki, dalion), wilayah file, papan task, aturan Git mode `multi-branch`.
 - `AGENTS.md`, `TASK.md`, `PROJECT_STATE.md` (di-gitignore, pribadi) — aturan kerja agen, rincian task, dan catatan antarsesi.
   Anggota baru menyalin ketiga file ini ke root proyek masing-masing setelah clone.
 
