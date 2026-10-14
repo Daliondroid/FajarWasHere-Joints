@@ -1,76 +1,50 @@
-# SuperTemplate
+# Cocokin! 🎮🎓
 
-Template awal untuk proyek perangkat lunak yang dikerjakan bersama agen AI (Claude Code,
-Codex, Cursor, Copilot, Gemini/Antigravity). Isinya bukan kode, melainkan aturan kerja
-dan kerangka dokumen agar agen bekerja terarah dan aman, anggota tim tidak saling
-bertabrakan, dan pekerjaan bisa dilanjutkan antarsesi. Bisa dipakai untuk proyek solo
-maupun tim, untuk keperluan apa pun.
+*"Cari yang Cocok, Uji Rasanya, Tembus Kampus Impianmu!"*
 
----
+Platform web untuk siswa SMA/SMK/MA kelas 12: cek kecocokan jurusan (minat RIASEC/O*NET), estimasi peluang
+masuk PTN lewat SNBP/SNBT berbasis data resmi snpmb.id dan PDDikti, serta *Test Drive* 60 detik untuk
+merasakan cara berpikir mahasiswa di 5.150 prodi dari 146 PTN. Dibuat untuk Hackathon JOINTS UGM 2026.
 
-## Struktur File
-
-### 1. File Bersama (Di-commit ke Git)
-Semua anggota tim dan AI memiliki panduan yang sama:
-
-- `KOLABORASI.md` — Blok isian anggota (`panggilan = "username GitHub"`), protokol identitas ("Kamu siapa?"), peran & wilayah file, papan task bersama, aturan Git (`satu-branch` / `multi-branch`), aturan commit/push oleh agen, dan log kerja.
-- `README.md` — Petunjuk awal proyek.
-- `.gitignore` — Mengabaikan file kerja pribadi, `.env`, dependency, dsb.
-- `docs/PRD.md` — Apa yang dibangun, alasan, dan batasan produk.
-- `docs/ARSITEKTUR.md` — Stack, struktur folder, kontrak API bersama, dan konvensi.
-- `docs/DESIGN_SYSTEM.md` — Token visual dan komponen UI (opsional).
-- `docs/referensi/` — Tempat menyimpan brief/SRS/aset dari luar (hanya dibaca AI).
-
-### 2. File Pribadi (Di-gitignore, Milik Masing-Masing Orang)
-Tiap developer punya file ini secara lokal agar tidak saling menimpa commit:
-
-- `AGENTS.md` — Aturan kerja permanen AI pribadi dan konteks proyek.
-- `TASK.md` — Rincian langkah task aktif & checklist yang sedang dikerjakan orang tersebut.
-- `PROJECT_STATE.md` — Catatan memori antarsesi dan siapa pengguna aktif di perangkat tersebut.
-
-*(Catatan: `CLAUDE.md` tidak diperlukan lagi karena Claude Code versi modern sudah otomatis membaca `AGENTS.md`).*
+**Status:** tahap dokumen dan dataset. Belum ada kode aplikasi.
 
 ---
 
-## Cara Memakai
+## Dokumen
 
-### Skenario A: Kerja Tim
+| File | Isi |
+| --- | --- |
+| `docs/PRD.md` | Apa yang dibangun: tujuan, fitur (F-xx), aturan bisnis (BR-xx), data, milestone |
+| `docs/ARSITEKTUR.md` | Stack (Next.js 15, Tailwind, PostgreSQL/Supabase, Gemini 2.5 Flash), daftar endpoint, konvensi |
+| `docs/DESIGN_SYSTEM.md` | Token visual 8-bit pixel × palet Google, komponen, microcopy |
+| `docs/referensi/PRD_Cocokin_v2.1.md` | PRD sumber lengkap (13 halaman, rumus skoring, deklarasi AI) |
+| `Data/README.md`, `Data/AUDIT_DATA.md` | Penjelasan dan audit dataset |
+| `KOLABORASI.md` | Anggota, papan task, aturan Git, log kerja |
 
-1. **Pemilik Proyek:**
-   - Salin folder template ini ke proyek baru, lalu jalankan `git init`.
-   - Buka `KOLABORASI.md` dan isi blok **Isi Di Sini Dulu** di paling atas:
-     ```ini
-     [anggota]
-     budi = "budi-santoso"
-     sari = "sari-dev"
+## Dataset
 
-     [git]
-     mode = "satu-branch"
-     branch_utama = "main"
-     ```
-   - Lengkapi tabel **Peran Dan Wilayah** dan daftar task awal di **Papan Task**.
-   - Minta AI membuat commit awal dan push ke repository GitHub/GitLab.
-2. **Anggota Lain (Setelah Clone):**
-   - Clone repo proyek dari Git.
-   - Karena file pribadi (`AGENTS.md`, `TASK.md`, `PROJECT_STATE.md`) di-gitignore, salin ketiga file tersebut dari template ini ke root proyek masing-masing.
-3. **Mulai Bekerja dengan AI:**
-   - Di sesi chat pertama, AI akan otomatis membaca `KOLABORASI.md` dan bertanya:
-     > *"Sebelum mulai, kamu siapa? (1) budi (2) sari ..."*
-   - Pilih namamu. AI hanya akan mengerjakan task yang terdaftar atas namamu dan hanya menyentuh file di wilayahmu.
-   - AI yang melakukan commit, push, dan merge mengikuti aturan di `KOLABORASI.md`, termasuk menulis pesan commit otomatis dari perubahan.
+Folder `Data/` berisi dataset yang sudah dikumpulkan dan diaudit (14 Okt 2026):
 
-### Skenario B: Proyek Mandiri (Solo)
+- **Resmi:** snpmb.id (prodi, daya tampung, peminat, diterima, kuota sekolah SNBP 2026), PDDikti (akreditasi,
+  profil, kompetensi prodi), Kepmendikdasmen 102/M/2025 (mapel pendukung).
+- **Instrumen minat:** O*NET Interest Profiler (CC BY 4.0), diterjemahkan ke Bahasa Indonesia.
+- **Estimasi:** skor UTBK per prodi (wajib diberi label di UI).
+- **Sintetis:** rekam jejak alumni (hanya untuk demo).
+- **Kode referensi:** `Data/kode/skoring_referensi.py`, `Data/kode/classify.py`.
 
-1. Salin folder ini, hapus `KOLABORASI.md` jika tidak diperlukan.
-2. Isi `AGENTS.md` bagian *Konteks Proyek*.
-3. Minta AI melengkapi `docs/PRD.md` dan `docs/ARSITEKTUR.md`, lalu mulai scaffolding.
+## Menjalankan
 
----
+Belum tersedia — menunggu scaffolding (task T-02 di `KOLABORASI.md`).
 
-## Catatan untuk Pemeliharaan Template
+## Cara Kerja Dengan Agen AI
 
-Jika folder template ini sendiri ingin disimpan sebagai repository Git template publik/privat:
-Jalankan perintah ini sekali agar file-file pribadi tetap terunggah di repository template induk:
-```bash
-git add -f AGENTS.md TASK.md PROJECT_STATE.md
-```
+Repo ini memakai aturan kerja untuk agen AI (Claude Code, Codex, Cursor, Copilot, Gemini/Antigravity):
+
+- `KOLABORASI.md` (di-commit) — protokol identitas, papan task, aturan Git mode `satu-branch`.
+- `AGENTS.md`, `TASK.md`, `PROJECT_STATE.md` (di-gitignore, pribadi) — aturan kerja agen, rincian task, dan catatan antarsesi.
+  Anggota baru menyalin ketiga file ini ke root proyek masing-masing setelah clone.
+
+## Atribusi
+
+Instrumen minat dari O*NET Resource Center (CC BY 4.0). Koordinat dari OpenStreetMap Nominatim
+(© OpenStreetMap contributors, ODbL). Data seleksi dari snpmb.id dan PDDikti Kemdiktisaintek.

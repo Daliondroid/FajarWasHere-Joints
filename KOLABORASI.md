@@ -14,8 +14,7 @@ Seluruh file ini merujuk anggota memakai **panggilan** dari blok ini.
 
 ```ini
 [anggota]
-panggilan1 = "username-github"
-panggilan2 = "username-github"
+farrelzaki = "farrelzaki"
 # tambah baris lain jika anggota lebih banyak
 
 [git]
@@ -50,8 +49,10 @@ Kolom *Panggilan* harus sama persis dengan panggilan di blok *Isi Di Sini Dulu*.
 
 | Panggilan | Peran | Wilayah (folder/file milik) |
 | --- | --- | --- |
-| panggilan1 | _[mis. Backend]_ | _[mis. `app/Services/`, `database/`]_ |
-| panggilan2 | _[mis. Frontend]_ | _[mis. `resources/js/`]_ |
+| farrelzaki | Semua peran (sementara dikerjakan sendiri) | Seluruh repo |
+
+Saat anggota bertambah, bagi wilayah mengikuti peran di PRD sumber bagian 8: Frontend (UI halaman 1–13),
+Fullstack & AI (`/api/*`, impor data, Gemini), UI/UX & Pitch Deck (aset desain), Data/Video/QA (`Data/`, skenario uji).
 
 **File bersama** (menyentuh semua orang, wajib dikunci dulu di bagian 4):
 `package.json` / `composer.json` / lockfile, konfigurasi (`.env.example`, config build/deploy), migrasi database, kontrak API di `docs/ARSITEKTUR.md`, dan file ini.
@@ -77,8 +78,17 @@ Aturan untuk agen:
 
 | ID | Task | Pemilik | Status | Branch | Area / file | Update | Catatan |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| T-01 | _[contoh: Endpoint login]_ | _[panggilan]_ | `[ ]` | `fitur/panggilan-T-01` | _[`app/Http/…`]_ | _[YYYY-MM-DD]_ | |
-| T-02 | _[contoh: Halaman dashboard]_ | - | `[ ]` | | | | |
+| T-01 | Sesuaikan dokumen template dengan PRD v2.1 | farrelzaki | `[x]` | `main` | `docs/`, `README.md`, `KOLABORASI.md` | 2026-10-15 | |
+| T-02 | Scaffolding Next.js 15 + Tailwind + NextAuth Google | farrelzaki | `[ ]` | `main` | `src/`, config | | F-01, F-02 |
+| T-03 | Skema DB + skrip impor dataset `Data/` ke PostgreSQL/Supabase | farrelzaki | `[ ]` | `main` | | | TBD-01, TBD-05 |
+| T-04 | Modul skoring murni + test (provinsi, keketatan, eligibilitas, peluang, kecocokan) | farrelzaki | `[ ]` | `main` | | | BR-01–BR-10 |
+| T-05 | API `/api/school`, `/api/prodi`, `/api/peluang`, `/api/kecocokan` | farrelzaki | `[ ]` | `main` | | | Kontrak di ARSITEKTUR bagian 4 |
+| T-06 | UI 8-bit: beranda, CTA, wizard preferensi (Hal. 1–7) | farrelzaki | `[ ]` | `main` | | | F-01–F-07 |
+| T-07 | Dashboard rekomendasi (Hal. 8) | farrelzaki | `[ ]` | `main` | | | F-08 |
+| T-08 | Katalog prodi + Test Drive (Hal. 12–13), API `/api/test-drive` | farrelzaki | `[ ]` | `main` | | | F-10, F-11 |
+| T-09 | Chatbot Gemini 2.5 Flash + function calling (Hal. 9–11), API `/api/chat` | farrelzaki | `[ ]` | `main` | | | F-09 |
+| T-10 | QA 10 skenario siswa + tinjau soal 3–5 prodi demo | farrelzaki | `[ ]` | `main` | | | R-02 |
+| T-11 | Pitch deck 10 slide + video demo 2 menit | farrelzaki | `[ ]` | `main` | | | Materi lomba |
 
 Rincian langkah task (rencana, checklist) ditulis di `TASK.md` pribadi, bukan di sini.
 
@@ -177,13 +187,9 @@ git push -u origin fitur/<panggilan>-<ID>
 Setiap anggota punya satu subbagian berjudul panggilannya. **Append-only**, satu baris per entri, terbaru di bawah. Hanya sunting subbagian milikmu.
 Format: `- YYYY-MM-DD · T-xx · apa yang dikerjakan · hasil/verifikasi · catatan untuk tim`
 
-### Log panggilan1
+### Log farrelzaki
 
-- _[belum ada]_
-
-### Log panggilan2
-
-- _[belum ada]_
+- 2026-10-15 · T-01 · isi docs/PRD, ARSITEKTUR, DESIGN_SYSTEM, README, papan task dari PRD v2.1 · tinjau diff · PRD sumber dipindah ke docs/referensi/
 
 ## 9. Mengubah File Ini
 
