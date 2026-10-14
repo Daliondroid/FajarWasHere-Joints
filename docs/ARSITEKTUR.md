@@ -42,13 +42,20 @@ Diagram lengkap: PRD sumber bagian 7.
 
 ## 3. Struktur Kode
 
-<!-- Isi setelah scaffolding. Jelaskan tanggung jawab tiap folder. -->
-
 ```
-Data/          dataset sumber (hanya dibaca; diimpor ke DB) + kode referensi Python
-docs/          PRD, arsitektur, design system, referensi
-src/           TBD saat scaffolding
-tests/         TBD
+Data/                 dataset sumber (hanya dibaca; diimpor ke DB) + kode referensi Python
+docs/                 PRD, arsitektur, design system, referensi
+public/               aset statis publik (ikon, gambar, svg)
+scripts/              skrip CLI (impor data supabase, seed)
+supabase/migrations/  migrasi skema database PostgreSQL
+src/
+  app/                Next.js 15 App Router (halaman 1–13, layout, globals.css)
+  app/api/            Route handler API backend (/api/*)
+  components/         Komponen UI antarmuka (8-bit arcade, form, kartu, modal, dll.)
+  styles/             Styling tambahan atau CSS module jika diperlukan
+  types/              Kontrak tipe bersama TypeScript antara frontend & backend
+  lib/                Modul server, klien Supabase, NextAuth, Gemini, dan skoring murni
+tests/                Unit test Vitest (skoring, aturan seleksi, integrasi)
 ```
 
 Aturan batas:

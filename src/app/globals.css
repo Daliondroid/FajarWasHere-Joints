@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #4285F4;
+  --color-danger: #EA4335;
+  --color-warning: #FBBC05;
+  --color-success: #34A853;
+  --color-border: #1A1A1A;
+  --color-retro-dark: #202124;
+  --color-retro-light: #F8F9FA;
+
+  --font-pixel: var(--font-pixel), 'Press Start 2P', monospace;
+  --font-body: var(--font-body), 'Outfit', 'Inter', sans-serif;
+
+  --shadow-pixel: 4px 4px 0px #1A1A1A;
+  --shadow-pixel-sm: 2px 2px 0px #1A1A1A;
+  --shadow-pixel-lg: 6px 6px 0px #1A1A1A;
+}
+
+:root {
+  --background: #F8F9FA;
+  --foreground: #1A1A1A;
+  --border-color: #1A1A1A;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #202124;
+    --foreground: #F8F9FA;
+    --border-color: #1A1A1A;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), system-ui, sans-serif;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 8-Bit Retro UI Utility Classes */
+.pixel-box {
+  border: 3px solid #1A1A1A;
+  box-shadow: 4px 4px 0px #1A1A1A;
+  border-radius: 0px;
+}
+
+.pixel-box-sm {
+  border: 2px solid #1A1A1A;
+  box-shadow: 2px 2px 0px #1A1A1A;
+  border-radius: 0px;
+}
+
+.pixel-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #1A1A1A;
+  box-shadow: 4px 4px 0px #1A1A1A;
+  border-radius: 0px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.05s ease, box-shadow 0.05s ease;
+}
+
+.pixel-btn:hover {
+  filter: brightness(1.05);
+}
+
+.pixel-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #1A1A1A;
+}
+
+.pixel-badge {
+  display: inline-flex;
+  align-items: center;
+  border: 2px solid #1A1A1A;
+  box-shadow: 2px 2px 0px #1A1A1A;
+  border-radius: 0px;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
