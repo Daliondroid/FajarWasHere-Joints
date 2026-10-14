@@ -106,7 +106,7 @@ Rumus lengkap: PRD sumber bagian 6.2.
 
 | ID | Aturan |
 | --- | --- |
-| BR-01 | **Satu provinsi SNBP:** dua pilihan prodi valid hanya jika salah satu PTN berada di provinsi sekolah (atau hanya satu pilihan). Provinsi selalu dibandingkan lewat `ak_provinsi_crosswalk.csv`; provinsi PTN dari `ak_ptn.csv`, bukan PDDikti. Pelanggaran → badge merah. |
+| BR-01 | **Satu provinsi SNBP:** dua pilihan prodi valid hanya jika salah satu PTN berada di provinsi sekolah (atau hanya satu pilihan). Provinsi selalu dibandingkan lewat `ak_provinsi_crosswalk.csv`; provinsi PTN dari `ak_ptn.csv`, bukan PDDikti. PTN dengan dua provinsi di data SNPMB (UI: DKI Jakarta & Jawa Barat; Universitas Papua: Papua Barat & Papua Barat Daya) dianggap cocok bila salah satunya sama — *interpretasi, perlu dicek ke aturan resmi*. Pelanggaran → badge merah. |
 | BR-02 | **Keketatan SNBP** = diterima ÷ peminat (data 2025, tampilkan juga rata-rata 3 tahun). **SNBT** = daya tampung ÷ peminat. |
 | BR-03 | **Label keketatan:** < 5% Sangat Ketat 🔴 · 5–<15% Ketat 🟡 · 15–<35% Sedang 🔵 · ≥ 35% Longgar 🟢. |
 | BR-04 | **Gerbang eligibilitas:** peringkat paralel > kuota eligible jurusan sekolah → "Belum masuk kuota eligible — fokus ke SNBT"; peluang SNBP tidak dihitung. Sekolah tanpa data PDSS/akreditasi → perkiraan dari persen akreditasi (A 40%, B 25%, C/tidak terakreditasi 5%) dengan pemberitahuan. |
@@ -135,7 +135,7 @@ Seluruh dataset ada di `Data/` (detail: PRD sumber bagian 6.1, `Data/README.md`,
 | Profil & akreditasi prodi | `ak_pddikti_prodi.csv`, `ak_profil_prodi_ptn.json`, `ak_akreditasi_map.csv` | 95% prodi tercocokkan ke PDDikti |
 | Instrumen minat | `form_minat_riasec_items.csv`, `form_minat_config.json`, `rumpun_riasec.csv` | O*NET, CC BY 4.0 — wajib atribusi |
 | Aturan seleksi | `aturan_seleksi_2026.json`, `mapel_pendukung_snbp.csv` | Config mesin aturan |
-| Soal | `ak_soal_spesifik_prodi_ptn_v2.csv`, `ak_soal_umum_prodi.csv`, `bank_soal_simulasi.csv` | Versi 1 sudah dihapus dari repo |
+| Soal | `ak_soal_spesifik_prodi_ptn_v2.csv`, `ak_soal_umum_prodi.csv`, `bank_soal_simulasi.csv` | Versi 1 sudah dihapus. Bank soal berisi 269 soal (35 UTBK + 3 per rumpun × 78), bukan 425 seperti di PRD sumber |
 | Pengguna | Dibuat aplikasi | Akun Google, preferensi, nilai rapor/TKA/TO — **data sensitif anak di bawah umur** |
 | Alumni | `ak_alumni_sintetis_snbp.csv` | **Sintetis**, demo saja |
 

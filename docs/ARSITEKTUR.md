@@ -105,9 +105,11 @@ Jangan diputuskan agen sendiri; tanyakan pemiliknya.
 
 | Kode | Pertanyaan | Pemilik |
 | --- | --- | --- |
-| TBD-05 | Skema tabel DB dan cara impor CSV (skrip seed) — dirancang di T-03. | farrelzaki |
+| — | Tidak ada keputusan terbuka saat ini. | — |
 
-Sudah diputuskan (2026-10-15): TBD-01 Supabase hosted · TBD-02 Vitest · TBD-03 Vercel · TBD-04 `snake_case`.
+Sudah diputuskan (2026-10-15): TBD-01 Supabase hosted · TBD-02 Vitest · TBD-03 Vercel · TBD-04 `snake_case` ·
+TBD-05 skema di `supabase/migrations/20261015000000_skema_awal.sql`, akses lewat supabase-js di server (tanpa ORM),
+impor dengan `scripts/impor_data.py` (Python stdlib + `psql \copy`), config aturan tetap file JSON di `Data/`.
 
 ## 8. Risiko Teknis
 
