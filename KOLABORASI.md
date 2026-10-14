@@ -15,7 +15,7 @@ Seluruh file ini merujuk anggota memakai **panggilan** dari blok ini.
 ```ini
 [anggota]
 farrelzaki = "farrelzaki"
-dalion = "Daliondroid"
+daliondroid = "daliondroid"
 # tambah baris lain jika anggota lebih banyak
 
 [git]
@@ -50,13 +50,13 @@ Kolom *Panggilan* harus sama persis dengan panggilan di blok *Isi Di Sini Dulu*.
 
 | Panggilan | Peran | Wilayah (folder/file milik) |
 | --- | --- | --- |
-| dalion | Frontend & UI/UX: scaffolding, halaman 1–13, komponen 8-bit, pitch deck | `src/app/**` **kecuali** `src/app/api/**` · `src/components/` · `src/styles/` · `public/` · `docs/DESIGN_SYSTEM.md` |
+| daliondroid | Frontend & UI/UX: scaffolding, halaman 1–13, komponen 8-bit, pitch deck | `src/app/**` **kecuali** `src/app/api/**` · `src/components/` · `src/styles/` · `public/` · `docs/DESIGN_SYSTEM.md` |
 | farrelzaki | Backend, Data & AI: DB, impor data, skoring, API, auth, Gemini, QA | `src/app/api/**` · `src/lib/` (skoring, db, auth, gemini, beserta test-nya) · `supabase/` kecuali migrasi · `scripts/` · `Data/` · `docs/PRD.md` |
 
 Struktur folder di atas adalah rencana; T-02 (scaffolding) wajib membuatnya persis seperti ini.
-**Pengecualian T-02:** dalion boleh membuat kerangka kosong (folder, file placeholder) di wilayah farrelzaki selama scaffolding — disetujui farrelzaki 2026-10-15.
+**Pengecualian T-02:** daliondroid boleh membuat kerangka kosong (folder, file placeholder) di wilayah farrelzaki selama scaffolding — disetujui farrelzaki 2026-10-15.
 
-UI memanggil backend hanya lewat endpoint di kontrak API. Selama endpoint belum ada, frontend memakai **mock lokal** di wilayah dalion sesuai bentuk kontrak (bagian 5).
+UI memanggil backend hanya lewat endpoint di kontrak API. Selama endpoint belum ada, frontend memakai **mock lokal** di wilayah daliondroid sesuai bentuk kontrak (bagian 5).
 
 **File bersama** (menyentuh semua orang, wajib dikunci dulu di bagian 4):
 `package.json` / lockfile, konfigurasi (`tsconfig.json`, `next.config.*`, `tailwind.config.*`, `postcss.config.*`, `vitest.config.*`, config lint, `.env.example`, config Vercel), migrasi database (`supabase/migrations/`), tipe kontrak API bersama (`src/types/`), kontrak API di `docs/ARSITEKTUR.md`, `README.md`, dan file ini.
@@ -85,16 +85,16 @@ Aturan untuk agen:
 | T-01 | Sesuaikan dokumen template dengan PRD v2.1 | farrelzaki | `[x]` | `main` | `docs/`, `README.md`, `KOLABORASI.md` | 2026-10-15 | |
 | T-12 | Putuskan pertanyaan terbuka; selaraskan dokumen dataset | farrelzaki | `[x]` | `main` | `docs/`, `Data/*.md` | 2026-10-15 | |
 | T-16 | Ubah tim jadi 2 orang, mode multi-branch, bagi task | farrelzaki | `[x]` | `main` | `KOLABORASI.md`, `README.md` | 2026-10-15 | |
-| T-02 | Scaffolding Next.js 15 + TypeScript + Tailwind + Vitest, struktur folder sesuai bagian 1, token `DESIGN_SYSTEM.md`, `.env.example`; isi ARSITEKTUR bagian 3 | dalion | `[ ]` | `fitur/dalion-T-02` | semua file bersama, kerangka `src/` | 2026-10-15 | Malam ini. File bersama sudah dikunci (bagian 4). Memblokir T-04, T-13, dan semua UI |
-| T-06 | UI 8-bit: navbar, beranda, CTA, modal login, wizard preferensi (Hal. 1–7) | dalion | `[ ]` | | `src/app/`, `src/components/` | | F-01–F-07; data dari mock sampai T-05 siap |
-| T-07 | UI dashboard rekomendasi (Hal. 8) | dalion | `[ ]` | | `src/app/`, `src/components/` | | F-08 |
-| T-08 | UI katalog prodi + Test Drive (Hal. 12–13) | dalion | `[ ]` | | `src/app/`, `src/components/` | | F-10, F-11 |
-| T-15 | UI banner chat, chatbot, drawer menu (Hal. 9–11) | dalion | `[ ]` | | `src/app/`, `src/components/` | | F-09 |
-| T-11 | Pitch deck 10 slide + video demo 2 menit | dalion | `[ ]` | | di luar repo | | Materi lomba; data dan hasil QA dari farrelzaki |
+| T-02 | Scaffolding Next.js 15 + TypeScript + Tailwind + Vitest, struktur folder sesuai bagian 1, token `DESIGN_SYSTEM.md`, `.env.example`; isi ARSITEKTUR bagian 3 | daliondroid | `[ ]` | `fitur/daliondroid-T-02` | semua file bersama, kerangka `src/` | 2026-10-15 | Malam ini. File bersama sudah dikunci (bagian 4). Memblokir T-04, T-13, dan semua UI |
+| T-06 | UI 8-bit: navbar, beranda, CTA, modal login, wizard preferensi (Hal. 1–7) | daliondroid | `[ ]` | | `src/app/`, `src/components/` | | F-01–F-07; data dari mock sampai T-05 siap |
+| T-07 | UI dashboard rekomendasi (Hal. 8) | daliondroid | `[ ]` | | `src/app/`, `src/components/` | | F-08 |
+| T-08 | UI katalog prodi + Test Drive (Hal. 12–13) | daliondroid | `[ ]` | | `src/app/`, `src/components/` | | F-10, F-11 |
+| T-15 | UI banner chat, chatbot, drawer menu (Hal. 9–11) | daliondroid | `[ ]` | | `src/app/`, `src/components/` | | F-09 |
+| T-11 | Pitch deck 10 slide + video demo 2 menit | daliondroid | `[ ]` | | di luar repo | | Materi lomba; data dan hasil QA dari farrelzaki |
 | T-03 | Skema DB (migrasi) + skrip impor dataset `Data/` ke Supabase | farrelzaki | `[ ]` | `fitur/farrelzaki-T-03` | `supabase/`, `scripts/` | 2026-10-15 | TBD-05. Rancangan skema boleh dimulai sebelum T-02; skrip impor setelah T-02 di-merge |
 | T-04 | Modul skoring murni + test (provinsi, keketatan, eligibilitas, peluang, kecocokan) | farrelzaki | `[ ]` | | `src/lib/` | | BR-01–BR-10; setelah T-02 |
 | T-13 | Login Google (NextAuth), sesi 30 hari, smart routing, hapus akun | farrelzaki | `[ ]` | | `src/app/api/auth/`, `src/lib/` | | F-02, F-16; setelah T-02 |
-| T-05 | API `/api/school`, `/api/prodi`, `/api/peluang`, `/api/kecocokan` + kontrak di ARSITEKTUR | farrelzaki | `[ ]` | | `src/app/api/`, `src/lib/` | | Kontrak disepakati dengan dalion sebelum dibekukan |
+| T-05 | API `/api/school`, `/api/prodi`, `/api/peluang`, `/api/kecocokan` + kontrak di ARSITEKTUR | farrelzaki | `[ ]` | | `src/app/api/`, `src/lib/` | | Kontrak disepakati dengan daliondroid sebelum dibekukan |
 | T-14 | API `/api/test-drive` (soal berlapis, reveal, refleksi) | farrelzaki | `[ ]` | | `src/app/api/`, `src/lib/` | | F-11 |
 | T-09 | Chatbot Gemini 2.5 Flash + function calling, API `/api/chat` | farrelzaki | `[ ]` | | `src/app/api/`, `src/lib/` | | F-09 |
 | T-10 | QA 10 skenario siswa + tinjau soal 3–5 prodi demo | farrelzaki | `[ ]` | | `src/lib/`, `Data/` | | R-02 |
@@ -107,7 +107,7 @@ Sebelum menyunting file bersama (bagian 1), tambahkan baris di sini, commit, dan
 
 | File | Dikunci oleh | Sejak | Alasan |
 | --- | --- | --- | --- |
-| `package.json`, lockfile, semua config (bagian 1), `.env.example`, `src/types/` | dalion | 2026-10-15 | T-02 scaffolding (dikunci lebih dulu oleh farrelzaki atas nama dalion) |
+| `package.json`, lockfile, semua config (bagian 1), `.env.example`, `src/types/` | daliondroid | 2026-10-15 | T-02 scaffolding (dikunci lebih dulu oleh farrelzaki atas nama daliondroid) |
 
 Agen **tidak boleh** menyunting file bersama yang sedang dikunci orang lain.
 
@@ -200,7 +200,7 @@ git push -u origin fitur/<panggilan>-<ID>
 Setiap anggota punya satu subbagian berjudul panggilannya. **Append-only**, satu baris per entri, terbaru di bawah. Hanya sunting subbagian milikmu.
 Format: `- YYYY-MM-DD · T-xx · apa yang dikerjakan · hasil/verifikasi · catatan untuk tim`
 
-### Log dalion
+### Log daliondroid
 
 - _[belum ada]_
 
@@ -208,7 +208,7 @@ Format: `- YYYY-MM-DD · T-xx · apa yang dikerjakan · hasil/verifikasi · cata
 
 - 2026-10-15 · T-01 · isi docs/PRD, ARSITEKTUR, DESIGN_SYSTEM, README, papan task dari PRD v2.1 · tinjau diff · PRD sumber dipindah ke docs/referensi/
 - 2026-10-15 · T-12 · keputusan OQ/TBD dicatat di docs; Data/README & AUDIT diselaraskan ke Cocokin!; soal v1 dihapus · JSON & py dicek valid · tenggat hackathon masih belum diketahui
-- 2026-10-15 · T-16 · tambah anggota dalion, mode multi-branch, bagi wilayah & task, siapkan branch fitur/dalion-T-02 dan fitur/farrelzaki-T-03, kunci file bersama untuk T-02 · disetujui farrelzaki; **dalion mohon konfirmasi** (bagian 9 butir 4)
+- 2026-10-15 · T-16 · tambah anggota daliondroid, mode multi-branch, bagi wilayah & task, siapkan branch fitur/daliondroid-T-02 dan fitur/farrelzaki-T-03, kunci file bersama untuk T-02 · atas perintah farrelzaki
 
 ## 9. Mengubah File Ini
 
