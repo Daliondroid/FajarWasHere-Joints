@@ -91,7 +91,7 @@ Aturan untuk agen:
 | T-08 | UI katalog prodi + Test Drive (Hal. 12–13) | daliondroid | `[ ]` | | `src/app/`, `src/components/` | | F-10, F-11 |
 | T-15 | UI banner chat, chatbot, drawer menu (Hal. 9–11) | daliondroid | `[ ]` | | `src/app/`, `src/components/` | | F-09 |
 | T-11 | Pitch deck 10 slide + video demo 2 menit | daliondroid | `[ ]` | | di luar repo | | Materi lomba; data dan hasil QA dari farrelzaki |
-| T-03 | Skema DB (migrasi) + skrip impor dataset `Data/` ke Supabase | farrelzaki | `[ ]` | `fitur/farrelzaki-T-03` | `supabase/`, `scripts/` | 2026-10-15 | TBD-05. Rancangan skema boleh dimulai sebelum T-02; skrip impor setelah T-02 di-merge |
+| T-03 | Skema DB (migrasi) + skrip impor dataset `Data/` ke Supabase | farrelzaki | `[~]` | `fitur/farrelzaki-T-03` | `supabase/`, `scripts/` | 2026-10-15 | TBD-05. Rancangan skema boleh dimulai sebelum T-02; skrip impor setelah T-02 di-merge |
 | T-04 | Modul skoring murni + test (provinsi, keketatan, eligibilitas, peluang, kecocokan) | farrelzaki | `[ ]` | | `src/lib/` | | BR-01–BR-10; setelah T-02 |
 | T-13 | Login Google (NextAuth), sesi 30 hari, smart routing, hapus akun | farrelzaki | `[ ]` | | `src/app/api/auth/`, `src/lib/` | | F-02, F-16; setelah T-02 |
 | T-05 | API `/api/school`, `/api/prodi`, `/api/peluang`, `/api/kecocokan` + kontrak di ARSITEKTUR | farrelzaki | `[ ]` | | `src/app/api/`, `src/lib/` | | Kontrak disepakati dengan daliondroid sebelum dibekukan |
