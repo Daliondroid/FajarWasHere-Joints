@@ -1,0 +1,5 @@
+1. hapus aturan harus push, commit dan lainnya harus minimal dicek dulu sama satu anggota lain
+2. hapus aturan yang push commit dan lainnya tidak boleh dilakukan oleh ai atau agent, justru sebaiknya dilakukan mereka dengan aturan tertentu agar rapih dan tidak bertabrakan dan agar pesan commit lebih sesuai secara otomatis oleh ai
+3. biar masukin nama gampang. di kolaborasi.md buatin di paling atas kayak choirun="masukan username github" gitu dong biar mereka gak ribet mereka nyari2 harus masukin dimana. nanti dibawahnya kayak nge link gitu sama itu
+4. jangan pakai mode competition jadinya pake mode standard
+5. dibuat netral saja jangan terlalu cenderung ke arah manapun kayak template ini masih condong ke arah lomba dan projek kampus

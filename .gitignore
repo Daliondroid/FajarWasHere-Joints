@@ -1,0 +1,30 @@
+# File agen pribadi (milik masing-masing anggota, tidak dibagikan)
+# Di repo template, tambahkan sekali dengan: git add -f AGENTS.md TASK.md PROJECT_STATE.md
+AGENTS.md
+TASK.md
+PROJECT_STATE.md
+CLAUDE.md
+CLAUDE.local.md
+
+# Rahasia
+.env
+.env.*
+!.env.example
+
+# Dependency
+node_modules/
+vendor/
+.venv/
+__pycache__/
+
+# Build
+dist/
+build/
+.next/
+coverage/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+*.log

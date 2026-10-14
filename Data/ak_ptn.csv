@@ -1,0 +1,147 @@
+﻿id_ptn,kode_ptn,nama_ptn,jenis,is_ptnbh,is_ptkin,web,alamat,provinsi,kode_prov,kota,provinsi_2,ikut_snbp,ikut_snbt,lat,lon,presisi_lokasi
+111,1111,UNIVERSITAS SYIAH KUALA,akademik,1,0,https://pmb.usk.ac.id/,"Universitas Syiah Kuala, Darusslam, Banda Aceh.Jl. T. Nyak Arief Darussalam Banda Aceh 23111",Aceh,060000,Kota Banda Aceh,,1,1,5.5692573,95.3712262,kampus_osm
+112,1112,UNIVERSITAS MALIKUSSALEH,akademik,0,0,http://pmb.unimal.ac.id/,"Universitas Malikussaleh Jalan Cot Tengku Nie, Reuleut, Kabupaten Aceh Utara",Aceh,060000,Kabupaten Aceh Utara,,1,1,5.2315086,96.9815290,kampus_osm
+113,1113,UNIVERSITAS TEUKU UMAR,akademik,0,0,https://pmb.utu.ac.id/,,Aceh,060000,Kabupaten Aceh Barat,,1,1,4.1446000,96.1999781,kampus_osm
+114,1114,UNIVERSITAS SAMUDRA,akademik,0,0,https://camaba.unsam.ac.id/,,Aceh,060000,Kota Langsa,,1,1,4.4560053,97.9721465,kampus_osm
+115,1115,ISBI ACEH,akademik,0,0,http://pmb.isbiaceh.ac.id/,,Aceh,060000,Kabupaten Aceh Besar,,1,1,5.3542491,95.4961508,kampus_osm
+116,1116,UIN AR-RANIRY,akademik,0,1,https://ar-raniry.ac.id/admisi/,,Aceh,060000,Kota Banda Aceh,,1,1,5.5779188,95.3669475,kampus_osm
+121,1121,UNIVERSITAS SUMATERA UTARA,akademik,1,0,https://www.usu.ac.id/id/penerimaan,Jalan Dr T Mansyur no 9 Medan,Sumatera Utara,070000,Kota Medan,,1,1,3.5613218,98.6568033,kampus_osm
+122,1122,UNIVERSITAS NEGERI MEDAN,akademik,0,0,https://www.unimed.ac.id/pmb/,"Jalan Willem Iskandar Pasar V Medan Estate, Kec.Medan Tembung, Medan, Sumatera Utara 20221 (061) 6613365",Sumatera Utara,070000,Kota Medan,,1,1,3.6090493,98.7170656,kampus_osm
+123,1123,UIN SUMATERA UTARA,akademik,0,1,https://maba.uinsu.ac.id/,,Sumatera Utara,070000,Kabupaten Deli Serdang,,1,1,3.6045402,98.7218310,kampus_osm
+124,1124,UIN SYEKH ALI HASAN AHMAD ADDARY PADANGSIDIMPUAN,akademik,0,1,https://www.uinsyahada.ac.id,,Sumatera Utara,070000,Kota Padangsidimpuan,,1,1,1.3726960,99.2727172,kampus_osm
+131,1131,UNIVERSITAS RIAU,akademik,0,0,https://registrasiulang.unri.ac.id/ ,"Jln. Bina Widya Km. 12,5 Simpang Baru Panam, Pekanbaru",Riau,090000,Kota Pekanbaru,,1,1,0.4768967,101.3834493,kampus_osm
+132,1132,UIN SULTAN SYARIF KASIM,akademik,0,1,https://sireg.uin-suska.ac.id, Jl.H.R Subrantas KM.18 No.155 Panam Pekanbaru,Riau,090000,Kota Pekanbaru,,1,1,0.5105311,101.4369311,kampus_osm
+133,1133,UNIVERSITAS MARITIM RAJA ALI HAJI,akademik,0,0,https://penerimaan.umrah.ac.id/,"Jln. Politeknik Km 24, SenggarangTanjungpinang-29115Provinsi Kepulauan Riau",Kepulauan Riau,310000,Kota Tanjungpinang,,1,1,0.8697150,104.4760635,kampus_osm
+141,1141,UNIVERSITAS ANDALAS,akademik,1,0,https://pmb.unand.ac.id/,,Sumatera Barat,080000,Kota Padang,,1,1,-0.9148733,100.4627099,kampus_osm
+142,1142,UNIVERSITAS NEGERI PADANG,akademik,1,0,https://spmb.unp.ac.id,"Jln. Prof. Dr. Hamka Air Tawar Padang - Sumatera Barat, Telepon: 0751-7053902 ",Sumatera Barat,080000,Kota Padang,,1,1,-0.8973952,100.3499581,kampus_osm
+143,1143,ISI PADANG PANJANG,akademik,0,0,https://www.isi-padangpanjang.ac.id/,,Sumatera Barat,080000,Kota Padang Panjang,,1,1,-0.4654636,100.3932441,kampus_osm
+144,1144,UIN IMAM BONJOL PADANG,akademik,0,1,https://pmb.uinib.ac.id/,,Sumatera Barat,080000,Kota Padang,,1,1,-0.8101577,100.3729228,kampus_osm
+151,1151,UNIVERSITAS JAMBI,akademik,0,0,https://regis.unja.ac.id/,"Jl. Raya Jambi - Muara Bulian KM.15 Mendalo Darat, Jambi Kodepos 36361. Telp. (0741) 583377",Jambi,100000,Kabupaten Muaro Jambi,,1,1,-1.6123473,103.5186977,kampus_osm
+152,1152,UIN SULTAN THAHA SAIFUDDIN JAMBI,akademik,0,1,https://pmb.uinjambi.ac.id/,,Jambi,100000,Kota Jambi,,1,1,-1.6296917,103.6077806,kampus_osm
+161,1161,UNIVERSITAS BENGKULU,akademik,0,0,https://portal.unib.ac.id,"Jl. W.R. Supratman, Kandang Limun, Bengkulu, 38371 (0736) 21170",Bengkulu,260000,Kota Bengkulu,,1,1,-3.7586670,102.2713932,kampus_osm
+171,1171,UNIVERSITAS SRIWIJAYA,akademik,1,0,https://pmb.unsri.ac.id/,"Jl. Raya Palembang - Prabumulih KM 32, Indralaya, Ogan Ilir 30662",Sumatera Selatan,110000,Kabupaten Ogan Ilir,,1,1,-3.2255315,104.6459991,kampus_osm
+172,1172,UIN RADEN FATAH,akademik,0,1,https://registrasi.radenfatah.ac.id,,Sumatera Selatan,110000,Kota Palembang,,1,1,-2.9645754,104.7479851,kampus_osm
+181,1181,UNIVERSITAS BANGKA BELITUNG,akademik,0,0,https://pmb.ubb.ac.id,,Kepulauan Bangka Belitung,290000,Kabupaten Bangka,,1,1,-2.0695764,106.0763199,kampus_osm
+191,1191,UNIVERSITAS LAMPUNG,akademik,0,0,http://simanila.unila.ac.id/,Jl.Prof.Dr.Sumantri Brojonegoro No.1 Gedongmeneng Bandar Lampung 35145,Lampung,120000,Kota Bandar Lampung,,1,1,-5.3777549,105.2523923,kampus_osm
+192,1192,INSTITUT TEKNOLOGI SUMATERA,akademik,0,0,https://pmb.itera.ac.id/,,Lampung,120000,Kabupaten Lampung Selatan,,1,1,-5.3667682,105.3149309,kampus_osm
+193,1193,UIN RADEN INTAN LAMPUNG,akademik,0,1,https://www.radenintan.ac.id/,,Lampung,120000,Kota Bandar Lampung,,1,1,-5.3807526,105.3037647,kampus_osm
+194,1194,UIN MAHMUD YUNUS BATUSANGKAR,akademik,0,1,https://pmb.uinmybatusangkar.ac.id,,Sumatera Barat,080000,Kabupaten Tanah Datar,,1,1,-0.4689960,100.6361603,kampus_osm
+195,1195,UIN SJECH M. DJAMIL DJAMBEK BUKITTINGGI,akademik,0,1,http://pmb.uinbukittinggi.ac.id,,Sumatera Barat,080000,Kota Bukittinggi,,1,1,-0.3212074,100.3991392,kampus_osm
+221,2221,POLITEKNIK NEGERI LHOKSEUMAWE,vokasi,0,0,http://pmb.pnl.ac.id/,,Aceh,060000,Kota Lhokseumawe,,1,1,5.1190363,97.1566838,kampus_osm
+222,2222,POLITEKNIK NEGERI MEDAN,vokasi,0,0,https://polmed.ac.id/,,Sumatera Utara,070000,Kota Medan,,1,1,3.5632759,98.6535839,kampus_osm
+231,2231,POLITEKNIK NEGERI BATAM,vokasi,0,0,http://registrasi.polibatam.ac.id/,,Kepulauan Riau,310000,Kota Batam,,1,1,1.1184317,104.0484820,kampus_osm
+232,2232,POLITEKNIK NEGERI BENGKALIS,vokasi,0,0,http://pmb.polbeng.ac.id/,,Riau,090000,Kabupaten Bengkalis,,1,1,1.4583167,102.1509075,kampus_osm
+241,2241,POLITEKNIK NEGERI PADANG,vokasi,0,0,https://penerimaan.pnp.ac.id/,,Sumatera Barat,080000,Kota Padang,,1,1,-0.9135217,100.4674676,kampus_osm
+242,2242,POLITEKNIK PERTANIAN NEGERI PAYAKUMBUH,vokasi,0,0,https://infopmb.ppnp.ac.id,,Sumatera Barat,080000,Kabupaten Lima Puluh Koto,,1,1,-0.1693869,100.6603204,kampus_osm
+271,2271,POLITEKNIK NEGERI SRIWIJAYA,vokasi,0,0,https://spmb.polsri.ac.id,,Sumatera Selatan,110000,Kota Palembang,,1,1,-3.0435843,104.7267526,kampus_osm
+281,2281,POLITEKNIK MANUFAKTUR NEGERI BANGKA BELITUNG,vokasi,0,0,http://pmb.polman-babel.ac.id/,,Kepulauan Bangka Belitung,290000,Kabupaten Bangka,,1,1,-1.9250896,105.9365208,kampus_osm
+291,2291,POLITEKNIK NEGERI LAMPUNG,vokasi,0,0,https://polinela.ac.id/,,Lampung,120000,Kota Bandar Lampung,,1,1,-5.4293858,105.2626169,kampus_osm
+311,1311,UNIVERSITAS SULTAN AGENG TIRTAYASA,akademik,0,0,https://pmb.untirta.ac.id/,"Jalan Raya Jakarta KM. 04, Serang, Banten, Indonesia Telp 254 280330",Banten,280000,Kabupaten Serang,,1,1,-6.1904793,106.1238925,kampus_osm
+312,1312,UIN SULTAN MAULANA HASANUDDIN BANTEN,akademik,0,1,https://pmb.uinbanten.ac.id/,,Banten,280000,Kota Serang,,1,1,-6.1824702,106.1551951,kampus_osm
+321,1321,UNIVERSITAS INDONESIA,akademik,1,0,https://enrollment.ui.ac.id/,,Jakarta Raya,010000,Kota Jakarta Pusat,Jawa Barat,1,1,-6.3603157,106.8271856,kampus_osm
+322,1322,UIN JAKARTA,akademik,0,1,https://admisi.uinjkt.ac.id/,,Banten,280000,Kota Tangerang Selatan,,1,1,-6.3067431,106.7545422,kampus_osm
+323,1323,UNIVERSITAS NEGERI JAKARTA,akademik,1,0,http://penmaba.unj.ac.id/,"Jl. Rawamangun Muka, Jakarta Timur, DKI Jakarta 13220 (021) 4890046",Jakarta Raya,010000,Kota Jakarta Timur,,1,1,-6.1947845,106.8781897,kampus_osm
+324,1324,"UPN ""VETERAN"" JAKARTA",akademik,0,0,https://penmaru.upnvj.ac.id/,,Jakarta Raya,010000,Kota Jakarta Selatan,,1,1,-6.3542614,106.7752761,kampus_osm
+331,1331,UNIVERSITAS SINGAPERBANGSA KARAWANG,akademik,0,0,https://pmb.unsika.ac.id/,,Jawa Barat,020000,Kabupaten Karawang,,1,1,-6.3229257,107.3062287,kampus_osm
+332,1332,INSTITUT TEKNOLOGI BANDUNG,akademik,1,0,https://admission.itb.ac.id,"Gedung Rektorat ITB, Jl. Tamansari no. 64 Bandung 40116",Jawa Barat,020000,Kota Bandung,,1,1,-6.8904487,107.6103136,kampus_osm
+333,1333,UNIVERSITAS PADJADJARAN,akademik,1,0,https://smup.unpad.ac.id/,,Jawa Barat,020000,Kabupaten Sumedang,,1,1,-6.9209644,107.7722221,kampus_osm
+334,1334,UNIVERSITAS PENDIDIKAN INDONESIA,akademik,1,0,https://pmb.upi.edu/,JL. Setiabudi No.229 Bandung,Jawa Barat,020000,Kota Bandung,,1,1,-6.8611533,107.5916770,kampus_osm
+335,1335,ISBI BANDUNG,akademik,0,0,https://pmb.isbi.ac.id/,"Jl. Raya Buah Batu 212, Bandung 40265",Jawa Barat,020000,Kota Bandung,,1,1,-6.9426293,107.6280141,kampus_osm
+336,1336,UIN SUNAN GUNUNG DJATI,akademik,0,1,https://pmb.uinsgd.ac.id/,,Jawa Barat,020000,Kota Bandung,,1,1,-6.9308464,107.7178471,kampus_osm
+341,1341,INSTITUT PERTANIAN BOGOR,akademik,1,0,https://registrasi.admisi.ipb.ac.id,,Jawa Barat,020000,Kabupaten Bogor,,1,1,-6.5552720,106.7250165,kampus_osm
+342,1342,UNIVERSITAS SILIWANGI,akademik,0,0,https://pmb.unsil.ac.id/,,Jawa Barat,020000,Kota Tasikmalaya,,1,1,-7.3489875,108.2227707,kampus_osm
+351,1351,UNIVERSITAS JENDERAL SOEDIRMAN,akademik,0,0,http://admisi.unsoed.ac.id/,"Jl. Prof. Dr. HR Boenyamin 708, Purwokerto 51322",Jawa Tengah,030000,Kabupaten Banyumas,,1,1,-7.4033788,109.2459047,kampus_osm
+352,1352,UNIVERSITAS TIDAR,akademik,0,0,https://smart.untidar.ac.id,,Jawa Tengah,030000,Kota Magelang,,1,1,-7.4605762,110.2168766,kampus_osm
+353,1353,UNIVERSITAS SEBELAS MARET,akademik,1,0,https://spmb.uns.ac.id,Jl. Ir Sutami No. 36 A Kampus UNS Kentingan Solo,Jawa Tengah,030000,Kota Surakarta,,1,1,-7.5594794,110.8568535,kampus_osm
+354,1354,ISI SURAKARTA,akademik,0,0,https://spmb.isi-ska.ac.id/,,Jawa Tengah,030000,Kota Surakarta,,1,1,-7.5513302,110.7709503,kampus_osm
+355,1355,UNIVERSITAS DIPONEGORO,akademik,1,0,https://pmb.undip.ac.id/,,Jawa Tengah,030000,Kota Semarang,,1,1,-7.0515579,110.4395309,kampus_osm
+356,1356,UNIVERSITAS NEGERI SEMARANG,akademik,1,0,https://unnes.ac.id/admission,Kampus Sekaran Gunungpati Semarang,Jawa Tengah,030000,Kota Semarang,,1,1,-7.0502003,110.3989922,kampus_osm
+357,1357,UIN WALISONGO,akademik,0,1,https://pmb.walisongo.ac.id,,Jawa Tengah,030000,Kota Semarang,,1,1,-6.9914587,110.3510604,kampus_osm
+358,1358,UIN RADEN MAS SAID SURAKARTA,akademik,0,1,https://www.uinsaid.ac.id/,,Jawa Tengah,030000,Kabupate Sukoharjo,,1,1,-7.555,110.769,manual
+361,1361,UNIVERSITAS GADJAH MADA,akademik,1,0,https://admissions.ugm.ac.id,,Yogyakarta,040000,Kabupaten Sleman,,1,1,-7.7693966,110.3804236,kampus_osm
+362,1362,UNIVERSITAS NEGERI YOGYAKARTA,akademik,1,0,http://pmb.uny.ac.id,"Jl. Colombo No. 1 Yogyakarta, 55281 Telp. 0274-544049/Fax. 0274-520325",Yogyakarta,040000,Kabupaten Sleman,,1,1,-7.7730335,110.3838155,kampus_osm
+363,1363,"UPN ""VETERAN"" YOGYAKARTA",akademik,0,0,https://pmb.upnyk.ac.id/,,Yogyakarta,040000,Kabupaten Sleman,,1,1,-7.7820975,110.4151904,kampus_osm
+364,1364,ISI YOGYAKARTA,akademik,0,0,https://pmb.isi.ac.id/,,Yogyakarta,040000,Kabupaten Bantul,,1,1,-7.8529764,110.3567229,kampus_osm
+365,1365,UIN SUNAN KALIJAGA,akademik,0,1,https://admisi.uin-suka.ac.id/, Jl. Marsda Adisucipto Yogyakarta 55281,Yogyakarta,040000,Kabupaten Sleman,,1,1,-7.7857048,110.3942909,kampus_osm
+366,1366,UIN PROFESOR KIAI HAJI SAIFUDDIN ZUHRI PURWOKERTO,akademik,0,1,https://pmb.uinsaizu.ac.id/,,Jawa Tengah,030000,Kabupaten Banyumas,,1,1,-7.4112059,109.2320314,kampus_osm
+367,1367,UIN SALATIGA,akademik,0,1,https://pmb.uinsalatiga.ac.id,,Jawa Tengah,030000,Kota Salatiga,,1,1,-7.3370170,110.4910283,kampus_osm
+368,1368,UIN K.H. ABDURRAHMAN WAHID PEKALONGAN,akademik,0,1,https://uingusdur.ac.id,,Jawa Tengah,030000,Kota Pekalongan,,1,1,-6.8905065,109.6761489,kampus_osm
+371,1371,UNIVERSITAS JEMBER,akademik,0,0,https://pmb.unej.ac.id , Jl. Kalimantan No. 37 Jember 68121. Kotak Pos 159.,Jawa Timur,050000,Kabupate Jember,,1,1,-8.1641423,113.7141354,kampus_osm
+372,1372,UNIVERSITAS BRAWIJAYA,akademik,1,0,https://selma.ub.ac.id/,Universitas Brawijaya Jl. Veteran Malang 65145,Jawa Timur,050000,Kota Malang,,1,1,-7.9517994,112.6138388,kampus_osm
+373,1373,UNIVERSITAS NEGERI MALANG,akademik,1,0,http://seleksi.um.ac.id/,"Jalan Ki Ageng Gribig No.45, Malang, Jawa Timur 65139 (0341) 712192",Jawa Timur,050000,Kota Malang,,1,1,-7.9614738,112.6178723,kampus_osm
+374,1374,UIN MALANG,akademik,0,1,http://pmb.uin-malang.ac.id/,,Jawa Timur,050000,Kota Malang,,1,1,-7.9536898,112.6054980,kampus_osm
+381,1381,UNIVERSITAS AIRLANGGA,akademik,1,0,https://ppmb.unair.ac.id,,Jawa Timur,050000,Kota Surabaya,,1,1,-7.2717077,112.7581321,kampus_osm
+382,1382,INSTITUT TEKNOLOGI SEPULUH NOPEMBER,akademik,1,0,https://www.its.ac.id/admission/,,Jawa Timur,050000,Kota Surabaya,,1,1,-7.2826954,112.7956782,kampus_osm
+383,1383,UNIVERSITAS NEGERI SURABAYA,akademik,1,0,https://admisi.unesa.ac.id/,"Jalan Ketintang, Surabaya 60231 Telp (031) 8280009",Jawa Timur,050000,Kota Surabaya,,1,1,-7.3018256,112.6692969,kampus_osm
+384,1384,UNIVERSITAS TRUNOJOYO MADURA,akademik,0,0,https://pmb.trunojoyo.ac.id,,Jawa Timur,050000,Kabupaten Bangkalan,,1,1,-7.1283207,112.7241286,kampus_osm
+385,1385,"UPN ""VETERAN"" JAWA TIMUR",akademik,0,0,https://simaba.upnjatim.ac.id/ ,,Jawa Timur,050000,Kota Surabaya,,1,1,-7.3313333,112.7877711,kampus_osm
+386,1386,UIN SUNAN AMPEL SURABAYA,akademik,0,1,https://pmb.uinsa.ac.id/pengumuman,,Jawa Timur,050000,Kota Surabaya,,1,1,-7.3227580,112.7335121,kampus_osm
+421,2421,POLITEKNIK NEGERI JAKARTA,vokasi,0,0,https://penerimaan.pnj.ac.id/,,Jawa Barat,020000,Kota Depok,,1,1,-6.3718345,106.8245633,kampus_osm
+422,2422,POLITEKNIK NEGERI MEDIA KREATIF,vokasi,0,0,https://pmb.polimedia.ac.id/,,Jakarta Raya,010000,Kota Jakarta Selatan,,1,1,-6.3470531,106.8272731,kampus_osm
+431,2431,POLITEKNIK NEGERI BANDUNG,vokasi,0,0,https://smb.polban.ac.id/,,Jawa Barat,020000,Kota Bandung,,1,1,-6.8712142,107.5729171,kampus_osm
+432,2432,POLITEKNIK MANUFAKTUR BANDUNG,vokasi,0,0,https://pmb.polman-bandung.ac.id/,,Jawa Barat,020000,Kota Bandung,,1,1,-6.9218457,107.6070833,kampus_osm
+433,2433,POLITEKNIK NEGERI INDRAMAYU,vokasi,0,0,https://pmb.polindra.ac.id/,,Jawa Barat,020000,Kabupaten Indramayu,,1,1,-6.4081594,108.2813573,kampus_osm
+434,2434,POLITEKNIK NEGERI SUBANG,vokasi,0,0,https://pmb.polsub.ac.id/,,Jawa Barat,020000,Kabupaten Subang,,1,1,-6.5662947,107.8274766,kampus_osm
+452,2452,POLITEKNIK NEGERI SEMARANG,vokasi,0,0,https://pmb.polines.ac.id,,Jawa Tengah,030000,Kota Semarang,,1,1,-7.0528101,110.4341689,kampus_osm
+453,2453,POLITEKNIK NEGERI CILACAP,vokasi,0,0,https://pmb.pnc.ac.id/,,Jawa Tengah,030000,Kabupaten Cilacap,,1,1,-7.7216716,109.0178986,kampus_osm
+454,2454,POLITEKNIK MARITIM NEGERI INDONESIA ,vokasi,0,0,https://pmb.polimarin.ac.id/,,Jawa Tengah,030000,Kota Semarang,,1,1,-7.1680368,110.4454582,kampus_osm
+471,2471,POLITEKNIK NEGERI BANYUWANGI,vokasi,0,0,https://www.poliwangi.ac.id,,Jawa Timur,050000,Kabupaten Banyuwangi,,1,1,-8.3325711,114.1415790,kampus_osm
+472,2472,POLITEKNIK NEGERI JEMBER,vokasi,0,0,https://www.polije.ac.id/,,Jawa Timur,050000,Kabupate Jember,,1,1,-8.1582739,113.7244168,kampus_osm
+473,2473,POLITEKNIK NEGERI MADIUN,vokasi,0,0,https://pmb.pnm.ac.id/,,Jawa Timur,050000,Kota Madiun,,1,1,-7.6473517,111.5267160,kampus_osm
+474,2474,POLITEKNIK NEGERI MALANG,vokasi,0,0,http://spmb.polinema.ac.id/,,Jawa Timur,050000,Kota Malang,,1,1,-7.9454193,112.6148980,kampus_osm
+481,2481,POLITEKNIK PERKAPALAN NEGERI SURABAYA,vokasi,0,0,https://pmb.ppns.ac.id/,,Jawa Timur,050000,Kota Surabaya,,1,1,-7.2778140,112.7957094,kampus_osm
+482,2482,POLITEKNIK ELEKTRONIKA NEGERI SURABAYA (PENS),vokasi,0,0,https://pmb.pens.ac.id/,,Jawa Timur,050000,Kota Surabaya,,1,1,-7.2462836,112.7377674,kampus_osm
+483,2483,POLITEKNIK NEGERI MADURA,vokasi,0,0,https://www.portal-pmb.poltera.ac.idb.poltera.ac.id,,Jawa Timur,050000,Kabupaten Sampang,,1,1,-7.2153791,113.2722151,kampus_osm
+511,1511,UNIVERSITAS TANJUNGPURA,akademik,0,0,https://scmb.untan.ac.id,"Jl Profesor Dr H. Hadari Nawawi, Pontianak 78115",Kalimantan Barat,130000,Kota Pontianak,,1,1,-0.0579607,109.3466533,kampus_osm
+515,2515,POLITEKNIK NEGERI PONTIANAK,vokasi,0,0,https://spmb.polnep.ac.id/,,Kalimantan Barat,130000,Kota Pontianak,,1,1,-0.0553172,109.3459214,kampus_osm
+516,2516,POLITEKNIK NEGERI KETAPANG,vokasi,0,0,https://pmb.politap.ac.id,,Kalimantan Barat,130000,Kabupaten Ketapang,,1,1,-1.8446652,109.9784067,kampus_osm
+517,2517,POLITEKNIK NEGERI SAMBAS,vokasi,0,0,https://poltesa.ac.id/,,Kalimantan Barat,130000,Kabupaten Sambas,,1,1,1.5219100,109.4138090,kampus_osm
+521,1521,UNIVERSITAS PALANGKARAYA,akademik,0,0,https://pmb.upr.ac.id/,"Jalan Yos Sudarso, Kampus Unpar Tunjung Nyaho, Palangka Raya, Kalimantan Tengah 73112",Kalimantan Tengah,140000,Kota Palangkaraya,,1,1,-2.2168747,113.8950114,kampus_osm
+531,1531,UNIVERSITAS LAMBUNG MANGKURAT,akademik,0,0,https://pmb.ulm.ac.id/,"JL. Ahmad Yani, Km. 36 Telp Banjarmasin (0511) 4772746",Kalimantan Selatan,150000,Kota Banjarmasin,,1,1,-3.2963061,114.5862710,kampus_osm
+532,1532,UIN ANTASARI BANJARMASIN,akademik,0,1,https://pmb.uin-antasari.ac.id,,Kalimantan Selatan,150000,Kota Banjarmasin,,1,1,-3.3326783,114.6165404,kampus_osm
+536,2536,POLITEKNIK NEGERI BANJARMASIN,vokasi,0,0,https://pmb.poliban.ac.id/,,Kalimantan Selatan,150000,Kota Banjarmasin,,1,1,-3.2960088,114.5824033,kampus_osm
+537,2537,POLITEKNIK NEGERI TANAH LAUT,vokasi,0,0,https://sinema.politala.ac.id,,Kalimantan Selatan,150000,Kabupaten Tanah Laut,,1,1,-3.7534764,114.7677401,kampus_osm
+541,1541,UNIVERSITAS MULAWARMAN,akademik,0,0,https://unmul.ac.id,"Kampus Gunung Kelua, Jl. Kuaro No.1, Samarinda, Kalimantan Timur 75119",Kalimantan Timur,160000,Kota Samarinda,,1,1,-0.4693330,117.1552628,kampus_osm
+542,1542,INSTITUT TEKNOLOGI KALIMANTAN,akademik,0,0,http://pmb.itk.ac.id/,,Kalimantan Timur,160000,Kota Balikpapan,,1,1,-1.1500760,116.8624491,kampus_osm
+551,1551,UNIVERSITAS BORNEO TARAKAN,akademik,0,0,https://www.ubt.ac.id/pmb/pengumuman-snbt/,,Kalimantan Utara,340000,Kota Tarakan,,1,1,3.3040088,117.6468067,kampus_osm
+552,2552,POLITEKNIK NEGERI NUNUKAN,vokasi,0,0,http://pnn.ac.id/,,Kalimantan Utara,340000,Kabupaten Nunukan,,1,1,3.9074565,117.0423506,kampus_osm
+561,2561,POLITEKNIK PERTANIAN NEGERI SAMARINDA,vokasi,0,0,https://politanisamarinda.ac.id/,,Kalimantan Timur,160000,Kota Samarinda,,1,1,-0.5371110,117.1250057,kampus_osm
+562,2562,POLITEKNIK NEGERI SAMARINDA,vokasi,0,0,https://pmb.polnes.ac.id/,,Kalimantan Timur,160000,Kota Samarinda,,1,1,-0.5339991,117.1249465,kampus_osm
+563,2563,POLITEKNIK NEGERI BALIKPAPAN,vokasi,0,0,https://pmb.poltekba.ac.id/,,Kalimantan Timur,160000,Kota Balikpapan,,1,1,-1.2021840,116.8848160,kampus_osm
+571,1571,UIN SULTAN AJI MUHAMMAD IDRIS SAMARINDA,akademik,0,1,https://www.uinsi.ac.id/,,Kalimantan Timur,160000,Kota Samarinda,,1,1,-0.5017804,117.1393089,kampus_osm
+611,1611,UNIVERSITAS UDAYANA,akademik,0,0,https://www.unud.ac.id/,"JL. KAMPUS UDAYANA BUKIT JIMBARAN, BADUNG - BALI, 80361",Bali,220000,Kabupaten Badung,,1,1,-8.7947286,115.1739037,kampus_osm
+612,1612,UNIVERSITAS PENDIDIKAN GANESHA,akademik,0,0,https://penerimaan.undiksha.ac.id/,"Jl. Udayana no 11, Singaraja, 81116 Telp (0362) 22570",Bali,220000,Kabupaten Buleleng,,1,1,-8.1188710,115.0883755,kampus_osm
+613,1613,ISI BALI,akademik,0,0,https://isibali.ac.id/,,Bali,220000,Kota Denpasar,,1,1,-8.6455278,115.2087527,kampus_osm
+617,2617,POLITEKNIK NEGERI BALI,vokasi,0,0,https://pnb.ac.id/,,Bali,220000,Kabupaten Badung,,1,1,-8.7991974,115.1618184,kampus_osm
+621,1621,UNIVERSITAS MATARAM,akademik,0,0,https://unram.ac.id/,,Nusa Tenggara Barat,230000,Kota Mataram,,1,1,-8.5873241,116.0933652,kampus_osm
+622,1622,UIN MATARAM,akademik,0,1,https://pmb.uinmataram.ac.id/,,Nusa Tenggara Barat,230000,Kota Mataram,,1,1,-8.5822515,116.0943846,kampus_osm
+631,1631,UNIVERSITAS NUSA CENDANA,akademik,0,0,https://undana.ac.id/admissions/,"Jl. Adisucipto, Penfui-Kupang Telp (0380) 881085",Nusa Tenggara Timur,240000,Kota Kupang,,1,1,-10.1524953,123.6656255,kampus_osm
+632,1632,UNIVERSITAS TIMOR,akademik,0,0,https://www.unimor.ac.id,,Nusa Tenggara Timur,240000,Kabupaten Timor Tengah Utara,,1,1,-9.447,124.479,manual
+641,2641,POLITEKNIK NEGERI KUPANG,vokasi,0,0,https://sidalang.pnk.ac.id/login,,Nusa Tenggara Timur,240000,Kota Kupang,,1,1,-10.1520095,123.6683781,kampus_osm
+642,2642,POLITEKNIK PERTANIAN NEGERI KUPANG,vokasi,0,0,http://pmb.politanikoe.ac.id/,,Nusa Tenggara Timur,240000,Kota Kupang,,1,1,-10.1523387,123.6712466,kampus_osm
+711,1711,UNIVERSITAS HASANUDDIN,akademik,1,0,https://regpmb.unhas.ac.id,Jl. Perintis Kemerdekaan KM.10 Tamalanrea Makassar,Sulawesi Selatan,190000,Kota Makassar,,1,1,-5.1325657,119.4884552,kampus_osm
+712,1712,UNIVERSITAS NEGERI MAKASSAR,akademik,0,0,https://unm.ac.id/info-pmb/,"Kampus Universitas Negeri Makassar (UNM) Jalan: Andi Pangeran Pettarani, Makassar, Sul-Sel. Telp. 0411-869834-869854-860468, Fax. 0411-868794",Sulawesi Selatan,190000,Kota Makassar,,1,1,-5.1842596,119.4296447,kampus_osm
+713,1713,UIN ALAUDDIN,akademik,0,1,http://pmb.uin-alauddin.ac.id/site/login,"Kampus I : Jl. Sultan Alauddin No. 63 Makassar Telp. (0411) 864924, Fax. 864923",Sulawesi Selatan,190000,Kabupaten Gowa,,1,1,-5.1759858,119.4338373,kampus_osm
+716,2716,POLITEKNIK NEGERI UJUNG PANDANG,vokasi,0,0,https://pmb.poliupg.ac.id/pengumuman,,Sulawesi Selatan,190000,Kota Makassar,,1,1,-5.1292108,119.4817629,kampus_osm
+717,2717,POLITEKNIK PERTANIAN NEGERI PANGKAJENE KEPULAUAN,vokasi,0,0,https://polipangkep.ac.id/,,Sulawesi Selatan,190000,Kabupaten Pangkaje,,1,1,-5.2322261,119.4008752,kampus_osm
+718,1718,INSTITUT TEKNOLOGI BJ. HABIBIE SULAWESI SELATAN,akademik,0,0,https://admission.ith.ac.id/,,Sulawesi Selatan,190000,Kota Parepare,,1,1,-4.0057055,119.6236101,kampus_osm
+721,1721,UNIVERSITAS SAM RATULANGI,akademik,0,0,https://regmaba.unsrat.ac.id,,Sulawesi Utara,170000,Kota Manado,,1,1,1.4571372,124.8279612,kampus_osm
+722,1722,UNIVERSITAS NEGERI MANADO,akademik,0,0,https://penerimaan.unima.ac.id/,"Jalan Tondano, Minahasa Sulawesi Utara 95618 Telp (0431) 321845",Sulawesi Utara,170000,Kabupaten Minahasa,,1,1,1.3124819,124.8463948,kampus_osm
+727,2727,POLITEKNIK NEGERI MANADO,vokasi,0,0,https://polimdo.ac.id/,,Sulawesi Utara,170000,Kota Manado,,1,1,1.5195527,124.8869022,kampus_osm
+728,2728,POLITEKNIK NEGERI NUSA UTARA,vokasi,0,0,https://www.polnustar.ac.id/,,Sulawesi Utara,170000,Kabupaten Kepulauan Sangihe,,1,1,3.6077,125.49,manual
+731,1731,UNIVERSITAS TADULAKO,akademik,0,0,https://pmb.untad.ac.id/,"Kampus Bumi Tadulako Tondo Jl. Soekarno - Hatta KM. 9, Palu, Telp (0451) 422611",Sulawesi Tengah,180000,Kota Palu,,1,1,-0.8362428,119.8946535,kampus_osm
+732,1732,UIN DATOKARAMA PALU,akademik,0,1,https://siakad.uindatokarama.ac.id/spmbfront,,Sulawesi Tengah,180000,Kota Palu,,1,1,-0.8850887,119.8451440,kampus_osm
+741,1741,UNIVERSITAS SULAWESI BARAT,akademik,0,0,https://pmb.unsulbar.ac.id/,,Sulawesi Barat,330000,Kabupaten Majene,,1,1,-3.542,118.97,manual
+751,1751,UNIVERSITAS HALUOLEO,akademik,0,0,https://spmb.uho.ac.id/,"Kampus Hijau Bumi Tridharma, Anduonou, Kendari, 93132 Telp (0401) 3190105",Sulawesi Tenggara,200000,Kota Kendari,,1,1,-4.0117476,122.5225042,kampus_osm
+752,1752,UNIVERSITAS NEGERI GORONTALO,akademik,0,0,https://spmb.ung.ac.id/,"Jl. Jenderal Sudirman No.6, Gorontalo Telp (0435) 821125",Gorontalo,300000,Kota Gorontalo,,1,1,0.5556573,123.0629391,kampus_osm
+753,1753,UNIVERSITAS SEMBILAN BELAS NOVEMBER KOLAKA,akademik,0,0,https://spmb.usn.ac.id/,,Sulawesi Tenggara,200000,Kabupaten Kolaka,,1,1,-4.3755131,121.5534298,kampus_osm
+811,1811,UNIVERSITAS PATTIMURA,akademik,0,0,https://pmb.unpatti.ac.id,"Jl. Ir. M. Putuhena Kampus - Poka, Ambon, Maluku 97116 Telp (0911) 322628",Maluku,210000,Kota Ambon,,1,1,-3.6544719,128.1964409,kampus_osm
+821,1821,UNIVERSITAS KHAIRUN,akademik,0,0,http://ukt.unkhair.ac.id/,,Maluku Utara,270000,Kota Ternate,,1,1,0.7620373,127.3364947,kampus_osm
+831,2831,POLITEKNIK NEGERI AMBON,vokasi,0,0,http://pmb.polnam.ac.id,,Maluku,210000,Kota Ambon,,1,1,-3.6591676,128.1804143,kampus_osm
+832,2832,POLITEKNIK PERIKANAN NEGERI TUAL,vokasi,0,0,http://www.polikant.ac.id/,,Maluku,210000,Kabupaten Maluku Tenggara,,1,1,-5.7714883,132.7377600,kampus_osm
+911,1911,UNIVERSITAS CENDERAWASIH,akademik,0,0,https://pmb.uncen.ac.id,"Kampus Baru Waena Jayapura, Papua 99358 Telp (0967) 572108",Papua,250000,Kota Jayapura,,1,1,-2.5387539,140.7037389,kota
+912,1912,UNIVERSITAS MUSAMUS MERAUKE,akademik,0,0,http://admisi.unmus.ac.id/,"Kampus Universitas Musamus Merauke, JL. Kamizaun Mopah Lama, Kec. Merauke, 99611 Telp (0971) 325976",Papua Selatan,370000,Kabupaten Merauke,,1,1,-8.5315972,140.4160531,kampus_osm
+913,1913,ISBI TANAH PAPUA,akademik,0,0,https://www.pmb.isbi-tanahpapua.ac.id,,Papua,250000,Kabupate Jayapura,,1,1,-2.6,140.67,manual
+921,1921,UNIVERSITAS PAPUA,akademik,0,0,https://bpak.unipa.ac.id/,"Jl Gunung Salju, Amban, Manokwari, Papua Barat",Papua Barat,320000,Kabupaten Manokwari,Papua Barat Daya,1,1,-0.8353470,134.0688903,kampus_osm
+931,2931,POLITEKNIK NEGERI FAKFAK,vokasi,0,0,https://www.polinef.ac.id/,,Papua Barat,320000,Kabupaten Fak-Fak,,1,1,-2.9152842,132.2866241,kampus_osm
+329,1329,UNIVERSITAS TERBUKA,akademik,1,0,https://www.ut.ac.id/sistem-registrasi,,Banten,280000,Kota Tangerang Selatan,,1,0,-6.341,106.76,manual

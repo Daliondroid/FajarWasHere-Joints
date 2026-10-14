@@ -1,0 +1,14 @@
+nilai_di_sumber,akreditasi_kanonik,skor_ordinal,catatan
+Unggul,Unggul,4,Skema IAPS 4.0 (BAN-PT/LAM)
+Terakreditasi Unggul,Unggul,4,Penulisan lain dari Unggul
+A,Unggul,4,Peringkat lama; diperlakukan setara tertinggi (asumsi)
+Baik Sekali,Baik Sekali,3,
+Terakreditasi Baik Sekali,Baik Sekali,3,
+B,Baik Sekali,3,Peringkat lama; diperlakukan setara (asumsi)
+Baik,Baik,2,
+Terakreditasi Baik,Baik,2,
+C,Baik,2,Peringkat lama (asumsi)
+Terakreditasi,Baik,2,Status tanpa peringkat
+Terakreditasi Pertama,Terakreditasi Pertama,1,Prodi baru
+Terakreditasi Sementara,Terakreditasi Sementara,1,Prodi baru
+,Tidak diketahui,0,Tidak ada di PDDikti

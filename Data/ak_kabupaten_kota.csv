@@ -1,0 +1,527 @@
+﻿kode_kab,nama_kab,provinsi,lat,lon,sumber
+010100,Kab. Kepulauan Seribu,Prov. D.K.I. Jakarta,-5.61,106.55,manual
+016000,Kota Jakarta Pusat,Prov. D.K.I. Jakarta,-6.1865,106.8341,manual
+016100,Kota Jakarta Utara,Prov. D.K.I. Jakarta,-6.1384,106.8636,manual
+016200,Kota Jakarta Barat,Prov. D.K.I. Jakarta,-6.1676,106.7637,manual
+016300,Kota Jakarta Selatan,Prov. D.K.I. Jakarta,-6.2615,106.8106,manual
+016400,Kota Jakarta Timur,Prov. D.K.I. Jakarta,-6.225,106.9004,manual
+020500,Kab. Bogor,Prov. Jawa Barat,-6.5453875,107.0017820,OSM Nominatim
+020600,Kab. Sukabumi,Prov. Jawa Barat,-7.0764508,106.7346608,OSM Nominatim
+020700,Kab. Cianjur,Prov. Jawa Barat,-7.0539936,107.0692399,OSM Nominatim
+020800,Kab. Bandung,Prov. Jawa Barat,-7.0613423,107.6342883,OSM Nominatim
+021000,Kab. Sumedang,Prov. Jawa Barat,-6.8597179,107.9207066,OSM Nominatim
+021100,Kab. Garut,Prov. Jawa Barat,-7.2162774,107.9014912,OSM Nominatim
+021200,Kab. Tasikmalaya,Prov. Jawa Barat,-7.4271707,108.0684231,OSM Nominatim
+021400,Kab. Ciamis,Prov. Jawa Barat,-7.3131593,108.4048938,OSM Nominatim
+021500,Kab. Kuningan,Prov. Jawa Barat,-6.9869841,108.5538158,OSM Nominatim
+021600,Kab. Majalengka,Prov. Jawa Barat,-6.8073627,108.2787860,OSM Nominatim
+021700,Kab. Cirebon,Prov. Jawa Barat,-6.7611892,108.4564232,OSM Nominatim
+021800,Kab. Indramayu,Prov. Jawa Barat,-6.4418182,108.1764705,OSM Nominatim
+021900,Kab. Subang,Prov. Jawa Barat,-6.5689807,107.7587397,OSM Nominatim
+022000,Kab. Purwakarta,Prov. Jawa Barat,-6.5556692,107.4421268,OSM Nominatim
+022100,Kab. Karawang,Prov. Jawa Barat,-6.3021906,107.3046116,OSM Nominatim
+022200,Kab. Bekasi,Prov. Jawa Barat,-6.2027897,107.1649161,OSM Nominatim
+022300,Kab. Bandung Barat,Prov. Jawa Barat,-6.8977540,107.4124294,OSM Nominatim
+022500,Kab. Pangandaran,Prov. Jawa Barat,-7.6407968,108.5567288,OSM Nominatim
+026000,Kota Bandung,Prov. Jawa Barat,-6.9218457,107.6070833,OSM Nominatim
+026100,Kota Bogor,Prov. Jawa Barat,-6.5963564,106.7973188,OSM Nominatim
+026200,Kota Sukabumi,Prov. Jawa Barat,-6.9199289,106.9265095,OSM Nominatim
+026300,Kota Cirebon,Prov. Jawa Barat,-6.7137044,108.5608483,OSM Nominatim
+026500,Kota Bekasi,Prov. Jawa Barat,-6.2349858,106.9945444,OSM Nominatim
+026600,Kota Depok,Prov. Jawa Barat,-6.4071900,106.8158371,OSM Nominatim
+026700,Kota Cimahi,Prov. Jawa Barat,-6.8731527,107.5423099,OSM Nominatim
+026800,Kota Tasikmalaya,Prov. Jawa Barat,-7.3262484,108.2201154,OSM Nominatim
+026900,Kota Banjar,Prov. Jawa Barat,-7.3695648,108.5415225,OSM Nominatim
+030100,Kab. Cilacap,Prov. Jawa Tengah,-7.4616710,108.8046146,OSM Nominatim
+030200,Kab. Banyumas,Prov. Jawa Tengah,-7.4550716,109.1167465,OSM Nominatim
+030300,Kab. Purbalingga,Prov. Jawa Tengah,-7.3273300,109.3998987,OSM Nominatim
+030400,Kab. Banjarnegara,Prov. Jawa Tengah,-7.3558733,109.6600728,OSM Nominatim
+030500,Kab. Kebumen,Prov. Jawa Tengah,-7.6439744,109.6077921,OSM Nominatim
+030600,Kab. Purworejo,Prov. Jawa Tengah,-7.7075157,109.9664914,OSM Nominatim
+030700,Kab. Wonosobo,Prov. Jawa Tengah,-7.3997999,109.9209645,OSM Nominatim
+030800,Kab. Magelang,Prov. Jawa Tengah,-7.5136144,110.2145133,OSM Nominatim
+030900,Kab. Boyolali,Prov. Jawa Tengah,-7.3872118,110.7038691,OSM Nominatim
+031000,Kab. Klaten,Prov. Jawa Tengah,-7.6732387,110.6284785,OSM Nominatim
+031100,Kab. Sukoharjo,Prov. Jawa Tengah,-7.6814994,110.8700287,OSM Nominatim
+031200,Kab. Wonogiri,Prov. Jawa Tengah,-7.9620507,110.9575733,OSM Nominatim
+031300,Kab. Karanganyar,Prov. Jawa Tengah,-7.6196965,111.0698003,OSM Nominatim
+031400,Kab. Sragen,Prov. Jawa Tengah,-7.3924563,110.9530232,OSM Nominatim
+031500,Kab. Grobogan,Prov. Jawa Tengah,-7.0964605,110.8948834,OSM Nominatim
+031600,Kab. Blora,Prov. Jawa Tengah,-7.1106130,111.4204319,OSM Nominatim
+031700,Kab. Rembang,Prov. Jawa Tengah,-6.7698635,111.4556709,OSM Nominatim
+031800,Kab. Pati,Prov. Jawa Tengah,-6.7534144,111.0399982,OSM Nominatim
+031900,Kab. Kudus,Prov. Jawa Tengah,-6.7978494,110.8679109,OSM Nominatim
+032000,Kab. Jepara,Prov. Jawa Tengah,-6.5994983,110.7832207,OSM Nominatim
+032100,Kab. Demak,Prov. Jawa Tengah,-6.9230952,110.6276667,OSM Nominatim
+032200,Kab. Semarang,Prov. Jawa Tengah,-7.2876561,110.4019427,OSM Nominatim
+032300,Kab. Temanggung,Prov. Jawa Tengah,-7.2397576,110.1216648,OSM Nominatim
+032400,Kab. Kendal,Prov. Jawa Tengah,-7.0190965,110.1374757,OSM Nominatim
+032500,Kab. Batang,Prov. Jawa Tengah,-6.9196569,109.7241353,OSM Nominatim
+032600,Kab. Pekalongan,Prov. Jawa Tengah,-7.0418471,109.6198875,OSM Nominatim
+032700,Kab. Pemalang,Prov. Jawa Tengah,-7.0110802,109.3914037,OSM Nominatim
+032800,Kab. Tegal,Prov. Jawa Tengah,-7.0564433,109.1315766,OSM Nominatim
+032900,Kab. Brebes,Prov. Jawa Tengah,-7.0520711,108.8881360,OSM Nominatim
+036000,Kota Magelang,Prov. Jawa Tengah,-7.4770747,110.2182164,OSM Nominatim
+036100,Kota Surakarta,Prov. Jawa Tengah,-7.5692489,110.8284480,OSM Nominatim
+036200,Kota Salatiga,Prov. Jawa Tengah,-7.3302642,110.4995353,OSM Nominatim
+036300,Kota Semarang,Prov. Jawa Tengah,-6.9903988,110.4229104,OSM Nominatim
+036400,Kota Pekalongan,Prov. Jawa Tengah,-6.8905065,109.6761489,OSM Nominatim
+036500,Kota Tegal,Prov. Jawa Tengah,-6.8674488,109.1378271,OSM Nominatim
+040100,Kab. Bantul,Prov. D.I. Yogyakarta,-7.9495034,110.3464944,OSM Nominatim
+040200,Kab. Sleman,Prov. D.I. Yogyakarta,-7.7455246,110.3672142,OSM Nominatim
+040300,Kab. Gunung Kidul,Prov. D.I. Yogyakarta,-7.9658,110.6014,manual
+040400,Kab. Kulon Progo,Prov. D.I. Yogyakarta,-7.8267,110.1641,manual
+046000,Kota Yogyakarta,Prov. D.I. Yogyakarta,-7.7778690,110.3637574,OSM Nominatim
+050100,Kab. Gresik,Prov. Jawa Timur,-5.7933465,112.6598223,OSM Nominatim
+050200,Kab. Sidoarjo,Prov. Jawa Timur,-7.4539769,112.6593869,OSM Nominatim
+050300,Kab. Mojokerto,Prov. Jawa Timur,-7.5413377,112.5094975,OSM Nominatim
+050400,Kab. Jombang,Prov. Jawa Timur,-7.5614640,112.2413044,OSM Nominatim
+050500,Kab. Bojonegoro,Prov. Jawa Timur,-7.2278714,111.8146200,OSM Nominatim
+050600,Kab. Tuban,Prov. Jawa Timur,-6.9596385,111.8932266,OSM Nominatim
+050700,Kab. Lamongan,Prov. Jawa Timur,-7.1229318,112.3281935,OSM Nominatim
+050800,Kab. Madiun,Prov. Jawa Timur,-7.6118876,111.6731926,OSM Nominatim
+050900,Kab. Ngawi,Prov. Jawa Timur,-7.4056936,111.4446798,OSM Nominatim
+051000,Kab. Magetan,Prov. Jawa Timur,-7.6542489,111.3360565,OSM Nominatim
+051100,Kab. Ponorogo,Prov. Jawa Timur,-7.9712266,111.4988929,OSM Nominatim
+051200,Kab. Pacitan,Prov. Jawa Timur,-8.1017184,111.1446711,OSM Nominatim
+051300,Kab. Kediri,Prov. Jawa Timur,-7.8026253,112.1686315,OSM Nominatim
+051400,Kab. Nganjuk,Prov. Jawa Timur,-7.6150161,111.9465075,OSM Nominatim
+051500,Kab. Blitar,Prov. Jawa Timur,-8.1311983,112.3115572,OSM Nominatim
+051600,Kab. Tulungagung,Prov. Jawa Timur,-8.0729035,111.8996408,OSM Nominatim
+051700,Kab. Trenggalek,Prov. Jawa Timur,-8.1359347,111.6401983,OSM Nominatim
+051800,Kab. Malang,Prov. Jawa Timur,-8.1047981,112.6879872,OSM Nominatim
+051900,Kab. Pasuruan,Prov. Jawa Timur,-7.7508114,112.8184830,OSM Nominatim
+052000,Kab. Probolinggo,Prov. Jawa Timur,-7.8631600,113.3051053,OSM Nominatim
+052100,Kab. Lumajang,Prov. Jawa Timur,-8.1237818,113.1436747,OSM Nominatim
+052200,Kab. Bondowoso,Prov. Jawa Timur,-7.9451279,113.8820590,OSM Nominatim
+052300,Kab. Situbondo,Prov. Jawa Timur,-7.7986089,114.2647430,OSM Nominatim
+052400,Kab. Jember,Prov. Jawa Timur,-8.2633237,113.6278541,OSM Nominatim
+052500,Kab. Banyuwangi,Prov. Jawa Timur,-8.3325711,114.1415790,OSM Nominatim
+052600,Kab. Pamekasan,Prov. Jawa Timur,-7.0708133,113.5003939,OSM Nominatim
+052700,Kab. Sampang,Prov. Jawa Timur,-7.0578157,113.2540541,OSM Nominatim
+052800,Kab. Sumenep,Prov. Jawa Timur,-6.9991798,113.8376708,OSM Nominatim
+052900,Kab. Bangkalan,Prov. Jawa Timur,-7.0463602,112.8961792,OSM Nominatim
+056000,Kota Surabaya,Prov. Jawa Timur,-7.2462836,112.7377674,OSM Nominatim
+056100,Kota Malang,Prov. Jawa Timur,-7.9771308,112.6340265,OSM Nominatim
+056200,Kota Madiun,Prov. Jawa Timur,-7.6290837,111.5168819,OSM Nominatim
+056300,Kota Kediri,Prov. Jawa Timur,-7.8111057,112.0046051,OSM Nominatim
+056400,Kota Mojokerto,Prov. Jawa Timur,-7.4631537,112.4319852,OSM Nominatim
+056500,Kota Blitar,Prov. Jawa Timur,-8.0982442,112.1650769,OSM Nominatim
+056600,Kota Pasuruan,Prov. Jawa Timur,-7.6399593,112.9070632,OSM Nominatim
+056700,Kota Probolinggo,Prov. Jawa Timur,-7.7441461,113.2158401,OSM Nominatim
+056800,Kota Batu,Prov. Jawa Timur,-7.8711667,112.5269482,OSM Nominatim
+060100,Kab. Aceh Besar,Prov. Aceh,5.3542491,95.4961508,OSM Nominatim
+060200,Kab. Pidie,Prov. Aceh,5.1143002,95.9412834,OSM Nominatim
+060300,Kab. Aceh Utara,Prov. Aceh,4.9911941,97.1587368,OSM Nominatim
+060400,Kab. Aceh Timur,Prov. Aceh,4.7016630,97.6450390,OSM Nominatim
+060500,Kab. Aceh Tengah,Prov. Aceh,4.5642670,96.9618926,OSM Nominatim
+060600,Kab. Aceh Barat,Prov. Aceh,4.4422521,96.1929830,OSM Nominatim
+060700,Kab. Aceh Selatan,Prov. Aceh,3.0679790,97.4687715,OSM Nominatim
+060800,Kab. Aceh Tenggara,Prov. Aceh,3.3389180,97.7455684,OSM Nominatim
+061100,Kab. Simeulue,Prov. Aceh,2.6290312,96.0220779,OSM Nominatim
+061200,Kab. Bireuen,Prov. Aceh,5.0827404,96.5921212,OSM Nominatim
+061300,Kab. Aceh Singkil,Prov. Aceh,2.3758794,97.9244295,OSM Nominatim
+061400,Kab. Aceh Tamiang,Prov. Aceh,4.2122625,97.9146797,OSM Nominatim
+061500,Kab. Nagan Raya,Prov. Aceh,4.1812430,96.5257726,OSM Nominatim
+061600,Kab. Aceh Jaya,Prov. Aceh,4.8114844,95.7001915,OSM Nominatim
+061700,Kab. Aceh Barat Daya,Prov. Aceh,3.8335897,96.8516154,OSM Nominatim
+061800,Kab. Gayo Lues,Prov. Aceh,3.9775993,97.3320677,OSM Nominatim
+061900,Kab. Bener Meriah,Prov. Aceh,4.7738799,96.9780036,OSM Nominatim
+062000,Kab. Pidie Jaya,Prov. Aceh,5.1047710,96.2116676,OSM Nominatim
+066000,Kota Sabang,Prov. Aceh,5.8927453,95.3225751,OSM Nominatim
+066100,Kota Banda Aceh,Prov. Aceh,5.5528455,95.3192908,OSM Nominatim
+066200,Kota Lhokseumawe,Prov. Aceh,5.1789659,97.1480544,OSM Nominatim
+066300,Kota Langsa,Prov. Aceh,4.4730892,97.9681841,OSM Nominatim
+066400,Kota Subulussalam,Prov. Aceh,2.6403146,98.0052459,OSM Nominatim
+070100,Kab. Deli Serdang,Prov. Sumatera Utara,3.4744538,98.7158975,OSM Nominatim
+070200,Kab. Langkat,Prov. Sumatera Utara,3.7617255,98.1769187,OSM Nominatim
+070300,Kab. Karo,Prov. Sumatera Utara,3.0803886,98.3327524,OSM Nominatim
+070400,Kab. Simalungun,Prov. Sumatera Utara,2.9507078,98.7843160,OSM Nominatim
+070500,Kab. Dairi,Prov. Sumatera Utara,2.8289604,98.3122779,OSM Nominatim
+070600,Kab. Asahan,Prov. Sumatera Utara,2.8518000,99.6233008,OSM Nominatim
+070700,Kab. Labuhan Batu,Prov. Sumatera Utara,2.1114730,99.8240064,OSM Nominatim
+070800,Kab. Tapanuli Utara,Prov. Sumatera Utara,1.9983286,99.0605340,OSM Nominatim
+070900,Kab. Tapanuli Tengah,Prov. Sumatera Utara,1.6819629,98.8266099,OSM Nominatim
+071000,Kab. Tapanuli Selatan,Prov. Sumatera Utara,1.5506328,99.2103853,OSM Nominatim
+071100,Kab. Nias,Prov. Sumatera Utara,1.1666792,97.9708330,OSM Nominatim
+071500,Kab. Mandailing Natal,Prov. Sumatera Utara,0.7916760,99.5814810,OSM Nominatim
+071600,Kab. Toba,Prov. Sumatera Utara,2.3821785,99.3286837,OSM Nominatim
+071700,Kab. Nias Selatan,Prov. Sumatera Utara,0.5728290,97.7935867,OSM Nominatim
+071800,Kab. Pakpak Bharat,Prov. Sumatera Utara,2.5243594,98.2554555,OSM Nominatim
+071900,Kab. Humbang Hasudutan,Prov. Sumatera Utara,2.2652,98.5036,manual
+072000,Kab. Samosir,Prov. Sumatera Utara,2.5936293,98.8010823,OSM Nominatim
+072100,Kab. Serdang Bedagai,Prov. Sumatera Utara,3.3485533,99.0000818,OSM Nominatim
+072200,Kab. Batubara,Prov. Sumatera Utara,3.1706506,99.4185425,OSM Nominatim
+072300,Kab. Padang Lawas utara,Prov. Sumatera Utara,1.6292295,99.6926115,OSM Nominatim
+072400,Kab. Padang Lawas,Prov. Sumatera Utara,1.6292295,99.6926115,OSM Nominatim
+072500,Kab. Labuhan Batu Utara,Prov. Sumatera Utara,2.1114730,99.8240064,OSM Nominatim
+072600,Kab. Labuhan Batu Selatan,Prov. Sumatera Utara,1.984,100.096,manual
+072700,Kab. Nias Barat,Prov. Sumatera Utara,1.035,97.537,manual
+072800,Kab. Nias Utara,Prov. Sumatera Utara,1.3747561,97.1445693,OSM Nominatim
+076000,Kota Medan,Prov. Sumatera Utara,3.5894617,98.6741623,OSM Nominatim
+076100,Kota Binjai,Prov. Sumatera Utara,3.6063964,98.4899865,OSM Nominatim
+076200,Kota Tebing Tinggi,Prov. Sumatera Utara,3.3273686,99.1623025,OSM Nominatim
+076300,Kota Pematangsiantar,Prov. Sumatera Utara,2.9588631,99.0653646,OSM Nominatim
+076400,Kota Tanjung Balai,Prov. Sumatera Utara,2.9703419,99.8020903,OSM Nominatim
+076500,Kota Sibolga,Prov. Sumatera Utara,1.7369570,98.7846100,OSM Nominatim
+076600,Kota Padang Sidimpuan,Prov. Sumatera Utara,1.3993059,99.3041045,OSM Nominatim
+076700,Kota Gunungsitoli,Prov. Sumatera Utara,1.2896152,97.6131023,OSM Nominatim
+080100,Kab. Agam,Prov. Sumatera Barat,-0.2547205,100.1700311,OSM Nominatim
+080200,Kab. Pasaman,Prov. Sumatera Barat,0.3974047,100.0249789,OSM Nominatim
+080300,Kab. Lima Puluh Koto,Prov. Sumatera Barat,0.2689515,100.7874857,OSM Nominatim
+080400,Kab. Solok,Prov. Sumatera Barat,-0.9310300,100.8043280,OSM Nominatim
+080500,Kab. Padang Pariaman,Prov. Sumatera Barat,-0.5690917,100.2770262,OSM Nominatim
+080600,Kab. Pesisir Selatan,Prov. Sumatera Barat,-1.7185793,100.9270249,OSM Nominatim
+080700,Kab. Tanah Datar,Prov. Sumatera Barat,-0.4689960,100.6361603,OSM Nominatim
+080800,Kab. Sijunjung,Prov. Sumatera Barat,-0.6513131,101.0707610,OSM Nominatim
+081000,Kab. Kepulauan Mentawai,Prov. Sumatera Barat,-1.3587816,98.8950051,OSM Nominatim
+081100,Kab. Solok Selatan,Prov. Sumatera Barat,-1.5573292,101.2394780,OSM Nominatim
+081200,Kab. Dharmasraya,Prov. Sumatera Barat,-1.2586389,101.5799034,OSM Nominatim
+081300,Kab. Pasaman Barat,Prov. Sumatera Barat,0.1875382,99.6935157,OSM Nominatim
+086000,Kota Bukittinggi,Prov. Sumatera Barat,-0.3051954,100.3694921,OSM Nominatim
+086100,Kota Padang,Prov. Sumatera Barat,-0.9247587,100.3632561,OSM Nominatim
+086200,Kota Padang Panjang,Prov. Sumatera Barat,-0.4654636,100.3932441,OSM Nominatim
+086300,Kota Sawah Lunto,Prov. Sumatera Barat,-0.8939283,100.3654984,OSM Nominatim
+086400,Kota Solok,Prov. Sumatera Barat,-0.7991165,100.6529829,OSM Nominatim
+086500,Kota Payakumbuh,Prov. Sumatera Barat,-0.2242687,100.6319419,OSM Nominatim
+086600,Kota Pariaman,Prov. Sumatera Barat,-0.6263889,100.1177778,OSM Nominatim
+090100,Kab. Kampar,Prov. Riau,0.3199733,101.0617123,OSM Nominatim
+090200,Kab. Bengkalis,Prov. Riau,1.7697227,101.9124384,OSM Nominatim
+090400,Kab. Indragiri Hulu,Prov. Riau,-0.4978978,102.3008136,OSM Nominatim
+090500,Kab. Indragiri Hilir,Prov. Riau,-0.2708850,103.3320788,OSM Nominatim
+090800,Kab. Pelalawan,Prov. Riau,0.2384009,102.2619218,OSM Nominatim
+090900,Kab. Rokan Hulu,Prov. Riau,0.9043104,100.4573683,OSM Nominatim
+091000,Kab. Rokan Hilir,Prov. Riau,2.2243424,100.6968114,OSM Nominatim
+091100,Kab. Siak,Prov. Riau,0.8275337,101.8461936,OSM Nominatim
+091400,Kab. Kuantan Singingi,Prov. Riau,-0.4937967,101.4897357,OSM Nominatim
+091500,Kab. Kepulauan Meranti,Prov. Riau,1.0613049,102.7018829,OSM Nominatim
+096000,Kota Pekanbaru,Prov. Riau,0.5262455,101.4515727,OSM Nominatim
+096200,Kota Dumai,Prov. Riau,1.6631967,101.4470369,OSM Nominatim
+100100,Kab. Batang Hari,Prov. Jambi,-1.8590978,103.0052795,OSM Nominatim
+100200,Kab. Bungo,Prov. Jambi,-1.5161123,101.9847534,OSM Nominatim
+100300,Kab. Sarolangun,Prov. Jambi,-2.3312458,102.6248073,OSM Nominatim
+100400,Kab. Tanjung Jabung Barat,Prov. Jambi,-1.0490699,103.1097116,OSM Nominatim
+100500,Kab. Kerinci,Prov. Jambi,-2.0633382,101.6001052,OSM Nominatim
+100600,Kab. Tebo,Prov. Jambi,-1.3878363,102.4174177,OSM Nominatim
+100700,Kab. Muaro Jambi,Prov. Jambi,-1.7070411,103.7875144,OSM Nominatim
+100800,Kab. Tanjung Jabung Timur,Prov. Jambi,-1.2096870,104.2198576,OSM Nominatim
+100900,Kab. Merangin,Prov. Jambi,-2.2084472,102.1171064,OSM Nominatim
+106000,Kota Jambi,Prov. Jambi,-1.6296917,103.6077806,OSM Nominatim
+106100,Kota Sungai Penuh,Prov. Jambi,-2.0706799,101.3961054,OSM Nominatim
+110100,Kab. Musi Banyuasin,Prov. Sumatera Selatan,-2.4909340,103.7048186,OSM Nominatim
+110200,Kab. Ogan Komering Ilir,Prov. Sumatera Selatan,-3.3288538,105.3997866,OSM Nominatim
+110300,Kab. Ogan Komering Ulu,Prov. Sumatera Selatan,-4.1101012,104.0082838,OSM Nominatim
+110400,Kab. Muara Enim,Prov. Sumatera Selatan,-3.8467067,103.9615719,OSM Nominatim
+110500,Kab. Lahat,Prov. Sumatera Selatan,-3.7853859,103.5392171,OSM Nominatim
+110600,Kab. Musi Rawas,Prov. Sumatera Selatan,-3.1757559,103.2500109,OSM Nominatim
+110700,Kab. Banyuasin,Prov. Sumatera Selatan,-2.3938935,104.7548031,OSM Nominatim
+110800,Kab. Ogan Komering Ulu Timur,Prov. Sumatera Selatan,-4.1160092,104.5584811,OSM Nominatim
+110900,Kab. Ogan Komering Ulu Selatan,Prov. Sumatera Selatan,-4.5702304,103.9249537,OSM Nominatim
+111000,Kab. Ogan Ilir,Prov. Sumatera Selatan,-3.4077190,104.6508420,OSM Nominatim
+111100,Kab. Empat Lawang,Prov. Sumatera Selatan,-3.7154833,102.9324724,OSM Nominatim
+111200,Kab. Penukal Abab Lematang Ilir,Prov. Sumatera Selatan,-3.2139950,104.0076941,OSM Nominatim
+111300,Kab. Musi Rawas Utara,Prov. Sumatera Selatan,-2.7128668,102.7456282,OSM Nominatim
+116000,Kota Palembang,Prov. Sumatera Selatan,-2.9888243,104.7568507,OSM Nominatim
+116100,Kota Prabumulih,Prov. Sumatera Selatan,-3.4382688,104.2310181,OSM Nominatim
+116200,Kota Lubuk Linggau,Prov. Sumatera Selatan,-3.2134854,102.8418419,OSM Nominatim
+116300,Kota Pagar Alam,Prov. Sumatera Selatan,-4.0212202,103.2516784,OSM Nominatim
+120100,Kab. Lampung Selatan,Prov. Lampung,-5.5414886,105.5110009,OSM Nominatim
+120200,Kab. Lampung Tengah,Prov. Lampung,-4.8728473,105.3260129,OSM Nominatim
+120300,Kab. Lampung Utara,Prov. Lampung,-4.8086085,104.8628815,OSM Nominatim
+120400,Kab. Lampung Barat,Prov. Lampung,-5.1117040,104.3057867,OSM Nominatim
+120500,Kab. Tulang Bawang,Prov. Lampung,-4.3980264,105.5542801,OSM Nominatim
+120600,Kab. Tanggamus,Prov. Lampung,-5.5140538,104.7771435,OSM Nominatim
+120700,Kab. Lampung Timur,Prov. Lampung,-5.1197116,105.5951515,OSM Nominatim
+120800,Kab. Way Kanan,Prov. Lampung,-4.5669403,104.5161602,OSM Nominatim
+120900,Kab. Pesawaran,Prov. Lampung,-5.4559573,105.0846910,OSM Nominatim
+121000,Kab. Pringsewu,Prov. Lampung,-5.3666892,104.9722121,OSM Nominatim
+121100,Kab. Mesuji,Prov. Lampung,-3.9754190,105.3749436,OSM Nominatim
+121200,Kab. Tulang Bawang Barat,Prov. Lampung,-4.4323025,105.1424734,OSM Nominatim
+121300,Kab. Pesisir Barat,Prov. Lampung,-5.3669442,104.1866417,OSM Nominatim
+126000,Kota Bandar Lampung,Prov. Lampung,-5.4293858,105.2626169,OSM Nominatim
+126100,Kota Metro,Prov. Lampung,-5.1147017,105.3081646,OSM Nominatim
+130100,Kab. Sambas,Prov. Kalimantan Barat,1.5219100,109.4138090,OSM Nominatim
+130200,Kab. Mempawah,Prov. Kalimantan Barat,0.3440181,109.1019761,OSM Nominatim
+130300,Kab. Sanggau,Prov. Kalimantan Barat,0.3502299,110.5470424,OSM Nominatim
+130400,Kab. Sintang,Prov. Kalimantan Barat,0.0635957,111.4866203,OSM Nominatim
+130500,Kab. Kapuas Hulu,Prov. Kalimantan Barat,0.8274260,112.7965412,OSM Nominatim
+130600,Kab. Ketapang,Prov. Kalimantan Barat,-1.8446652,109.9784067,OSM Nominatim
+130800,Kab. Bengkayang,Prov. Kalimantan Barat,1.0157755,109.7080333,OSM Nominatim
+130900,Kab. Landak,Prov. Kalimantan Barat,0.5046350,109.7070383,OSM Nominatim
+131000,Kab. Sekadau,Prov. Kalimantan Barat,0.0219108,110.8883392,OSM Nominatim
+131100,Kab. Melawi,Prov. Kalimantan Barat,-0.7239359,111.6559533,OSM Nominatim
+131200,Kab. Kayong Utara,Prov. Kalimantan Barat,-1.0435067,110.0589495,OSM Nominatim
+131300,Kab. Kuburaya,Prov. Kalimantan Barat,-0.356,109.438,manual
+136000,Kota Pontianak,Prov. Kalimantan Barat,-0.0226903,109.3447488,OSM Nominatim
+136100,Kota Singkawang,Prov. Kalimantan Barat,0.9069861,108.9889657,OSM Nominatim
+140100,Kab. Kapuas,Prov. Kalimantan Tengah,-1.9228793,114.3363619,OSM Nominatim
+140200,Kab. Barito Selatan,Prov. Kalimantan Tengah,-1.9228793,114.7888904,OSM Nominatim
+140300,Kab. Barito Utara,Prov. Kalimantan Tengah,-0.7542110,115.0451447,OSM Nominatim
+140400,Kab. Kotawaringin Timur,Prov. Kalimantan Tengah,-2.2514730,112.7854649,OSM Nominatim
+140500,Kab. Kotawaringin Barat,Prov. Kalimantan Tengah,-2.5042120,111.6468097,OSM Nominatim
+140600,Kab. Katingan,Prov. Kalimantan Tengah,-1.8595578,113.3369051,OSM Nominatim
+140700,Kab. Seruyan,Prov. Kalimantan Tengah,-2.1201765,112.1650251,OSM Nominatim
+140800,Kab. Sukamara,Prov. Kalimantan Tengah,-2.5602491,111.1837719,OSM Nominatim
+140900,Kab. Lamandau,Prov. Kalimantan Tengah,-1.7788744,111.4173165,OSM Nominatim
+141000,Kab. Gunung Mas,Prov. Kalimantan Tengah,-0.9677894,113.5357137,OSM Nominatim
+141100,Kab. Pulang Pisau,Prov. Kalimantan Tengah,-2.4931655,114.0404704,OSM Nominatim
+141200,Kab. Murung Raya,Prov. Kalimantan Tengah,-0.0684509,114.1731819,OSM Nominatim
+141300,Kab. Barito Timur,Prov. Kalimantan Tengah,-1.9819108,115.1803876,OSM Nominatim
+146000,Kota Palangka Raya,Prov. Kalimantan Tengah,-2.2072919,113.9164372,OSM Nominatim
+150100,Kab. Banjar,Prov. Kalimantan Selatan,-3.2775630,115.0284389,OSM Nominatim
+150200,Kab. Tanah Laut,Prov. Kalimantan Selatan,-3.8440385,114.9888593,OSM Nominatim
+150300,Kab. Barito Kuala,Prov. Kalimantan Selatan,-3.0192964,114.6779323,OSM Nominatim
+150400,Kab. Tapin,Prov. Kalimantan Selatan,-2.8622730,115.0109640,OSM Nominatim
+150500,Kab. Hulu Sungai Selatan,Prov. Kalimantan Selatan,-2.7125808,115.1587771,OSM Nominatim
+150600,Kab. Hulu Sungai Tengah,Prov. Kalimantan Selatan,-2.6187577,115.4292997,OSM Nominatim
+150700,Kab. Hulu Sungai Utara,Prov. Kalimantan Selatan,-2.4242449,115.1597061,OSM Nominatim
+150800,Kab. Tabalong,Prov. Kalimantan Selatan,-1.8363209,115.5155337,OSM Nominatim
+150900,Kab. Kotabaru,Prov. Kalimantan Selatan,-2.7951096,115.9712548,OSM Nominatim
+151000,Kab. Balangan,Prov. Kalimantan Selatan,-2.2878972,115.6205477,OSM Nominatim
+151100,Kab. Tanah Bumbu,Prov. Kalimantan Selatan,-3.4473328,115.7063933,OSM Nominatim
+156000,Kota Banjarmasin,Prov. Kalimantan Selatan,-3.3187496,114.5925828,OSM Nominatim
+156100,Kota Banjarbaru,Prov. Kalimantan Selatan,-3.4430503,114.8308481,OSM Nominatim
+160100,Kab. Paser,Prov. Kalimantan Timur,-1.6896674,116.0158218,OSM Nominatim
+160200,Kab. Kutai Kartanegara,Prov. Kalimantan Timur,0.1956330,116.2004167,OSM Nominatim
+160300,Kab. Berau,Prov. Kalimantan Timur,1.7767536,117.2691764,OSM Nominatim
+160900,Kab. Kutai Barat,Prov. Kalimantan Timur,-0.4209152,115.7651571,OSM Nominatim
+161000,Kab. Kutai Timur,Prov. Kalimantan Timur,0.9453607,117.0110884,OSM Nominatim
+161100,Kab. Penajam Paser Utara,Prov. Kalimantan Timur,-1.1973862,116.5673033,OSM Nominatim
+161200,Kab. Mahakam Ulu,Prov. Kalimantan Timur,0.6226020,115.3131454,OSM Nominatim
+166000,Kota Samarinda,Prov. Kalimantan Timur,-0.5017804,117.1393089,OSM Nominatim
+166100,Kota Balikpapan,Prov. Kalimantan Timur,-1.2398711,116.8593379,OSM Nominatim
+166300,Kota Bontang,Prov. Kalimantan Timur,0.1236548,117.4717080,OSM Nominatim
+170100,Kab. Bolaang Mongondow,Prov. Sulawesi Utara,0.7207701,123.9870367,OSM Nominatim
+170200,Kab. Minahasa,Prov. Sulawesi Utara,1.2151679,124.7978881,OSM Nominatim
+170300,Kab. Kep. Sangihe,Prov. Sulawesi Utara,3.58,125.53,manual
+170400,Kab. Kepulauan Talaud,Prov. Sulawesi Utara,4.2694929,126.8135499,OSM Nominatim
+170500,Kab. Minahasa Selatan,Prov. Sulawesi Utara,1.0703100,124.4361622,OSM Nominatim
+170600,Kab. Minahasa Utara,Prov. Sulawesi Utara,1.5332955,124.9999397,OSM Nominatim
+170800,Kab. Bolaang Mongondow Utara,Prov. Sulawesi Utara,0.7599112,123.4849375,OSM Nominatim
+170900,Kab. Kepulauan Siau Tagulandang Biaro,Prov. Sulawesi Utara,2.3495183,125.4202589,OSM Nominatim
+171000,Kab. Minahasa Tenggara,Prov. Sulawesi Utara,0.9882673,124.7306506,OSM Nominatim
+171100,Kab. Bolaang Mongondow Timur,Prov. Sulawesi Utara,0.7115652,124.4895208,OSM Nominatim
+171200,Kab. Bolaang Mongondow Selatan,Prov. Sulawesi Utara,0.4533360,124.1796300,OSM Nominatim
+176000,Kota Manado,Prov. Sulawesi Utara,1.4900447,124.8407673,OSM Nominatim
+176100,Kota Bitung,Prov. Sulawesi Utara,1.4434400,125.1940836,OSM Nominatim
+176200,Kota Tomohon,Prov. Sulawesi Utara,1.3255914,124.8386050,OSM Nominatim
+176300,Kota Kotamobagu,Prov. Sulawesi Utara,0.7352231,124.3154057,OSM Nominatim
+180100,Kab. Banggai Kepulauan,Prov. Sulawesi Tengah,-1.3518454,123.1808567,OSM Nominatim
+180200,Kab. Donggala,Prov. Sulawesi Tengah,-1.0478201,119.6758465,OSM Nominatim
+180300,Kab. Poso,Prov. Sulawesi Tengah,-1.6568513,120.5421575,OSM Nominatim
+180400,Kab. Banggai,Prov. Sulawesi Tengah,-0.9210461,122.6975066,OSM Nominatim
+180500,Kab. Buol,Prov. Sulawesi Tengah,1.0123735,121.3120524,OSM Nominatim
+180600,Kab. Tolitoli,Prov. Sulawesi Tengah,1.0392000,120.8169000,OSM Nominatim
+180700,Kab. Morowali,Prov. Sulawesi Tengah,-2.7151483,121.8824104,OSM Nominatim
+180800,Kab. Parigi Moutong,Prov. Sulawesi Tengah,-0.2383605,119.9599311,OSM Nominatim
+180900,Kab. Tojo Una-Una,Prov. Sulawesi Tengah,-1.2131378,121.6196075,OSM Nominatim
+181000,Kab. Sigi,Prov. Sulawesi Tengah,-1.3211588,119.9987265,OSM Nominatim
+181100,Kab. Banggai Laut,Prov. Sulawesi Tengah,-1.8428131,123.1025832,OSM Nominatim
+181200,Kab. Morowali Utara,Prov. Sulawesi Tengah,-1.8418842,121.0771696,OSM Nominatim
+186000,Kota Palu,Prov. Sulawesi Tengah,-0.8957793,119.8679974,OSM Nominatim
+190100,Kab. Maros,Prov. Sulawesi Selatan,-4.9655024,119.6928434,OSM Nominatim
+190200,Kab. Pangkajene Kepulauan,Prov. Sulawesi Selatan,-4.7544495,119.5893105,OSM Nominatim
+190300,Kab. Gowa,Prov. Sulawesi Selatan,-5.3290868,119.7660277,OSM Nominatim
+190400,Kab. Takalar,Prov. Sulawesi Selatan,-5.4066540,119.5375417,OSM Nominatim
+190500,Kab. Jeneponto,Prov. Sulawesi Selatan,-5.6796827,119.7474599,OSM Nominatim
+190600,Kab. Barru,Prov. Sulawesi Selatan,-4.4337339,119.6778273,OSM Nominatim
+190700,Kab. Bone,Prov. Sulawesi Selatan,-4.6801018,120.0946735,OSM Nominatim
+190800,Kab. Wajo,Prov. Sulawesi Selatan,-3.9655767,120.1279377,OSM Nominatim
+190900,Kab. Soppeng,Prov. Sulawesi Selatan,-4.3188696,119.9185062,OSM Nominatim
+191000,Kab. Bantaeng,Prov. Sulawesi Selatan,-5.4709449,119.9871679,OSM Nominatim
+191100,Kab. Bulukumba,Prov. Sulawesi Selatan,-5.5592430,120.1929309,OSM Nominatim
+191200,Kab. Sinjai,Prov. Sulawesi Selatan,-5.2006665,120.1441865,OSM Nominatim
+191300,Kab. Kepulauan Selayar,Prov. Sulawesi Selatan,-7.3014876,120.9626595,OSM Nominatim
+191400,Kab. Pinrang,Prov. Sulawesi Selatan,-3.7932568,119.6528692,OSM Nominatim
+191500,Kab. Sidenreng Rappang,Prov. Sulawesi Selatan,-3.8078618,120.0450189,OSM Nominatim
+191600,Kab. Enrekang,Prov. Sulawesi Selatan,-3.4880125,119.8658463,OSM Nominatim
+191700,Kab. Luwu,Prov. Sulawesi Selatan,-3.3479550,120.2214481,OSM Nominatim
+191800,Kab. Tana Toraja,Prov. Sulawesi Selatan,-3.1169403,119.6937644,OSM Nominatim
+192400,Kab. Luwu Utara,Prov. Sulawesi Selatan,-2.4037884,120.1301347,OSM Nominatim
+192600,Kab. Luwu Timur,Prov. Sulawesi Selatan,-2.5304830,121.1224205,OSM Nominatim
+192700,Kab. Toraja Utara,Prov. Sulawesi Selatan,-2.8612420,119.8420118,OSM Nominatim
+196000,Kota Makassar,Prov. Sulawesi Selatan,-5.1342962,119.4124282,OSM Nominatim
+196100,Kota Parepare,Prov. Sulawesi Selatan,-4.0057055,119.6236101,OSM Nominatim
+196200,Kota Palopo,Prov. Sulawesi Selatan,-2.9996306,120.1920679,OSM Nominatim
+200100,Kab. Konawe,Prov. Sulawesi Tenggara,-3.5116689,121.6523287,OSM Nominatim
+200200,Kab. Muna,Prov. Sulawesi Tenggara,-4.9191496,122.6918339,OSM Nominatim
+200300,Kab. Buton,Prov. Sulawesi Tenggara,-5.3543453,122.9506590,OSM Nominatim
+200400,Kab. Kolaka,Prov. Sulawesi Tenggara,-4.1213511,121.6929444,OSM Nominatim
+200500,Kab. Konawe Selatan,Prov. Sulawesi Tenggara,-4.2599185,122.4498522,OSM Nominatim
+200600,Kab. Wakatobi,Prov. Sulawesi Tenggara,-5.3156704,123.5850437,OSM Nominatim
+200700,Kab. Bombana,Prov. Sulawesi Tenggara,-4.6392558,121.7572110,OSM Nominatim
+200800,Kab. Kolaka Utara,Prov. Sulawesi Tenggara,-3.2605039,121.0933984,OSM Nominatim
+200900,Kab. Konawe Utara,Prov. Sulawesi Tenggara,-3.4549579,121.9762570,OSM Nominatim
+201000,Kab. Buton Utara,Prov. Sulawesi Tenggara,-4.7565043,122.9489160,OSM Nominatim
+201100,Kab. Kolaka Timur,Prov. Sulawesi Tenggara,-3.8207324,121.7541986,OSM Nominatim
+201200,Kab. Konawe Kepulauan,Prov. Sulawesi Tenggara,-4.1194809,123.0985639,OSM Nominatim
+201300,Kab. Muna Barat,Prov. Sulawesi Tenggara,-4.8036713,122.4514545,OSM Nominatim
+201400,Kab. Buton Selatan,Prov. Sulawesi Tenggara,-5.5913914,122.7018948,OSM Nominatim
+201600,Kab. Buton Tengah,Prov. Sulawesi Tenggara,-5.2918081,122.3882776,OSM Nominatim
+206000,Kota Kendari,Prov. Sulawesi Tenggara,-3.9918068,122.5180066,OSM Nominatim
+206100,Kota Baubau,Prov. Sulawesi Tenggara,-5.4620298,122.6057655,OSM Nominatim
+210100,Kab. Maluku Tengah,Prov. Maluku,-3.1214456,129.4599922,OSM Nominatim
+210200,Kab. Maluku Tenggara,Prov. Maluku,-5.7714883,132.7377600,OSM Nominatim
+210300,Kab. Buru,Prov. Maluku,-3.3539094,126.6489184,OSM Nominatim
+210400,Kab. Kepulauan Tanimbar,Prov. Maluku,-7.5740504,131.4223940,OSM Nominatim
+210500,Kab. Seram Bagian Barat,Prov. Maluku,-3.1642057,128.4836558,OSM Nominatim
+210600,Kab. Seram Bagian Timur,Prov. Maluku,-3.4231586,130.3910924,OSM Nominatim
+210700,Kab. Kepulauan Aru,Prov. Maluku,-6.2279395,134.4978439,OSM Nominatim
+210800,Kab. Maluku Barat Daya,Prov. Maluku,-7.7867206,126.2427827,OSM Nominatim
+210900,Kab. Buru Selatan,Prov. Maluku,-3.4866756,126.3501528,OSM Nominatim
+216000,Kota Ambon,Prov. Maluku,-3.6959434,128.1787850,OSM Nominatim
+216100,Kota Tual,Prov. Maluku,-5.5411435,132.7187819,OSM Nominatim
+220100,Kab. Buleleng,Prov. Bali,-8.2222492,114.9950437,OSM Nominatim
+220200,Kab. Jembrana,Prov. Bali,-8.3139706,114.6684648,OSM Nominatim
+220300,Kab. Tabanan,Prov. Bali,-8.4402566,115.0715750,OSM Nominatim
+220400,Kab. Badung,Prov. Bali,-8.5445874,115.1985235,OSM Nominatim
+220500,Kab. Gianyar,Prov. Bali,-8.4821436,115.2855901,OSM Nominatim
+220600,Kab. Klungkung,Prov. Bali,-8.7455328,115.5348165,OSM Nominatim
+220700,Kab. Bangli,Prov. Bali,-8.3336175,115.3680460,OSM Nominatim
+220800,Kab. Karang Asem,Prov. Bali,-8.4860280,115.6004992,OSM Nominatim
+226000,Kota Denpasar,Prov. Bali,-8.6653349,115.2176191,OSM Nominatim
+230100,Kab. Lombok Barat,Prov. Nusa Tenggara Barat,-8.6718889,116.1220480,OSM Nominatim
+230200,Kab. Lombok Tengah,Prov. Nusa Tenggara Barat,-8.7030710,116.2899373,OSM Nominatim
+230300,Kab. Lombok Timur,Prov. Nusa Tenggara Barat,-8.6330934,116.5587704,OSM Nominatim
+230400,Kab. Sumbawa,Prov. Nusa Tenggara Barat,-8.7341272,117.4959870,OSM Nominatim
+230500,Kab. Dompu,Prov. Nusa Tenggara Barat,-8.5164771,118.3312161,OSM Nominatim
+230600,Kab. Bima,Prov. Nusa Tenggara Barat,-8.5647631,118.7624740,OSM Nominatim
+230700,Kab. Sumbawa Barat,Prov. Nusa Tenggara Barat,-8.6585150,116.9161845,OSM Nominatim
+230800,Kab. Lombok Utara,Prov. Nusa Tenggara Barat,-8.3572425,116.1609208,OSM Nominatim
+236000,Kota Mataram,Prov. Nusa Tenggara Barat,-8.5837726,116.1068500,OSM Nominatim
+236100,Kota Bima,Prov. Nusa Tenggara Barat,-8.4534091,118.7276890,OSM Nominatim
+240100,Kab. Kupang,Prov. Nusa Tenggara Timur,-9.8475696,123.8780846,OSM Nominatim
+240300,Kab. Timor Tengah Selatan,Prov. Nusa Tenggara Timur,-9.8230512,124.4355953,OSM Nominatim
+240400,Kab. Timor Tengah Utara,Prov. Nusa Tenggara Timur,-9.3406164,124.6102696,OSM Nominatim
+240500,Kab. Belu,Prov. Nusa Tenggara Timur,-9.1759720,124.9163537,OSM Nominatim
+240600,Kab. Alor,Prov. Nusa Tenggara Timur,-8.2911448,124.7777164,OSM Nominatim
+240700,Kab. Flores Timur,Prov. Nusa Tenggara Timur,-8.3184620,123.1657963,OSM Nominatim
+240800,Kab. Sikka,Prov. Nusa Tenggara Timur,-8.5946450,122.0895517,OSM Nominatim
+240900,Kab. Ende,Prov. Nusa Tenggara Timur,-8.6728675,121.6929173,OSM Nominatim
+241000,Kab. Ngada,Prov. Nusa Tenggara Timur,-8.6499482,120.9867070,OSM Nominatim
+241100,Kab. Manggarai,Prov. Nusa Tenggara Timur,-8.5480146,120.4389862,OSM Nominatim
+241200,Kab. Sumba Timur,Prov. Nusa Tenggara Timur,-9.8342576,120.2094194,OSM Nominatim
+241300,Kab. Sumba Barat,Prov. Nusa Tenggara Timur,-9.5857091,119.4439426,OSM Nominatim
+241400,Kab. Lembata,Prov. Nusa Tenggara Timur,-8.3781443,123.5446266,OSM Nominatim
+241500,Kab. Rote-Ndao,Prov. Nusa Tenggara Timur,-10.6870292,123.2084350,OSM Nominatim
+241600,Kab. Manggarai Barat,Prov. Nusa Tenggara Timur,-8.5741281,120.0611252,OSM Nominatim
+241700,Kab. Nagekeo,Prov. Nusa Tenggara Timur,-8.6758869,121.2708027,OSM Nominatim
+241800,Kab. Sumba Tengah,Prov. Nusa Tenggara Timur,-9.5935839,119.6662771,OSM Nominatim
+241900,Kab. Sumba Barat Daya,Prov. Nusa Tenggara Timur,-9.5378210,119.1623019,OSM Nominatim
+242000,Kab. Manggarai Timur,Prov. Nusa Tenggara Timur,-8.5738273,120.6863591,OSM Nominatim
+242100,Kab. Sabu Raijua,Prov. Nusa Tenggara Timur,-10.5222314,121.8884584,OSM Nominatim
+242200,Kab. Malaka,Prov. Nusa Tenggara Timur,-9.5460166,124.8763532,OSM Nominatim
+246000,Kota Kupang,Prov. Nusa Tenggara Timur,-10.1632209,123.6017755,OSM Nominatim
+250100,Kab. Jayapura,Prov. Papua,-3.0371160,139.9470356,OSM Nominatim
+250200,Kab. Biak Numfor,Prov. Papua,-1.1592050,136.0785210,OSM Nominatim
+250300,Kab. Kepulauan Yapen,Prov. Papua,-1.7558371,136.3664523,OSM Nominatim
+251900,Kab. Sarmi,Prov. Papua,-2.5562874,139.1077422,OSM Nominatim
+252000,Kab. Keerom,Prov. Papua,-3.3335922,140.6726625,OSM Nominatim
+252600,Kab. Waropen,Prov. Papua,-2.7187964,136.6504111,OSM Nominatim
+252700,Kab. Supiori,Prov. Papua,-0.7535972,135.6349645,OSM Nominatim
+252800,Kab. Memberamo Raya,Prov. Papua,-2.533,138,manual
+256000,Kota Jayapura,Prov. Papua,-2.5387539,140.7037389,OSM Nominatim
+260100,Kab. Bengkulu Utara,Prov. Bengkulu,-3.1891333,101.8576418,OSM Nominatim
+260200,Kab. Rejang Lebong,Prov. Bengkulu,-3.4389041,102.6984853,OSM Nominatim
+260300,Kab. Bengkulu Selatan,Prov. Bengkulu,-4.3589877,103.0020389,OSM Nominatim
+260400,Kab. Muko-muko,Prov. Bengkulu,-2.5613420,101.1060600,OSM Nominatim
+260500,Kab. Kepahiang,Prov. Bengkulu,-3.6479363,102.6661393,OSM Nominatim
+260600,Kab. Lebong,Prov. Bengkulu,-3.0534115,102.2089661,OSM Nominatim
+260700,Kab. Kaur,Prov. Bengkulu,-4.5905275,103.3652613,OSM Nominatim
+260800,Kab. Seluma,Prov. Bengkulu,-4.0768265,102.6717867,OSM Nominatim
+260900,Kab. Bengkulu Tengah,Prov. Bengkulu,-3.6712272,102.3875619,OSM Nominatim
+266000,Kota Bengkulu,Prov. Bengkulu,-3.7922858,102.2623797,OSM Nominatim
+270100,Kab. Pulau Taliabu,Prov. Maluku Utara,-1.8314758,124.8299791,OSM Nominatim
+270200,Kab. Halmahera Tengah,Prov. Maluku Utara,0.3888811,128.5832237,OSM Nominatim
+270300,Kab. Halmahera Barat,Prov. Maluku Utara,1.3631055,127.5737958,OSM Nominatim
+270400,Kab. halmahera Utara,Prov. Maluku Utara,1.6178705,127.8584679,OSM Nominatim
+270500,Kab. Halmahera Selatan,Prov. Maluku Utara,-1.5343700,127.7165590,OSM Nominatim
+270600,Kab. Halmahera Timur,Prov. Maluku Utara,1.0027852,128.2487936,OSM Nominatim
+270700,Kab. Kepulauan Sula,Prov. Maluku Utara,-1.8625438,125.8306468,OSM Nominatim
+270800,Kab. Kepulauan Morotai,Prov. Maluku Utara,2.366,128.4,manual
+276000,Kota Ternate,Prov. Maluku Utara,0.7852043,127.3832342,OSM Nominatim
+276100,Kota Tidore Kepulauan,Prov. Maluku Utara,0.6786796,127.4483156,OSM Nominatim
+280100,Kab. Pandeglang,Prov. Banten,-6.5473765,105.7994879,OSM Nominatim
+280200,Kab. Lebak,Prov. Banten,-6.6432471,106.1868837,OSM Nominatim
+280300,Kab. Tangerang,Prov. Banten,-6.1644013,106.4679311,OSM Nominatim
+280400,Kab. Serang,Prov. Banten,-6.1057256,105.9884196,OSM Nominatim
+286000,Kota Cilegon,Prov. Banten,-6.0173890,106.0537688,OSM Nominatim
+286100,Kota Tangerang,Prov. Banten,-6.1761924,106.6382161,OSM Nominatim
+286200,Kota Serang,Prov. Banten,-6.1169662,106.1518079,OSM Nominatim
+286300,Kota Tangerang Selatan,Prov. Banten,-6.3227016,106.7085737,OSM Nominatim
+290100,Kab. Bangka,Prov. Kepulauan Bangka Belitung,-1.9250896,105.9365208,OSM Nominatim
+290200,Kab. Belitung,Prov. Kepulauan Bangka Belitung,-2.8842812,107.6631596,OSM Nominatim
+290300,Kab. Bangka Tengah,Prov. Kepulauan Bangka Belitung,-2.4305155,106.1001553,OSM Nominatim
+290400,Kab. Bangka Barat,Prov. Kepulauan Bangka Belitung,-1.8412375,105.5518712,OSM Nominatim
+290500,Kab. Bangka Selatan,Prov. Kepulauan Bangka Belitung,-2.7768975,106.2939584,OSM Nominatim
+290600,Kab. Belitung Timur,Prov. Kepulauan Bangka Belitung,-2.9164574,108.0037218,OSM Nominatim
+296000,Kota Pangkalpinang,Prov. Kepulauan Bangka Belitung,-2.1206733,106.1134604,OSM Nominatim
+300100,Kab. Boalemo,Prov. Gorontalo,0.6876202,122.3356833,OSM Nominatim
+300200,Kab. Gorontalo,Prov. Gorontalo,0.7011802,122.7233095,OSM Nominatim
+300300,Kab. Pohuwato,Prov. Gorontalo,0.7018210,121.6470746,OSM Nominatim
+300400,Kab. Bone Bolango,Prov. Gorontalo,0.5564031,123.3099705,OSM Nominatim
+300500,Kab. Gorontalo Utara,Prov. Gorontalo,0.8661976,123.0495286,OSM Nominatim
+306000,Kota Gorontalo,Prov. Gorontalo,0.5384433,123.0594971,OSM Nominatim
+310100,Kab. Bintan,Prov. Kepulauan Riau,1.0196577,104.5698189,OSM Nominatim
+310200,Kab. Karimun,Prov. Kepulauan Riau,0.7653871,103.4287445,OSM Nominatim
+310300,Kab. Natuna,Prov. Kepulauan Riau,3.9305166,108.1901503,OSM Nominatim
+310400,Kab. Lingga,Prov. Kepulauan Riau,-0.5094966,104.4141614,OSM Nominatim
+310500,Kab. Kepulauan Anambas,Prov. Kepulauan Riau,2.9389011,105.7602580,OSM Nominatim
+316000,Kota Batam,Prov. Kepulauan Riau,1.1030815,104.0383696,OSM Nominatim
+316100,Kota Tanjungpinang,Prov. Kepulauan Riau,0.9236915,104.4460940,OSM Nominatim
+320100,Kab. Fak-Fak,Prov. Papua Barat,-2.9301890,132.2944510,OSM Nominatim
+320200,Kab. Kaimana,Prov. Papua Barat,-3.5158358,134.3165746,OSM Nominatim
+320300,Kab. Teluk Wondama,Prov. Papua Barat,-2.6325250,134.5661466,OSM Nominatim
+320400,Kab. Teluk Bintuni,Prov. Papua Barat,-2.1138854,133.5287755,OSM Nominatim
+320500,Kab. Manokwari,Prov. Papua Barat,-0.9776762,133.7538039,OSM Nominatim
+321100,Kab. Pegunungan Arfak,Prov. Papua Barat,-1.2611918,133.6492059,OSM Nominatim
+321200,Kab. Manokwari Selatan,Prov. Papua Barat,-1.5250221,134.0710293,OSM Nominatim
+330100,Kab. Mamuju,Prov. Sulawesi Barat,-2.5394187,119.3889455,OSM Nominatim
+330200,Kab. Pasangkayu,Prov. Sulawesi Barat,-1.3447436,119.3795112,OSM Nominatim
+330300,Kab. Polewali Mandar,Prov. Sulawesi Barat,-3.3031896,119.1450522,OSM Nominatim
+330400,Kab. Mamasa,Prov. Sulawesi Barat,-3.0003659,119.3209087,OSM Nominatim
+330500,Kab. Majene,Prov. Sulawesi Barat,-3.2429956,118.8733445,OSM Nominatim
+330600,Kab. Mamuju Tengah,Prov. Sulawesi Barat,-2.0214417,119.5405447,OSM Nominatim
+340100,Kab. Malinau,Prov. Kalimantan Utara,2.6185545,115.6904970,OSM Nominatim
+340200,Kab. Bulungan,Prov. Kalimantan Utara,2.7620341,117.0743468,OSM Nominatim
+340300,Kab. Tana Tidung,Prov. Kalimantan Utara,3.5553285,117.0446603,OSM Nominatim
+340500,Kab. Nunukan,Prov. Kalimantan Utara,3.9074565,117.0423506,OSM Nominatim
+346000,Kota Tarakan,Prov. Kalimantan Utara,3.3000169,117.6330159,OSM Nominatim
+350100,Belanda,Luar Negeri,,,
+350200,Japan,Luar Negeri,,,
+350300,Mesir,Luar Negeri,,,
+350400,Malaysia,Luar Negeri,,,
+350500,Myanmar,Luar Negeri,,,
+350600,Filipina,Luar Negeri,,,
+350800,Arab Saudi,Luar Negeri,,,
+351000,Singapura,Luar Negeri,,,
+351200,Thailand,Luar Negeri,,,
+351300,Taiwan,Luar Negeri,,,
+351400,Cina,Luar Negeri,,,
+351500,Brunei Darussalam,Luar Negeri,,,
+360100,Kab. Nabire,Prov. Papua Tengah,-3.3467970,135.9502720,OSM Nominatim
+360200,Kab. Puncak Jaya,Prov. Papua Tengah,-3.7009102,137.9649142,OSM Nominatim
+360300,Kab. Paniai,Prov. Papua Tengah,-3.7426381,136.3778066,OSM Nominatim
+360400,Kab. Mimika,Prov. Papua Tengah,-4.5875259,136.9477964,OSM Nominatim
+360500,Kab. Puncak,Prov. Papua Tengah,-3.6256500,137.4892467,OSM Nominatim
+360600,Kab. Dogiyai,Prov. Papua Tengah,-4.0047509,135.7166964,OSM Nominatim
+360700,Kab. Intan Jaya,Prov. Papua Tengah,-3.5229883,136.7184661,OSM Nominatim
+360800,Kab. Deiyai,Prov. Papua Tengah,-4.1879385,136.4453126,OSM Nominatim
+370100,Kab. Merauke,Prov. Papua Selatan,-8.4902766,140.3955820,OSM Nominatim
+370200,Kab. Boven Digoel,Prov. Papua Selatan,-6.0391733,140.4299086,OSM Nominatim
+370300,Kab. Mappi,Prov. Papua Selatan,-6.3295533,139.2877312,OSM Nominatim
+370400,Kab. Asmat,Prov. Papua Selatan,-5.5314486,138.7896921,OSM Nominatim
+380100,Kab. Jayawijaya,Prov. Papua Pegunungan,-4.1152787,138.9650306,OSM Nominatim
+380200,Kab. Pegunungan Bintang,Prov. Papua Pegunungan,-4.4754920,140.5576777,OSM Nominatim
+380300,Kab. Yahukimo,Prov. Papua Pegunungan,-4.3739458,139.4648162,OSM Nominatim
+380400,Kab. Tolikara,Prov. Papua Pegunungan,-3.4496601,138.3491294,OSM Nominatim
+380500,Kab. Mamberamo Tengah,Prov. Papua Pegunungan,-3.5335458,139.0177409,OSM Nominatim
+380600,Kab. Yalimo,Prov. Papua Pegunungan,-3.7353308,139.5505815,OSM Nominatim
+380700,Kab. Lanny Jaya,Prov. Papua Pegunungan,-3.9977349,138.3731165,OSM Nominatim
+380800,Kab. Nduga,Prov. Papua Pegunungan,-4.4431202,138.2248381,OSM Nominatim
+390100,Kab. Maybrat,Prov. Papua Barat Daya,-1.4039435,132.5871495,OSM Nominatim
+390200,Kab. Raja Ampat,Prov. Papua Barat Daya,-0.7125553,130.3034473,OSM Nominatim
+390300,Kab. Sorong Selatan,Prov. Papua Barat Daya,-1.6430519,132.2549526,OSM Nominatim
+390400,Kab. Sorong,Prov. Papua Barat Daya,-1.1547630,131.5336145,OSM Nominatim
+390500,Kab. Tambrauw,Prov. Papua Barat Daya,-0.8501282,132.7243581,OSM Nominatim
+390600,Kota Sorong,Prov. Papua Barat Daya,-0.8634105,131.2544805,OSM Nominatim

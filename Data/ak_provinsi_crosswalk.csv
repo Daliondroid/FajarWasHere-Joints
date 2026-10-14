@@ -1,0 +1,182 @@
+﻿sumber_file,nama_di_sumber,provinsi_kanonik,kode_bps,provinsi_induk_sebelum_pemekaran_2022
+ptn.csv,Aceh,Aceh,11,Aceh
+ptn.csv,Bali,Bali,51,Bali
+ptn.csv,Banten,Banten,36,Banten
+ptn.csv,Bengkulu,Bengkulu,17,Bengkulu
+ptn.csv,Gorontalo,Gorontalo,75,Gorontalo
+ptn.csv,Jakarta Raya,DKI Jakarta,31,DKI Jakarta
+ptn.csv,Jambi,Jambi,15,Jambi
+ptn.csv,Jawa Barat,Jawa Barat,32,Jawa Barat
+ptn.csv,Jawa Tengah,Jawa Tengah,33,Jawa Tengah
+ptn.csv,Jawa Timur,Jawa Timur,35,Jawa Timur
+ptn.csv,Kalimantan Barat,Kalimantan Barat,61,Kalimantan Barat
+ptn.csv,Kalimantan Selatan,Kalimantan Selatan,63,Kalimantan Selatan
+ptn.csv,Kalimantan Tengah,Kalimantan Tengah,62,Kalimantan Tengah
+ptn.csv,Kalimantan Timur,Kalimantan Timur,64,Kalimantan Timur
+ptn.csv,Kalimantan Utara,Kalimantan Utara,65,Kalimantan Utara
+ptn.csv,Kepulauan Bangka Belitung,Kepulauan Bangka Belitung,19,Kepulauan Bangka Belitung
+ptn.csv,Kepulauan Riau,Kepulauan Riau,21,Kepulauan Riau
+ptn.csv,Lampung,Lampung,18,Lampung
+ptn.csv,Maluku,Maluku,81,Maluku
+ptn.csv,Maluku Utara,Maluku Utara,82,Maluku Utara
+ptn.csv,Nusa Tenggara Barat,Nusa Tenggara Barat,52,Nusa Tenggara Barat
+ptn.csv,Nusa Tenggara Timur,Nusa Tenggara Timur,53,Nusa Tenggara Timur
+ptn.csv,Papua,Papua,91,Papua
+ptn.csv,Papua Barat,Papua Barat,92,Papua Barat
+ptn.csv,Papua Selatan,Papua Selatan,93,Papua
+ptn.csv,Riau,Riau,14,Riau
+ptn.csv,Sulawesi Barat,Sulawesi Barat,76,Sulawesi Barat
+ptn.csv,Sulawesi Selatan,Sulawesi Selatan,73,Sulawesi Selatan
+ptn.csv,Sulawesi Tengah,Sulawesi Tengah,72,Sulawesi Tengah
+ptn.csv,Sulawesi Tenggara,Sulawesi Tenggara,74,Sulawesi Tenggara
+ptn.csv,Sulawesi Utara,Sulawesi Utara,71,Sulawesi Utara
+ptn.csv,Sumatera Barat,Sumatera Barat,13,Sumatera Barat
+ptn.csv,Sumatera Selatan,Sumatera Selatan,16,Sumatera Selatan
+ptn.csv,Sumatera Utara,Sumatera Utara,12,Sumatera Utara
+ptn.csv,Yogyakarta,DI Yogyakarta,34,DI Yogyakarta
+sekolah_kuota,Luar Negeri,Luar Negeri,0,Luar Negeri
+sekolah_kuota,Prov. Aceh,Aceh,11,Aceh
+sekolah_kuota,Prov. Bali,Bali,51,Bali
+sekolah_kuota,Prov. Banten,Banten,36,Banten
+sekolah_kuota,Prov. Bengkulu,Bengkulu,17,Bengkulu
+sekolah_kuota,Prov. D.I. Yogyakarta,DI Yogyakarta,34,DI Yogyakarta
+sekolah_kuota,Prov. D.K.I. Jakarta,DKI Jakarta,31,DKI Jakarta
+sekolah_kuota,Prov. Gorontalo,Gorontalo,75,Gorontalo
+sekolah_kuota,Prov. Jambi,Jambi,15,Jambi
+sekolah_kuota,Prov. Jawa Barat,Jawa Barat,32,Jawa Barat
+sekolah_kuota,Prov. Jawa Tengah,Jawa Tengah,33,Jawa Tengah
+sekolah_kuota,Prov. Jawa Timur,Jawa Timur,35,Jawa Timur
+sekolah_kuota,Prov. Kalimantan Barat,Kalimantan Barat,61,Kalimantan Barat
+sekolah_kuota,Prov. Kalimantan Selatan,Kalimantan Selatan,63,Kalimantan Selatan
+sekolah_kuota,Prov. Kalimantan Tengah,Kalimantan Tengah,62,Kalimantan Tengah
+sekolah_kuota,Prov. Kalimantan Timur,Kalimantan Timur,64,Kalimantan Timur
+sekolah_kuota,Prov. Kalimantan Utara,Kalimantan Utara,65,Kalimantan Utara
+sekolah_kuota,Prov. Kepulauan Bangka Belitung,Kepulauan Bangka Belitung,19,Kepulauan Bangka Belitung
+sekolah_kuota,Prov. Kepulauan Riau,Kepulauan Riau,21,Kepulauan Riau
+sekolah_kuota,Prov. Lampung,Lampung,18,Lampung
+sekolah_kuota,Prov. Maluku,Maluku,81,Maluku
+sekolah_kuota,Prov. Maluku Utara,Maluku Utara,82,Maluku Utara
+sekolah_kuota,Prov. Nusa Tenggara Barat,Nusa Tenggara Barat,52,Nusa Tenggara Barat
+sekolah_kuota,Prov. Nusa Tenggara Timur,Nusa Tenggara Timur,53,Nusa Tenggara Timur
+sekolah_kuota,Prov. Papua,Papua,91,Papua
+sekolah_kuota,Prov. Papua Barat,Papua Barat,92,Papua Barat
+sekolah_kuota,Prov. Papua Barat Daya,Papua Barat Daya,96,Papua Barat
+sekolah_kuota,Prov. Papua Pegunungan,Papua Pegunungan,95,Papua
+sekolah_kuota,Prov. Papua Selatan,Papua Selatan,93,Papua
+sekolah_kuota,Prov. Papua Tengah,Papua Tengah,94,Papua
+sekolah_kuota,Prov. Riau,Riau,14,Riau
+sekolah_kuota,Prov. Sulawesi Barat,Sulawesi Barat,76,Sulawesi Barat
+sekolah_kuota,Prov. Sulawesi Selatan,Sulawesi Selatan,73,Sulawesi Selatan
+sekolah_kuota,Prov. Sulawesi Tengah,Sulawesi Tengah,72,Sulawesi Tengah
+sekolah_kuota,Prov. Sulawesi Tenggara,Sulawesi Tenggara,74,Sulawesi Tenggara
+sekolah_kuota,Prov. Sulawesi Utara,Sulawesi Utara,71,Sulawesi Utara
+sekolah_kuota,Prov. Sumatera Barat,Sumatera Barat,13,Sumatera Barat
+sekolah_kuota,Prov. Sumatera Selatan,Sumatera Selatan,16,Sumatera Selatan
+sekolah_kuota,Prov. Sumatera Utara,Sumatera Utara,12,Sumatera Utara
+pddikti_prodi,Prov. Aceh,Aceh,11,Aceh
+pddikti_prodi,Prov. Bali,Bali,51,Bali
+pddikti_prodi,Prov. Bangka Belitung,Kepulauan Bangka Belitung,19,Kepulauan Bangka Belitung
+pddikti_prodi,Prov. Banten,Banten,36,Banten
+pddikti_prodi,Prov. Bengkulu,Bengkulu,17,Bengkulu
+pddikti_prodi,Prov. D.I. Yogyakarta,DI Yogyakarta,34,DI Yogyakarta
+pddikti_prodi,Prov. D.K.I. Jakarta,DKI Jakarta,31,DKI Jakarta
+pddikti_prodi,Prov. Gorontalo,Gorontalo,75,Gorontalo
+pddikti_prodi,Prov. Jambi,Jambi,15,Jambi
+pddikti_prodi,Prov. Jawa Barat,Jawa Barat,32,Jawa Barat
+pddikti_prodi,Prov. Jawa Tengah,Jawa Tengah,33,Jawa Tengah
+pddikti_prodi,Prov. Jawa Timur,Jawa Timur,35,Jawa Timur
+pddikti_prodi,Prov. Kalimantan Barat,Kalimantan Barat,61,Kalimantan Barat
+pddikti_prodi,Prov. Kalimantan Selatan,Kalimantan Selatan,63,Kalimantan Selatan
+pddikti_prodi,Prov. Kalimantan Tengah,Kalimantan Tengah,62,Kalimantan Tengah
+pddikti_prodi,Prov. Kalimantan Timur,Kalimantan Timur,64,Kalimantan Timur
+pddikti_prodi,Prov. Kalimantan Utara,Kalimantan Utara,65,Kalimantan Utara
+pddikti_prodi,Prov. Kepulauan Riau,Kepulauan Riau,21,Kepulauan Riau
+pddikti_prodi,Prov. Lampung,Lampung,18,Lampung
+pddikti_prodi,Prov. Maluku,Maluku,81,Maluku
+pddikti_prodi,Prov. Maluku Utara,Maluku Utara,82,Maluku Utara
+pddikti_prodi,Prov. Nusa Tenggara Barat,Nusa Tenggara Barat,52,Nusa Tenggara Barat
+pddikti_prodi,Prov. Nusa Tenggara Timur,Nusa Tenggara Timur,53,Nusa Tenggara Timur
+pddikti_prodi,Prov. Papua,Papua,91,Papua
+pddikti_prodi,Prov. Papua Barat,Papua Barat,92,Papua Barat
+pddikti_prodi,Prov. Riau,Riau,14,Riau
+pddikti_prodi,Prov. Sulawesi Selatan,Sulawesi Selatan,73,Sulawesi Selatan
+pddikti_prodi,Prov. Sulawesi Tengah,Sulawesi Tengah,72,Sulawesi Tengah
+pddikti_prodi,Prov. Sulawesi Tenggara,Sulawesi Tenggara,74,Sulawesi Tenggara
+pddikti_prodi,Prov. Sulawesi Utara,Sulawesi Utara,71,Sulawesi Utara
+pddikti_prodi,Prov. Sumatera Barat,Sumatera Barat,13,Sumatera Barat
+pddikti_prodi,Prov. Sumatera Selatan,Sumatera Selatan,16,Sumatera Selatan
+pddikti_prodi,Prov. Sumatera Utara,Sumatera Utara,12,Sumatera Utara
+snbt_peminat_provinsi,Aceh,Aceh,11,Aceh
+snbt_peminat_provinsi,Bali,Bali,51,Bali
+snbt_peminat_provinsi,Banten,Banten,36,Banten
+snbt_peminat_provinsi,Bengkulu,Bengkulu,17,Bengkulu
+snbt_peminat_provinsi,DI Yogyakarta,DI Yogyakarta,34,DI Yogyakarta
+snbt_peminat_provinsi,DKI Jakarta,DKI Jakarta,31,DKI Jakarta
+snbt_peminat_provinsi,Gorontalo,Gorontalo,75,Gorontalo
+snbt_peminat_provinsi,Jambi,Jambi,15,Jambi
+snbt_peminat_provinsi,Jawa Barat,Jawa Barat,32,Jawa Barat
+snbt_peminat_provinsi,Jawa Tengah,Jawa Tengah,33,Jawa Tengah
+snbt_peminat_provinsi,Jawa Timur,Jawa Timur,35,Jawa Timur
+snbt_peminat_provinsi,Kalimantan Barat,Kalimantan Barat,61,Kalimantan Barat
+snbt_peminat_provinsi,Kalimantan Selatan,Kalimantan Selatan,63,Kalimantan Selatan
+snbt_peminat_provinsi,Kalimantan Tengah,Kalimantan Tengah,62,Kalimantan Tengah
+snbt_peminat_provinsi,Kalimantan Timur,Kalimantan Timur,64,Kalimantan Timur
+snbt_peminat_provinsi,Kalimantan Utara,Kalimantan Utara,65,Kalimantan Utara
+snbt_peminat_provinsi,Kepulauan Bangka Belitung,Kepulauan Bangka Belitung,19,Kepulauan Bangka Belitung
+snbt_peminat_provinsi,Kepulauan Riau,Kepulauan Riau,21,Kepulauan Riau
+snbt_peminat_provinsi,Lampung,Lampung,18,Lampung
+snbt_peminat_provinsi,Luar Negeri,Luar Negeri,0,Luar Negeri
+snbt_peminat_provinsi,Maluku,Maluku,81,Maluku
+snbt_peminat_provinsi,Maluku Utara,Maluku Utara,82,Maluku Utara
+snbt_peminat_provinsi,Nusa Tenggara Barat,Nusa Tenggara Barat,52,Nusa Tenggara Barat
+snbt_peminat_provinsi,Nusa Tenggara Timur,Nusa Tenggara Timur,53,Nusa Tenggara Timur
+snbt_peminat_provinsi,Papua,Papua,91,Papua
+snbt_peminat_provinsi,Papua Barat,Papua Barat,92,Papua Barat
+snbt_peminat_provinsi,Riau,Riau,14,Riau
+snbt_peminat_provinsi,Sulawesi Barat,Sulawesi Barat,76,Sulawesi Barat
+snbt_peminat_provinsi,Sulawesi Selatan,Sulawesi Selatan,73,Sulawesi Selatan
+snbt_peminat_provinsi,Sulawesi Tengah,Sulawesi Tengah,72,Sulawesi Tengah
+snbt_peminat_provinsi,Sulawesi Tenggara,Sulawesi Tenggara,74,Sulawesi Tenggara
+snbt_peminat_provinsi,Sulawesi Utara,Sulawesi Utara,71,Sulawesi Utara
+snbt_peminat_provinsi,Sumatera Barat,Sumatera Barat,13,Sumatera Barat
+snbt_peminat_provinsi,Sumatera Selatan,Sumatera Selatan,16,Sumatera Selatan
+snbt_peminat_provinsi,Sumatera Utara,Sumatera Utara,12,Sumatera Utara
+kabupaten_kota,Luar Negeri,Luar Negeri,0,Luar Negeri
+kabupaten_kota,Prov. Aceh,Aceh,11,Aceh
+kabupaten_kota,Prov. Bali,Bali,51,Bali
+kabupaten_kota,Prov. Banten,Banten,36,Banten
+kabupaten_kota,Prov. Bengkulu,Bengkulu,17,Bengkulu
+kabupaten_kota,Prov. D.I. Yogyakarta,DI Yogyakarta,34,DI Yogyakarta
+kabupaten_kota,Prov. D.K.I. Jakarta,DKI Jakarta,31,DKI Jakarta
+kabupaten_kota,Prov. Gorontalo,Gorontalo,75,Gorontalo
+kabupaten_kota,Prov. Jambi,Jambi,15,Jambi
+kabupaten_kota,Prov. Jawa Barat,Jawa Barat,32,Jawa Barat
+kabupaten_kota,Prov. Jawa Tengah,Jawa Tengah,33,Jawa Tengah
+kabupaten_kota,Prov. Jawa Timur,Jawa Timur,35,Jawa Timur
+kabupaten_kota,Prov. Kalimantan Barat,Kalimantan Barat,61,Kalimantan Barat
+kabupaten_kota,Prov. Kalimantan Selatan,Kalimantan Selatan,63,Kalimantan Selatan
+kabupaten_kota,Prov. Kalimantan Tengah,Kalimantan Tengah,62,Kalimantan Tengah
+kabupaten_kota,Prov. Kalimantan Timur,Kalimantan Timur,64,Kalimantan Timur
+kabupaten_kota,Prov. Kalimantan Utara,Kalimantan Utara,65,Kalimantan Utara
+kabupaten_kota,Prov. Kepulauan Bangka Belitung,Kepulauan Bangka Belitung,19,Kepulauan Bangka Belitung
+kabupaten_kota,Prov. Kepulauan Riau,Kepulauan Riau,21,Kepulauan Riau
+kabupaten_kota,Prov. Lampung,Lampung,18,Lampung
+kabupaten_kota,Prov. Maluku,Maluku,81,Maluku
+kabupaten_kota,Prov. Maluku Utara,Maluku Utara,82,Maluku Utara
+kabupaten_kota,Prov. Nusa Tenggara Barat,Nusa Tenggara Barat,52,Nusa Tenggara Barat
+kabupaten_kota,Prov. Nusa Tenggara Timur,Nusa Tenggara Timur,53,Nusa Tenggara Timur
+kabupaten_kota,Prov. Papua,Papua,91,Papua
+kabupaten_kota,Prov. Papua Barat,Papua Barat,92,Papua Barat
+kabupaten_kota,Prov. Papua Barat Daya,Papua Barat Daya,96,Papua Barat
+kabupaten_kota,Prov. Papua Pegunungan,Papua Pegunungan,95,Papua
+kabupaten_kota,Prov. Papua Selatan,Papua Selatan,93,Papua
+kabupaten_kota,Prov. Papua Tengah,Papua Tengah,94,Papua
+kabupaten_kota,Prov. Riau,Riau,14,Riau
+kabupaten_kota,Prov. Sulawesi Barat,Sulawesi Barat,76,Sulawesi Barat
+kabupaten_kota,Prov. Sulawesi Selatan,Sulawesi Selatan,73,Sulawesi Selatan
+kabupaten_kota,Prov. Sulawesi Tengah,Sulawesi Tengah,72,Sulawesi Tengah
+kabupaten_kota,Prov. Sulawesi Tenggara,Sulawesi Tenggara,74,Sulawesi Tenggara
+kabupaten_kota,Prov. Sulawesi Utara,Sulawesi Utara,71,Sulawesi Utara
+kabupaten_kota,Prov. Sumatera Barat,Sumatera Barat,13,Sumatera Barat
+kabupaten_kota,Prov. Sumatera Selatan,Sumatera Selatan,16,Sumatera Selatan
+kabupaten_kota,Prov. Sumatera Utara,Sumatera Utara,12,Sumatera Utara

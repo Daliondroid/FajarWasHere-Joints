@@ -1,0 +1,243 @@
+{
+  "nama": "Form Minat ArahKuliah (RIASEC)",
+  "versi": "1.0",
+  "instrumen_inti": {
+    "dasar": "O*NET Interest Profiler Short Form (60 item) dan Mini-IP (30 item), National Center for O*NET Development / U.S. DOL. Lisensi CC BY 4.0 (boleh diadaptasi & diterjemahkan dengan atribusi).",
+    "mode_default": "mini_ip_30",
+    "mode_lengkap": "ipsf_60",
+    "file_item": "form_minat_riasec_items.csv",
+    "instruksi": "Bayangkan kamu melakukan kegiatan ini sebagai pekerjaan. Jangan pikirkan berapa lama sekolahnya, berapa gajinya, atau apakah kamu sudah bisa melakukannya. Pilih seberapa kamu SUKA kegiatan tersebut.",
+    "skala_jawaban": [
+      {
+        "nilai": 0,
+        "label": "Sangat tidak suka"
+      },
+      {
+        "nilai": 1,
+        "label": "Tidak suka"
+      },
+      {
+        "nilai": 2,
+        "label": "Ragu-ragu"
+      },
+      {
+        "nilai": 3,
+        "label": "Suka"
+      },
+      {
+        "nilai": 4,
+        "label": "Sangat suka"
+      }
+    ],
+    "penskoran": {
+      "skor_mentah": "jumlah nilai item per skala (Mini-IP: 5 item -> 0..20; IPSF: 10 item -> 0..40)",
+      "skor_normal": "skor_mentah / skor_maks * 6 + 1  -> rentang 1..7 agar sebanding dengan skala O*NET Occupational Interest (OI)",
+      "kode_holland": "3 skala tertinggi (urut); jika seri, tampilkan keduanya dan minta pengguna memilih yang paling menggambarkan dirinya (sesuai petunjuk O*NET)",
+      "profil_datar": "jika selisih skor tertinggi dan terendah < 1.0 (skala 1..7) atau varians item sangat kecil, tampilkan peringatan 'profil minat belum jelas' dan sarankan mode 60 item",
+      "cek_kualitas": [
+        "waktu isi < 60 detik untuk 30 item -> tandai 'terlalu cepat'",
+        "seluruh jawaban sama -> tandai 'pola seragam'"
+      ]
+    },
+    "bukti_validitas": {
+      "mini_ip": "Rounds dkk. (2016): alpha .74-.81 per skala (sampel validasi N=575); korelasi dengan Short-IP .95-.96; MDS mereproduksi struktur heksagonal RIASEC (stress<.01, RSQ=.99).",
+      "ipsf": "Rounds dkk. (2010) laporan psikometrik IPSF, onetcenter.org/reports/IPSF_Psychometric.html",
+      "konteks_indonesia": "Adaptasi CABIN-NET versi Indonesia (Putri, UMM, 2026; N=375): reliabilitas alpha/omega >.70 dan validitas konvergen positif dengan O*NET Interest Profiler. Struktur RIASEC perlu diuji ulang pada sampel siswa SMA Indonesia."
+    },
+    "catatan_adaptasi": "Terjemahan mengikuti ITC Guidelines for Translating and Adapting Tests (2nd ed., 2017): terjemahan maju, telaah ahli, uji keterbacaan pada siswa SMA, lalu uji coba (pilot) untuk alpha per skala dan struktur RIASEC. Item IP26 (jazz/tap dance) diadaptasi menjadi tarian tradisional/modern agar relevan secara budaya."
+  },
+  "bagian_pendukung": {
+    "hobi": {
+      "status": "pelengkap, BUKAN instrumen tervalidasi; bobot maks 20% dan dipakai untuk penjelasan/tie-breaker",
+      "pertanyaan": "Pilih hobi/kegiatan yang sering kamu lakukan di luar sekolah (boleh lebih dari satu)",
+      "opsi": [
+        {
+          "id": "H01",
+          "label": "Otomotif, merakit atau memperbaiki barang",
+          "riasec": {
+            "R": 1
+          }
+        },
+        {
+          "id": "H02",
+          "label": "Berkebun, memelihara hewan, kegiatan alam",
+          "riasec": {
+            "R": 0.7,
+            "I": 0.3
+          }
+        },
+        {
+          "id": "H03",
+          "label": "Olahraga (tim atau individu)",
+          "riasec": {
+            "R": 0.6,
+            "S": 0.4
+          }
+        },
+        {
+          "id": "H04",
+          "label": "Eksperimen sains, membaca sains/teknologi",
+          "riasec": {
+            "I": 1
+          }
+        },
+        {
+          "id": "H05",
+          "label": "Ngoding, robotik, utak-atik komputer",
+          "riasec": {
+            "I": 0.5,
+            "R": 0.3,
+            "C": 0.2
+          }
+        },
+        {
+          "id": "H06",
+          "label": "Teka-teki, catur, olimpiade matematika",
+          "riasec": {
+            "I": 0.8,
+            "C": 0.2
+          }
+        },
+        {
+          "id": "H07",
+          "label": "Menggambar, desain grafis, fotografi",
+          "riasec": {
+            "A": 1
+          }
+        },
+        {
+          "id": "H08",
+          "label": "Musik, bernyanyi, menari, teater",
+          "riasec": {
+            "A": 1
+          }
+        },
+        {
+          "id": "H09",
+          "label": "Menulis cerita, puisi, blog, konten",
+          "riasec": {
+            "A": 0.7,
+            "E": 0.3
+          }
+        },
+        {
+          "id": "H10",
+          "label": "Organisasi relawan, kegiatan sosial, keagamaan",
+          "riasec": {
+            "S": 1
+          }
+        },
+        {
+          "id": "H11",
+          "label": "Mengajari teman / jadi tutor sebaya",
+          "riasec": {
+            "S": 0.8,
+            "I": 0.2
+          }
+        },
+        {
+          "id": "H12",
+          "label": "Mendengarkan curhat teman, konseling sebaya",
+          "riasec": {
+            "S": 1
+          }
+        },
+        {
+          "id": "H13",
+          "label": "Jualan online / usaha kecil",
+          "riasec": {
+            "E": 0.8,
+            "C": 0.2
+          }
+        },
+        {
+          "id": "H14",
+          "label": "OSIS, ketua kelas, debat, MUN",
+          "riasec": {
+            "E": 0.7,
+            "S": 0.3
+          }
+        },
+        {
+          "id": "H15",
+          "label": "Membuat konten media sosial / public speaking",
+          "riasec": {
+            "E": 0.5,
+            "A": 0.5
+          }
+        },
+        {
+          "id": "H16",
+          "label": "Mengatur jadwal, bendahara/sekretaris organisasi",
+          "riasec": {
+            "C": 1
+          }
+        },
+        {
+          "id": "H17",
+          "label": "Mengoleksi & merapikan data/barang (spreadsheet, katalog)",
+          "riasec": {
+            "C": 1
+          }
+        },
+        {
+          "id": "H18",
+          "label": "Bermain game strategi / manajemen",
+          "riasec": {
+            "I": 0.4,
+            "E": 0.3,
+            "C": 0.3
+          }
+        }
+      ]
+    },
+    "mapel_favorit": {
+      "status": "dipakai untuk mencocokkan mapel pendukung SNBP (Kepmendikdasmen 102/M/2025), bukan untuk skor RIASEC",
+      "pertanyaan": "Mapel apa yang paling kamu kuasai/sukai? (pilih maksimal 3)",
+      "opsi": [
+        "Matematika",
+        "Matematika Tingkat Lanjut",
+        "Fisika",
+        "Kimia",
+        "Biologi",
+        "Ekonomi",
+        "Sosiologi",
+        "Geografi",
+        "Sejarah",
+        "Antropologi",
+        "Bahasa Indonesia",
+        "Bahasa Inggris",
+        "Bahasa asing lain",
+        "Pendidikan Pancasila",
+        "Seni Budaya",
+        "PJOK",
+        "Informatika"
+      ]
+    }
+  },
+  "pencocokan_prodi": {
+    "data": "prodi_riasec.csv (vektor OI 1..7 per prodi, diturunkan dari O*NET Interests via rumpun prodi)",
+    "metode_utama": "korelasi Pearson antara profil 6 skala siswa dan profil 6 skala prodi (profile similarity, bebas tinggi-rendah rata-rata) -> dipetakan ke 0..100: skor = (r + 1) / 2 * 100",
+    "metode_pendukung": "indeks kongruensi kode Holland 3 huruf (C-index Brown & Gore 1994: 3*(huruf1) + 2*(huruf2) + 1*(huruf3) dengan jarak heksagonal 3/2/1/0)",
+    "gabungan": "kecocokan = 0.8 * profil (Pearson) + 0.2 * hobi (jika diisi)",
+    "label": [
+      {
+        "min": 80,
+        "label": "Sangat cocok"
+      },
+      {
+        "min": 65,
+        "label": "Cocok"
+      },
+      {
+        "min": 50,
+        "label": "Cukup"
+      },
+      {
+        "min": 0,
+        "label": "Kurang cocok"
+      }
+    ],
+    "dasar_ilmiah": "Kecocokan minat-lingkungan memprediksi prestasi dan ketekunan studi: Nye, Su, Rounds & Drasgow (2012) Perspectives on Psychological Science 7(4); Allen & Robbins (2008) J. Vocational Behavior (kecocokan minat-jurusan & persistensi)."
+  }
+}

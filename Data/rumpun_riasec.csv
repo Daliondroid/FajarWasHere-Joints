@@ -1,0 +1,79 @@
+rumpun_id,rumpun,R,I,A,S,E,C,kode_holland,jumlah_okupasi_onet,mapel_pendukung,kelompok
+kedokteran,Kedokteran,3.96,6.37,1.55,6.32,2.31,3.71,ISR,3,Biologi; Kimia,saintek
+kedokteran_gigi,Kedokteran Gigi,5.31,5.4,1.15,4.27,1.95,3.85,IRS,1,Biologi; Kimia,saintek
+kedokteran_hewan,Kedokteran Hewan,6.34,5.6,1.0,3.23,1.35,4.04,RIC,2,Biologi; Kimia,saintek
+farmasi,Farmasi,3.65,6.33,1.89,4.03,2.38,4.31,ICS,2,Biologi; Kimia,saintek
+keperawatan,Keperawatan,3.66,4.82,1.31,5.62,2.28,4.58,SIC,1,Biologi,saintek
+kebidanan,Kebidanan,3.42,4.33,1.91,5.85,2.92,3.41,SIR,1,Biologi,saintek
+gizi,Gizi,3.03,4.8,2.4,5.5,3.42,3.36,SIE,1,Biologi; Kimia,saintek
+kesmas,Kesehatan Masyarakat,2.42,4.78,1.86,4.95,3.88,4.22,SIC,3,Biologi,saintek
+k3_kesling,K3 & Kesehatan Lingkungan,4.66,6.0,1.5,3.0,2.84,4.62,IRC,2,Biologi,saintek
+fisioterapi,Fisioterapi & Terapi Rehabilitasi,4.07,4.98,2.58,5.59,1.83,3.44,SIR,4,Biologi,saintek
+lab_medis,Teknologi Laboratorium Medis,5.9,6.02,1.06,2.83,1.27,4.93,IRC,2,Biologi; Kimia,saintek
+radiologi,Radiologi & Elektromedis,5.74,5.45,1.43,3.3,1.27,4.53,RIC,3,Fisika; Biologi,saintek
+rekam_medis,Rekam Medis & Informasi Kesehatan,2.67,4.75,1.09,3.59,2.04,6.46,CIS,2,Biologi; Matematika Tingkat Lanjut,saintek
+kesehatan_gigi,Terapi Gigi & Teknik Gigi,5.91,4.57,1.31,4.06,1.33,4.25,RIC,2,Biologi,saintek
+optometri,Optometri & Refraksi,4.55,4.0,1.52,4.02,2.77,4.7,CRS,2,Biologi; Fisika,saintek
+kesehatan_lain,Kesehatan (lainnya),4.3,4.42,1.36,5.73,2.17,3.99,SIR,3,Biologi,saintek
+psikologi,Psikologi,1.17,5.09,3.11,5.84,3.41,3.68,SIC,3,Sosiologi; Matematika,soshum
+geografi,Geografi & Geomatika,4.8,5.47,2.84,2.01,1.91,5.1,ICR,4,Geografi; Matematika,saintek
+informatika,Informatika / Ilmu Komputer,3.73,6.01,2.58,1.98,2.11,5.35,ICR,3,Matematika Tingkat Lanjut,saintek
+sistem_informasi,Sistem / Teknologi Informasi,3.09,4.7,1.6,2.26,3.92,5.79,CIE,3,Matematika Tingkat Lanjut,saintek
+keamanan_siber,Keamanan Siber & Jaringan,3.96,4.94,1.52,2.15,3.15,5.8,CIR,3,Matematika Tingkat Lanjut,saintek
+sains_data,Sains Data & Statistika,2.01,6.02,1.84,1.94,2.31,5.86,ICE,3,Matematika Tingkat Lanjut,saintek
+matematika,Matematika,2.92,6.4,3.15,4.07,1.56,4.86,ICS,2,Matematika Tingkat Lanjut,saintek
+fisika,Fisika,5.17,6.84,2.62,2.36,1.99,4.39,IRC,3,Fisika; Matematika Tingkat Lanjut,saintek
+kimia,Kimia,5.55,6.27,1.54,1.44,1.31,5.01,IRC,2,Kimia,saintek
+biologi,Biologi & Bioteknologi,4.71,6.63,1.99,2.07,1.64,4.7,IRC,4,Biologi; Matematika,saintek
+kebumian,Geologi & Ilmu Kebumian,5.4,6.63,2.43,2.28,2.18,4.33,IRC,3,Fisika; Matematika Tingkat Lanjut,saintek
+lingkungan,Ilmu & Teknik Lingkungan,5.0,6.27,1.93,2.57,2.95,4.24,IRC,3,Biologi,saintek
+teknik_sipil,Teknik Sipil & Infrastruktur,5.84,5.18,2.17,1.76,2.69,4.8,RIC,4,Fisika; Matematika Tingkat Lanjut,saintek
+arsitektur,Arsitektur,5.31,4.44,4.56,2.57,3.56,3.92,RAI,2,Matematika; Fisika,saintek
+planologi,Perencanaan Wilayah & Kota,3.16,5.38,2.96,3.0,4.53,3.95,IEC,1,Ekonomi; Matematika,saintek
+teknik_mesin,Teknik Mesin & Manufaktur,6.66,4.81,1.73,1.23,1.46,4.6,RIC,3,Fisika; Matematika Tingkat Lanjut,saintek
+teknik_elektro,"Teknik Elektro, Elektronika & Telekomunikasi",6.23,5.52,1.9,1.59,1.75,4.81,RIC,4,Fisika; Matematika Tingkat Lanjut,saintek
+teknik_industri,Teknik Industri,3.77,3.88,1.34,1.86,4.85,5.43,CEI,3,Matematika Tingkat Lanjut; Fisika,saintek
+teknik_kimia,Teknik Kimia & Bioproses,5.97,6.2,1.63,1.1,1.72,4.78,IRC,2,Kimia; Matematika Tingkat Lanjut,saintek
+teknik_tambang,"Pertambangan, Perminyakan & Metalurgi",5.8,5.56,1.99,1.67,2.57,4.38,RIC,3,Fisika; Kimia; Matematika Tingkat Lanjut,saintek
+teknik_kelautan,Perkapalan & Teknik Kelautan,5.67,4.06,1.67,1.65,3.83,4.5,RCI,2,Fisika; Matematika Tingkat Lanjut,saintek
+penerbangan,Penerbangan & Dirgantara,5.65,4.35,1.63,1.69,2.73,4.67,RCI,3,Fisika; Matematika Tingkat Lanjut,saintek
+teknik_fisika,"Teknik Fisika, Nuklir & Biomedis",5.17,6.77,2.38,2.33,1.99,4.35,IRC,3,Fisika; Matematika Tingkat Lanjut,saintek
+teknik_pertanian,Teknik Pertanian & Biosistem,5.63,5.99,2.33,1.93,2.56,3.95,IRC,2,Fisika; Kimia; Matematika,saintek
+pangan,Teknologi Pangan & Hasil Pertanian,5.56,4.11,1.95,1.76,2.36,4.49,RCI,3,Kimia; Biologi,saintek
+pertanian,"Pertanian, Agroteknologi & Agronomi",6.22,4.24,1.29,1.72,2.6,4.06,RIC,4,Biologi,saintek
+agribisnis,Agribisnis & Penyuluhan,3.4,3.88,1.97,3.31,4.85,4.1,ECI,3,Ekonomi; Biologi,soshum
+peternakan,Peternakan,5.21,4.86,1.54,2.34,3.88,3.92,RIC,2,Biologi,saintek
+perikanan,Perikanan & Ilmu Kelautan,5.99,5.41,1.98,1.94,2.01,3.78,RIC,3,Biologi,saintek
+kehutanan,Kehutanan,5.81,4.54,1.41,2.63,3.26,4.21,RIC,3,Biologi,saintek
+hukum,Hukum,1.5,4.46,2.21,3.29,4.71,5.02,CEI,3,Sosiologi; Pendidikan Pancasila,soshum
+ekonomi,Ilmu Ekonomi & Ekonomi Pembangunan,1.27,6.03,2.14,2.24,4.45,4.94,ICE,2,Ekonomi; Matematika,soshum
+manajemen,Manajemen & Bisnis,1.47,3.31,1.69,3.19,6.12,5.41,ECI,4,Ekonomi,soshum
+akuntansi,Akuntansi & Perpajakan,1.47,2.72,1.03,2.57,3.92,6.8,CEI,3,Ekonomi; Matematika,soshum
+keuangan,Keuangan & Perbankan,1.27,3.63,1.26,2.96,4.87,5.94,CEI,3,Ekonomi; Matematika,soshum
+adm_publik,Administrasi Publik & Pemerintahan,1.77,3.49,1.87,3.44,5.07,5.41,CEI,4,Sosiologi,soshum
+politik_hi,Ilmu Politik & Hubungan Internasional,1.44,4.89,4.09,3.49,2.79,4.12,ICA,2,Sosiologi,soshum
+sosiologi,Sosiologi & Antropologi,3.08,6.58,3.92,3.87,2.32,3.55,IAS,2,Sosiologi; Antropologi,soshum
+komunikasi,Ilmu Komunikasi & Media,1.31,2.66,4.8,3.35,5.31,3.64,EAC,4,Sosiologi; Antropologi,soshum
+perpustakaan,"Perpustakaan, Kearsipan & Ilmu Informasi",2.73,3.63,2.4,3.74,2.18,6.12,CSI,3,Matematika Tingkat Lanjut,soshum
+filsafat_agama,Filsafat & Studi Agama,1.85,3.37,3.56,6.62,4.35,3.11,SEA,3,Sosiologi,soshum
+bahasa_asing,Bahasa & Sastra Asing,1.67,3.61,5.11,4.45,3.08,3.84,ASC,3,Bahasa Inggris Tingkat Lanjut / bahasa asing relevan,soshum
+sastra_indo,Bahasa & Sastra Indonesia / Daerah,1.45,3.71,5.43,4.12,3.75,3.86,ASC,3,Bahasa Indonesia Tingkat Lanjut,soshum
+pariwisata,"Pariwisata, Perhotelan & Kuliner",2.39,1.42,2.14,4.0,6.05,5.18,ECS,4,Ekonomi; Bahasa Inggris,soshum
+olahraga,Ilmu Keolahragaan,4.95,3.8,1.73,5.28,3.49,3.43,SRI,3,PJOK; Biologi,soshum
+seni_rupa,Seni Rupa & Kriya,5.11,2.03,5.41,2.57,2.84,2.94,ARC,3,Seni Budaya,soshum
+desain,"Desain (DKV, Interior, Produk, Fesyen)",4.15,3.06,6.3,2.32,3.65,3.48,ARE,4,Seni Budaya; Matematika,soshum
+film_animasi,"Film, Televisi, Animasi & Fotografi",3.66,2.32,5.95,2.24,3.44,3.55,ARC,4,Seni Budaya,soshum
+musik,"Musik, Karawitan & Etnomusikologi",2.46,1.9,6.83,3.23,4.09,2.38,AES,2,Seni Budaya,soshum
+tari_teater,"Tari, Teater & Pedalangan",3.23,1.96,6.62,3.75,4.21,2.19,AES,4,Seni Budaya,soshum
+hankam,"Pertahanan, Militer & Kepolisian",4.29,3.32,1.12,3.34,5.04,4.78,ECR,3,Pendidikan Pancasila; Sosiologi,soshum
+edu:default,Pendidikan (guru mapel),2.85,3.23,3.71,7.0,2.75,3.63,SAC,1,Maks. 1 mapel relevan dengan bidang kependidikan,soshum
+edu:PAUD,Pendidikan Anak Usia Dini,2.65,2.96,4.03,7.0,2.54,3.66,SAC,2,Maks. 1 mapel relevan dengan bidang kependidikan,soshum
+edu:BIMBINGAN DAN KONSELING,Bimbingan dan Konseling,1.0,3.31,3.42,7.0,4.21,3.38,SEA,1,Maks. 1 mapel relevan dengan bidang kependidikan,soshum
+edu:TEKNOLOGI PENDIDIKAN,Teknologi/Manajemen Pendidikan,1.83,3.42,3.52,6.34,4.2,3.83,SEC,3,Maks. 1 mapel relevan dengan bidang kependidikan,soshum
+edu:VOKASIONAL,Pendidikan Teknik & Kejuruan,2.83,3.34,3.62,7.0,2.71,3.48,SAC,1,Maks. 1 mapel relevan dengan bidang kependidikan,soshum
+edu:PGSD,Pendidikan Guru SD/MI,2.55,3.38,3.99,7.0,2.57,3.53,SAC,1,Maks. 1 mapel relevan dengan bidang kependidikan,soshum
+teknik_lain,Teknik / Rekayasa (lainnya),5.78,5.2,1.96,1.56,2.2,4.8,RIC,4,Fisika; Kimia; Matematika Tingkat Lanjut,saintek
+kesos,Kesejahteraan Sosial & Pekerjaan Sosial,1.64,3.45,2.4,6.62,3.02,3.73,SCI,3,Sosiologi,soshum
+sejarah,Sejarah & Arkeologi,3.22,5.12,3.64,3.4,2.6,4.44,ICA,3,Sejarah,soshum
+transportasi,Transportasi & Logistik,3.06,3.99,1.41,2.26,4.77,5.34,CEI,3,Matematika Tingkat Lanjut,soshum
+edu:LUAR BIASA,Pendidikan Luar Biasa/Khusus,4.36,3.62,2.63,7.0,1.79,3.59,SRI,1,Maks. 1 mapel relevan dengan bidang kependidikan,soshum

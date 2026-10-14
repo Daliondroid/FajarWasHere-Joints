@@ -1,0 +1,84 @@
+{
+  "tahun_acuan": 2026,
+  "snbp": {
+    "sumber": [
+      "https://snpmb.id/snbp/informasi-umum",
+      "https://snpmb.id/snbp/kuota-sekolah"
+    ],
+    "kuota_siswa_eligible_per_akreditasi": {
+      "A": 0.4,
+      "B": 0.25,
+      "C": 0.05,
+      "lainnya": 0.05,
+      "bonus_e_rapor": 0.05,
+      "catatan": "persen dari jumlah siswa per jurusan di sekolah; kuota aktual tiap sekolah tersedia di sekolah_kuota_snbp_2026.csv (kolom persen_kuota & kuota_siswa)"
+    },
+    "komponen_penilaian": {
+      "rapor_semua_mapel_min": 0.5,
+      "komponen_kedua_maks": 0.5,
+      "komponen_kedua_isi": [
+        "nilai rapor maks 2 mapel pendukung prodi",
+        "portofolio (prodi seni/olahraga)",
+        "prestasi (3 prestasi terbaik)"
+      ],
+      "komposisi": "ditetapkan masing-masing PTN"
+    },
+    "pemeringkatan_sekolah": "rerata semua mapel semua semester kecuali semester terakhir (smt 1-5); sekolah boleh menambah kriteria prestasi",
+    "syarat": [
+      "siswa kelas terakhir dengan prestasi unggul",
+      "NISN & terdaftar di PDSS",
+      "memiliki nilai TKA Kemendikdasmen"
+    ],
+    "pilihan_prodi": {
+      "maks_prodi": 2,
+      "aturan": "jika 1 prodi bebas provinsi; jika 2 prodi, salah satunya harus PTN di provinsi yang sama dengan sekolah",
+      "urutan": "diseleksi pilihan 1 dulu, jika tidak lulus diikutkan pilihan 2"
+    },
+    "portofolio_wajib": [
+      "Olahraga",
+      "Seni Rupa, Desain, dan Kriya",
+      "Seni Tari",
+      "Seni Musik",
+      "Seni Karawitan",
+      "Etnomusikologi",
+      "Teater",
+      "Fotografi",
+      "Film Televisi",
+      "Seni Pedalangan",
+      "Sendratasik"
+    ],
+    "konsekuensi": [
+      "lulus SNBP 2024-2026 tidak dapat daftar UTBK-SNBT 2026",
+      "lulus SNBP 2026 tidak dapat ikut jalur Mandiri 2026 di PTN manapun"
+    ],
+    "kuota_minimum_ptn": "minimal 20% daya tampung PTN untuk SNBP"
+  },
+  "snbt": {
+    "subtes": {
+      "TPS": [
+        "Penalaran Umum",
+        "Pengetahuan dan Pemahaman Umum",
+        "Pemahaman Bacaan dan Menulis",
+        "Pengetahuan Kuantitatif"
+      ],
+      "Literasi": [
+        "Literasi dalam Bahasa Indonesia",
+        "Literasi dalam Bahasa Inggris",
+        "Penalaran Matematika"
+      ]
+    },
+    "skala_skor": "skor IRT per subtes; rerata nasional 2025 S1 545.78 (min 200.00, maks 819.85)",
+    "portofolio": "wajib untuk prodi seni & olahraga (lihat kolom portofolio di snbt_prodi.csv)",
+    "maks_prodi": {
+      "maks": 4,
+      "aturan": "1-2 pilihan bebas; 3 pilihan = kombinasi akademik/vokasi (jika 3 vokasi minimal 1 D3); 4 pilihan = 2 akademik + 2 vokasi atau 1 akademik + 3 vokasi, wajib minimal 1 D3",
+      "urutan": "urutan pilihan = prioritas"
+    },
+    "sumber": "https://snpmb.id/utbk-snbt/informasi-umum",
+    "syarat": [
+      "UTBK hanya 1 kali per tahun",
+      "lulusan 2024-2026 (atau Paket C) usia maks 25 tahun per 1 Juli 2026",
+      "biaya UTBK Rp200.000"
+    ]
+  }
+}
