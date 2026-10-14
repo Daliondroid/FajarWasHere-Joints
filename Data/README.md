@@ -39,7 +39,7 @@ Kenapa RIASEC/O*NET: model Holland adalah teori minat karier paling banyak ditel
 * `est_skor_utbk` di `ak_prodi_master.csv` – **tidak ada data resmi skor UTBK per prodi**. Model: rata-rata skor UTBK kampus (20 PTN akademik & 20 politeknik teratas, `utbk_anchor_kampus.csv`) diregresikan terhadap log keketatan SNBT rata-rata kampus (akademik: skor = 410,5 + 78,0·ln(keketatan), r = 0,67; vokasi: 427,4 + 44,5·ln, r = 0,75). Kampus tanpa anchor memakai prediksi regresi; skor prodi = skor kampus + 0,5·b·(ln keketatan prodi − rata-rata ln kampus), dibatasi 380–780, rentang ±35. Gunakan sebagai *perkiraan kasar*.
 * `utbk_nasional_2025.csv` – min/rerata/maks nasional per jenjang 2025 (rilis konferensi pers SNBT 2025).
 * `ak_alumni_sintetis_snbp.csv` – **SINTETIS**. Rekam jejak alumni per sekolah tidak tersedia publik. Dibangkitkan untuk 300 sekolah (150 A, 100 B, 50 C) × 2023–2025, peluang diterima ∝ rasio diterima prodi 2025 × faktor akreditasi × nilai rapor; IPK tahun-1 sintetis. Hanya untuk demo; ganti dengan data BK sekolah mitra bila ada.
-* `bank_soal_simulasi.csv` – 425 soal orisinal (35 bergaya 7 subtes UTBK + 390 soal "cicip jurusan" untuk 78 rumpun, 5 soal/rumpun). Bukan soal resmi.
+* `bank_soal_simulasi.csv` – 269 soal orisinal (35 bergaya 7 subtes UTBK + 234 soal "cicip jurusan" untuk 78 rumpun, 3 soal/rumpun). Bukan soal resmi.
 
 
 ## 6. Data PDDikti (Kemdiktisaintek) — per prodi per kampus
@@ -56,7 +56,7 @@ Diambil dari API publik pddikti.kemdiktisaintek.go.id (14 Okt 2026). 4.915 dari 
 
 ### Struktur Test Drive (Halaman 13, per prodi per kampus)
 1. **Soal spesifik kampus** (`ak_soal_spesifik_prodi_ptn_v2.csv`, 1–2 soal) — bila tersedia; jika tidak, **soal kompetensi umum** (`ak_soal_umum_prodi.csv`).
-2. **Soal rumpun** (`bank_soal_simulasi.csv`, 5 soal per rumpun × 78 rumpun = 390 + 35 soal gaya UTBK) — tersedia untuk SEMUA prodi lewat kolom `rumpun_id` di `ak_prodi_master.csv`.
+2. **Soal rumpun** (`bank_soal_simulasi.csv`, 3 soal per rumpun × 78 rumpun = 234 + 35 soal gaya UTBK) — tersedia untuk SEMUA prodi lewat kolom `rumpun_id` di `ak_prodi_master.csv` (237 prodi kependidikan dipetakan lewat nama rumpun saat impor, lihat `scripts/README.md`).
 3. **Kartu profil prodi** (`ak_profil_prodi_ptn.json` + `ak_pddikti_prodi.csv`): akreditasi, rasio dosen, masa studi, kompetensi lulusan.
 4. Pertanyaan refleksi "seru atau berat?" → memperbarui skor kecocokan.
 
