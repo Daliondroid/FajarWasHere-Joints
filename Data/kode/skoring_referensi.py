@@ -1,4 +1,4 @@
-"""Implementasi referensi (deterministik) untuk form minat & pencocokan prodi ArahKuliah.
+"""Implementasi referensi (deterministik) untuk form minat & pencocokan prodi Cocokin!.
 Pakai sebagai acuan saat menulis versi TypeScript/Python di backend."""
 import csv, math
 SKALA = "RIASEC"

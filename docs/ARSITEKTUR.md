@@ -3,7 +3,7 @@
 > Menjawab: **dengan apa dan dalam bentuk apa sistem dibangun.**
 > Keputusan di sini mengikat. Perubahan besar butuh persetujuan pengguna (lihat `AGENTS.md` bagian 6).
 
-Status: **draf** — stack diambil dari PRD sumber v2.1 (`referensi/PRD_Cocokin_v2.1.md` bagian 1, 6, 7); belum ada scaffolding.
+Status: **draf** — stack dari PRD sumber v2.1 dan keputusan 2026-10-15; belum ada scaffolding.
 
 ## 1. Stack
 
@@ -11,11 +11,11 @@ Status: **draf** — stack diambil dari PRD sumber v2.1 (`referensi/PRD_Cocokin_
 | --- | --- | --- | --- |
 | Frontend + Backend | Next.js (App Router, TypeScript) | 15.x — verifikasi saat scaffolding | Satu repo untuk UI dan route handler `/api/*` |
 | Autentikasi | NextAuth (Google OAuth) | TBD | Login Gmail, sesi HttpOnly cookie 30 hari |
-| Basis data | PostgreSQL via Supabase | TBD | Impor CSV dataset; query katalog dan peluang |
+| Basis data | PostgreSQL via Supabase (hosted) | — | Satu DB untuk pengembangan dan demo, tanpa Docker; impor CSV dataset |
 | Styling | Tailwind CSS | TBD | Token dari `DESIGN_SYSTEM.md` |
 | AI | Google Gemini 2.5 Flash (Google AI Studio) | `gemini-2.5-flash` atau Flash terbaru | Ekstraksi, chatbot dengan function calling, skenario Test Drive. Gemini 1.5 Flash sudah dihentikan. |
-| Test | _TBD (TBD-02)_ | — | Wajib untuk logika skoring |
-| Hosting | _TBD (TBD-03)_ | — | — |
+| Test | Vitest | TBD — verifikasi saat scaffolding | Dukungan TypeScript/ESM bawaan, konfigurasi minimal |
+| Hosting | Vercel | — | Deploy Next.js langsung dari GitHub; free tier cukup untuk demo |
 
 Versi diverifikasi ke registry resmi saat scaffolding, bukan dari ingatan.
 
@@ -83,7 +83,7 @@ Aturan perubahan setelah beku:
 
 | Hal | Konvensi |
 | --- | --- |
-| Penamaan field JSON / kolom DB | _TBD (TBD-04)_ — dataset sumber memakai `snake_case` |
+| Penamaan field JSON / kolom DB | `snake_case`, sama dengan kolom dataset (tanpa lapisan konversi) |
 | ID prodi | `id_prodi` dari snpmb.id (kunci bersama semua file data) |
 | Nama provinsi | Selalu dinormalisasi lewat `ak_provinsi_crosswalk.csv` |
 | Akreditasi | Dinormalisasi ke skor 0–4 lewat `ak_akreditasi_map.csv` |
@@ -105,11 +105,9 @@ Jangan diputuskan agen sendiri; tanyakan pemiliknya.
 
 | Kode | Pertanyaan | Pemilik |
 | --- | --- | --- |
-| TBD-01 | Supabase (hosted) atau PostgreSQL lokal untuk pengembangan? | farrelzaki |
-| TBD-02 | Framework test (TypeScript) untuk logika skoring. | farrelzaki |
-| TBD-03 | Platform hosting demo. | farrelzaki |
-| TBD-04 | Konvensi field JSON API: `snake_case` mengikuti dataset atau `camelCase`? | farrelzaki |
-| TBD-05 | Skema tabel DB dan cara impor CSV (skrip seed). | farrelzaki |
+| TBD-05 | Skema tabel DB dan cara impor CSV (skrip seed) — dirancang di T-03. | farrelzaki |
+
+Sudah diputuskan (2026-10-15): TBD-01 Supabase hosted · TBD-02 Vitest · TBD-03 Vercel · TBD-04 `snake_case`.
 
 ## 8. Risiko Teknis
 
@@ -120,5 +118,5 @@ Jangan diputuskan agen sendiri; tanyakan pemiliknya.
 | 212 prodi tanpa histori, 203 tanpa estimasi UTBK | Fallback rata-rata rumpun di PTN sama, label "data terbatas" |
 | Data PDDikti tidak lengkap (kompetensi, deskripsi, masa studi, koordinat) | Tampilkan field yang ada saja; koordinat dari `ak_ptn.csv` |
 | Gemini mengarang angka atau output tidak valid | Function calling ke API internal; validasi skema JSON; fallback bank soal |
-| Soal versi 1 terimpor ganda | Impor hanya `ak_soal_spesifik_prodi_ptn_v2.csv` |
+| Soal versi 1 terimpor ganda | Versi 1 sudah dihapus; impor `ak_soal_spesifik_prodi_ptn_v2.csv` |
 | Ukuran data besar (261.558 baris peminat per provinsi) | Impor ke DB dengan indeks; jangan dimuat ke klien |

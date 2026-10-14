@@ -79,8 +79,9 @@ Aturan untuk agen:
 | ID | Task | Pemilik | Status | Branch | Area / file | Update | Catatan |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | T-01 | Sesuaikan dokumen template dengan PRD v2.1 | farrelzaki | `[x]` | `main` | `docs/`, `README.md`, `KOLABORASI.md` | 2026-10-15 | |
-| T-02 | Scaffolding Next.js 15 + Tailwind + NextAuth Google | farrelzaki | `[ ]` | `main` | `src/`, config | | F-01, F-02 |
-| T-03 | Skema DB + skrip impor dataset `Data/` ke PostgreSQL/Supabase | farrelzaki | `[ ]` | `main` | | | TBD-01, TBD-05 |
+| T-12 | Putuskan pertanyaan terbuka; selaraskan dokumen dataset | farrelzaki | `[x]` | `main` | `docs/`, `Data/*.md` | 2026-10-15 | |
+| T-02 | Scaffolding Next.js 15 + Tailwind + NextAuth Google + Vitest | farrelzaki | `[ ]` | `main` | `src/`, config | | F-01, F-02 |
+| T-03 | Skema DB + skrip impor dataset `Data/` ke Supabase | farrelzaki | `[ ]` | `main` | | | TBD-05 |
 | T-04 | Modul skoring murni + test (provinsi, keketatan, eligibilitas, peluang, kecocokan) | farrelzaki | `[ ]` | `main` | | | BR-01–BR-10 |
 | T-05 | API `/api/school`, `/api/prodi`, `/api/peluang`, `/api/kecocokan` | farrelzaki | `[ ]` | `main` | | | Kontrak di ARSITEKTUR bagian 4 |
 | T-06 | UI 8-bit: beranda, CTA, wizard preferensi (Hal. 1–7) | farrelzaki | `[ ]` | `main` | | | F-01–F-07 |
@@ -190,6 +191,7 @@ Format: `- YYYY-MM-DD · T-xx · apa yang dikerjakan · hasil/verifikasi · cata
 ### Log farrelzaki
 
 - 2026-10-15 · T-01 · isi docs/PRD, ARSITEKTUR, DESIGN_SYSTEM, README, papan task dari PRD v2.1 · tinjau diff · PRD sumber dipindah ke docs/referensi/
+- 2026-10-15 · T-12 · keputusan OQ/TBD dicatat di docs; Data/README & AUDIT diselaraskan ke Cocokin!; soal v1 dihapus · JSON & py dicek valid · tenggat hackathon masih belum diketahui
 
 ## 9. Mengubah File Ini
 

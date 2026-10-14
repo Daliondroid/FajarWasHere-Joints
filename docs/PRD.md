@@ -48,8 +48,12 @@ Solusi: **Dual-Engine** — *Admission Matcher* (peluang berbasis data resmi 202
   - Tidak menjamin kelulusan; semua peluang berupa estimasi berlabel.
   - Tidak menyimpan alamat lengkap siswa atau foto rapor/sertifikat setelah diekstrak.
   - Jalur Mandiri tidak dicakup.
-- **Metrik keberhasilan:** _TBD (lihat OQ-03)_. Kandidat dari PRD sumber: 10 skenario siswa uji lolos,
-  soal 3–5 prodi demo sudah ditinjau, aturan provinsi teruji memakai crosswalk, demo video 2 menit.
+- **Metrik keberhasilan (kriteria demo MVP):**
+  - 10 skenario siswa lolos uji.
+  - Soal 3–5 prodi demo sudah ditinjau manual.
+  - Aturan satu provinsi teruji memakai crosswalk.
+  - Alur Halaman 1–13 berjalan end-to-end.
+  - Video demo 2 menit selesai.
 
 ## 4. Pengguna
 
@@ -65,7 +69,7 @@ Sebagian besar pengguna **di bawah 18 tahun** — berlaku aturan privasi BR-14.
 ## 5. Fitur
 
 ID halaman (Hal.) mengacu pada 13 halaman di PRD sumber bagian 4.
-Prioritas diturunkan dari PRD sumber: halaman inti = Wajib; yang ditandai opsional di sumber = Sebaiknya.
+Prioritas disepakati 2026-10-15: halaman inti dan hapus akun = Wajib; yang opsional di PRD sumber = Sebaiknya; input suara = Nanti.
 
 | ID | Fitur | Hal. | Prioritas | Kriteria terima |
 | --- | --- | --- | --- | --- |
@@ -116,7 +120,7 @@ Rumus lengkap: PRD sumber bagian 6.2.
 | BR-12 | **Grounding AI:** LLM tidak boleh mengarang angka. Chatbot mengambil angka dari API internal; hasil ekstraksi AI wajib dikonfirmasi siswa. |
 | BR-13 | **Label data di UI:** resmi (snpmb.id, PDDikti, Kepmendikdasmen 102/M/2025), estimasi (skor UTBK prodi, koreksi TKA, peluang), sintetis (data alumni — demo saja), soal (dibuat otomatis, perlu review). |
 | BR-14 | **Privasi:** simpan data seperlunya; alamat hanya provinsi & kab/kota; foto rapor/sertifikat dihapus setelah diekstrak; sediakan hapus akun & data. |
-| BR-15 | **Portofolio** wajib untuk prodi seni & olahraga sesuai kolom `portofolio` di data (lihat OQ-06 soal jumlahnya). |
+| BR-15 | **Portofolio** wajib untuk prodi seni & olahraga sesuai kolom `portofolio` di data: 267 prodi (229 S1, 32 D4, 6 D3). Angka 229 di PRD sumber hanya menghitung S1. |
 
 ## 7. Data
 
@@ -131,7 +135,7 @@ Seluruh dataset ada di `Data/` (detail: PRD sumber bagian 6.1, `Data/README.md`,
 | Profil & akreditasi prodi | `ak_pddikti_prodi.csv`, `ak_profil_prodi_ptn.json`, `ak_akreditasi_map.csv` | 95% prodi tercocokkan ke PDDikti |
 | Instrumen minat | `form_minat_riasec_items.csv`, `form_minat_config.json`, `rumpun_riasec.csv` | O*NET, CC BY 4.0 — wajib atribusi |
 | Aturan seleksi | `aturan_seleksi_2026.json`, `mapel_pendukung_snbp.csv` | Config mesin aturan |
-| Soal | `ak_soal_spesifik_prodi_ptn_v2.csv`, `ak_soal_umum_prodi.csv`, `bank_soal_simulasi.csv` | Pakai `_v2`; versi 1 jangan diimpor |
+| Soal | `ak_soal_spesifik_prodi_ptn_v2.csv`, `ak_soal_umum_prodi.csv`, `bank_soal_simulasi.csv` | Versi 1 sudah dihapus dari repo |
 | Pengguna | Dibuat aplikasi | Akun Google, preferensi, nilai rapor/TKA/TO — **data sensitif anak di bawah umur** |
 | Alumni | `ak_alumni_sintetis_snbp.csv` | **Sintetis**, demo saja |
 
@@ -142,14 +146,14 @@ Seluruh dataset ada di `Data/` (detail: PRD sumber bagian 6.1, `Data/README.md`,
 - **Privasi & keamanan:** BR-14; sesi HttpOnly cookie; tidak ada rahasia (API key Gemini, OAuth) di repo.
 - **Keandalan AI:** output Gemini divalidasi skema; selalu ada fallback non-AI.
 - **Performa:** katalog 5.150 prodi memakai virtualized list dan pencarian instan.
-- **Perangkat:** _TBD (lihat OQ-04)_ — target siswa SMA kemungkinan besar mobile-first.
+- **Perangkat:** mobile-first (siswa SMA mayoritas mengakses lewat ponsel); tampilan desktop tetap rapi untuk demo.
 - **Aksesibilitas:** lihat `DESIGN_SYSTEM.md` bagian 8.
 
 ## 9. Rilis Dan Milestone
 
 | Milestone | Target | Isi |
 | --- | --- | --- |
-| MVP hackathon | Sprint 48 jam (tanggal TBD, OQ-02) | F-01 s.d. F-11, F-16; impor dataset; 3–5 prodi demo dengan soal yang sudah ditinjau |
+| MVP hackathon | Sprint 48 jam (tanggal belum diketahui, OQ-02) | F-01 s.d. F-11, F-16; impor dataset; 3–5 prodi demo dengan soal yang sudah ditinjau |
 | Materi lomba | Bersama MVP | Pitch deck 10 slide (termasuk deklarasi AI dan slide "Sumber Data & Label Estimasi"), video demo 2 menit |
 | Pasca-hackathon | TBD | F-12–F-15, F-17; pilot kuis minat 100–200 siswa sebelum klaim "tervalidasi untuk siswa Indonesia" |
 
@@ -162,9 +166,15 @@ Seluruh dataset ada di `Data/` (detail: PRD sumber bagian 6.1, `Data/README.md`,
 | R-01 | Klaim "87% salah jurusan" sulit diverifikasi → pakai formulasi aman kecuali sumber primer ditemukan. | farrelzaki |
 | R-02 | Soal dibangkitkan otomatis (status `otomatis_perlu_review`) bisa keliru → tinjau manual untuk prodi demo. | farrelzaki |
 | R-03 | Data pengguna di bawah umur → minimalkan data dan sediakan penghapusan. | farrelzaki |
-| OQ-01 | `Data/README.md` dan `AUDIT_DATA.md` masih memakai nama lama "ArahKuliah" serta nama halaman "Simulasi/Nembak Jurusan", dan menyuruh membuang awalan `ak_` yang ternyata masih dipakai. Perlu diselaraskan? | farrelzaki |
-| OQ-02 | Tanggal sprint dan tenggat pengumpulan hackathon. | farrelzaki |
-| OQ-03 | Metrik keberhasilan yang diukur (selain kriteria juri). | farrelzaki |
-| OQ-04 | Perangkat utama: mobile-first atau desktop-first? | farrelzaki |
-| OQ-05 | `ak_soal_spesifik_prodi_ptn.csv` (versi 1) direkomendasikan audit untuk dihapus; hapus dari repo atau cukup tidak diimpor? | farrelzaki |
-| OQ-06 | PRD sumber menyebut 229 prodi wajib portofolio, tetapi kolom `portofolio` di `ak_prodi_master.csv` terisi untuk 267 prodi. Mana yang benar? | farrelzaki |
+| OQ-02 | Tanggal sprint dan tenggat pengumpulan hackathon — belum diketahui. | farrelzaki |
+
+### Keputusan (2026-10-15)
+
+| Kode | Keputusan |
+| --- | --- |
+| OQ-01 | Dokumen dataset (`Data/README.md`, `Data/AUDIT_DATA.md`) diselaraskan: nama Cocokin!, nama file sesuai folder, nama halaman sesuai PRD v2.1. |
+| OQ-03 | Metrik keberhasilan = kriteria demo MVP (bagian 3). |
+| OQ-04 | Mobile-first. |
+| OQ-05 | `ak_soal_spesifik_prodi_ptn.csv` (versi 1) dihapus dari repo. |
+| OQ-06 | Portofolio memakai data: 267 prodi (BR-15). |
+| OQ-07 | Prioritas fitur di bagian 5 disetujui. |

@@ -46,7 +46,7 @@ Pilihan final antara dua font per peran: TBD.
 
 ## 5. Tata Letak Dan Breakpoint
 
-TBD (bergantung OQ-04 di `PRD.md`: mobile-first atau desktop-first).
+**Mobile-first** (keputusan 2026-10-15): desain dasar untuk lebar ponsel, lalu diperluas ke tablet/desktop. Nilai breakpoint dan lebar maksimum: TBD.
 
 ## 6. Komponen
 

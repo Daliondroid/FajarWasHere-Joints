@@ -1,4 +1,4 @@
-# Audit Dataset ArahKuliah — 14 Okt 2026
+# Audit Dataset Cocokin! — 14 Okt 2026
 
 ## Integritas (LULUS)
 - 5.150 prodi, 146 PTN. Tidak ada id_prodi ganda; semua id cocok antar file (master, snbp, snbt, pddikti).
@@ -13,10 +13,10 @@
 | 3 | SNBP: diterima > daya tampung di 3.134 sel tahun-prodi (mis. PDH USK 2022: dt 55, diterima 70) | Bukan error; PTN menambah kuota saat seleksi | Pakai `diterima/peminat` untuk peluang, jangan `daya_tampung/peminat`. |
 | 4 | 212 prodi tanpa histori sama sekali (194 berstatus prodi baru); 203 tanpa estimasi skor UTBK | Peluang tidak bisa dihitung | Fallback: rata-rata rumpun yang sama di PTN yang sama, label "data terbatas". |
 | 5 | Sekolah: 1.192 tanpa akreditasi + 214 "Tidak Terakreditasi" (kuota 5%); 3.580 sekolah kuota 0 karena belum mengisi PDSS | Eligibilitas tidak pasti | Tampilkan "sekolah belum mengisi PDSS — perkiraan dari persen kuota". |
-| 6 | PDDikti: provinsi Univ. Borneo Tarakan masih Kalimantan Timur (data lama, seharusnya Kaltara) | Lokasi salah 16 prodi | Gunakan provinsi dari ptn.csv (SNPMB), bukan PDDikti. |
-| 7 | PDDikti: 2.457 prodi tanpa teks kompetensi, 2.283 tanpa deskripsi, 1.522 tanpa masa studi, 2.839 tanpa koordinat prodi | Kartu profil tidak lengkap | Kartu menampilkan field yang ada saja; koordinat pakai ptn.csv. |
+| 6 | PDDikti: provinsi Univ. Borneo Tarakan masih Kalimantan Timur (data lama, seharusnya Kaltara) | Lokasi salah 16 prodi | Gunakan provinsi dari `ak_ptn.csv` (SNPMB), bukan PDDikti. |
+| 7 | PDDikti: 2.457 prodi tanpa teks kompetensi, 2.283 tanpa deskripsi, 1.522 tanpa masa studi, 2.839 tanpa koordinat prodi | Kartu profil tidak lengkap | Kartu menampilkan field yang ada saja; koordinat pakai `ak_ptn.csv`. |
 | 8 | 12 kab/kota & 13 sekolah tanpa koordinat (semuanya luar negeri) | — | Abaikan jarak untuk sekolah luar negeri. |
-| 9 | `ak_soal_spesifik_prodi_ptn.csv` (versi 1) masih ada | Bisa terimpor ganda | Hapus; pakai `_v2`. |
+| 9 | `ak_soal_spesifik_prodi_ptn.csv` (versi 1) masih ada | Bisa terimpor ganda | **Diperbaiki** (15 Okt 2026): versi 1 dihapus; pakai `_v2`. |
 
 ## Data yang MEMANG belum ada (tidak tersedia publik)
 1. Bobot komponen SNBP per PTN (rapor vs mapel pendukung vs prestasi) — ditetapkan tiap PTN, tidak dipublikasikan seragam.
