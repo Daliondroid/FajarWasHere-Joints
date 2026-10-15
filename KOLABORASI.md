@@ -85,14 +85,14 @@ Aturan untuk agen:
 | T-01 | Sesuaikan dokumen template dengan PRD v2.1 | farrelzaki | `[x]` | `main` | `docs/`, `README.md`, `KOLABORASI.md` | 2026-10-15 | |
 | T-12 | Putuskan pertanyaan terbuka; selaraskan dokumen dataset | farrelzaki | `[x]` | `main` | `docs/`, `Data/*.md` | 2026-10-15 | |
 | T-16 | Ubah tim jadi 2 orang, mode multi-branch, bagi task | farrelzaki | `[x]` | `main` | `KOLABORASI.md`, `README.md` | 2026-10-15 | |
-| T-02 | Scaffolding Next.js 15 + TypeScript + Tailwind + Vitest, struktur folder sesuai bagian 1, token `DESIGN_SYSTEM.md`, `.env.example`; isi ARSITEKTUR bagian 3 | daliondroid | `[ ]` | `fitur/daliondroid-T-02` | semua file bersama, kerangka `src/` | 2026-10-15 | Malam ini. File bersama sudah dikunci (bagian 4). Memblokir T-04, T-13, dan semua UI |
+| T-02 | Scaffolding Next.js 15 + TypeScript + Tailwind + Vitest, struktur folder sesuai bagian 1, token `DESIGN_SYSTEM.md`, `.env.example`; isi ARSITEKTUR bagian 3 | daliondroid | `[x]` | `fitur/daliondroid-T-02` | semua file bersama, kerangka `src/` | 2026-10-15 | Commit 6dfaf36 di-fast-forward ke `main` oleh farrelzaki (test, lint, build lulus). Commit T-06 di branch yang sama belum digabung |
 | T-06 | UI 8-bit: navbar, beranda, CTA, modal login, wizard preferensi (Hal. 1–7) | daliondroid | `[ ]` | | `src/app/`, `src/components/` | | F-01–F-07; data dari mock sampai T-05 siap |
 | T-07 | UI dashboard rekomendasi (Hal. 8) | daliondroid | `[ ]` | | `src/app/`, `src/components/` | | F-08 |
 | T-08 | UI katalog prodi + Test Drive (Hal. 12–13) | daliondroid | `[ ]` | | `src/app/`, `src/components/` | | F-10, F-11 |
 | T-15 | UI banner chat, chatbot, drawer menu (Hal. 9–11) | daliondroid | `[ ]` | | `src/app/`, `src/components/` | | F-09 |
 | T-11 | Pitch deck 10 slide + video demo 2 menit | daliondroid | `[ ]` | | di luar repo | | Materi lomba; data dan hasil QA dari farrelzaki |
 | T-03 | Skema DB (migrasi) + skrip impor dataset `Data/` ke Supabase | farrelzaki | `[x]` | `main` (PR #1) | `supabase/`, `scripts/` | 2026-10-15 | TBD-05. Skema + data sudah dimuat ke Supabase `cocokin` |
-| T-04 | Modul skoring murni + test (provinsi, keketatan, eligibilitas, peluang, kecocokan) | farrelzaki | `[ ]` | | `src/lib/` | | BR-01–BR-10; setelah T-02 |
+| T-04 | Modul skoring murni + test (provinsi, keketatan, eligibilitas, peluang, kecocokan) | farrelzaki | `[~]` | `fitur/farrelzaki-T-04` | `src/lib/` | 2026-10-15 | BR-01–BR-10 |
 | T-13 | Login Google (NextAuth), sesi 30 hari, smart routing, hapus akun | farrelzaki | `[ ]` | | `src/app/api/auth/`, `src/lib/` | | F-02, F-16; setelah T-02 |
 | T-05 | API `/api/school`, `/api/prodi`, `/api/peluang`, `/api/kecocokan` + kontrak di ARSITEKTUR | farrelzaki | `[ ]` | | `src/app/api/`, `src/lib/` | | Kontrak disepakati dengan daliondroid sebelum dibekukan |
 | T-14 | API `/api/test-drive` (soal berlapis, reveal, refleksi) | farrelzaki | `[ ]` | | `src/app/api/`, `src/lib/` | | F-11 |
@@ -107,7 +107,6 @@ Sebelum menyunting file bersama (bagian 1), tambahkan baris di sini, commit, dan
 
 | File | Dikunci oleh | Sejak | Alasan |
 | --- | --- | --- | --- |
-| `package.json`, lockfile, semua config (bagian 1), `.env.example`, `src/types/` | daliondroid | 2026-10-15 | T-02 scaffolding (dikunci lebih dulu oleh farrelzaki atas nama daliondroid) |
 
 Agen **tidak boleh** menyunting file bersama yang sedang dikunci orang lain.
 
@@ -210,6 +209,7 @@ Format: `- YYYY-MM-DD · T-xx · apa yang dikerjakan · hasil/verifikasi · cata
 - 2026-10-15 · T-12 · keputusan OQ/TBD dicatat di docs; Data/README & AUDIT diselaraskan ke Cocokin!; soal v1 dihapus · JSON & py dicek valid · tenggat hackathon masih belum diketahui
 - 2026-10-15 · T-16 · tambah anggota daliondroid, mode multi-branch, bagi wilayah & task, siapkan branch fitur/daliondroid-T-02 dan fitur/farrelzaki-T-03, kunci file bersama untuk T-02 · atas perintah farrelzaki
 - 2026-10-15 · T-03 · migrasi skema awal (27 tabel, RLS tanpa policy) + scripts/impor_data.py; dimuat ke Supabase cocokin · jumlah baris 21 tabel cocok, 84 MB · akses DB hanya dari server (service role); kunci supabase/migrations dilepas
+- 2026-10-15 · T-02 · gabungkan scaffolding daliondroid (6dfaf36) ke main lewat fast-forward, lepas kunci file bersama · npm test 3/3, lint, build lulus · T-06 di fitur/daliondroid-T-02 belum digabung
 
 ## 9. Mengubah File Ini
 
