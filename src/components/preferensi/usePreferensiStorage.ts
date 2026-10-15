@@ -15,6 +15,7 @@ export interface PreferensiDraft {
   alamat: string;
   selectedAlumniRep: string;
   selectedCampus: string;
+  selectedCampuses?: string[];
   // SNBT
   activeScoreIndex: number;
   tryoutList: TryoutItem[];

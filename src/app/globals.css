@@ -40,6 +40,11 @@ body {
   box-shadow: 3px 3px 0px #000000;
 }
 
+.pixel-border-xs {
+  border: 2px solid #000000;
+  box-shadow: 2px 2px 0px #000000;
+}
+
 .pixel-btn-blue {
   background-color: #277EFD;
   color: #FFFFFF;
@@ -52,6 +57,10 @@ body {
   cursor: pointer;
   user-select: none;
   transition: transform 0.05s ease, box-shadow 0.05s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .pixel-btn-blue:hover {
@@ -59,6 +68,33 @@ body {
 }
 
 .pixel-btn-blue:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #000000;
+}
+
+.pixel-btn-red {
+  background-color: #F1402E;
+  color: #FFFFFF;
+  border: 3px solid #000000;
+  box-shadow: 4px 4px 0px #000000;
+  font-family: var(--font-pixel), 'Press Start 2P', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.05s ease, box-shadow 0.05s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pixel-btn-red:hover {
+  background-color: #d73322;
+}
+
+.pixel-btn-red:active {
   transform: translate(2px, 2px);
   box-shadow: 2px 2px 0px #000000;
 }
@@ -75,6 +111,10 @@ body {
   cursor: pointer;
   user-select: none;
   transition: transform 0.05s ease, box-shadow 0.05s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .pixel-btn-white:hover {
@@ -89,7 +129,25 @@ body {
 .pixel-badge-blue {
   background-color: #277EFD;
   color: #FFFFFF;
-  border: 3px solid #000000;
+  border: 2px solid #000000;
+  box-shadow: 3px 3px 0px #000000;
+  font-family: var(--font-pixel), 'Press Start 2P', monospace;
+  padding: 2px 8px;
+}
+
+.pixel-badge-yellow {
+  background-color: #FEBD01;
+  color: #000000;
+  border: 2px solid #000000;
+  box-shadow: 3px 3px 0px #000000;
+  font-family: var(--font-pixel), 'Press Start 2P', monospace;
+  padding: 2px 8px;
+}
+
+.pixel-badge-green {
+  background-color: #22A94F;
+  color: #FFFFFF;
+  border: 2px solid #000000;
   box-shadow: 3px 3px 0px #000000;
   font-family: var(--font-pixel), 'Press Start 2P', monospace;
   padding: 2px 8px;

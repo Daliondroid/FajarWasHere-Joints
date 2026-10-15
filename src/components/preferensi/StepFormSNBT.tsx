@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
+import { RetroWindow } from '@/components/ui/RetroWindow';
+import { Icon } from '@/components/ui/Icon';
 
 export interface SubtestScores {
   pu: string;
@@ -19,131 +20,101 @@ export interface TryoutItem {
 }
 
 interface StepFormSNBTProps {
-  tryoutList: TryoutItem[];
-  activeScoreIndex: number;
-  onSelectScoreIndex: (idx: number) => void;
-  onBack: () => void;
-  onSubmit: () => void;
+  scores: SubtestScores;
+  onChangeScore: (key: keyof SubtestScores, val: string) => void;
 }
 
-const SUBTEST_LABELS = [
+const SUBTEST_FIELDS: { key: keyof SubtestScores; label: string }[] = [
   { key: 'pu', label: 'Penalaran Umum (PU)' },
-  { key: 'ppu', label: 'Pengetahuan dan Pemahaman Umum (PPU)' },
-  { key: 'pbm', label: 'Pemahaman Bacaan dan Menulis (PBM)' },
+  { key: 'ppu', label: 'Pengetahuan & Pemahaman Umum' },
+  { key: 'pbm', label: 'Pemahaman Bacaan & Menulis' },
   { key: 'pk', label: 'Pengetahuan Kuantitatif (PK)' },
-  { key: 'lbind', label: 'Literasi dalam Bahasa Indonesia' },
-  { key: 'lbing', label: 'Literasi dalam Bahasa Inggris' },
+  { key: 'lbind', label: 'Literasi Bahasa Indonesia' },
+  { key: 'lbing', label: 'Literasi Bahasa Inggris' },
   { key: 'pm', label: 'Penalaran Matematika (PM)' },
 ];
 
-export default function StepFormSNBT({
-  tryoutList,
-  activeScoreIndex,
-  onSelectScoreIndex,
-  onBack,
-  onSubmit,
-}: StepFormSNBTProps) {
+export default function StepFormSNBT({ scores, onChangeScore }: StepFormSNBTProps) {
   return (
-    <div className="flex flex-col space-y-6">
-      {/* KOTAK BIRU DASHED SNBT */}
-      <div className="w-full border-2 border-dashed border-[#277EFD] p-4 bg-white flex flex-col space-y-4">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="w-4 h-4 bg-[#277EFD] inline-block"></span>
-          <span className="font-['Press_Start_2P',monospace] text-xs font-bold text-black">
-            SNBT
-          </span>
+    <RetroWindow
+      title="JALUR SNBT · NILAI TRY OUT"
+      variant="blue"
+      className="mb-8"
+      contentClassName="p-4 flex flex-col gap-6"
+    >
+      {/* 1. Header Skor Try Out Terakhir */}
+      <div className="flex flex-col gap-1">
+        <h4 className="font-['Press_Start_2P',monospace] text-xs text-black">
+          Skor try out terakhir
+        </h4>
+        <span className="text-xs text-[#6B7280]">Skala 0–1000 · 15 Okt 2026</span>
+      </div>
+
+      {/* 2. Subtest Inputs */}
+      <div className="flex flex-col gap-2.5">
+        {SUBTEST_FIELDS.map((subtest) => (
+          <div
+            key={subtest.key}
+            className="flex items-center justify-between gap-3 text-xs"
+          >
+            <span className="text-black font-medium text-xs flex-1 leading-snug">
+              {subtest.label}
+            </span>
+            <input
+              type="number"
+              min="0"
+              max="1000"
+              value={scores[subtest.key]}
+              onChange={(e) => onChangeScore(subtest.key, e.target.value)}
+              className="w-24 h-9 border-2 border-black bg-white text-center font-bold text-sm text-black focus:outline-none"
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* 3. Riwayat Try Out */}
+      <div className="flex flex-col gap-2 pt-2 border-t border-gray-200">
+        <div>
+          <h4 className="font-['Press_Start_2P',monospace] text-[11px] text-black">
+            Riwayat try out
+          </h4>
+          <span className="text-xs text-[#6B7280]">Pantau perkembangan skormu</span>
         </div>
 
-        <div>
-          <p className="text-xs font-bold text-black mb-2">Nilai Try Out</p>
-          <div className="space-y-1.5 text-xs">
-            {SUBTEST_LABELS.map((subtest) => (
-              <div
-                key={subtest.key}
-                className="flex items-center justify-between text-xs"
-              >
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[#22A94F] text-[10px]">▶</span>
-                  <span>{subtest.label}</span>
-                </div>
-                <span className="text-gray-400">.........</span>
-              </div>
-            ))}
+        <div className="grid grid-cols-2 gap-3 mt-1">
+          {/* Card 1 */}
+          <div className="p-3 border-2 border-black bg-[#FEF9E7] flex flex-col">
+            <span className="text-[11px] text-[#6B7280] mb-1">15 Okt 2026</span>
+            <div className="flex items-baseline gap-1.5 mb-1">
+              <span className="text-lg font-black text-black">684</span>
+              <span className="text-xs font-bold text-[#22A94F]">+38</span>
+            </div>
+            <span className="text-[10px] text-[#6B7280]">Rata-rata 7 subtes</span>
+          </div>
+
+          {/* Card 2 */}
+          <div className="p-3 border-2 border-black bg-white flex flex-col">
+            <span className="text-[11px] text-[#6B7280] mb-1">01 Okt 2026</span>
+            <div className="flex items-baseline gap-1.5 mb-1">
+              <span className="text-lg font-black text-black">646</span>
+              <span className="text-xs font-bold text-[#22A94F]">+12</span>
+            </div>
+            <span className="text-[10px] text-[#6B7280]">Rata-rata 7 subtes</span>
           </div>
         </div>
-
-        {/* Kartu Kuning Histori Nilai TO */}
-        <div className="flex gap-2 justify-center py-2">
-          {tryoutList.map((item, idx) => (
-            <div
-              key={item.date}
-              onClick={() => onSelectScoreIndex(idx)}
-              className={`w-[98px] bg-[#FEBD01] border-2 border-black p-2 flex flex-col cursor-pointer ${
-                activeScoreIndex === idx ? 'shadow-[3px_3px_0px_#000000]' : 'opacity-80'
-              }`}
-            >
-              <div className="flex justify-between text-[9px] font-mono leading-tight mb-2">
-                <div className="flex flex-col">
-                  <span>PU</span>
-                  <span>PPU</span>
-                  <span>PBM</span>
-                  <span>PK</span>
-                  <span>LBInd</span>
-                  <span>LBIng</span>
-                  <span>PM</span>
-                </div>
-                <div className="flex flex-col text-right font-bold">
-                  <span>{item.scores.pu}</span>
-                  <span>{item.scores.ppu}</span>
-                  <span>{item.scores.pbm}</span>
-                  <span>{item.scores.pk}</span>
-                  <span>{item.scores.lbind}</span>
-                  <span>{item.scores.lbing}</span>
-                  <span>{item.scores.pm}</span>
-                </div>
-              </div>
-              <span className="text-[8px] text-center font-mono border-t border-black/40 pt-1">
-                {item.date}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {/* Upload Portofolio SNBT */}
-        <div>
-          <p className="text-xs font-normal text-black mb-2">
-            Sertifikat / portofolio (pdf, img, video)
-          </p>
-          <label className="w-full h-[140px] border border-[#277EFD] flex flex-col items-center justify-center cursor-pointer hover:bg-blue-50/40 transition-colors">
-            <Image
-              src="/assets/icon-upload.png"
-              alt="Upload icon"
-              width={64}
-              height={64}
-              className="w-16 h-16 object-contain image-pixelated mb-1"
-            />
-            <input type="file" accept=".pdf,image/*,video/*" className="hidden" />
-          </label>
-        </div>
       </div>
 
-      {/* Navigasi Tombol */}
-      <div className="flex items-center justify-between gap-4 mt-6">
-        <button
-          type="button"
-          onClick={onBack}
-          className="w-[128px] h-[34px] pixel-btn-white flex items-center justify-center cursor-pointer"
-        >
-          KEMBALI
-        </button>
-        <button
-          type="button"
-          onClick={onSubmit}
-          className="w-[129px] h-[34px] pixel-btn-blue flex items-center justify-center cursor-pointer"
-        >
-          LANJUT
-        </button>
+      {/* 4. Upload Sertifikat / Portofolio SNBT */}
+      <div>
+        <label className="w-full py-6 px-4 border-2 border-dashed border-[#277EFD] bg-white flex flex-col items-center justify-center cursor-pointer hover:bg-blue-50/40 transition-colors">
+          <Icon name="upload" className="w-8 h-8 text-[#277EFD] mb-2" />
+          <span className="font-['Press_Start_2P',monospace] text-[10px] sm:text-xs text-black text-center mb-1">
+            Sertifikat / portofolio
+          </span>
+          <span className="text-xs text-[#6B7280]">PDF, JPG, atau MP4 · maks. 25 MB</span>
+          <input type="file" accept=".pdf,.jpg,.jpeg,.png,.mp4" className="hidden" />
+        </label>
       </div>
-    </div>
+    </RetroWindow>
   );
 }

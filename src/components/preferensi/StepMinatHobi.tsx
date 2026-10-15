@@ -1,6 +1,8 @@
 'use client';
 
 import React from 'react';
+import { RetroWindow } from '@/components/ui/RetroWindow';
+import { Icon } from '@/components/ui/Icon';
 
 interface StepMinatHobiProps {
   selectedHobbies: string[];
@@ -13,14 +15,14 @@ interface StepMinatHobiProps {
 }
 
 const HOBBY_LIST = [
-  { name: 'CODING', col: 1 },
-  { name: 'Networking', col: 2 },
-  { name: 'Musik', col: 1 },
-  { name: 'Fotografi', col: 2 },
-  { name: 'Membaca', col: 1 },
-  { name: 'Desain', col: 2 },
-  { name: 'Memasak', col: 1 },
-  { name: 'Blogging', col: 2 },
+  'Coding',
+  'Networking',
+  'Musik',
+  'Fotografi',
+  'Membaca',
+  'Desain',
+  'Memasak',
+  'Blogging',
 ];
 
 export default function StepMinatHobi({
@@ -33,53 +35,71 @@ export default function StepMinatHobi({
   onNext,
 }: StepMinatHobiProps) {
   return (
-    <div className="flex flex-col">
-      <h2 className="font-['Press_Start_2P',monospace] text-sm sm:text-base font-bold text-black leading-relaxed mb-6">
-        Apa <span className="text-[#F1402E]">hobi</span> dan{' '}
-        <span className="text-[#F1402E]">minat</span>
-        <br />
-        kamu ?
-      </h2>
+    <div className="flex flex-col pb-24">
+      {/* Step tag */}
+      <div className="mb-2">
+        <span className="font-['Press_Start_2P',monospace] text-[9px] sm:text-[10px] text-[#277EFD] tracking-wider uppercase">
+          LANGKAH 1 DARI 2
+        </span>
+      </div>
 
-      {/* Grid 2 Kolom Tombol Hobi */}
-      <div className="grid grid-cols-2 gap-x-4 gap-y-3 mb-6">
-        {HOBBY_LIST.map((item) => {
-          const isSelected = selectedHobbies.includes(item.name);
+      {/* Heading */}
+      <h2 className="font-['Press_Start_2P',monospace] text-base sm:text-lg text-black leading-relaxed mb-1.5">
+        Apa <span className="text-[#277EFD]">hobi</span> &{' '}
+        <span className="text-[#277EFD]">minat</span> kamu?
+      </h2>
+      <p className="text-xs text-[#6B7280] mb-5">
+        Pilih minimal 2 — boleh lebih dari satu.
+      </p>
+
+      {/* Interest chips grid */}
+      <div className="grid grid-cols-2 gap-3 mb-6">
+        {HOBBY_LIST.map((hobby) => {
+          const isSelected = selectedHobbies.includes(hobby);
           return (
             <button
-              key={item.name}
+              key={hobby}
               type="button"
-              onClick={() => onToggleHobby(item.name)}
-              className={`h-[36px] flex items-center justify-center font-['Press_Start_2P',monospace] text-[10px] font-bold border-2 border-black transition-all cursor-pointer ${
+              onClick={() => onToggleHobby(hobby)}
+              className={`h-[40px] px-3 flex items-center justify-center gap-1.5 font-['Press_Start_2P',monospace] text-[10px] font-bold border-2 border-black transition-all cursor-pointer ${
                 isSelected
-                  ? 'bg-[#22A94F] text-white shadow-[3px_3px_0px_#000000]'
+                  ? 'bg-[#277EFD] text-white shadow-[3px_3px_0px_#000000]'
                   : 'bg-white text-black shadow-[3px_3px_0px_#000000] hover:bg-gray-50'
               }`}
             >
-              {item.name}
+              {isSelected && <Icon name="check" className="w-3.5 h-3.5 text-white" />}
+              <span>{hobby}</span>
             </button>
           );
         })}
       </div>
 
-      {/* Textarea kotak tebal border hitam persis Figma */}
-      <div className="w-full border-2 border-black shadow-[4px_4px_0px_#000000] bg-white p-3 mb-2">
+      {/* Story Window matching Figma HIFI v2 */}
+      <RetroWindow
+        title="CERITAKAN LEBIH DETAIL"
+        variant="blue"
+        className="mb-4"
+        contentClassName="p-3.5 flex flex-col"
+      >
         <textarea
           rows={5}
+          maxLength={500}
           value={hobbiesStory}
           onChange={(e) => onChangeStory(e.target.value)}
-          placeholder="Tulis hobi dan minat lain mu di bawah sedetail mungkin"
-          className="w-full text-xs leading-relaxed text-black resize-none focus:outline-none"
+          placeholder="Aku suka main teka-teki logika dan pernah bikin game kecil pakai Scratch lalu Python. Lebih suka kerja sendiri dulu baru presentasi. Nggak terlalu suka pelajaran yang banyak hafalan."
+          className="w-full text-xs sm:text-[13px] leading-relaxed text-black resize-none focus:outline-none placeholder:text-gray-400 bg-transparent"
         />
-      </div>
 
-      {/* Warning icon + placeholder note */}
-      <div className="flex items-center gap-1.5 mb-2 text-[#F1402E] text-[10.5px]">
-        <span className="w-4 h-4 rounded-full border border-[#F1402E] flex items-center justify-center text-[10px] font-bold">
-          !
-        </span>
-        <span>Tulis hobi dan minat lain mu di bawah sedetail mungkin</span>
-      </div>
+        <div className="mt-3 pt-2 border-t border-gray-200 flex items-center justify-between text-[11px] text-[#6B7280]">
+          <div className="flex items-center gap-1.5">
+            <Icon name="spark" className="w-3.5 h-3.5 text-gray-500" />
+            <span>Semakin detail, semakin akurat hasilnya</span>
+          </div>
+          <span className="font-medium text-black">
+            {hobbiesStory.length}/500
+          </span>
+        </div>
+      </RetroWindow>
 
       {/* Error Banner jika Langkah 1 belum diisi */}
       {errorMessage && (
@@ -89,22 +109,25 @@ export default function StepMinatHobi({
         </div>
       )}
 
-      {/* Navigasi Tombol Kembali & Lanjut */}
-      <div className="flex items-center justify-between gap-4 mt-auto">
-        <button
-          type="button"
-          onClick={onBack}
-          className="w-[128px] h-[34px] pixel-btn-white flex items-center justify-center cursor-pointer"
-        >
-          KEMBALI
-        </button>
-        <button
-          type="button"
-          onClick={onNext}
-          className="w-[129px] h-[34px] pixel-btn-blue flex items-center justify-center cursor-pointer"
-        >
-          LANJUT
-        </button>
+      {/* Fixed Bottom Action Bar */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-black z-40 py-3 px-4">
+        <div className="w-full max-w-[402px] mx-auto flex items-center justify-between gap-3">
+          <button
+            type="button"
+            onClick={onBack}
+            className="flex-1 pixel-btn-white py-3 text-xs tracking-wider"
+          >
+            KEMBALI
+          </button>
+          <button
+            type="button"
+            onClick={onNext}
+            className="flex-1 pixel-btn-blue py-3 text-xs tracking-wider flex items-center justify-center gap-2"
+          >
+            <span>LANJUT</span>
+            <Icon name="arrow-right" className="w-4 h-4 text-white" />
+          </button>
+        </div>
       </div>
     </div>
   );
