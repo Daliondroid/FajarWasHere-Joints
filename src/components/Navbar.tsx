@@ -4,17 +4,38 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSession, signOut } from 'next-auth/react';
 import { Icon } from '@/components/ui/Icon';
+import ScrollProgress from '@/components/ui/ScrollProgress';
+import LoginModal from '@/components/auth/LoginModal';
 
 interface NavbarProps {
   onMenuClick?: () => void;
   isOpen?: boolean;
+  backHref?: string;
+  title?: string;
 }
 
-export default function Navbar({ onMenuClick, isOpen: controlledIsOpen }: NavbarProps) {
+export default function Navbar({
+  onMenuClick,
+  isOpen: controlledIsOpen,
+  backHref,
+  title,
+}: NavbarProps) {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen;
   const pathname = usePathname();
+  const { data: session, status } = useSession();
+
+  const isAuthenticated = status === 'authenticated';
+  const userName = session?.user?.name || 'Ari Rahman';
+  const userInitials = userName
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .substring(0, 2)
+    .toUpperCase();
 
   const handleToggle = () => {
     if (onMenuClick) {
@@ -36,149 +57,214 @@ export default function Navbar({ onMenuClick, isOpen: controlledIsOpen }: Navbar
     <>
       <header className="sticky top-0 z-50 bg-white border-b-2 border-black">
         <div className="w-full max-w-[402px] mx-auto px-4 py-2.5 flex items-center justify-between">
-          {/* Logo Toga Pixel + Text Cocokin! */}
-          <Link href="/" onClick={closeMenu} className="flex items-center gap-2">
-            <Image
-              src="/assets/logo-cap.png"
-              alt="Cocokin Logo"
-              width={34}
-              height={34}
-              priority
-              className="w-[34px] h-[34px] object-contain image-pixelated"
-            />
-            <span className="font-['Press_Start_2P',monospace] text-base font-black text-black tracking-tight">
-              Cocokin!
-            </span>
-          </Link>
+          {backHref ? (
+            <div className="flex items-center gap-3">
+              <Link
+                href={backHref}
+                className="p-1 hover:bg-gray-100 border border-black shadow-[1px_1px_0px_#000000] active:translate-x-[1px] active:translate-y-[1px] flex items-center justify-center transition-all"
+                aria-label="Kembali"
+              >
+                <Icon name="back" className="w-4 h-4 text-black" />
+              </Link>
+              {title && (
+                <span className="font-['Outfit',sans-serif] font-bold text-sm text-black truncate max-w-[200px]">
+                  {title}
+                </span>
+              )}
+            </div>
+          ) : (
+            /* Logo Toga Pixel + Text Cocokin! */
+            <Link href="/" onClick={closeMenu} className="flex items-center gap-2">
+              <Image
+                src="/assets/logo-cap.png"
+                alt="Cocokin Logo"
+                width={32}
+                height={32}
+                priority
+                className="w-8 h-8 object-contain image-pixelated"
+              />
+              <span className="font-['Press_Start_2P',monospace] text-sm font-black text-black tracking-tight">
+                Cocokin!
+              </span>
+            </Link>
+          )}
 
-          {/* Toggle Button: Hamburger or Close X */}
-          <button
-            type="button"
-            aria-label={isOpen ? "Tutup menu" : "Buka menu"}
-            onClick={handleToggle}
-            className="p-1 cursor-pointer flex items-center justify-center active:scale-95 transition-transform"
-          >
-            {isOpen ? (
-              <Icon name="close" className="w-5 h-5 text-black" />
-            ) : (
-              <Icon name="menu" className="w-6 h-6 text-black" />
+          {/* Right Action: Avatar/Masuk + Hamburger Menu */}
+          <div className="flex items-center gap-2">
+            {!backHref && (
+              isAuthenticated ? (
+                <div
+                  className="w-7 h-7 bg-[#EEF5FF] border-2 border-black flex items-center justify-center shadow-[1px_1px_0px_#000000] text-[10px] font-bold font-['Press_Start_2P',monospace] text-[#277EFD]"
+                  title={userName}
+                >
+                  {userInitials || 'AR'}
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setIsLoginModalOpen(true)}
+                  className="px-2.5 py-1 bg-[#4285F4] text-white border border-black shadow-[2px_2px_0px_#000000] active:translate-x-[1px] active:translate-y-[1px] font-['Press_Start_2P',monospace] text-[8px] hover:bg-[#277EFD] transition-colors cursor-pointer"
+                >
+                  MASUK
+                </button>
+              )
             )}
-          </button>
+
+            {/* Toggle Button: Hamburger or Close X */}
+            <button
+              type="button"
+              aria-label={isOpen ? 'Tutup menu' : 'Buka menu'}
+              onClick={handleToggle}
+              className="p-1 cursor-pointer flex items-center justify-center active:scale-95 transition-transform"
+            >
+              {isOpen ? (
+                <Icon name="close" className="w-5 h-5 text-black" />
+              ) : (
+                <Icon name="menu" className="w-5 h-5 text-black" />
+              )}
+            </button>
+          </div>
         </div>
 
-        {/* 4-Color Strip Bar below Header */}
-        <div className="w-full grid grid-cols-4 h-[3px]">
-          <div className="bg-[#277EFD]"></div>
-          <div className="bg-[#F1402E]"></div>
-          <div className="bg-[#FEBD01]"></div>
-          <div className="bg-[#22A94F]"></div>
-        </div>
+        {/* 4-Color Strip Bar with Reactive Scroll Progress (F-01) */}
+        <ScrollProgress />
+      </header>
 
-        {/* Dropdown Menu Overlay matching Figma HIFI v2 (110:604) */}
-        {isOpen && (
-          <div className="w-full max-w-[402px] mx-auto bg-white border-b-[3px] border-black px-4 pt-3 pb-5 shadow-[0px_4px_0px_#000] relative z-50 animate-in fade-in slide-in-from-top-1 duration-100">
-            <nav className="flex flex-col gap-1.5">
-              {/* 1. Beranda */}
+      {/* Menu Overlay Drawer (Figma M02 / 172:344) */}
+      {isOpen && (
+        <div className="fixed inset-0 top-[49px] z-40 bg-black/50 backdrop-blur-[1px] flex justify-center">
+          <div className="w-full max-w-[402px] bg-white border-b-2 border-black shadow-[0_8px_0_0_#000000] flex flex-col max-h-[calc(100vh-49px)] overflow-y-auto">
+            {/* User Session Info if authenticated */}
+            {isAuthenticated && (
+              <div className="p-4 bg-[#EEF5FF] border-b-2 border-black flex items-center gap-3">
+                <div className="w-10 h-10 bg-white border-2 border-black flex items-center justify-center font-['Press_Start_2P',monospace] text-xs font-bold text-[#277EFD] shadow-[2px_2px_0px_#000000]">
+                  {userInitials || 'AR'}
+                </div>
+                <div className="min-w-0">
+                  <p className="font-['Outfit',sans-serif] font-bold text-sm text-black truncate">
+                    {userName}
+                  </p>
+                  <p className="font-['Outfit',sans-serif] text-xs text-gray-600 truncate">
+                    {session?.user?.email || 'siswa@sma.sch.id'}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            <nav className="p-4 flex flex-col gap-2 font-['Press_Start_2P',monospace] text-[10px]">
               <Link
                 href="/"
                 onClick={closeMenu}
-                className={`flex items-center justify-between px-3 py-2.5 transition-colors ${
+                className={`flex items-center justify-between px-3 py-3 border border-black shadow-[2px_2px_0px_#000000] transition-colors ${
                   pathname === '/'
-                    ? 'bg-[#EEF5FF] border-l-4 border-[#277EFD] text-[#277EFD]'
-                    : 'hover:bg-gray-50 text-black'
+                    ? 'bg-[#EEF5FF] text-[#277EFD]'
+                    : 'bg-white hover:bg-gray-50 text-black'
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <Icon name="home" className={`w-5 h-5 ${pathname === '/' ? 'text-[#277EFD]' : 'text-black'}`} />
-                  <span className="font-['Press_Start_2P',monospace] text-[11px]">Beranda</span>
-                </div>
-                <Icon name="chevron-right" className={`w-4 h-4 ${pathname === '/' ? 'text-[#277EFD]' : 'text-gray-400'}`} />
+                <span>BERANDA</span>
+                <Icon name="chevron-right" className="w-3.5 h-3.5" />
               </Link>
 
-              {/* 2. Cocokin */}
               <Link
                 href="/cocokin"
                 onClick={closeMenu}
-                className={`flex items-center justify-between px-3 py-2.5 transition-colors ${
-                  pathname === '/cocokin' || pathname === '/rekomendasi'
-                    ? 'bg-[#EEF5FF] border-l-4 border-[#277EFD] text-[#277EFD]'
-                    : 'hover:bg-gray-50 text-black'
+                className={`flex items-center justify-between px-3 py-3 border border-black shadow-[2px_2px_0px_#000000] transition-colors ${
+                  pathname === '/cocokin'
+                    ? 'bg-[#EEF5FF] text-[#277EFD]'
+                    : 'bg-white hover:bg-gray-50 text-black'
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <Icon name="plus" className="w-5 h-5 text-black" />
-                  <span className="font-['Press_Start_2P',monospace] text-[11px]">Cocokin</span>
-                </div>
-                <Icon name="chevron-right" className="w-4 h-4 text-gray-400" />
+                <span>COCOKIN (REKOMENDASI)</span>
+                <Icon name="chevron-right" className="w-3.5 h-3.5" />
               </Link>
 
-              {/* 3. Simulasi jurusan */}
+              <Link
+                href="/preferensi"
+                onClick={closeMenu}
+                className={`flex items-center justify-between px-3 py-3 border border-black shadow-[2px_2px_0px_#000000] transition-colors ${
+                  pathname.startsWith('/preferensi')
+                    ? 'bg-[#EEF5FF] text-[#277EFD]'
+                    : 'bg-white hover:bg-gray-50 text-black'
+                }`}
+              >
+                <span>KELOLA PREFERENSI</span>
+                <Icon name="chevron-right" className="w-3.5 h-3.5" />
+              </Link>
+
               <Link
                 href="/katalog"
                 onClick={closeMenu}
-                className={`flex items-center justify-between px-3 py-2.5 transition-colors ${
+                className={`flex items-center justify-between px-3 py-3 border border-black shadow-[2px_2px_0px_#000000] transition-colors ${
                   pathname.startsWith('/katalog') || pathname.startsWith('/test-drive')
-                    ? 'bg-[#EEF5FF] border-l-4 border-[#277EFD] text-[#277EFD]'
-                    : 'hover:bg-gray-50 text-black'
+                    ? 'bg-[#EEF5FF] text-[#277EFD]'
+                    : 'bg-white hover:bg-gray-50 text-black'
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <Icon name="play" className="w-5 h-5 text-black" />
-                  <span className="font-['Press_Start_2P',monospace] text-[11px]">Simulasi jurusan</span>
-                </div>
-                <Icon name="chevron-right" className="w-4 h-4 text-gray-400" />
+                <span>SIMULASI KULIAH</span>
+                <Icon name="chevron-right" className="w-3.5 h-3.5" />
               </Link>
 
-              {/* 4. Edit preferensi */}
               <Link
-                href="/preferensi/minat"
+                href="/chat"
                 onClick={closeMenu}
-                className={`flex items-center justify-between px-3 py-2.5 transition-colors ${
-                  pathname.startsWith('/preferensi')
-                    ? 'bg-[#EEF5FF] border-l-4 border-[#277EFD] text-[#277EFD]'
-                    : 'hover:bg-gray-50 text-black'
+                className={`flex items-center justify-between px-3 py-3 border border-black shadow-[2px_2px_0px_#000000] transition-colors ${
+                  pathname.startsWith('/chat')
+                    ? 'bg-[#EEF5FF] text-[#277EFD]'
+                    : 'bg-white hover:bg-gray-50 text-black'
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <Icon name="edit" className="w-5 h-5 text-black" />
-                  <span className="font-['Press_Start_2P',monospace] text-[11px]">Edit preferensi</span>
-                </div>
-                <Icon name="chevron-right" className="w-4 h-4 text-gray-400" />
+                <span>CHAT AI</span>
+                <Icon name="chevron-right" className="w-3.5 h-3.5" />
+              </Link>
+
+              <Link
+                href="/syarat-ketentuan"
+                onClick={closeMenu}
+                className={`flex items-center justify-between px-3 py-3 border border-black shadow-[2px_2px_0px_#000000] transition-colors ${
+                  pathname === '/syarat-ketentuan'
+                    ? 'bg-[#EEF5FF] text-[#277EFD]'
+                    : 'bg-white hover:bg-gray-50 text-black'
+                }`}
+              >
+                <span>SYARAT & KETENTUAN</span>
+                <Icon name="chevron-right" className="w-3.5 h-3.5" />
               </Link>
             </nav>
 
-            {/* Separator Dashed */}
-            <div className="my-4 border-t-2 border-dashed border-gray-300" />
-
-            {/* Tombol MASUK */}
-            <Link
-              href="/login"
-              onClick={closeMenu}
-              className="w-full pixel-btn-blue py-3 px-4 text-center justify-center flex items-center gap-2"
-            >
-              <span>MASUK</span>
-              <Icon name="arrow-right" className="w-4 h-4 text-white" />
-            </Link>
-
-            {/* Subtext */}
-            <p className="mt-3 text-center text-xs text-gray-600">
-              Belum punya akun?{' '}
-              <Link href="/daftar" onClick={closeMenu} className="text-[#277EFD] font-bold hover:underline">
-                Daftar gratis
-              </Link>
-            </p>
+            <div className="p-4 border-t-2 border-black bg-gray-50">
+              {isAuthenticated ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    closeMenu();
+                    signOut();
+                  }}
+                  className="w-full py-2.5 bg-red-100 hover:bg-red-200 border-2 border-black font-['Press_Start_2P',monospace] text-[9px] text-red-700 shadow-[2px_2px_0px_#000000] active:translate-x-[1px] active:translate-y-[1px] transition-all cursor-pointer"
+                >
+                  KELUAR DARI AKUN
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    closeMenu();
+                    setIsLoginModalOpen(true);
+                  }}
+                  className="w-full py-2.5 bg-[#4285F4] hover:bg-[#277EFD] text-white border-2 border-black font-['Press_Start_2P',monospace] text-[9px] shadow-[2px_2px_0px_#000000] active:translate-x-[1px] active:translate-y-[1px] transition-all cursor-pointer"
+                >
+                  MASUK DENGAN GOOGLE
+                </button>
+              )}
+            </div>
           </div>
-        )}
-      </header>
-
-      {/* Scrim backdrop */}
-      {isOpen && (
-        <div
-          onClick={closeMenu}
-          className="fixed inset-0 bg-black/60 z-40 transition-opacity"
-          aria-hidden="true"
-        />
+        </div>
       )}
+
+      {/* Modal Login Google */}
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+      />
     </>
   );
 }

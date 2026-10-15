@@ -1,112 +1,328 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { TryoutItem } from '@/components/preferensi/StepFormSNBT';
+import { useState, useEffect } from 'react';
 
 export interface PreferensiDraft {
-  // Step 1: Minat & Hobi
-  selectedHobbies: string[];
+  nama: string;
+  jalur: 'snbp' | 'snbt';
+  
+  // RIASEC answers: "IP01" .. "IP30" -> 0..4
+  jawaban_minat: Record<string, number>;
+  
+  // Minat & Hobi
+  chip_hobi: string[];
   hobbiesStory: string;
+  mapel_favorit: string[];
 
-  // Step 2: Akademik
-  selectedTrack: 'SNBP' | 'SNBT' | '';
   // SNBP
   npsn: string;
-  alamat: string;
-  selectedAlumniRep: string;
-  selectedCampus: string;
-  selectedCampuses?: string[];
+  nama_sekolah?: string;
+  provinsi?: string;
+  kabupaten?: string;
+  rapor_rata: number;
+  nilai_mapel_pendukung: Record<string, number>;
+  nilai_tka: {
+    matematika: number;
+    bahasa_indonesia: number;
+    bahasa_inggris: number;
+    pilihan: Record<string, number>;
+  };
+  reputasi_alumni: 'sangat_tinggi' | 'tinggi' | 'sedang' | 'rendah' | '';
+  kampus_alumni: string[]; // nama kampus
+
   // SNBT
-  activeScoreIndex: number;
-  tryoutList: TryoutItem[];
+  skor_to: {
+    pu: number;
+    ppu: number;
+    pbm: number;
+    pk: number;
+    lit_ind: number;
+    lit_ing: number;
+    pm: number;
+  };
+  riwayat_to: Array<{
+    bulan: string;
+    tanggal: string;
+    rata_rata: number;
+  }>;
 }
 
-const STORAGE_KEY = 'cocokin_preferensi_draft_v1';
+export interface PreferensiSavedItem {
+  id: string;
+  nama: string;
+  jalur: 'snbp' | 'snbt';
+  is_aktif: boolean;
+  ringkasan: string;
+  skor_riasec?: { R: number; I: number; A: number; S: number; E: number; C: number };
+  kode_holland?: string;
+  created_at: string;
+  data: PreferensiDraft;
+}
 
-const DEFAULT_TRYOUTS: TryoutItem[] = [
+const DRAFT_KEY = 'cocokin_v3_wizard_draft';
+const SAVED_KEY = 'cocokin_v3_saved_preferensi';
+
+export const INITIAL_DRAFT: PreferensiDraft = {
+  nama: '',
+  jalur: 'snbp',
+  jawaban_minat: {},
+  chip_hobi: [],
+  hobbiesStory: '',
+  mapel_favorit: [],
+  npsn: '20403161', // default SMAN 1 Yogyakarta untuk kenyamanan demo
+  nama_sekolah: 'SMAN 1 YOGYAKARTA',
+  provinsi: 'D.I. Yogyakarta',
+  kabupaten: 'Kota Yogyakarta',
+  rapor_rata: 89.4,
+  nilai_mapel_pendukung: {},
+  nilai_tka: {
+    matematika: 88,
+    bahasa_indonesia: 86,
+    bahasa_inggris: 90,
+    pilihan: { Fisika: 85, Informatika: 92 },
+  },
+  reputasi_alumni: 'sangat_tinggi',
+  kampus_alumni: ['UGM', 'UNY', 'UPN "VETERAN" YK'],
+  skor_to: {
+    pu: 720,
+    ppu: 680,
+    pbm: 650,
+    pk: 700,
+    lit_ind: 640,
+    lit_ing: 710,
+    pm: 690,
+  },
+  riwayat_to: [
+    { bulan: 'AGU', tanggal: '08 Agu 2026', rata_rata: 612 },
+    { bulan: 'SEP', tanggal: '18 Agu 2026', rata_rata: 646 },
+    { bulan: 'OKT', tanggal: '19 Sep 2026', rata_rata: 684 },
+  ],
+};
+
+const DEFAULT_SAVED_LIST: PreferensiSavedItem[] = [
   {
-    date: '15/10/2026',
-    scores: {
-      pu: '900',
-      ppu: '700',
-      pbm: '500',
-      pk: '650',
-      lbind: '433',
-      lbing: '830',
-      pm: '720',
+    id: 'pref-default-1',
+    nama: 'Informatika Impian',
+    jalur: 'snbp',
+    is_aktif: true,
+    ringkasan: '30/30 RIASEC • Rapor 89,4 • 2 Mapel TKA',
+    kode_holland: 'IRC',
+    created_at: '2026-10-15',
+    data: {
+      ...INITIAL_DRAFT,
+      nama: 'Informatika Impian',
+      jalur: 'snbp',
     },
   },
   {
-    date: '1/10/2026',
-    scores: {
-      pu: '900',
-      ppu: '700',
-      pbm: '500',
-      pk: '650',
-      lbind: '433',
-      lbing: '830',
-      pm: '720',
+    id: 'pref-default-2',
+    nama: 'Cadangan SNBT',
+    jalur: 'snbt',
+    is_aktif: false,
+    ringkasan: '30/30 RIASEC • Skor TO 684 • 3 Riwayat TO',
+    kode_holland: 'IRC',
+    created_at: '2026-10-14',
+    data: {
+      ...INITIAL_DRAFT,
+      nama: 'Cadangan SNBT',
+      jalur: 'snbt',
     },
   },
 ];
 
-const INITIAL_DRAFT: PreferensiDraft = {
-  selectedHobbies: [],
-  hobbiesStory: '',
-  selectedTrack: '',
-  npsn: '',
-  alamat: '',
-  selectedAlumniRep: '',
-  selectedCampus: 'UGM',
-  activeScoreIndex: 0,
-  tryoutList: DEFAULT_TRYOUTS,
-};
-
 export function usePreferensiStorage() {
   const [draft, setDraftState] = useState<PreferensiDraft>(INITIAL_DRAFT);
+  const [savedList, setSavedList] = useState<PreferensiSavedItem[]>(DEFAULT_SAVED_LIST);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load from localStorage saat mount
+  // Load from localStorage on mount
   useEffect(() => {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        setDraftState((prev) => ({ ...prev, ...parsed }));
+      const storedDraft = localStorage.getItem(DRAFT_KEY);
+      if (storedDraft) {
+        setDraftState(JSON.parse(storedDraft));
       }
-    } catch (err) {
-      console.warn('Gagal memuat preferensi draft dari localStorage:', err);
+
+      const storedSaved = localStorage.getItem(SAVED_KEY);
+      if (storedSaved) {
+        setSavedList(JSON.parse(storedSaved));
+      } else {
+        localStorage.setItem(SAVED_KEY, JSON.stringify(DEFAULT_SAVED_LIST));
+      }
+    } catch {
+      // Fallback ignore error
     } finally {
       setIsLoaded(true);
     }
   }, []);
 
-  // Update state dan sync ke localStorage
   const updateDraft = (updates: Partial<PreferensiDraft>) => {
     setDraftState((prev) => {
       const next = { ...prev, ...updates };
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-      } catch (err) {
-        console.warn('Gagal menyimpan preferensi draft ke localStorage:', err);
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(next));
+      } catch {
+        // ignore
       }
       return next;
     });
   };
 
-  const clearDraft = () => {
+  const resetDraft = () => {
+    setDraftState(INITIAL_DRAFT);
     try {
-      localStorage.removeItem(STORAGE_KEY);
-      setDraftState(INITIAL_DRAFT);
-    } catch (err) {
-      console.warn('Gagal menghapus preferensi draft:', err);
+      localStorage.removeItem(DRAFT_KEY);
+    } catch {
+      // ignore
     }
+  };
+
+  const setAktif = async (id: string) => {
+    setSavedList((prev) => {
+      const next = prev.map((p) => ({
+        ...p,
+        is_aktif: p.id === id,
+      }));
+      try {
+        localStorage.setItem(SAVED_KEY, JSON.stringify(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+
+    try {
+      await fetch(`/api/preferensi/${id}/aktif`, { method: 'POST' });
+    } catch {
+      // offline fallback
+    }
+  };
+
+  const hapusPreferensi = async (id: string) => {
+    setSavedList((prev) => {
+      const remaining = prev.filter((p) => p.id !== id);
+      if (remaining.length > 0 && !remaining.some((p) => p.is_aktif)) {
+        remaining[0].is_aktif = true;
+      }
+      try {
+        localStorage.setItem(SAVED_KEY, JSON.stringify(remaining));
+      } catch {
+        // ignore
+      }
+      return remaining;
+    });
+
+    try {
+      await fetch(`/api/preferensi/${id}`, { method: 'DELETE' });
+    } catch {
+      // offline fallback
+    }
+  };
+
+  const simpanDraftSebagaiPreferensi = async (): Promise<PreferensiSavedItem> => {
+    const isSNBP = draft.jalur === 'snbp';
+    const ringkasan = isSNBP
+      ? `30/30 RIASEC • Rapor ${draft.rapor_rata} • ${Object.keys(draft.nilai_tka.pilihan).length} Mapel TKA`
+      : `30/30 RIASEC • Skor TO ${Math.round(
+          Object.values(draft.skor_to).reduce((a, b) => a + b, 0) / 7
+        )} • ${draft.riwayat_to.length} Riwayat TO`;
+
+    const newItem: PreferensiSavedItem = {
+      id: `pref-${Date.now()}`,
+      nama: draft.nama || (isSNBP ? 'Preferensi SNBP Baru' : 'Preferensi SNBT Baru'),
+      jalur: draft.jalur,
+      is_aktif: true,
+      ringkasan,
+      kode_holland: 'IRC',
+      created_at: new Date().toISOString().split('T')[0],
+      data: { ...draft },
+    };
+
+    // Update list dan jadikan preferensi baru ini aktif (sesuai F-19)
+    setSavedList((prev) => {
+      const updated = prev.map((p) => ({ ...p, is_aktif: false }));
+      const next = [newItem, ...updated];
+      try {
+        localStorage.setItem(SAVED_KEY, JSON.stringify(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+
+    // Coba simpan ke server backend jika user login
+    try {
+      await fetch('/api/preferensi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nama: newItem.nama,
+          jalur: newItem.jalur,
+          minat: {
+            mode: 'ipsf_30',
+            jawaban_minat: draft.jawaban_minat,
+            chip_hobi: draft.chip_hobi,
+            mapel_favorit: draft.mapel_favorit,
+          },
+          kelulusan: {
+            tahun_lulus: 2026,
+            pernah_lulus_snbp: false,
+          },
+          akademik: isSNBP
+            ? {
+                npsn: draft.npsn,
+                jurusan_sekolah: 'MIPA',
+                rapor_rata: draft.rapor_rata,
+                nilai_mapel_pendukung: draft.nilai_mapel_pendukung,
+                peringkat_paralel: 15,
+                jumlah_siswa_jurusan: 150,
+                nilai_tka: {
+                  matematika: draft.nilai_tka.matematika,
+                  bahasa_indonesia: draft.nilai_tka.bahasa_indonesia,
+                  bahasa_inggris: draft.nilai_tka.bahasa_inggris,
+                  pilihan: draft.nilai_tka.pilihan,
+                },
+                prestasi: [],
+                reputasi_alumni: draft.reputasi_alumni || 'sangat_tinggi',
+                kampus_alumni: [1, 2, 3],
+              }
+            : null,
+          riwayat_to: isSNBP
+            ? []
+            : [
+                {
+                  tanggal: '2026-09-19',
+                  sumber_to: 'Bimbel Nasional',
+                  skala: 'irt_200_1000',
+                  skor: {
+                    pu: draft.skor_to.pu,
+                    ppu: draft.skor_to.ppu,
+                    pbm: draft.skor_to.pbm,
+                    pk: draft.skor_to.pk,
+                    lit_ind: draft.skor_to.lit_ind,
+                    lit_ing: draft.skor_to.lit_ing,
+                    pm: draft.skor_to.pm,
+                  },
+                },
+              ],
+        }),
+      });
+    } catch {
+      // offline fallback
+    }
+
+    resetDraft();
+    return newItem;
   };
 
   return {
     draft,
+    savedList,
     isLoaded,
     updateDraft,
-    clearDraft,
+    resetDraft,
+    setAktif,
+    hapusPreferensi,
+    simpanDraftSebagaiPreferensi,
   };
 }
