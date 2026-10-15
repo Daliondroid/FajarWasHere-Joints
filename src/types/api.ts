@@ -428,3 +428,54 @@ export interface ResponsJawabTestDrive {
   pembahasan: string | null;
   tersimpan: boolean;
 }
+
+// ---------- GET /api/rekomendasi (T-19, Hal. 8: F-08, K-07, K-10). Wajib login, memakai preferensi aktif ----------
+
+/**
+ * #1 dream_goal: kecocokan tertinggi (seri -> prodi paling ketat).
+ * #2 safety_net: serumpun dengan #1, peluang tertinggi (tanpa data peluang -> paling longgar);
+ *    SNBP: bila PTN #1 di luar provinsi sekolah, #2 wajib di provinsi sekolah (BR-01).
+ * #3 alternatif: kecocokan tertinggi dari rumpun lain (seri -> peluang/longgar tertinggi).
+ */
+export type JenisKartu = 'dream_goal' | 'safety_net' | 'alternatif';
+
+export interface KartuRekomendasi {
+  peringkat: 1 | 2 | 3;
+  jenis: JenisKartu;
+  prodi: {
+    id_prodi: number;
+    nama_prodi: string;
+    id_ptn: number;
+    nama_ptn: string;
+    provinsi_ptn: string;
+    jenjang: JenjangProdi;
+    kelompok: RumpunIlmu;
+    rumpun_id: string;
+    rumpun: string;
+  };
+  kecocokan: { skor: number; label: string };
+  /** Isi popup DETAIL (K-07). */
+  detail: {
+    kode_holland: string;
+    keketatan_snbp: Keketatan | null;
+    keketatan_snbt: Keketatan | null;
+    /** Sesuai jalur preferensi aktif; yang lain null. Peluang = rentang + label + 3 alasan "Kenapa?" + flag estimasi. */
+    peluang_snbp: HasilPeluangSnbp | null;
+    peluang_snbt: HasilPeluangSnbt | null;
+    pddikti: ProdiDetail['pddikti'];
+  };
+}
+
+export interface ResponsRekomendasi {
+  /** null bila akun belum punya preferensi. */
+  data: {
+    preferensi: { id: string; nama: string; jalur: JalurPreferensi };
+    kode_holland: string;
+    /** Biasanya 3; bisa kurang bila kandidat tidak tersedia. */
+    kartu: KartuRekomendasi[];
+    /** SNBP: validasi pasangan #1 + #2 sebagai dua pilihan (BR-01); null untuk SNBT atau sekolah belum diisi. */
+    validasi_provinsi_snbp: HasilValidasiProvinsi | null;
+    /** Pemberitahuan data kurang, mis. bahan akademik belum diisi sehingga peluang tidak dihitung. */
+    catatan: string[];
+  } | null;
+}
