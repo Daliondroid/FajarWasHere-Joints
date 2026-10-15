@@ -2,9 +2,12 @@
 import type {
   FilterProdi,
   JenjangProdi,
+  PermintaanJawabTestDrive,
   PermintaanKecocokan,
   PermintaanPeluang,
+  PermintaanRefleksiTestDrive,
   PreferensiPengguna,
+  RefleksiTestDrive,
   ProfilAkademik,
   RumpunIlmu,
 } from '@/types';
@@ -147,6 +150,7 @@ export function validasiKecocokan(v: unknown): PermintaanKecocokan {
     mapel_favorit: opsional(v.mapel_favorit, (x) => daftarTeks(x, 'mapel_favorit', 3)) ?? [],
     filter,
     batas: opsional(v.batas, (x) => angka(x, 'batas', 1, 100, true)) ?? 20,
+    refleksi: opsional(v.refleksi, validasiPetaRefleksi),
   };
 }
 
@@ -228,4 +232,36 @@ export function validasiPreferensi(v: unknown): PreferensiPengguna {
     },
     akademik: ak,
   };
+}
+
+const REFLEKSI = ['seru', 'melelahkan'] as const;
+const OPSI = ['A', 'B', 'C', 'D'] as const;
+
+export function validasiIdProdi(v: unknown): number {
+  return angka(v, 'id_prodi', 1, 2_147_483_647, true);
+}
+
+export function validasiJawabTestDrive(v: unknown): PermintaanJawabTestDrive {
+  if (!isObjek(v)) throw galatValidasi('Badan request harus objek.');
+  return {
+    id_prodi: validasiIdProdi(v.id_prodi),
+    id_soal: teks(v.id_soal, 'id_soal'),
+    jawaban: pilihan(v.jawaban, 'jawaban', OPSI),
+  };
+}
+
+export function validasiRefleksi(v: unknown): PermintaanRefleksiTestDrive {
+  if (!isObjek(v)) throw galatValidasi('Badan request harus objek.');
+  return { id_prodi: validasiIdProdi(v.id_prodi), refleksi: pilihan(v.refleksi, 'refleksi', REFLEKSI) };
+}
+
+/** {"361036": "seru"} -> sama, dengan kunci id_prodi angka; maks 500 entri. */
+export function validasiPetaRefleksi(v: unknown): Record<string, RefleksiTestDrive> {
+  if (!isObjek(v) || Object.keys(v).length > 500) throw galatValidasi('refleksi harus objek {id_prodi: seru|melelahkan}, maks 500.');
+  return Object.fromEntries(
+    Object.entries(v).map(([k, r]) => {
+      if (!/^\d{1,9}$/.test(k)) throw galatValidasi(`refleksi: kunci ${k} harus id_prodi angka.`);
+      return [k, pilihan(r, `refleksi.${k}`, REFLEKSI)];
+    }),
+  );
 }
