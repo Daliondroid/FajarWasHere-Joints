@@ -77,7 +77,7 @@ export default function RekomendasiPage() {
 
                 <div className="mt-3">
                   <Link
-                    href="/katalog"
+                    href={`/test-drive/${item.slug}`}
                     className="inline-block bg-[#EA4335] hover:bg-[#D93025] text-white font-['Press_Start_2P',monospace] text-[9px] px-3 py-1.5 border-[2px] border-black shadow-[2px_2px_0px_#000] active:translate-y-0.5 transition-transform"
                   >
                     Simulation
