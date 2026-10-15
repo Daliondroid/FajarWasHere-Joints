@@ -13,6 +13,7 @@
   "dependencies": {
     "@supabase/supabase-js": "2.117.3",
     "next": "15.5.28",
+    "next-auth": "4.24.15",
     "react": "19.1.0",
     "react-dom": "19.1.0"
   },
