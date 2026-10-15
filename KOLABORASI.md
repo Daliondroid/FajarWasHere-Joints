@@ -222,6 +222,7 @@ Format: `- YYYY-MM-DD · T-xx · apa yang dikerjakan · hasil/verifikasi · cata
 - 2026-10-15 · T-14 · /api/test-drive (maks 3 soal tanpa kunci, berlapis spesifik/umum → rumpun → cadangan; reality check), /jawab, /refleksi (wajib login); refleksi jadi tie-breaker /api/kecocokan; kunci dilepas · npm test 117/117, build, e2e Supabase + login Google lulus · daliondroid: Hal. 13 pakai /test-drive/[id_prodi]; kunci & pembahasan diambil dari /jawab
 - 2026-10-15 · T-17 · docs/PRD.md 2.2: F-01 progres scroll, F-02 modal login + CTA sudah login, F-18/F-19/BR-16/BR-17 banyak preferensi (1 aktif, 1 jalur), BR-18 2 mapel pilihan TKA dipilih siswa, riwayat alumni tidak daftar ulang dihapus (K-04) · diff ditinjau; langsung ke main atas izin farrelzaki · daliondroid: UI perlu ikut Figma "HIFI v3 — PRD 2.2" (R-05); T-18 untuk DB/API
 - 2026-10-15 · T-17 · docs/PRD.md: Test Drive tanpa timer (F-11, K-06), rekomendasi ringkas + popup DETAIL (F-08, K-07) · diff ditinjau; langsung ke main atas izin farrelzaki · daliondroid: ikuti Figma HIFI v3 M13/M14/M18/M19
+- 2026-10-15 · T-17 · docs/PRD.md: hasil Test Drive = versi koreksi layar soal, tanpa rating/refleksi (F-11, K-08) · diff ditinjau · R-06: endpoint/field refleksi dari T-14 perlu dihapus
 
 ## 9. Mengubah File Ini
 
