@@ -86,10 +86,10 @@ Aturan untuk agen:
 | T-12 | Putuskan pertanyaan terbuka; selaraskan dokumen dataset | farrelzaki | `[x]` | `main` | `docs/`, `Data/*.md` | 2026-10-15 | |
 | T-16 | Ubah tim jadi 2 orang, mode multi-branch, bagi task | farrelzaki | `[x]` | `main` | `KOLABORASI.md`, `README.md` | 2026-10-15 | |
 | T-02 | Scaffolding Next.js 15 + TypeScript + Tailwind + Vitest, struktur folder sesuai bagian 1, token `DESIGN_SYSTEM.md`, `.env.example`; isi ARSITEKTUR bagian 3 | daliondroid | `[x]` | `fitur/daliondroid-T-02` | semua file bersama, kerangka `src/` | 2026-10-15 | Commit 6dfaf36 di-fast-forward ke `main` oleh farrelzaki (test, lint, build lulus). Commit T-06 di branch yang sama belum digabung |
-| T-06 | UI 8-bit: navbar, beranda, CTA, modal login, wizard preferensi (Hal. 1–7) | daliondroid | `[ ]` | | `src/app/`, `src/components/` | | F-01–F-07; data dari mock sampai T-05 siap |
-| T-07 | UI dashboard rekomendasi (Hal. 8) | daliondroid | `[ ]` | | `src/app/`, `src/components/` | | F-08 |
-| T-08 | UI katalog prodi + Test Drive (Hal. 12–13) | daliondroid | `[ ]` | | `src/app/`, `src/components/` | | F-10, F-11 |
-| T-15 | UI banner chat, chatbot, drawer menu (Hal. 9–11) | daliondroid | `[ ]` | | `src/app/`, `src/components/` | | F-09 |
+| T-06 | UI 8-bit: navbar, beranda, CTA, modal login, wizard preferensi (Hal. 1–7) | daliondroid | `[x]` | `fitur/daliondroid-T-07` | `src/app/`, `src/components/` | 2026-10-15 | F-01–F-07 100% sesuai Figma; wizard modular & draft persistensi |
+| T-07 | UI dashboard rekomendasi (Hal. 8) | daliondroid | `[x]` | `fitur/daliondroid-T-07` | `src/app/`, `src/components/` | 2026-10-15 | F-08 100% sesuai Figma; kartu rekomendasi, skor kecocokan, tombol simulation & chat |
+| T-08 | UI katalog prodi + Test Drive (Hal. 12–13) | daliondroid | `[x]` | `fitur/daliondroid-T-07` | `src/app/`, `src/components/` | 2026-10-15 | F-10, F-11 100% sesuai Figma; filter IPA/IPS, challenge 60s, code block, feedback |
+| T-15 | UI banner chat, chatbot, drawer menu (Hal. 9–11) | daliondroid | `[x]` | `fitur/daliondroid-T-07` | `src/app/`, `src/components/` | 2026-10-15 | F-09 100% sesuai Figma; input mic pixel, drawer histori & quick prompts |
 | T-11 | Pitch deck 10 slide + video demo 2 menit | daliondroid | `[ ]` | | di luar repo | | Materi lomba; data dan hasil QA dari farrelzaki |
 | T-03 | Skema DB (migrasi) + skrip impor dataset `Data/` ke Supabase | farrelzaki | `[x]` | `main` (PR #1) | `supabase/`, `scripts/` | 2026-10-15 | TBD-05. Skema + data sudah dimuat ke Supabase `cocokin` |
 | T-04 | Modul skoring murni + test (provinsi, keketatan, eligibilitas, peluang, kecocokan) | farrelzaki | `[x]` | `main` (PR #2) | `src/lib/` | 2026-10-15 | BR-01–BR-11. Modul di `src/lib/skoring/`, asumsi di `parameter_estimasi.json` |
@@ -202,7 +202,9 @@ Format: `- YYYY-MM-DD · T-xx · apa yang dikerjakan · hasil/verifikasi · cata
 
 ### Log daliondroid
 
-- _[belum ada]_
+- 2026-10-15 · T-02 · scaffolding Next.js 15, Tailwind, Vitest, token visual · test, lint, build lulus · branch fitur/daliondroid-T-02 digabung farrelzaki ke main
+- 2026-10-15 · T-06 · UI landing page, navbar 8-bit, CTA, wizard preferensi langkah 1-3 modular · 100% persis Figma · branch fitur/daliondroid-T-07
+- 2026-10-15 · T-07, T-08, T-15 · implementasi dashboard rekomendasi (/cocokin), chat & drawer (/chat), katalog (/katalog), mini challenge 60s (/test-drive/[id]), dropdown menu overlay di Navbar · 100% persis Figma, 84/84 test passed, lint 0 error, build 16 routes sukses · branch fitur/daliondroid-T-07 di-push ke remote, siap di-merge
 
 ### Log farrelzaki
 
