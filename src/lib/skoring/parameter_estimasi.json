@@ -1,0 +1,44 @@
+{
+  "catatan": "Parameter model skoring Cocokin!. Blok berstatus 'asumsi' bukan aturan resmi SNPMB dan wajib diberi label estimasi di UI (BR-13). Disetujui farrelzaki 2026-10-15 (T-04).",
+  "keketatan": {
+    "status": "kalibrasi dari sebaran SNBP 2025 (PRD 6.2-B)",
+    "ambang": { "sangat_ketat": 0.05, "ketat": 0.15, "sedang": 0.35 }
+  },
+  "tka": {
+    "status": "asumsi",
+    "rerata_nasional": { "bahasa_indonesia": 55.38, "matematika": 36.1, "bahasa_inggris": 24.93 },
+    "sumber_rerata": "PRD v2.1 bagian 6.2-C",
+    "simpangan_baku": 15,
+    "batas_z": 2,
+    "k": 5
+  },
+  "skor_akademik": {
+    "status": "asumsi (komposisi resmi ditetapkan tiap PTN)",
+    "w1_rapor": 0.6,
+    "w2_mapel_pendukung": 0.25,
+    "w3_prestasi": 0.15
+  },
+  "posisi_siswa": {
+    "status": "asumsi",
+    "bobot_skor_akademik": 0.5,
+    "bobot_persentil_kuota": 0.5,
+    "penyesuaian_akreditasi": { "A": 3, "B": 0, "C": -3, "lainnya": -3 },
+    "penyesuaian_alumni": { "diterima": 3, "tidak_daftar_ulang": -3 },
+    "batas_penyesuaian": 5
+  },
+  "peluang": {
+    "status": "asumsi",
+    "kemiringan": 1.7,
+    "sebaran_snbp": 15,
+    "sebaran_snbt": 35,
+    "setengah_rentang": 7.5,
+    "pembulatan_rentang": 5,
+    "label": { "sedang_min": 35, "tinggi_min": 65 }
+  },
+  "kecocokan": {
+    "status": "PRD 6.2-E (BR-10)",
+    "bobot_profil": 0.8,
+    "bobot_hobi": 0.2,
+    "batas_profil_datar": 1.0
+  }
+}
