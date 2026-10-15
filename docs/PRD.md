@@ -85,8 +85,6 @@ Prioritas disepakati 2026-10-15: halaman inti dan hapus akun = Wajib; yang opsio
 | F-08 | Dashboard rekomendasi | 8 | Wajib | Memakai preferensi aktif; pemilih preferensi (F-19) di bawah judul. Tampilan ringkas: **3 kartu tiket** berurutan peringkat — #1 Dream Goal, #2 Safety Net serumpun, #3 Alternatif (prodi dengan kecocokan tertinggi berikutnya, K-10) — berisi peringkat, jurusan, kampus, % kecocokan, tombol `SIMULASI` dan `DETAIL`. Tombol `DETAIL` membuka **popup detail**: kode Holland prodi, peluang per kampus (rentang + label keketatan + label estimasi), 3 alasan "Kenapa?" berbasis data, dan info PDDikti (K-07). Footer situs di bawah halaman |
 | F-09 | Chatbot Cocokin! + drawer menu | 9–11 | Wajib | Angka hanya dari API internal (function calling); jawab "datanya tidak tersedia" bila tidak ada. Jawaban memakai preferensi aktif. Drawer: Simulasi, **Preferensi**, Riwayat Chat, Logout + pemilih preferensi (F-19) |
 | F-10 | Katalog 5.150 prodi | 12 | Wajib | Fuzzy search + alias; filter rumpun, jenjang, 9 klaster, akreditasi, provinsi, wajib portofolio; virtualized list |
-| 13 | Hasil rekomendasi jadi 3 kartu tiket | Ringkasan tujuan, F-08, K-10 | Rekomendasi (M13, M14, D07) |
-| 14 | "Test Drive" diganti "Simulasi" | Seluruh PRD, K-11 | Menu, tombol, judul katalog & mini challenge, footer |
 | F-11 | Simulasi mini challenge | 13 | Wajib | Soal 4 opsi dari bank soal berlapis, **tanpa timer** (K-06); setelah `KUNCI JAWABAN`, layar soal yang sama tampil versi koreksi: jawaban siswa ditandai merah bila salah, jawaban benar hijau, opsi lain diredupkan, tanpa penjelasan untuk opsi yang salah. Insight di bagian bawah: pembahasan jawaban benar, kompetensi lulusan resmi, fakta kampus & persaingan. **Tanpa rating/refleksi** (K-08) |
 | F-12 | Ekstraksi AI teks hobi bebas | 3 | Sebaiknya | Teks bebas → chip hobi/mapel, dikonfirmasi siswa |
 | F-13 | Upload foto/PDF rapor + ekstraksi AI | 5 | Sebaiknya | Nilai hasil ekstraksi wajib dikonfirmasi; file dihapus setelah diekstrak |
@@ -229,3 +227,5 @@ Seluruh dataset ada di `Data/` (detail: PRD sumber bagian 6.1, `Data/README.md`,
 | 10 | Rekomendasi ringkas seperti v2 + popup detail | F-08, K-07 | Rekomendasi + popup detail |
 | 11 | Hasil Simulasi = versi koreksi layar soal, insight di bawah, tanpa rating/refleksi | F-11, F-19, BR-10, BR-16, alur, K-08, R-06 | Mini challenge hasil (M19), D10 |
 | 12 | Keterangan kecil dihapus dari layar dan dipindah ke Halaman Syarat & Ketentuan; tautan di footer & modal login | F-20, NFR Transparansi, K-09 | Semua layar wizard & hasil, footer, modal login, M20 & D11 (S&K) |
+| 13 | Hasil rekomendasi jadi 3 kartu tiket | Ringkasan tujuan, F-08, K-10 | Rekomendasi (M13, M14, D07) |
+| 14 | "Test Drive" diganti "Simulasi" | Seluruh PRD, K-11 | Menu, tombol, judul katalog & mini challenge, footer |
