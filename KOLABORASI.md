@@ -92,7 +92,7 @@ Aturan untuk agen:
 | T-15 | UI banner chat, chatbot, drawer menu (Hal. 9–11) | daliondroid | `[ ]` | | `src/app/`, `src/components/` | | F-09 |
 | T-11 | Pitch deck 10 slide + video demo 2 menit | daliondroid | `[ ]` | | di luar repo | | Materi lomba; data dan hasil QA dari farrelzaki |
 | T-03 | Skema DB (migrasi) + skrip impor dataset `Data/` ke Supabase | farrelzaki | `[x]` | `main` (PR #1) | `supabase/`, `scripts/` | 2026-10-15 | TBD-05. Skema + data sudah dimuat ke Supabase `cocokin` |
-| T-04 | Modul skoring murni + test (provinsi, keketatan, eligibilitas, peluang, kecocokan) | farrelzaki | `[~]` | `fitur/farrelzaki-T-04` | `src/lib/` | 2026-10-15 | BR-01–BR-10 |
+| T-04 | Modul skoring murni + test (provinsi, keketatan, eligibilitas, peluang, kecocokan) | farrelzaki | `[x]` | `main` (PR #2) | `src/lib/` | 2026-10-15 | BR-01–BR-11. Modul di `src/lib/skoring/`, asumsi di `parameter_estimasi.json` |
 | T-13 | Login Google (NextAuth), sesi 30 hari, smart routing, hapus akun | farrelzaki | `[ ]` | | `src/app/api/auth/`, `src/lib/` | | F-02, F-16; setelah T-02 |
 | T-05 | API `/api/school`, `/api/prodi`, `/api/peluang`, `/api/kecocokan` + kontrak di ARSITEKTUR | farrelzaki | `[ ]` | | `src/app/api/`, `src/lib/` | | Kontrak disepakati dengan daliondroid sebelum dibekukan |
 | T-14 | API `/api/test-drive` (soal berlapis, reveal, refleksi) | farrelzaki | `[ ]` | | `src/app/api/`, `src/lib/` | | F-11 |
@@ -210,6 +210,7 @@ Format: `- YYYY-MM-DD · T-xx · apa yang dikerjakan · hasil/verifikasi · cata
 - 2026-10-15 · T-16 · tambah anggota daliondroid, mode multi-branch, bagi wilayah & task, siapkan branch fitur/daliondroid-T-02 dan fitur/farrelzaki-T-03, kunci file bersama untuk T-02 · atas perintah farrelzaki
 - 2026-10-15 · T-03 · migrasi skema awal (27 tabel, RLS tanpa policy) + scripts/impor_data.py; dimuat ke Supabase cocokin · jumlah baris 21 tabel cocok, 84 MB · akses DB hanya dari server (service role); kunci supabase/migrations dilepas
 - 2026-10-15 · T-02 · gabungkan scaffolding daliondroid (6dfaf36) ke main lewat fast-forward, lepas kunci file bersama · npm test 3/3, lint, build lulus · T-06 di fitur/daliondroid-T-02 belum digabung
+- 2026-10-15 · T-04 · modul skoring murni src/lib/skoring (BR-01–BR-11) + 47 test · npm test 50/50, tsc, lint, build lulus; angka cocok skoring_referensi.py · parameter asumsi di src/lib/skoring/parameter_estimasi.json; tipe src/types belum selaras, dibahas di kontrak T-05
 
 ## 9. Mengubah File Ini
 
