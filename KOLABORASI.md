@@ -94,7 +94,7 @@ Aturan untuk agen:
 | T-03 | Skema DB (migrasi) + skrip impor dataset `Data/` ke Supabase | farrelzaki | `[x]` | `main` (PR #1) | `supabase/`, `scripts/` | 2026-10-15 | TBD-05. Skema + data sudah dimuat ke Supabase `cocokin` |
 | T-04 | Modul skoring murni + test (provinsi, keketatan, eligibilitas, peluang, kecocokan) | farrelzaki | `[x]` | `main` (PR #2) | `src/lib/` | 2026-10-15 | BR-01–BR-11. Modul di `src/lib/skoring/`, asumsi di `parameter_estimasi.json` |
 | T-13 | Login Google (NextAuth), sesi 30 hari, smart routing, hapus akun | farrelzaki | `[ ]` | | `src/app/api/auth/`, `src/lib/` | | F-02, F-16; setelah T-02 |
-| T-05 | API `/api/school`, `/api/prodi`, `/api/peluang`, `/api/kecocokan` + kontrak di ARSITEKTUR | farrelzaki | `[~]` | `fitur/farrelzaki-T-05` | `src/app/api/`, `src/lib/` | 2026-10-15 | Kontrak disepakati dengan daliondroid sebelum dibekukan |
+| T-05 | API `/api/school`, `/api/prodi`, `/api/peluang`, `/api/kecocokan` + kontrak di ARSITEKTUR | farrelzaki | `[x]` | `main` (PR #3) | `src/app/api/`, `src/lib/` | 2026-10-15 | Kontrak (ARSITEKTUR bagian 4, `src/types/api.ts`) **menunggu tinjauan daliondroid** sebelum dibekukan |
 | T-14 | API `/api/test-drive` (soal berlapis, reveal, refleksi) | farrelzaki | `[ ]` | | `src/app/api/`, `src/lib/` | | F-11 |
 | T-09 | Chatbot Gemini 2.5 Flash + function calling, API `/api/chat` | farrelzaki | `[ ]` | | `src/app/api/`, `src/lib/` | | F-09 |
 | T-10 | QA 10 skenario siswa + tinjau soal 3–5 prodi demo | farrelzaki | `[ ]` | | `src/lib/`, `Data/` | | R-02 |
@@ -107,7 +107,6 @@ Sebelum menyunting file bersama (bagian 1), tambahkan baris di sini, commit, dan
 
 | File | Dikunci oleh | Sejak | Alasan |
 | --- | --- | --- | --- |
-| `package.json`, lockfile, `.env.example`, `src/types/`, `docs/ARSITEKTUR.md` | farrelzaki | 2026-10-15 | T-05: tambah supabase-js, tipe & kontrak API |
 
 Agen **tidak boleh** menyunting file bersama yang sedang dikunci orang lain.
 
@@ -212,6 +211,7 @@ Format: `- YYYY-MM-DD · T-xx · apa yang dikerjakan · hasil/verifikasi · cata
 - 2026-10-15 · T-03 · migrasi skema awal (27 tabel, RLS tanpa policy) + scripts/impor_data.py; dimuat ke Supabase cocokin · jumlah baris 21 tabel cocok, 84 MB · akses DB hanya dari server (service role); kunci supabase/migrations dilepas
 - 2026-10-15 · T-02 · gabungkan scaffolding daliondroid (6dfaf36) ke main lewat fast-forward, lepas kunci file bersama · npm test 3/3, lint, build lulus · T-06 di fitur/daliondroid-T-02 belum digabung
 - 2026-10-15 · T-04 · modul skoring murni src/lib/skoring (BR-01–BR-11) + 47 test · npm test 50/50, tsc, lint, build lulus; angka cocok skoring_referensi.py · parameter asumsi di src/lib/skoring/parameter_estimasi.json; tipe src/types belum selaras, dibahas di kontrak T-05
+- 2026-10-15 · T-05 · 5 endpoint (school, prodi, prodi/[id], peluang, kecocokan) + kontrak + supabase-js 2.117.3; kunci file bersama dilepas · npm test 81/81, tsc, lint, build, uji e2e ke Supabase lulus · daliondroid: mohon tinjau kontrak ARSITEKTUR bagian 4 / src/types/api.ts; tipe lama di src/types/index.ts diganti; isi NEXT_PUBLIC_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY di .env untuk memanggil API lokal
 
 ## 9. Mengubah File Ini
 
