@@ -85,7 +85,7 @@ Prioritas disepakati 2026-10-15: halaman inti dan hapus akun = Wajib; yang opsio
 | F-08 | Dashboard rekomendasi | 8 | Wajib | Memakai preferensi aktif; pemilih preferensi (F-19) di bawah judul. Tampilan ringkas: 2 kartu tiket (Dream Goal, Safety Net serumpun) berisi peringkat, jurusan, kampus, % kecocokan, tombol `SIMULASI` dan `DETAIL`. Tombol `DETAIL` membuka **popup detail**: kode Holland prodi, peluang per kampus (rentang + label keketatan + label estimasi), 3 alasan "Kenapa?" berbasis data, dan info PDDikti (K-07). Footer situs di bawah halaman |
 | F-09 | Chatbot Cocokin! + drawer menu | 9–11 | Wajib | Angka hanya dari API internal (function calling); jawab "datanya tidak tersedia" bila tidak ada. Jawaban memakai preferensi aktif. Drawer: Test Drive, **Preferensi**, Riwayat Chat, Logout + pemilih preferensi (F-19) |
 | F-10 | Katalog 5.150 prodi | 12 | Wajib | Fuzzy search + alias; filter rumpun, jenjang, 9 klaster, akreditasi, provinsi, wajib portofolio; virtualized list |
-| F-11 | Test Drive mini challenge | 13 | Wajib | Soal 4 opsi dari bank soal berlapis, **tanpa timer** (K-06); reveal pembahasan, kompetensi lulusan, fakta kampus & persaingan; refleksi memperbarui skor Hal. 8 |
+| F-11 | Test Drive mini challenge | 13 | Wajib | Soal 4 opsi dari bank soal berlapis, **tanpa timer** (K-06); setelah `KUNCI JAWABAN`, layar soal yang sama tampil versi koreksi: jawaban siswa ditandai merah bila salah, jawaban benar hijau, opsi lain diredupkan, tanpa penjelasan untuk opsi yang salah. Insight di bagian bawah: pembahasan jawaban benar, kompetensi lulusan resmi, fakta kampus & persaingan. **Tanpa rating/refleksi** (K-08) |
 | F-12 | Ekstraksi AI teks hobi bebas | 3 | Sebaiknya | Teks bebas → chip hobi/mapel, dikonfirmasi siswa |
 | F-13 | Upload foto/PDF rapor + ekstraksi AI | 5 | Sebaiknya | Nilai hasil ekstraksi wajib dikonfirmasi; file dihapus setelah diekstrak |
 | F-14 | Skenario studi kasus Gemini (AI 3) | 13 | Sebaiknya | Grounding ke kompetensi prodi, validasi skema JSON, label "dibuat AI", fallback ke bank soal |
@@ -93,7 +93,7 @@ Prioritas disepakati 2026-10-15: halaman inti dan hapus akun = Wajib; yang opsio
 | F-16 | Hapus akun & data | — | Wajib | Tombol hapus akun menghapus profil dan preferensi |
 | F-17 | Input suara di chatbot | 10 | Nanti | — |
 | F-18 | Halaman Preferensi (kelola banyak preferensi) | P | Wajib | Pintu masuk menu **Preferensi** (navbar dan drawer), menggantikan "Edit Preferensi". Berisi kartu preferensi tersimpan + kotak bergaris putus-putus "+ Tambah preferensi" (keadaan kosong: hanya kotak ini). Warna kartu mengikuti jalur: **kuning = SNBP, biru = SNBT**. Kartu menampilkan nama, jalur, status aktif, kode Holland, rekomendasi teratas, dan waktu diperbarui. Aksi: jadikan aktif, edit (membuka wizard yang sudah terisi), ganti nama, hapus (dengan konfirmasi). Tambah: isi nama + pilih jalur → Hal. 3 → bahan sesuai jalur |
-| F-19 | Pemilih preferensi aktif | 8, 10–12 | Wajib | Kontrol "Preferensi: <nama>" di Hal. 8, chatbot/drawer, dan katalog Test Drive; layar hasil Test Drive menyebut preferensi yang diperbarui refleksi. Mengganti preferensi aktif (BR-16) lalu memuat ulang hasil; tautan "Kelola" ke Hal. P |
+| F-19 | Pemilih preferensi aktif | 8, 10–12 | Wajib | Kontrol "Preferensi: <nama>" di Hal. 8, chatbot/drawer, dan katalog Test Drive. Mengganti preferensi aktif (BR-16) lalu memuat ulang hasil; tautan "Kelola" ke Hal. P |
 
 ### Alur pengguna utama
 
@@ -106,8 +106,7 @@ Prioritas disepakati 2026-10-15: halaman inti dan hapus akun = Wajib; yang opsio
 3. Akun sudah punya preferensi → langsung Hal. 8 memakai preferensi aktif. Di beranda, CTA berganti
    menjadi "Yuk, lihat rekomendasi jurusan untukmu".
 4. Dari 8: banner → Chatbot (9–11), atau tombol Test Drive → Katalog (12) → Mini Challenge (13).
-5. Refleksi Test Drive memperbarui skor kecocokan **preferensi aktif** di Hal. 8.
-6. Menu **Preferensi** (navbar dan drawer) untuk menambah, mengedit, mengaktifkan, atau menghapus preferensi;
+5. Menu **Preferensi** (navbar dan drawer) untuk menambah, mengedit, mengaktifkan, atau menghapus preferensi;
    pemilih preferensi (F-19) untuk berganti tanpa keluar halaman.
 
 Smart routing PRD sumber (otomatis pindah ke Hal. 8 saat scroll melewati hero) **diganti** perilaku CTA di F-02.
@@ -128,13 +127,13 @@ Rumus lengkap: PRD sumber bagian 6.2.
 | BR-07 | **Output peluang** selalu rentang (mis. 35–50%) + label rendah/sedang/tinggi + 3 alasan berbasis data + label "estimasi". |
 | BR-08 | **Prodi tanpa histori** (212 prodi): pakai rata-rata rumpun yang sama di PTN yang sama, label "data terbatas". |
 | BR-09 | **Peluang SNBT:** P = 1 / (1 + e^(−1,7·(TO − est_skor_utbk)/35)); `est_skor_utbk` wajib berlabel estimasi. TO bukan skala IRT → peringatan skala. |
-| BR-10 | **Kecocokan minat** = 0,8 × ((r_Pearson(profil siswa, profil prodi) + 1)/2 × 100) + 0,2 × skor hobi. Label: ≥ 80 Sangat cocok · ≥ 65 Cocok · ≥ 50 Cukup · < 50 Kurang cocok. Tie-breaker: mapel favorit, refleksi Test Drive. |
+| BR-10 | **Kecocokan minat** = 0,8 × ((r_Pearson(profil siswa, profil prodi) + 1)/2 × 100) + 0,2 × skor hobi. Label: ≥ 80 Sangat cocok · ≥ 65 Cocok · ≥ 50 Cukup · < 50 Kurang cocok. Tie-breaker: mapel favorit. |
 | BR-11 | **Validasi jalur:** lulusan 2024/2025 tidak bisa SNBP; yang lulus SNBP 2024–2026 tidak bisa SNBT 2026. |
 | BR-12 | **Grounding AI:** LLM tidak boleh mengarang angka. Chatbot mengambil angka dari API internal; hasil ekstraksi AI wajib dikonfirmasi siswa. |
 | BR-13 | **Label data di UI:** resmi (snpmb.id, PDDikti, Kepmendikdasmen 102/M/2025), estimasi (skor UTBK prodi, koreksi TKA, peluang), sintetis (data alumni — demo saja), soal (dibuat otomatis, perlu review). |
 | BR-14 | **Privasi:** simpan data seperlunya; alamat hanya provinsi & kab/kota; foto rapor/sertifikat dihapus setelah diekstrak; sediakan hapus akun & data. |
 | BR-15 | **Portofolio** wajib untuk prodi seni & olahraga sesuai kolom `portofolio` di data: 267 prodi (229 S1, 32 D4, 6 D3). Angka 229 di PRD sumber hanya menghitung S1. |
-| BR-16 | **Preferensi aktif:** satu akun boleh punya banyak preferensi, dan **tepat satu** berstatus aktif. Preferensi yang baru dibuat otomatis aktif. Rekomendasi (Hal. 8), jawaban chatbot, dan refleksi Test Drive selalu memakai/memperbarui preferensi aktif. Menghapus preferensi aktif → preferensi lain yang terakhir diperbarui menjadi aktif; menghapus satu-satunya preferensi → akun kembali berstatus "belum punya preferensi". Nama preferensi wajib diisi dan unik per akun. |
+| BR-16 | **Preferensi aktif:** satu akun boleh punya banyak preferensi, dan **tepat satu** berstatus aktif. Preferensi yang baru dibuat otomatis aktif. Rekomendasi (Hal. 8), jawaban chatbot, dan urutan katalog Test Drive selalu memakai preferensi aktif. Menghapus preferensi aktif → preferensi lain yang terakhir diperbarui menjadi aktif; menghapus satu-satunya preferensi → akun kembali berstatus "belum punya preferensi". Nama preferensi wajib diisi dan unik per akun. |
 | BR-17 | **Satu jalur per preferensi:** SNBP atau SNBT, dipilih saat membuat preferensi dan tidak bisa diubah sesudahnya (untuk jalur lain, buat preferensi baru). Warna di UI: SNBP kuning, SNBT biru. Validasi BR-11 berlaku saat memilih jalur. |
 | BR-18 | **TKA SMA/SMK (Kemendikdasmen):** 3 mapel wajib (Bahasa Indonesia, Matematika, Bahasa Inggris) + **2 mapel pilihan berbeda** yang dipilih siswa dari: Matematika Tingkat Lanjut, Bahasa Indonesia Tingkat Lanjut, Bahasa Inggris Tingkat Lanjut, Fisika, Kimia, Biologi, Ekonomi, Sosiologi, Geografi, Sejarah, Antropologi, Pendidikan Pancasila dan Kewarganegaraan, Bahasa Asing (Arab, Jerman, Prancis, Jepang, Korea, Mandarin), serta Produk/Projek Kreatif dan Kewirausahaan (khusus SMK/MAK). Pemilihan sesuai prodi incaran hanya **anjuran**, bukan syarat; UI menandai pilihan yang cocok dengan `mapel_pendukung_snbp.csv`. Daftar mapel disimpan di config. TKA dipakai sebagai validator rapor (BR-05). |
 
@@ -185,6 +184,7 @@ Seluruh dataset ada di `Data/` (detail: PRD sumber bagian 6.1, `Data/README.md`,
 | OQ-02 | Tanggal sprint dan tenggat pengumpulan hackathon — belum diketahui. | farrelzaki |
 | R-04 | Skema `preferensi`/`profil_akademik` dan kontrak `/api/preferensi` di main masih **satu preferensi per akun** (primary key `pengguna_id`). F-18, F-19, BR-16, BR-17 butuh migrasi dan perubahan kontrak (T-18, perubahan besar, perlu persetujuan). Sekalian: hapus field `alumni_tidak_daftar_ulang` (K-04) dan simpan nama + nilai 2 mapel pilihan TKA di `nilai_tka` (BR-18); daftar mapel pilihan TKA belum ada di `Data/aturan_seleksi_2026.json`. | farrelzaki |
 | R-05 | UI (T-06–T-08, T-15) perlu menyesuaikan: Hal. P, pemilih preferensi, modal login, CTA sudah login, label menu "Preferensi", progres scroll, footer Hal. 8, tata letak desktop; `DESIGN_SYSTEM.md` masih menyebut "Edit Preferensi". | daliondroid |
+| R-06 | API T-14 di main masih punya `POST /api/test-drive/refleksi`, field `refleksi` di kontrak (`src/types/api.ts`, ARSITEKTUR) dan tie-breaker refleksi → perlu dihapus atau dinonaktifkan sesuai K-08. | farrelzaki |
 
 ### Keputusan (2026-10-15)
 
@@ -203,6 +203,7 @@ Seluruh dataset ada di `Data/` (detail: PRD sumber bagian 6.1, `Data/README.md`,
 | K-05 | Mapel pilihan TKA dipilih siswa (2 dari daftar resmi, BR-18) — farrelzaki 2026-10-15. |
 | K-06 | Test Drive tanpa timer: siswa menjawab tanpa batas waktu; "60 detik" tidak dipakai lagi sebagai klaim — farrelzaki 2026-10-15. |
 | K-07 | Halaman rekomendasi memakai kartu ringkas; detail peluang, alasan "Kenapa?", dan PDDikti dipindah ke popup `DETAIL` — farrelzaki 2026-10-15. |
+| K-08 | Test Drive tanpa rating/refleksi; hasil tampil sebagai versi koreksi layar soal dengan insight di bawah — farrelzaki 2026-10-15. |
 
 ## 11. Riwayat Revisi
 
@@ -215,8 +216,9 @@ Seluruh dataset ada di `Data/` (detail: PRD sumber bagian 6.1, `Data/README.md`,
 | 3 | Banyak preferensi per akun, satu aktif; Halaman Preferensi; pemilih preferensi; menu "Edit Preferensi" → "Preferensi" | F-04, F-08, F-09, F-18, F-19, BR-16, BR-17, data, R-04 | Hal. P (kosong & berisi), dialog preferensi baru, pemilih di Hal. 8/chat/Test Drive |
 | 4 | Footer di Hal. 8 | F-08 | Rekomendasi |
 | 5 | Desain desktop | Kebutuhan non-fungsional (Perangkat) | Set layar 1440 px |
-| 6 | Desain diselaraskan dengan PRD (kuis RIASEC, TKA, NPSN, mapel pendukung, TO 7 subtes, label data, "Kenapa?", kompetensi lulusan, refleksi, dll.) | — (tidak mengubah PRD) | Seluruh layar wizard, Hal. 8, 12, 13 |
+| 6 | Desain diselaraskan dengan PRD (kuis RIASEC, TKA, NPSN, mapel pendukung, TO 7 subtes, label data, "Kenapa?", kompetensi lulusan, dll.) | — (tidak mengubah PRD) | Seluruh layar wizard, Hal. 8, 12, 13 |
 | 7 | TKA: siswa memilih 2 mapel pilihan dari daftar resmi + nilainya | F-05, BR-18, K-05, R-04 | Bahan SNBP (mobile & desktop) + lembar pilih mapel TKA |
 | 8 | Riwayat alumni tidak daftar ulang dihapus (tidak resmi) | F-07, BR-06, alur, K-04, R-04 | Wilayah & alumni |
 | 9 | Test Drive tanpa timer | Ringkasan, solusi, F-11, F-19, K-06 | Mini challenge (soal & hasil), beranda, D10 |
 | 10 | Rekomendasi ringkas seperti v2 + popup detail | F-08, K-07 | Rekomendasi + popup detail |
+| 11 | Hasil Test Drive = versi koreksi layar soal, insight di bawah, tanpa rating/refleksi | F-11, F-19, BR-10, BR-16, alur, K-08, R-06 | Mini challenge hasil (M19), D10 |
