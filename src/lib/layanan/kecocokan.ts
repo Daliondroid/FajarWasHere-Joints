@@ -1,7 +1,7 @@
 /** POST /api/kecocokan: skor RIASEC siswa lalu peringkat kecocokan ke prodi. */
 import { validasiKecocokan } from '@/lib/api/validasi';
 import { cIndex, kecocokan, kodeHollandSeri, profilDatar, skorHobi, type ProfilRiasec } from '@/lib/skoring';
-import type { HasilKecocokanProdi, PermintaanKecocokan, ResponsKecocokan } from '@/types';
+import type { HasilKecocokanProdi, PermintaanKecocokan, RefleksiTestDrive, ResponsKecocokan } from '@/types';
 import { hitungProfilMinat } from './minat';
 import { daftarMapel } from './prodi';
 import type { BarisProdi, Repo } from './repo';
@@ -25,12 +25,28 @@ export function jumlahMapelCocok(mapelProdi: string | null, favorit: string[]): 
   return favorit.filter((m) => pendukung.has(m.trim().toLowerCase())).length;
 }
 
-/** Urutkan: skor ↓, mapel favorit cocok ↓, C-index ↓, id_prodi ↑. */
+const NILAI_REFLEKSI: Record<RefleksiTestDrive, number> = { seru: 1, melelahkan: -1 };
+const nilaiRefleksi = (r: RefleksiTestDrive | null) => (r ? NILAI_REFLEKSI[r] : 0);
+
+/** Urutkan: skor ↓, mapel favorit cocok ↓, refleksi Test Drive (seru > kosong > melelahkan), C-index ↓, id_prodi ↑. */
 export function bandingkanHasil(a: HasilKecocokanProdi, b: HasilKecocokanProdi): number {
-  return b.skor - a.skor || b.mapel_favorit_cocok - a.mapel_favorit_cocok || b.c_index - a.c_index || a.id_prodi - b.id_prodi;
+  return (
+    b.skor - a.skor ||
+    b.mapel_favorit_cocok - a.mapel_favorit_cocok ||
+    nilaiRefleksi(b.refleksi) - nilaiRefleksi(a.refleksi) ||
+    b.c_index - a.c_index ||
+    a.id_prodi - b.id_prodi
+  );
 }
 
-export async function layananKecocokan(badan: unknown, repo: Repo): Promise<ResponsKecocokan> {
+/**
+ * @param refleksiSesi refleksi tersimpan milik pengguna login; dipakai bila badan tidak membawa `refleksi`.
+ */
+export async function layananKecocokan(
+  badan: unknown,
+  repo: Repo,
+  refleksiSesi?: () => Promise<Record<string, RefleksiTestDrive>>,
+): Promise<ResponsKecocokan> {
   const req = validasiKecocokan(badan);
   const { profil, kode } = hitungProfilMinat(req.jawaban_minat, req.mode!, req.chip_hobi!, await repo.itemMinat());
 
@@ -40,6 +56,7 @@ export async function layananKecocokan(badan: unknown, repo: Repo): Promise<Resp
   if (nilai.length > 1 && nilai.every((v) => v === nilai[0])) peringatan.push('Semua jawaban sama (pola seragam).');
   if (kodeHollandSeri(profil)) peringatan.push('Ada skor seri pada kode Holland; pilih huruf yang paling menggambarkan dirimu.');
 
+  const refleksi = req.refleksi ?? (refleksiSesi ? await refleksiSesi() : {});
   const prodi = (await repo.semuaProdi()).filter((b) => lolosFilter(b, req.filter));
   const hasil = prodi
     .map((b): HasilKecocokanProdi => {
@@ -59,6 +76,7 @@ export async function layananKecocokan(badan: unknown, repo: Repo): Promise<Resp
         skor_hobi: k.skor_hobi === null ? null : Math.round(k.skor_hobi * 10) / 10,
         c_index: cIndex(kode, b.kode_holland),
         mapel_favorit_cocok: jumlahMapelCocok(b.mapel_pendukung_snbp, req.mapel_favorit!),
+        refleksi: refleksi[String(b.id_prodi)] ?? null,
       };
     })
     .sort(bandingkanHasil);

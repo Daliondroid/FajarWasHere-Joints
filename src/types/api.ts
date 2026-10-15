@@ -217,6 +217,11 @@ export interface PermintaanKecocokan {
   filter?: Omit<FilterProdi, 'q' | 'portofolio'> & { id_prodi?: number[] };
   /** 1–100, bawaan 20. */
   batas?: number;
+  /**
+   * Refleksi Test Drive per prodi ({"361036": "seru"}), tie-breaker setelah mapel favorit (BR-10).
+   * Kosong + login -> diambil dari riwayat Test Drive pengguna.
+   */
+  refleksi?: Record<string, RefleksiTestDrive>;
 }
 
 export interface HasilKecocokanProdi {
@@ -233,6 +238,7 @@ export interface HasilKecocokanProdi {
   skor_hobi: number | null;
   c_index: number;
   mapel_favorit_cocok: number;
+  refleksi: RefleksiTestDrive | null;
 }
 
 export interface ResponsKecocokan {
@@ -318,4 +324,73 @@ export interface ResponsPreferensi {
         diperbarui_pada: string;
       })
     | null;
+}
+
+// ---------- Test Drive (T-14, Hal. 13, F-11). UI: /test-drive/[id_prodi] ----------
+
+export type RefleksiTestDrive = 'seru' | 'melelahkan';
+export type LapisanSoal = 'spesifik' | 'umum' | 'rumpun';
+
+/** Soal tanpa kunci; kunci & pembahasan baru dikirim lewat POST /api/test-drive/jawab. */
+export interface SoalTestDrive {
+  id_soal: string;
+  /** spesifik = kompetensi kampus ini; umum = prodi sejenis kampus lain; rumpun = konten keilmuan. */
+  lapisan: LapisanSoal;
+  pertanyaan: string;
+  opsi: { A: string; B: string; C: string; D: string };
+  sumber: string | null;
+  /** mis. otomatis_perlu_review — soal dibuat otomatis, perlu ditinjau (BR-13). */
+  status: string | null;
+  label_data: 'soal';
+}
+
+export interface RealityCheck {
+  /** 2–3 butir kompetensi lulusan resmi (PDDikti); kosong jika tidak ada data. */
+  kompetensi_lulusan: string[];
+  fakta_kampus: {
+    akreditasi: string;
+    rasio_dosen_mhs: string | null;
+    rata_masa_studi_th: number | null;
+    label_data: 'resmi';
+  } | null;
+  fakta_persaingan: {
+    daya_tampung_snbp_2026: number | null;
+    daya_tampung_snbt_2026: number | null;
+    keketatan_snbp: Keketatan | null;
+    keketatan_snbt: Keketatan | null;
+  };
+}
+
+/** GET /api/test-drive?id_prodi= (tidak wajib login). */
+export interface ResponsTestDrive {
+  prodi: { id_prodi: number; nama_prodi: string; nama_ptn: string; jenjang: JenjangProdi; rumpun_id: string; rumpun: string };
+  /** Maks 3, urut: spesifik/umum, rumpun, cadangan. Diacak tiap permintaan. */
+  soal: SoalTestDrive[];
+  reality_check: RealityCheck;
+  durasi_detik: 60;
+}
+
+/** POST /api/test-drive/jawab (tidak wajib login; jika login, jawaban dicatat di riwayat). */
+export interface PermintaanJawabTestDrive {
+  id_prodi: number;
+  id_soal: string;
+  jawaban: 'A' | 'B' | 'C' | 'D';
+}
+
+export interface ResponsJawabTestDrive {
+  id_soal: string;
+  benar: boolean;
+  kunci: 'A' | 'B' | 'C' | 'D';
+  pembahasan: string | null;
+  tersimpan: boolean;
+}
+
+/** POST /api/test-drive/refleksi (wajib login, 401 jika belum). */
+export interface PermintaanRefleksiTestDrive {
+  id_prodi: number;
+  refleksi: RefleksiTestDrive;
+}
+
+export interface ResponsRefleksiTestDrive {
+  tersimpan: true;
 }
