@@ -98,7 +98,7 @@ Aturan untuk agen:
 | T-14 | API `/api/test-drive` (soal berlapis, reveal, refleksi) | farrelzaki | `[~]` | `fitur/farrelzaki-T-14` | `src/app/api/`, `src/lib/` | 2026-10-15 | F-11. Rute UI Hal. 13: `/test-drive/[id_prodi]` (angka) |
 | T-09 | Chatbot Gemini 2.5 Flash + function calling, API `/api/chat` | farrelzaki | `[ ]` | | `src/app/api/`, `src/lib/` | | F-09 |
 | T-10 | QA 10 skenario siswa + tinjau soal 3–5 prodi demo | farrelzaki | `[ ]` | | `src/lib/`, `Data/` | | R-02 |
-| T-17 | Revisi PRD 2.2: scroll progress navbar, modal login & CTA sudah login, banyak preferensi + preferensi aktif, desktop | farrelzaki | `[~]` | `docs/farrelzaki-T-17` | `docs/PRD.md` | 2026-10-15 | Desain di Figma (HIFI v3) dikerjakan paralel |
+| T-17 | Revisi PRD 2.2: scroll progress navbar, modal login & CTA sudah login, banyak preferensi + preferensi aktif, desktop, mapel pilihan TKA, hapus riwayat alumni | farrelzaki | `[x]` | `main` | `docs/PRD.md` | 2026-10-15 | Langsung ke main tanpa PR atas izin farrelzaki. Desain: Figma page "HIFI v3 — PRD 2.2" |
 | T-18 | DB + API banyak preferensi per akun (nama, jalur tunggal, status aktif) + pemilih preferensi aktif | farrelzaki | `[ ]` | | `supabase/migrations/`, `src/app/api/preferensi/`, `src/lib/`, `docs/ARSITEKTUR.md` | | F-18, F-19, BR-16, BR-17. Perubahan besar: skema `preferensi` kini satu baris per akun |
 
 Rincian langkah task (rencana, checklist) ditulis di `TASK.md` pribadi, bukan di sini.
@@ -220,6 +220,7 @@ Format: `- YYYY-MM-DD · T-xx · apa yang dikerjakan · hasil/verifikasi · cata
 - 2026-10-15 · T-13 · login Google next-auth 4.24.15 (sesi JWT 30 hari), /api/auth/lanjut, /api/akun (status, hapus), /api/preferensi GET/PUT, middleware gerbang login, migrasi preferensi (ipsf_60, 0..4); kunci dilepas · npm test 97/97, build, uji e2e login Google nyata lulus · daliondroid: tombol login `signIn('google', { callbackUrl: '/api/auth/lanjut' })`, keluar `signOut()`; isi GOOGLE_CLIENT_ID/SECRET, NEXTAUTH_SECRET, NEXTAUTH_URL di .env (minta ke farrelzaki)
 - 2026-10-15 · T-13 · lanjutan: /cocokin wajib login dan jadi tujuan smart routing; /katalog publik; kunci dilepas · npm test 97/97, build, cek redirect di dev lulus (PR #5) · daliondroid: halaman Hal. 8 tetap di /cocokin
 - 2026-10-15 · T-06/07/08/15 · gabungkan branch fitur/daliondroid-T-07 ke main lewat PR #6 (squash, branch dibiarkan) · uji gabung: npm test 100/100, tsc, lint, build lulus · UI belum memanggil API; Test Drive akan memakai /test-drive/[id_prodi]
+- 2026-10-15 · T-17 · docs/PRD.md 2.2: F-01 progres scroll, F-02 modal login + CTA sudah login, F-18/F-19/BR-16/BR-17 banyak preferensi (1 aktif, 1 jalur), BR-18 2 mapel pilihan TKA dipilih siswa, riwayat alumni tidak daftar ulang dihapus (K-04) · diff ditinjau; langsung ke main atas izin farrelzaki · daliondroid: UI perlu ikut Figma "HIFI v3 — PRD 2.2" (R-05); T-18 untuk DB/API
 
 ## 9. Mengubah File Ini
 
