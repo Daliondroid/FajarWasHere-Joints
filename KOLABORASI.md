@@ -95,7 +95,7 @@ Aturan untuk agen:
 | T-04 | Modul skoring murni + test (provinsi, keketatan, eligibilitas, peluang, kecocokan) | farrelzaki | `[x]` | `main` (PR #2) | `src/lib/` | 2026-10-15 | BR-01–BR-11. Modul di `src/lib/skoring/`, asumsi di `parameter_estimasi.json` |
 | T-13 | Login Google (NextAuth), sesi 30 hari, smart routing, hapus akun + API simpan preferensi | farrelzaki | `[x]` | `main` (PR #4) | `src/app/api/auth/`, `src/app/api/akun/`, `src/app/api/preferensi/`, `src/lib/`, `src/middleware.ts` | 2026-10-15 | F-02, F-16. Scope + `/api/preferensi` dan middleware, atas perintah farrelzaki |
 | T-05 | API `/api/school`, `/api/prodi`, `/api/peluang`, `/api/kecocokan` + kontrak di ARSITEKTUR | farrelzaki | `[x]` | `main` (PR #3) | `src/app/api/`, `src/lib/` | 2026-10-15 | Kontrak (ARSITEKTUR bagian 4, `src/types/api.ts`) **menunggu tinjauan daliondroid** sebelum dibekukan |
-| T-14 | API `/api/test-drive` (soal berlapis, reveal, refleksi) | farrelzaki | `[~]` | `fitur/farrelzaki-T-14` | `src/app/api/`, `src/lib/` | 2026-10-15 | F-11. Rute UI Hal. 13: `/test-drive/[id_prodi]` (angka) |
+| T-14 | API `/api/test-drive` (soal berlapis, reveal, refleksi) | farrelzaki | `[x]` | `main` (PR #7) | `src/app/api/`, `src/lib/` | 2026-10-15 | F-11. Rute UI Hal. 13: `/test-drive/[id_prodi]` (angka). `durasi_detik` perlu disesuaikan dengan PRD 2.2 (tanpa timer) |
 | T-09 | Chatbot Gemini 2.5 Flash + function calling, API `/api/chat` | farrelzaki | `[ ]` | | `src/app/api/`, `src/lib/` | | F-09 |
 | T-10 | QA 10 skenario siswa + tinjau soal 3–5 prodi demo | farrelzaki | `[ ]` | | `src/lib/`, `Data/` | | R-02 |
 | T-17 | Revisi PRD 2.2: scroll progress navbar, modal login & CTA sudah login, banyak preferensi + preferensi aktif, desktop, mapel pilihan TKA, hapus riwayat alumni | farrelzaki | `[x]` | `main` | `docs/PRD.md` | 2026-10-15 | Langsung ke main tanpa PR atas izin farrelzaki. Desain: Figma page "HIFI v3 — PRD 2.2" |
@@ -109,7 +109,6 @@ Sebelum menyunting file bersama (bagian 1), tambahkan baris di sini, commit, dan
 
 | File | Dikunci oleh | Sejak | Alasan |
 | --- | --- | --- | --- |
-| `src/types/`, `docs/ARSITEKTUR.md` | farrelzaki | 2026-10-15 | T-14: kontrak test-drive + refleksi di kecocokan |
 
 Agen **tidak boleh** menyunting file bersama yang sedang dikunci orang lain.
 
@@ -220,6 +219,7 @@ Format: `- YYYY-MM-DD · T-xx · apa yang dikerjakan · hasil/verifikasi · cata
 - 2026-10-15 · T-13 · login Google next-auth 4.24.15 (sesi JWT 30 hari), /api/auth/lanjut, /api/akun (status, hapus), /api/preferensi GET/PUT, middleware gerbang login, migrasi preferensi (ipsf_60, 0..4); kunci dilepas · npm test 97/97, build, uji e2e login Google nyata lulus · daliondroid: tombol login `signIn('google', { callbackUrl: '/api/auth/lanjut' })`, keluar `signOut()`; isi GOOGLE_CLIENT_ID/SECRET, NEXTAUTH_SECRET, NEXTAUTH_URL di .env (minta ke farrelzaki)
 - 2026-10-15 · T-13 · lanjutan: /cocokin wajib login dan jadi tujuan smart routing; /katalog publik; kunci dilepas · npm test 97/97, build, cek redirect di dev lulus (PR #5) · daliondroid: halaman Hal. 8 tetap di /cocokin
 - 2026-10-15 · T-06/07/08/15 · gabungkan branch fitur/daliondroid-T-07 ke main lewat PR #6 (squash, branch dibiarkan) · uji gabung: npm test 100/100, tsc, lint, build lulus · UI belum memanggil API; Test Drive akan memakai /test-drive/[id_prodi]
+- 2026-10-15 · T-14 · /api/test-drive (maks 3 soal tanpa kunci, berlapis spesifik/umum → rumpun → cadangan; reality check), /jawab, /refleksi (wajib login); refleksi jadi tie-breaker /api/kecocokan; kunci dilepas · npm test 117/117, build, e2e Supabase + login Google lulus · daliondroid: Hal. 13 pakai /test-drive/[id_prodi]; kunci & pembahasan diambil dari /jawab
 - 2026-10-15 · T-17 · docs/PRD.md 2.2: F-01 progres scroll, F-02 modal login + CTA sudah login, F-18/F-19/BR-16/BR-17 banyak preferensi (1 aktif, 1 jalur), BR-18 2 mapel pilihan TKA dipilih siswa, riwayat alumni tidak daftar ulang dihapus (K-04) · diff ditinjau; langsung ke main atas izin farrelzaki · daliondroid: UI perlu ikut Figma "HIFI v3 — PRD 2.2" (R-05); T-18 untuk DB/API
 - 2026-10-15 · T-17 · docs/PRD.md: Test Drive tanpa timer (F-11, K-06), rekomendasi ringkas + popup DETAIL (F-08, K-07) · diff ditinjau; langsung ke main atas izin farrelzaki · daliondroid: ikuti Figma HIFI v3 M13/M14/M18/M19
 
