@@ -88,7 +88,7 @@ Aturan umum:
   `/api/preferensi` maupun data sementara di klien.
 - Login (T-13): NextAuth v4 Google, sesi JWT di cookie HttpOnly 30 hari. Klien memanggil
   `signIn('google', { callbackUrl: '/api/auth/lanjut' })` dan `signOut()` dari `next-auth/react`.
-  Halaman `/preferensi`, `/rekomendasi`, `/chat`, `/test-drive` dijaga `src/middleware.ts`: tanpa sesi → `/?login=1&kembali=<path>`.
+  Halaman `/preferensi`, `/cocokin`, `/rekomendasi`, `/chat`, `/test-drive` dijaga `src/middleware.ts`: tanpa sesi → `/?login=1&kembali=<path>`.
 
 | Endpoint | Fitur | Masukan | Keluaran |
 | --- | --- | --- | --- |
@@ -97,7 +97,7 @@ Aturan umum:
 | `GET /api/prodi/[id_prodi]` | F-08, F-09, F-11 | – | `{ data: ProdiDetail }`: ProdiRingkas + riasec, mapel_pendukung_snbp, rasio 3 tahun, statistik tahunan, PDDikti, profil (kompetensi, capaian). Prodi tanpa histori memakai rata-rata rumpun di PTN sama (BR-08) |
 | `POST /api/peluang` | F-08, F-09 | `{ jalur: snbp \| snbt \| keduanya, id_prodi: number[], profil }`; snbp maks 2 prodi, lainnya maks 4. `profil`: tahun_lulus (wajib), lulus_snbp_tahun, npsn, jurusan_sekolah, peringkat_paralel, jumlah_siswa_jurusan, rapor_rata, nilai_mapel_pendukung `{mapel: nilai}`, prestasi_skor (0–100), nilai_tka, alumni, skor_to | `validasi_jalur` (BR-11), `validasi_provinsi_snbp` (BR-01, 2 pilihan pertama), `sekolah` (kuota + sumbernya), `hasil[]` per prodi: `snbp` / `snbt` = rentang, label, 3 alasan, flag `estimasi` / `data_terbatas` / `peringatan_skala`; data siswa kurang → `dihitung: false` + `pesan`, bukan galat |
 | `POST /api/kecocokan` | F-03, F-08 | `{ jawaban_minat: {item_id: 0..4}, mode?: mini_ip_30 \| ipsf_60, chip_hobi?: string[], mapel_favorit?: string[] (≤ 3), filter?, batas? (1–100, bawaan 20) }`; tiap skala RIASEC minimal 1 jawaban | `skor_riasec` (1–7), `kode_holland`, `kode_holland_seri`, `profil_datar`, `peringatan[]`, `total_dibandingkan`, `hasil[]` terurut: skor, label, skor_profil, skor_hobi, c_index, mapel_favorit_cocok (tie-breaker) |
-| `GET /api/auth/lanjut` | F-02 | – (callbackUrl setelah login) | 302 ke `/rekomendasi` (sudah isi preferensi), `/preferensi` (belum), atau `/` (belum login) |
+| `GET /api/auth/lanjut` | F-02 | – (callbackUrl setelah login) | 302 ke `/cocokin` (Hal. 8, sudah isi preferensi), `/preferensi` (belum), atau `/` (belum login) |
 | `GET /api/akun` | F-02 | – | `{ login, pengguna: { nama, email } \| null, sudah_isi_preferensi }`; 200 juga saat belum login |
 | `DELETE /api/akun` | F-16 | `{ "konfirmasi": "HAPUS" }` | `{ terhapus: true }`; akun + preferensi + profil + riwayat terhapus (cascade), cookie sesi dihapus. Klien lalu memanggil `signOut()` |
 | `GET /api/preferensi` | F-02, F-03–F-07 | – (wajib login) | `{ data: PreferensiPengguna & { skor_riasec, kode_holland, diperbarui_pada } \| null }` |
