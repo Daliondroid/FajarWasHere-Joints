@@ -6,4 +6,4 @@ export * from './peluang';
 export * from './peluang_snbp';
 export * from './peluang_snbt';
 export * from './kecocokan';
-export { PARAM, ATURAN } from './parameter';
+export { PARAM, ATURAN, OPSI_HOBI } from './parameter';
