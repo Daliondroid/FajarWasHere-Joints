@@ -73,12 +73,14 @@ describe('aturan rute (F-02)', () => {
   it('smart routing', () => {
     expect(tujuanSetelahLogin(false, false)).toBe('/');
     expect(tujuanSetelahLogin(true, false)).toBe('/preferensi');
-    expect(tujuanSetelahLogin(true, true)).toBe('/rekomendasi');
+    expect(tujuanSetelahLogin(true, true)).toBe('/cocokin');
   });
   it('halaman wajib login, tanpa salah cocok prefix', () => {
     expect(butuhLogin('/preferensi')).toBe(true);
     expect(butuhLogin('/preferensi/minat')).toBe(true);
+    expect(butuhLogin('/cocokin')).toBe(true);
     expect(butuhLogin('/rekomendasi')).toBe(true);
+    expect(butuhLogin('/katalog')).toBe(false);
     expect(butuhLogin('/')).toBe(false);
     expect(butuhLogin('/preferensi-lain')).toBe(false);
     expect(butuhLogin('/api/prodi')).toBe(false);

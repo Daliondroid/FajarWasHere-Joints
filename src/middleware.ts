@@ -15,5 +15,5 @@ export async function middleware(req: NextRequest) {
 
 // Harus literal statis; samakan dengan HALAMAN_WAJIB_LOGIN di src/lib/auth/rute.ts.
 export const config = {
-  matcher: ['/preferensi/:path*', '/rekomendasi/:path*', '/chat/:path*', '/test-drive/:path*'],
+  matcher: ['/preferensi/:path*', '/cocokin/:path*', '/rekomendasi/:path*', '/chat/:path*', '/test-drive/:path*'],
 };

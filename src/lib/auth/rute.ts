@@ -3,11 +3,12 @@
 export const RUTE = {
   beranda: '/',
   preferensi: '/preferensi',
-  rekomendasi: '/rekomendasi',
+  /** Hal. 8 (dashboard rekomendasi); /rekomendasi di UI hanya mengalihkan ke sini. */
+  cocokin: '/cocokin',
 } as const;
 
 /** Prefix halaman yang wajib login. Samakan dengan `config.matcher` di src/middleware.ts. */
-export const HALAMAN_WAJIB_LOGIN = ['/preferensi', '/rekomendasi', '/chat', '/test-drive'] as const;
+export const HALAMAN_WAJIB_LOGIN = ['/preferensi', '/cocokin', '/rekomendasi', '/chat', '/test-drive'] as const;
 
 export const SESI_DETIK = 30 * 24 * 60 * 60; // 30 hari
 
@@ -18,7 +19,7 @@ export function butuhLogin(pathname: string): boolean {
 /** Smart routing: belum login -> beranda; sudah isi preferensi -> Hal. 8; belum -> wizard. */
 export function tujuanSetelahLogin(login: boolean, sudahIsiPreferensi: boolean): string {
   if (!login) return RUTE.beranda;
-  return sudahIsiPreferensi ? RUTE.rekomendasi : RUTE.preferensi;
+  return sudahIsiPreferensi ? RUTE.cocokin : RUTE.preferensi;
 }
 
 /** URL beranda yang membuka modal login, dengan halaman asal (path relatif saja). */

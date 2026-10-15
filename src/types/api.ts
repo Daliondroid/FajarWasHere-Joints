@@ -247,7 +247,7 @@ export interface ResponsKecocokan {
 
 // ---------- Akun & sesi (T-13) ----------
 // Login: signIn('google', { callbackUrl: '/api/auth/lanjut' }) dari next-auth/react.
-// GET /api/auth/lanjut -> 302 ke /rekomendasi (sudah isi preferensi), /preferensi (belum), atau / (belum login).
+// GET /api/auth/lanjut -> 302 ke /cocokin (sudah isi preferensi), /preferensi (belum), atau / (belum login).
 
 /** GET /api/akun (200 juga saat belum login). */
 export interface ResponsAkun {
