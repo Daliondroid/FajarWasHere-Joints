@@ -12,7 +12,7 @@
 | Versi | 2.2 |
 | Tanggal | 2026-10-15 |
 | Status | Disepakati (PRD sumber v2.1 + revisi 2.2, lihat bagian 11) |
-| Sumber | `referensi/PRD_Cocokin_v2.1.md`, `Data/README.md`, `Data/AUDIT_DATA.md`, revisi pengguna 2026-10-15 (T-17) |
+| Sumber | `referensi/PRD_Cocokin_v2.1.md`, `Data/README.md`, `Data/AUDIT_DATA.md`, revisi pengguna 2026-10-15 (T-17), aturan TKA Kemendikdasmen |
 | Desain | Figma `FIGMA-JOINTS`, page **HIFI v3** (mobile 402 px dan desktop 1440 px) |
 | Konteks | Hackathon JOINTS UGM 2026 · Tema Education · Subtema siswa SMA kelas akhir |
 
@@ -79,9 +79,9 @@ Prioritas disepakati 2026-10-15: halaman inti dan hapus akun = Wajib; yang opsio
 | F-02 | Login Google (modal) + smart routing | 2 | Wajib | Klik CTA saat belum login → **modal popup** "Masuk dengan Google" di atas halaman. Setelah login: akun sudah punya preferensi → langsung Hal. 8 (preferensi aktif); belum punya → Hal. P. Status dibaca dari akun di server, bukan dari cache browser: cache terhapus → diminta login lagi dari CTA → tetap langsung ke Hal. 8. Saat login dan sudah punya preferensi, bagian CTA beranda berganti menjadi "Yuk, lihat rekomendasi jurusan untukmu" (tombol ke Hal. 8). Sesi 30 hari |
 | F-03 | Kuis minat RIASEC + chip hobi + mapel favorit | 3 | Wajib | 30 item Mini-IP (5 per layar, skala 5), kode Holland 3 huruf; chip hobi bobot ≤ 20%; maks 3 mapel favorit |
 | F-04 | Pilih jalur SNBP/SNBT + validasi | 4 | Wajib | Dipilih saat **membuat preferensi**, bersama nama preferensi; satu jalur per preferensi (BR-17). Gap year → SNBP nonaktif; peringatan bagi yang pernah lulus SNBP 2024–2026 |
-| F-05 | Bahan SNBP: NPSN, rapor, TKA, prestasi | 5 | Wajib | Lookup NPSN/nama sekolah mengisi nama, wilayah, akreditasi, kuota eligible per jurusan; input rapor smt 1–5, mapel pendukung (maks 2), peringkat paralel, TKA, prestasi |
+| F-05 | Bahan SNBP: NPSN, rapor, TKA, prestasi | 5 | Wajib | Lookup NPSN/nama sekolah mengisi nama, wilayah, akreditasi, kuota eligible per jurusan; input rapor smt 1–5, mapel pendukung (maks 2), peringkat paralel, prestasi. Nilai TKA: 3 mapel wajib + **2 mapel pilihan yang dipilih siswa** dari daftar resmi, masing-masing dengan nilainya (BR-18); UI menyarankan mapel pilihan yang sama dengan mapel pendukung prodi incaran |
 | F-06 | Alamat & reputasi alumni | 6 | Wajib | Provinsi/kab terisi dari NPSN; reputasi alumni self-report; tag kampus alumni dengan autocomplete 146 PTN + alias |
-| F-07 | Riwayat alumni & bahan SNBT | 7 | Wajib | Bagian alumni hanya untuk preferensi SNBP: pertanyaan alumni tidak daftar ulang (opsional, berlabel bukan aturan resmi). Bagian TO hanya untuk preferensi SNBT: 7 subtes TO, sumber TO, riwayat TO + grafik. Flag portofolio (BR-15) |
+| F-07 | Bahan SNBT | 7 | Wajib | Hanya untuk preferensi SNBT: 7 subtes TO, sumber TO, riwayat TO + grafik. Flag portofolio (BR-15). Pertanyaan riwayat alumni tidak daftar ulang **dihapus** karena tidak resmi (K-04) |
 | F-08 | Dashboard rekomendasi | 8 | Wajib | Memakai preferensi aktif; nama preferensi aktif + pemilih preferensi (F-19) di atas hasil. 2 kartu (Dream Goal, Safety Net serumpun), % kecocokan, peluang per kampus berupa rentang + label + tombol "Kenapa?", info PDDikti. Footer situs di bawah halaman |
 | F-09 | Chatbot Cocokin! + drawer menu | 9–11 | Wajib | Angka hanya dari API internal (function calling); jawab "datanya tidak tersedia" bila tidak ada. Jawaban memakai preferensi aktif. Drawer: Test Drive, **Preferensi**, Riwayat Chat, Logout + pemilih preferensi (F-19) |
 | F-10 | Katalog 5.150 prodi | 12 | Wajib | Fuzzy search + alias; filter rumpun, jenjang, 9 klaster, akreditasi, provinsi, wajib portofolio; virtualized list |
@@ -100,8 +100,8 @@ Prioritas disepakati 2026-10-15: halaman inti dan hapus akun = Wajib; yang opsio
 1. Beranda (1) → CTA (2). Belum login → **modal login Google**.
 2. Setelah login, akun belum punya preferensi → **Halaman Preferensi (P)** → "+ Tambah preferensi": nama + jalur (4)
    → Minat (3) → bahan sesuai jalur:
-   - SNBP: Sekolah, Rapor & TKA (5) → Alamat & Reputasi Alumni (6) → Riwayat Alumni (7, bagian alumni).
-   - SNBT: Try Out & Portofolio (7, bagian SNBT).
+   - SNBP: Sekolah, Rapor & TKA (5) → Alamat & Reputasi Alumni (6).
+   - SNBT: Try Out & Portofolio (7).
    Preferensi yang baru selesai dibuat otomatis aktif, lalu pengguna masuk ke Hal. 8.
 3. Akun sudah punya preferensi → langsung Hal. 8 memakai preferensi aktif. Di beranda, CTA berganti
    menjadi "Yuk, lihat rekomendasi jurusan untukmu".
@@ -124,7 +124,7 @@ Rumus lengkap: PRD sumber bagian 6.2.
 | BR-03 | **Label keketatan:** < 5% Sangat Ketat 🔴 · 5–<15% Ketat 🟡 · 15–<35% Sedang 🔵 · ≥ 35% Longgar 🟢. |
 | BR-04 | **Gerbang eligibilitas:** peringkat paralel > kuota eligible jurusan sekolah → "Belum masuk kuota eligible — fokus ke SNBT"; peluang SNBP tidak dihitung. Sekolah tanpa data PDSS/akreditasi → perkiraan dari persen akreditasi (A 40%, B 25%, C/tidak terakreditasi 5%) dengan pemberitahuan. |
 | BR-05 | **Skor akademik SNBP:** S = w1·Rapor_terkoreksi + w2·Mapel Pendukung + w3·Prestasi, w1 ≥ 0,5 dan w2 + w3 ≤ 0,5 (default 0,6/0,25/0,15). Rapor_terkoreksi = Rapor + k·z_TKA; k adalah asumsi berlabel. |
-| BR-06 | **Faktor akreditasi dan alumni self-report** masing-masing maksimal ±5 poin persentil. Alumni tidak daftar ulang bukan aturan resmi SNPMB dan hanya faktor kecil. |
+| BR-06 | **Faktor akreditasi dan reputasi alumni self-report** masing-masing maksimal ±5 poin persentil. Faktor "alumni tidak daftar ulang" dihapus (tidak ada aturan resmi SNPMB, K-04). |
 | BR-07 | **Output peluang** selalu rentang (mis. 35–50%) + label rendah/sedang/tinggi + 3 alasan berbasis data + label "estimasi". |
 | BR-08 | **Prodi tanpa histori** (212 prodi): pakai rata-rata rumpun yang sama di PTN yang sama, label "data terbatas". |
 | BR-09 | **Peluang SNBT:** P = 1 / (1 + e^(−1,7·(TO − est_skor_utbk)/35)); `est_skor_utbk` wajib berlabel estimasi. TO bukan skala IRT → peringatan skala. |
@@ -136,6 +136,7 @@ Rumus lengkap: PRD sumber bagian 6.2.
 | BR-15 | **Portofolio** wajib untuk prodi seni & olahraga sesuai kolom `portofolio` di data: 267 prodi (229 S1, 32 D4, 6 D3). Angka 229 di PRD sumber hanya menghitung S1. |
 | BR-16 | **Preferensi aktif:** satu akun boleh punya banyak preferensi, dan **tepat satu** berstatus aktif. Preferensi yang baru dibuat otomatis aktif. Rekomendasi (Hal. 8), jawaban chatbot, dan refleksi Test Drive selalu memakai/memperbarui preferensi aktif. Menghapus preferensi aktif → preferensi lain yang terakhir diperbarui menjadi aktif; menghapus satu-satunya preferensi → akun kembali berstatus "belum punya preferensi". Nama preferensi wajib diisi dan unik per akun. |
 | BR-17 | **Satu jalur per preferensi:** SNBP atau SNBT, dipilih saat membuat preferensi dan tidak bisa diubah sesudahnya (untuk jalur lain, buat preferensi baru). Warna di UI: SNBP kuning, SNBT biru. Validasi BR-11 berlaku saat memilih jalur. |
+| BR-18 | **TKA SMA/SMK (Kemendikdasmen):** 3 mapel wajib (Bahasa Indonesia, Matematika, Bahasa Inggris) + **2 mapel pilihan berbeda** yang dipilih siswa dari: Matematika Tingkat Lanjut, Bahasa Indonesia Tingkat Lanjut, Bahasa Inggris Tingkat Lanjut, Fisika, Kimia, Biologi, Ekonomi, Sosiologi, Geografi, Sejarah, Antropologi, Pendidikan Pancasila dan Kewarganegaraan, Bahasa Asing (Arab, Jerman, Prancis, Jepang, Korea, Mandarin), serta Produk/Projek Kreatif dan Kewirausahaan (khusus SMK/MAK). Pemilihan sesuai prodi incaran hanya **anjuran**, bukan syarat; UI menandai pilihan yang cocok dengan `mapel_pendukung_snbp.csv`. Daftar mapel disimpan di config. TKA dipakai sebagai validator rapor (BR-05). |
 
 ## 7. Data
 
@@ -182,7 +183,7 @@ Seluruh dataset ada di `Data/` (detail: PRD sumber bagian 6.1, `Data/README.md`,
 | R-02 | Soal dibangkitkan otomatis (status `otomatis_perlu_review`) bisa keliru → tinjau manual untuk prodi demo. | farrelzaki |
 | R-03 | Data pengguna di bawah umur → minimalkan data dan sediakan penghapusan. | farrelzaki |
 | OQ-02 | Tanggal sprint dan tenggat pengumpulan hackathon — belum diketahui. | farrelzaki |
-| R-04 | Skema `preferensi`/`profil_akademik` dan kontrak `/api/preferensi` di main masih **satu preferensi per akun** (primary key `pengguna_id`). F-18, F-19, BR-16, BR-17 butuh migrasi dan perubahan kontrak (T-18, perubahan besar, perlu persetujuan). | farrelzaki |
+| R-04 | Skema `preferensi`/`profil_akademik` dan kontrak `/api/preferensi` di main masih **satu preferensi per akun** (primary key `pengguna_id`). F-18, F-19, BR-16, BR-17 butuh migrasi dan perubahan kontrak (T-18, perubahan besar, perlu persetujuan). Sekalian: hapus field `alumni_tidak_daftar_ulang` (K-04) dan simpan nama + nilai 2 mapel pilihan TKA di `nilai_tka` (BR-18); daftar mapel pilihan TKA belum ada di `Data/aturan_seleksi_2026.json`. | farrelzaki |
 | R-05 | UI (T-06–T-08, T-15) perlu menyesuaikan: Hal. P, pemilih preferensi, modal login, CTA sudah login, label menu "Preferensi", progres scroll, footer Hal. 8, tata letak desktop; `DESIGN_SYSTEM.md` masih menyebut "Edit Preferensi". | daliondroid |
 
 ### Keputusan (2026-10-15)
@@ -198,6 +199,8 @@ Seluruh dataset ada di `Data/` (detail: PRD sumber bagian 6.1, `Data/README.md`,
 | K-01 | Satu jalur per preferensi (BR-17) — dikonfirmasi farrelzaki 2026-10-15. |
 | K-02 | Smart routing lewat CTA beranda (F-02), bukan pindah otomatis saat scroll. |
 | K-03 | Garis warna di bawah navbar = indikator progres scroll; bagian yang belum terlewati berwarna abu-abu. |
+| K-04 | Pertanyaan riwayat alumni tidak daftar ulang dihapus dari form dan skoring karena tidak resmi — farrelzaki 2026-10-15. |
+| K-05 | Mapel pilihan TKA dipilih siswa (2 dari daftar resmi, BR-18) — farrelzaki 2026-10-15. |
 
 ## 11. Riwayat Revisi
 
@@ -211,3 +214,5 @@ Seluruh dataset ada di `Data/` (detail: PRD sumber bagian 6.1, `Data/README.md`,
 | 4 | Footer di Hal. 8 | F-08 | Rekomendasi |
 | 5 | Desain desktop | Kebutuhan non-fungsional (Perangkat) | Set layar 1440 px |
 | 6 | Desain diselaraskan dengan PRD (kuis RIASEC, TKA, NPSN, mapel pendukung, TO 7 subtes, label data, "Kenapa?", kompetensi lulusan, refleksi, dll.) | — (tidak mengubah PRD) | Seluruh layar wizard, Hal. 8, 12, 13 |
+| 7 | TKA: siswa memilih 2 mapel pilihan dari daftar resmi + nilainya | F-05, BR-18, K-05, R-04 | Bahan SNBP (mobile & desktop) + lembar pilih mapel TKA |
+| 8 | Riwayat alumni tidak daftar ulang dihapus (tidak resmi) | F-07, BR-06, alur, K-04, R-04 | Wilayah & alumni |
