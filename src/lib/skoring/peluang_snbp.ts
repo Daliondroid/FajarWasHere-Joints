@@ -108,7 +108,8 @@ export interface HasilPeluangSnbp {
   data_terbatas: boolean;
   pesan: string | null;
   rincian: {
-    skor_akademik: number;
+    /** null jika peluang tidak dihitung karena data siswa belum lengkap. */
+    skor_akademik: number | null;
     persentil_kuota: number | null;
     skor_posisi: number | null;
     ambang: number | null;

@@ -11,7 +11,7 @@ Status: **draf** — stack dari PRD sumber v2.1 dan keputusan 2026-10-15; belum 
 | --- | --- | --- | --- |
 | Frontend + Backend | Next.js (App Router, TypeScript) | 15.x — verifikasi saat scaffolding | Satu repo untuk UI dan route handler `/api/*` |
 | Autentikasi | NextAuth (Google OAuth) | TBD | Login Gmail, sesi HttpOnly cookie 30 hari |
-| Basis data | PostgreSQL via Supabase (hosted) | — | Satu DB untuk pengembangan dan demo, tanpa Docker; impor CSV dataset |
+| Basis data | PostgreSQL via Supabase (hosted), akses server lewat `@supabase/supabase-js` (service role) | supabase-js 2.117.3 | Satu DB untuk pengembangan dan demo, tanpa Docker; impor CSV dataset |
 | Styling | Tailwind CSS | TBD | Token dari `DESIGN_SYSTEM.md` |
 | AI | Google Gemini 2.5 Flash (Google AI Studio) | `gemini-2.5-flash` atau Flash terbaru | Ekstraksi, chatbot dengan function calling, skenario Test Drive. Gemini 1.5 Flash sudah dihentikan. |
 | Test | Vitest | TBD — verifikasi saat scaffolding | Dukungan TypeScript/ESM bawaan, konfigurasi minimal |
@@ -68,8 +68,9 @@ Aturan batas:
 
 ## 4. Kontrak API
 
-Status: **draf — belum disepakati.** Daftar endpoint dari PRD sumber bagian 8; masukan/keluaran belum dirinci.
-Setelah disepakati, kontrak dibekukan.
+Status: **disetujui farrelzaki 2026-10-15, menunggu tinjauan daliondroid** — dibekukan setelah daliondroid setuju.
+Tipe TypeScript lengkap: `src/types/api.ts` (sumber kebenaran bentuk data; tabel di bawah ringkasannya).
+Implementasi: route handler tipis di `src/app/api/`, logika di `src/lib/layanan/`, akses DB di `src/lib/db/`.
 
 Aturan perubahan setelah beku:
 
@@ -77,14 +78,26 @@ Aturan perubahan setelah beku:
 2. Dalam commit tersendiri, tidak dicampur perubahan fitur.
 3. Menambah field opsional itu murah; mengganti nama/menghapus field itu mahal.
 
+Aturan umum:
+
+- JSON `snake_case`. Angka membawa label sumber `label_data`: `resmi` / `estimasi` / `sintetis` (BR-13).
+- Galat: `{ "error": { "kode": "VALIDASI" | "TIDAK_DITEMUKAN" | "SERVER", "pesan": "..." } }` dengan status 400 / 404 / 500.
+  Pesan berbahasa Indonesia dan aman ditampilkan ke pengguna; galat 500 tidak membocorkan detail server.
+- Peluang dan kecocokan dihitung deterministik oleh `src/lib/skoring/` (T-04); tidak ada LLM.
+- Belum ada login (T-13): profil siswa dikirim di badan request, tidak dibaca dari sesi.
+
 | Endpoint | Fitur | Masukan | Keluaran |
 | --- | --- | --- | --- |
-| `GET /api/school` | F-05, F-06 | NPSN 8 digit atau nama sekolah | Nama resmi, kab/kota, provinsi, akreditasi, kuota eligible per jurusan |
-| `GET /api/prodi` | F-08, F-09, F-10, F-11 | Kata kunci, filter (rumpun, jenjang, klaster, akreditasi, provinsi, portofolio) | Daftar/detail prodi + statistik + info PDDikti |
-| `POST /api/peluang` | F-08, F-09 | Profil akademik siswa + prodi pilihan | Rentang peluang, label, 3 alasan, flag estimasi/data terbatas, validasi provinsi |
-| `POST /api/kecocokan` | F-03, F-08 | Jawaban kuis, chip hobi, mapel favorit | Skor RIASEC, kode Holland, % kecocokan per prodi |
-| `GET /api/test-drive` | F-11, F-14 | id prodi | Soal (4 opsi), pembahasan, kompetensi lulusan, fakta kampus & persaingan |
-| `POST /api/chat` | F-09 | Pesan pengguna | Jawaban chatbot (angka hanya dari API internal) |
+| `GET /api/school` | F-05, F-06 | `?npsn=` (8 digit) atau `?q=` (nama, 3–100 karakter, maks 20 hasil) | `{ data: SekolahDetail }` / `{ data: SekolahDetail[] }`: npsn, nama, jenis, akreditasi, kab_kota, provinsi, kode_bps, persen_kuota, kuota_siswa, `jurusan_kuota: [{ jurusan, kuota }]`, `ada_data_pdss` |
+| `GET /api/prodi` | F-08, F-10 | `q` (mendukung alias, mis. `TI UI`), `rumpun_id`, `jenjang`, `kelompok`, `klaster_id`, `kode_bps`, `id_ptn`, `portofolio` (true/false), `halaman` (≥ 1), `per_halaman` (1–50, bawaan 20) | `{ data: ProdiRingkas[], total, halaman, per_halaman }`; ProdiRingkas memuat keketatan SNBP/SNBT (rasio, label, `data_terbatas`) dan `est_skor_utbk` (label estimasi) |
+| `GET /api/prodi/[id_prodi]` | F-08, F-09, F-11 | – | `{ data: ProdiDetail }`: ProdiRingkas + riasec, mapel_pendukung_snbp, rasio 3 tahun, statistik tahunan, PDDikti, profil (kompetensi, capaian). Prodi tanpa histori memakai rata-rata rumpun di PTN sama (BR-08) |
+| `POST /api/peluang` | F-08, F-09 | `{ jalur: snbp \| snbt \| keduanya, id_prodi: number[], profil }`; snbp maks 2 prodi, lainnya maks 4. `profil`: tahun_lulus (wajib), lulus_snbp_tahun, npsn, jurusan_sekolah, peringkat_paralel, jumlah_siswa_jurusan, rapor_rata, nilai_mapel_pendukung `{mapel: nilai}`, prestasi_skor (0–100), nilai_tka, alumni, skor_to | `validasi_jalur` (BR-11), `validasi_provinsi_snbp` (BR-01, 2 pilihan pertama), `sekolah` (kuota + sumbernya), `hasil[]` per prodi: `snbp` / `snbt` = rentang, label, 3 alasan, flag `estimasi` / `data_terbatas` / `peringatan_skala`; data siswa kurang → `dihitung: false` + `pesan`, bukan galat |
+| `POST /api/kecocokan` | F-03, F-08 | `{ jawaban_minat: {item_id: 0..4}, mode?: mini_ip_30 \| ipsf_60, chip_hobi?: string[], mapel_favorit?: string[] (≤ 3), filter?, batas? (1–100, bawaan 20) }`; tiap skala RIASEC minimal 1 jawaban | `skor_riasec` (1–7), `kode_holland`, `kode_holland_seri`, `profil_datar`, `peringatan[]`, `total_dibandingkan`, `hasil[]` terurut: skor, label, skor_profil, skor_hobi, c_index, mapel_favorit_cocok (tie-breaker) |
+| `GET /api/test-drive` | F-11, F-14 | id prodi | Soal (4 opsi), pembahasan, kompetensi lulusan, fakta kampus & persaingan — dirinci di T-14 |
+| `POST /api/chat` | F-09 | Pesan pengguna | Jawaban chatbot (angka hanya dari API internal) — dirinci di T-09 |
+
+Catatan: skala jawaban minat **0..4** (sesuai `form_minat_config.json`); komentar `1..5` dan nilai `lengkap_60` di tabel
+`preferensi` (migrasi T-03) perlu diselaraskan saat T-13 menyimpan preferensi.
 
 ## 5. Konvensi
 
@@ -94,7 +107,7 @@ Aturan perubahan setelah beku:
 | ID prodi | `id_prodi` dari snpmb.id (kunci bersama semua file data) |
 | Nama provinsi | Selalu dinormalisasi lewat `ak_provinsi_crosswalk.csv` |
 | Akreditasi | Dinormalisasi ke skor 0–4 lewat `ak_akreditasi_map.csv` |
-| Format galat | _TBD_ |
+| Format galat | `{ "error": { "kode", "pesan" } }`, status 400 / 404 / 500 (bagian 4) |
 | Format tanggal/waktu | _TBD_ |
 | Bahasa teks antarmuka | Bahasa Indonesia |
 | Variabel lingkungan | `.env` (tidak di-commit), contoh di `.env.example` — mis. kunci Gemini, kredensial Google OAuth, URL Supabase |
