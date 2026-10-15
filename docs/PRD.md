@@ -39,7 +39,7 @@ Solusi: **Dual-Engine** — *Admission Matcher* (peluang berbasis data resmi 202
 ## 3. Tujuan, Non-Goals, Metrik
 
 - **Tujuan:**
-  - Memberi 2 rekomendasi jurusan + kampus (Dream Goal dan Safety Net serumpun) yang patuh aturan SNBP 2026.
+  - Memberi 3 rekomendasi jurusan + kampus (#1 Dream Goal, #2 Safety Net serumpun, #3 Alternatif) yang patuh aturan SNBP 2026.
   - Menampilkan kecocokan minat dan estimasi peluang yang dapat dijelaskan ("Kenapa?") dan bersumber data.
   - Memungkinkan siswa mencoba soal/skenario kompetensi untuk seluruh 5.150 prodi di 146 PTN.
   - Memisahkan tegas angka **resmi**, **estimasi**, dan **sintetis** di antarmuka.
@@ -82,9 +82,10 @@ Prioritas disepakati 2026-10-15: halaman inti dan hapus akun = Wajib; yang opsio
 | F-05 | Bahan SNBP: NPSN, rapor, TKA, prestasi | 5 | Wajib | Lookup NPSN/nama sekolah mengisi nama, wilayah, akreditasi, kuota eligible per jurusan; input rapor smt 1–5, mapel pendukung (maks 2), peringkat paralel, prestasi. Nilai TKA: 3 mapel wajib + **2 mapel pilihan yang dipilih siswa** dari daftar resmi, masing-masing dengan nilainya (BR-18); UI menyarankan mapel pilihan yang sama dengan mapel pendukung prodi incaran |
 | F-06 | Alamat & reputasi alumni | 6 | Wajib | Provinsi/kab terisi dari NPSN; reputasi alumni self-report; tag kampus alumni dengan autocomplete 146 PTN + alias |
 | F-07 | Bahan SNBT | 7 | Wajib | Hanya untuk preferensi SNBT: 7 subtes TO, sumber TO, riwayat TO + grafik. Flag portofolio (BR-15). Pertanyaan riwayat alumni tidak daftar ulang **dihapus** karena tidak resmi (K-04) |
-| F-08 | Dashboard rekomendasi | 8 | Wajib | Memakai preferensi aktif; pemilih preferensi (F-19) di bawah judul. Tampilan ringkas: 2 kartu tiket (Dream Goal, Safety Net serumpun) berisi peringkat, jurusan, kampus, % kecocokan, tombol `SIMULASI` dan `DETAIL`. Tombol `DETAIL` membuka **popup detail**: kode Holland prodi, peluang per kampus (rentang + label keketatan + label estimasi), 3 alasan "Kenapa?" berbasis data, dan info PDDikti (K-07). Footer situs di bawah halaman |
+| F-08 | Dashboard rekomendasi | 8 | Wajib | Memakai preferensi aktif; pemilih preferensi (F-19) di bawah judul. Tampilan ringkas: **3 kartu tiket** berurutan peringkat — #1 Dream Goal, #2 Safety Net serumpun, #3 Alternatif (prodi dengan kecocokan tertinggi berikutnya, K-10) — berisi peringkat, jurusan, kampus, % kecocokan, tombol `SIMULASI` dan `DETAIL`. Tombol `DETAIL` membuka **popup detail**: kode Holland prodi, peluang per kampus (rentang + label keketatan + label estimasi), 3 alasan "Kenapa?" berbasis data, dan info PDDikti (K-07). Footer situs di bawah halaman |
 | F-09 | Chatbot Cocokin! + drawer menu | 9–11 | Wajib | Angka hanya dari API internal (function calling); jawab "datanya tidak tersedia" bila tidak ada. Jawaban memakai preferensi aktif. Drawer: Test Drive, **Preferensi**, Riwayat Chat, Logout + pemilih preferensi (F-19) |
 | F-10 | Katalog 5.150 prodi | 12 | Wajib | Fuzzy search + alias; filter rumpun, jenjang, 9 klaster, akreditasi, provinsi, wajib portofolio; virtualized list |
+| 13 | Hasil rekomendasi jadi 3 kartu tiket | Ringkasan tujuan, F-08, K-10 | Rekomendasi (M13, M14, D07) |
 | F-11 | Test Drive mini challenge | 13 | Wajib | Soal 4 opsi dari bank soal berlapis, **tanpa timer** (K-06); setelah `KUNCI JAWABAN`, layar soal yang sama tampil versi koreksi: jawaban siswa ditandai merah bila salah, jawaban benar hijau, opsi lain diredupkan, tanpa penjelasan untuk opsi yang salah. Insight di bagian bawah: pembahasan jawaban benar, kompetensi lulusan resmi, fakta kampus & persaingan. **Tanpa rating/refleksi** (K-08) |
 | F-12 | Ekstraksi AI teks hobi bebas | 3 | Sebaiknya | Teks bebas → chip hobi/mapel, dikonfirmasi siswa |
 | F-13 | Upload foto/PDF rapor + ekstraksi AI | 5 | Sebaiknya | Nilai hasil ekstraksi wajib dikonfirmasi; file dihapus setelah diekstrak |
@@ -206,6 +207,7 @@ Seluruh dataset ada di `Data/` (detail: PRD sumber bagian 6.1, `Data/README.md`,
 | K-07 | Halaman rekomendasi memakai kartu ringkas; detail peluang, alasan "Kenapa?", dan PDDikti dipindah ke popup `DETAIL` — farrelzaki 2026-10-15. |
 | K-08 | Test Drive tanpa rating/refleksi; hasil tampil sebagai versi koreksi layar soal dengan insight di bawah — farrelzaki 2026-10-15. |
 | K-09 | Keterangan kecil (catatan aturan, sumber, privasi, penjelasan rumus) tidak ditampilkan di layar kerja; dikumpulkan di Halaman Syarat & Ketentuan (F-20). Yang tetap tampil: label data (resmi/estimasi/sintetis), status penting (eligible, pelanggaran provinsi), alasan "Kenapa?", dan disclaimer footer — farrelzaki 2026-10-15. |
+| K-10 | Hasil rekomendasi menjadi 3 kartu (#1 Dream Goal, #2 Safety Net serumpun, #3 Alternatif), seperti tampilan v2 — farrelzaki 2026-10-15. |
 
 ## 11. Riwayat Revisi
 
