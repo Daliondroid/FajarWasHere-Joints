@@ -4,6 +4,7 @@ import type {
   JenjangProdi,
   PermintaanKecocokan,
   PermintaanPeluang,
+  PreferensiPengguna,
   ProfilAkademik,
   RumpunIlmu,
 } from '@/types';
@@ -146,5 +147,85 @@ export function validasiKecocokan(v: unknown): PermintaanKecocokan {
     mapel_favorit: opsional(v.mapel_favorit, (x) => daftarTeks(x, 'mapel_favorit', 3)) ?? [],
     filter,
     batas: opsional(v.batas, (x) => angka(x, 'batas', 1, 100, true)) ?? 20,
+  };
+}
+
+const REPUTASI = ['langganan_ptn_top', 'rutin_lolos', 'satu_lima_per_tahun', 'sekolah_baru'] as const;
+
+function boolean(v: unknown, nama: string): boolean {
+  if (typeof v !== 'boolean') throw galatValidasi(`${nama} harus true atau false.`);
+  return v;
+}
+
+function nilaiPerMapel(v: unknown, nama: string): Record<string, number> {
+  if (v === undefined || v === null) return {};
+  if (!isObjek(v) || Object.keys(v).length > 20) throw galatValidasi(`${nama} harus objek {mapel: nilai}, maks 20 mapel.`);
+  return Object.fromEntries(Object.entries(v).map(([k, n]) => [teks(k, `${nama} (nama mapel)`), angka(n, `${nama}.${k}`, 0, 100)]));
+}
+
+/** PUT /api/preferensi. Kelengkapan skala RIASEC dicek di layanan (butuh daftar item). */
+export function validasiPreferensi(v: unknown): PreferensiPengguna {
+  if (!isObjek(v)) throw galatValidasi('Badan request harus objek.');
+  const { minat, jalur, akademik } = v;
+  if (!isObjek(minat)) throw galatValidasi('minat wajib diisi.');
+  if (!isObjek(jalur)) throw galatValidasi('jalur wajib diisi.');
+  if (!isObjek(minat.jawaban_minat)) throw galatValidasi('minat.jawaban_minat wajib berupa objek {item_id: 0..4}.');
+
+  let ak: PreferensiPengguna['akademik'] = null;
+  if (akademik !== undefined && akademik !== null) {
+    if (!isObjek(akademik)) throw galatValidasi('akademik harus objek atau null.');
+    let tka: NonNullable<PreferensiPengguna['akademik']>['nilai_tka'] = {};
+    if (akademik.nilai_tka !== undefined && akademik.nilai_tka !== null) {
+      if (!isObjek(akademik.nilai_tka)) throw galatValidasi('akademik.nilai_tka harus objek.');
+      tka = {};
+      for (const m of MAPEL_TKA) {
+        const n = opsional(akademik.nilai_tka[m], (x) => angka(x, `nilai_tka.${m}`, 0, 100));
+        if (n !== undefined) tka[m] = n;
+      }
+    }
+    const prestasi = akademik.prestasi ?? [];
+    if (!Array.isArray(prestasi) || prestasi.length > 3) throw galatValidasi('akademik.prestasi harus daftar maks 3 item.');
+    ak = {
+      npsn: opsional(akademik.npsn, validasiNpsn) ?? null,
+      jurusan_sekolah: opsional(akademik.jurusan_sekolah, (x) => teks(x, 'jurusan_sekolah')) ?? null,
+      rapor_rata: opsional(akademik.rapor_rata, (x) => angka(x, 'rapor_rata', 0, 100)) ?? null,
+      nilai_mapel_pendukung: nilaiPerMapel(akademik.nilai_mapel_pendukung, 'nilai_mapel_pendukung'),
+      peringkat_paralel: opsional(akademik.peringkat_paralel, (x) => angka(x, 'peringkat_paralel', 1, 10_000, true)) ?? null,
+      jumlah_siswa_jurusan:
+        opsional(akademik.jumlah_siswa_jurusan, (x) => angka(x, 'jumlah_siswa_jurusan', 1, 10_000, true)) ?? null,
+      nilai_tka: tka,
+      prestasi: prestasi.map((p, i) => {
+        if (!isObjek(p)) throw galatValidasi(`prestasi[${i}] harus objek.`);
+        return {
+          tingkat: teks(p.tingkat, `prestasi[${i}].tingkat`, 50),
+          bidang: teks(p.bidang, `prestasi[${i}].bidang`),
+          peringkat: teks(p.peringkat, `prestasi[${i}].peringkat`, 50),
+        };
+      }),
+      reputasi_alumni: opsional(akademik.reputasi_alumni, (x) => pilihan(x, 'reputasi_alumni', REPUTASI)) ?? null,
+      kampus_alumni: opsional(akademik.kampus_alumni, (x) => daftarAngka(x, 'kampus_alumni', 0, 10)) ?? [],
+      alumni_tidak_daftar_ulang:
+        opsional(akademik.alumni_tidak_daftar_ulang, (x) =>
+          pilihan(x, 'alumni_tidak_daftar_ulang', ['tidak_tahu', 'pernah'] as const),
+        ) ?? null,
+    };
+  }
+
+  return {
+    minat: {
+      mode: opsional(minat.mode, (x) => pilihan(x, 'minat.mode', ['mini_ip_30', 'ipsf_60'] as const)) ?? 'mini_ip_30',
+      jawaban_minat: Object.fromEntries(
+        Object.entries(minat.jawaban_minat).map(([k, n]) => [k, angka(n, `jawaban_minat.${k}`, 0, 4, true)]),
+      ),
+      chip_hobi: opsional(minat.chip_hobi, (x) => daftarTeks(x, 'minat.chip_hobi', 30)) ?? [],
+      mapel_favorit: opsional(minat.mapel_favorit, (x) => daftarTeks(x, 'minat.mapel_favorit', 3)) ?? [],
+    },
+    jalur: {
+      ikut_snbp: boolean(jalur.ikut_snbp, 'jalur.ikut_snbp'),
+      ikut_snbt: boolean(jalur.ikut_snbt, 'jalur.ikut_snbt'),
+      tahun_lulus: opsional(jalur.tahun_lulus, (x) => angka(x, 'jalur.tahun_lulus', 2000, 2100, true)) ?? null,
+      pernah_lulus_snbp: opsional(jalur.pernah_lulus_snbp, (x) => boolean(x, 'jalur.pernah_lulus_snbp')) ?? false,
+    },
+    akademik: ak,
   };
 }

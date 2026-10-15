@@ -1,19 +1,8 @@
 /** POST /api/kecocokan: skor RIASEC siswa lalu peringkat kecocokan ke prodi. */
-import { galatValidasi } from '@/lib/api/galat';
 import { validasiKecocokan } from '@/lib/api/validasi';
-import {
-  cIndex,
-  kecocokan,
-  kodeHolland,
-  kodeHollandSeri,
-  OPSI_HOBI,
-  profilDatar,
-  SKALA,
-  skorHobi,
-  skorMinat,
-  type ProfilRiasec,
-} from '@/lib/skoring';
+import { cIndex, kecocokan, kodeHollandSeri, profilDatar, skorHobi, type ProfilRiasec } from '@/lib/skoring';
 import type { HasilKecocokanProdi, PermintaanKecocokan, ResponsKecocokan } from '@/types';
+import { hitungProfilMinat } from './minat';
 import { daftarMapel } from './prodi';
 import type { BarisProdi, Repo } from './repo';
 
@@ -43,20 +32,7 @@ export function bandingkanHasil(a: HasilKecocokanProdi, b: HasilKecocokanProdi):
 
 export async function layananKecocokan(badan: unknown, repo: Repo): Promise<ResponsKecocokan> {
   const req = validasiKecocokan(badan);
-  const items = await repo.itemMinat();
-
-  const idItem = new Set(items.map((it) => it.item_id));
-  const asing = Object.keys(req.jawaban_minat).filter((k) => !idItem.has(k));
-  if (asing.length) throw galatValidasi(`item_id tidak dikenal: ${asing.slice(0, 5).join(', ')}.`);
-  const idHobi = new Set(OPSI_HOBI.map((o) => o.id));
-  const hobiAsing = req.chip_hobi!.filter((h) => !idHobi.has(h));
-  if (hobiAsing.length) throw galatValidasi(`chip_hobi tidak dikenal: ${hobiAsing.join(', ')}.`);
-
-  const skor = skorMinat(req.jawaban_minat, items, req.mode);
-  const kosong = SKALA.filter((s) => skor[s] === null);
-  if (kosong.length) throw galatValidasi(`Setiap skala RIASEC butuh minimal 1 jawaban (kosong: ${kosong.join(', ')}).`);
-  const profil = skor as ProfilRiasec;
-  const kode = kodeHolland(profil);
+  const { profil, kode } = hitungProfilMinat(req.jawaban_minat, req.mode!, req.chip_hobi!, await repo.itemMinat());
 
   const peringatan: string[] = [];
   const nilai = Object.values(req.jawaban_minat);

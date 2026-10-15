@@ -18,9 +18,9 @@ export type { HasilJalur, HasilPeluangSnbp, HasilPeluangSnbt, HasilValidasiProvi
 /** Label sumber angka (BR-13). */
 export type LabelData = 'resmi' | 'estimasi' | 'sintetis';
 
-/** Semua galat: HTTP 400 / 404 / 500 dengan badan ini. */
+/** Semua galat: HTTP 400 / 401 / 404 / 500 dengan badan ini. */
 export interface GalatApi {
-  error: { kode: 'VALIDASI' | 'TIDAK_DITEMUKAN' | 'SERVER'; pesan: string };
+  error: { kode: 'VALIDASI' | 'TIDAK_LOGIN' | 'TIDAK_DITEMUKAN' | 'SERVER'; pesan: string };
 }
 
 // ---------- GET /api/school ----------
@@ -243,4 +243,79 @@ export interface ResponsKecocokan {
   peringatan: string[];
   total_dibandingkan: number;
   hasil: HasilKecocokanProdi[];
+}
+
+// ---------- Akun & sesi (T-13) ----------
+// Login: signIn('google', { callbackUrl: '/api/auth/lanjut' }) dari next-auth/react.
+// GET /api/auth/lanjut -> 302 ke /rekomendasi (sudah isi preferensi), /preferensi (belum), atau / (belum login).
+
+/** GET /api/akun (200 juga saat belum login). */
+export interface ResponsAkun {
+  login: boolean;
+  pengguna: { nama: string | null; email: string } | null;
+  sudah_isi_preferensi: boolean;
+}
+
+/** DELETE /api/akun, badan wajib persis ini. Menghapus akun + seluruh data, lalu menghapus cookie sesi. */
+export interface PermintaanHapusAkun {
+  konfirmasi: 'HAPUS';
+}
+
+export interface ResponsHapusAkun {
+  terhapus: true;
+}
+
+// ---------- GET/PUT /api/preferensi (wajib login, 401 jika belum) ----------
+
+export type ReputasiAlumni = 'langganan_ptn_top' | 'rutin_lolos' | 'satu_lima_per_tahun' | 'sekolah_baru';
+
+export interface PrestasiSiswa {
+  tingkat: string;
+  bidang: string;
+  peringkat: string;
+}
+
+export interface PreferensiPengguna {
+  minat: {
+    mode: ModeMinat;
+    /** {"IP01": 0..4}; tiap skala RIASEC minimal 1 jawaban. */
+    jawaban_minat: Record<string, number>;
+    chip_hobi: string[];
+    /** Maks 3. */
+    mapel_favorit: string[];
+  };
+  jalur: {
+    ikut_snbp: boolean;
+    ikut_snbt: boolean;
+    tahun_lulus: number | null;
+    pernah_lulus_snbp: boolean;
+  };
+  /** null = belum diisi. Alamat tidak disimpan; kab/kota diambil dari data sekolah (BR-14). */
+  akademik: {
+    npsn: string | null;
+    jurusan_sekolah: string | null;
+    rapor_rata: number | null;
+    nilai_mapel_pendukung: Record<string, number>;
+    peringkat_paralel: number | null;
+    jumlah_siswa_jurusan: number | null;
+    nilai_tka: NilaiTka;
+    /** Maks 3 prestasi terbaik. */
+    prestasi: PrestasiSiswa[];
+    reputasi_alumni: ReputasiAlumni | null;
+    /** id_ptn, maks 10. */
+    kampus_alumni: number[];
+    alumni_tidak_daftar_ulang: 'tidak_tahu' | 'pernah' | null;
+  } | null;
+}
+
+/** GET -> data null jika belum pernah disimpan. PUT (badan = PreferensiPengguna) -> data tersimpan. */
+export interface ResponsPreferensi {
+  data:
+    | (PreferensiPengguna & {
+        /** Dihitung server dari jawaban_minat. */
+        skor_riasec: { R: number; I: number; A: number; S: number; E: number; C: number };
+        kode_holland: string;
+        diperbarui_pada: string;
+      })
+    | null;
 }

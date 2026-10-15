@@ -3,7 +3,7 @@ import type { GalatApi } from '@/types';
 
 type KodeGalat = GalatApi['error']['kode'];
 
-const STATUS: Record<KodeGalat, number> = { VALIDASI: 400, TIDAK_DITEMUKAN: 404, SERVER: 500 };
+const STATUS: Record<KodeGalat, number> = { VALIDASI: 400, TIDAK_LOGIN: 401, TIDAK_DITEMUKAN: 404, SERVER: 500 };
 
 export class ApiGalat extends Error {
   constructor(
@@ -19,6 +19,7 @@ export class ApiGalat extends Error {
 
 export const galatValidasi = (pesan: string) => new ApiGalat('VALIDASI', pesan);
 export const galatTidakDitemukan = (pesan: string) => new ApiGalat('TIDAK_DITEMUKAN', pesan);
+export const galatTidakLogin = () => new ApiGalat('TIDAK_LOGIN', 'Silakan masuk dengan akun Google dulu.');
 
 export function responsGalat(e: unknown): Response {
   if (e instanceof ApiGalat) {
@@ -30,10 +31,11 @@ export function responsGalat(e: unknown): Response {
   return Response.json(badan, { status: 500 });
 }
 
-/** Bungkus handler: galat apa pun diubah ke format seragam. */
+/** Bungkus handler: hasil dijadikan JSON (kecuali sudah Response); galat apa pun diubah ke format seragam. */
 export async function tangani(fn: () => Promise<unknown>): Promise<Response> {
   try {
-    return Response.json(await fn());
+    const hasil = await fn();
+    return hasil instanceof Response ? hasil : Response.json(hasil);
   } catch (e) {
     return responsGalat(e);
   }
