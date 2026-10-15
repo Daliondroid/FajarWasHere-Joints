@@ -136,6 +136,15 @@ describe('/api/peluang', () => {
     ).rejects.toMatchObject({ kode: 'TIDAK_DITEMUKAN' });
   });
 
+  it('reputasi alumni + PTN tujuan di kampus alumni menaikkan peluang SNBP (BR-06)', async () => {
+    const dasar = await layananPeluang({ jalur: 'snbp', id_prodi: [1], profil }, repo);
+    const alumni = await layananPeluang(
+      { jalur: 'snbp', id_prodi: [1], profil: { ...profil, reputasi_alumni: 'langganan_ptn_top', kampus_alumni: [lokal.id_ptn] } },
+      repo,
+    );
+    expect(alumni.hasil[0].snbp!.rincian.skor_posisi! - dasar.hasil[0].snbp!.rincian.skor_posisi!).toBeCloseTo(5);
+  });
+
   it('nilai mapel pendukung: rata-rata maks 2 mapel prodi', () => {
     expect(nilaiMapelPendukung('Fisika; Matematika Tingkat Lanjut', { fisika: 92, 'Matematika Tingkat Lanjut': 88 })).toBe(90);
     expect(nilaiMapelPendukung('Biologi; Kimia', { Fisika: 92 })).toBeNull();

@@ -27,7 +27,7 @@ export async function layananStatusAkun(idSesi: string | null, repo: RepoAkun): 
   return {
     login: true,
     pengguna: { nama: pengguna.nama, email: pengguna.email },
-    sudah_isi_preferensi: await repo.sudahIsiPreferensi(pengguna.id),
+    sudah_isi_preferensi: await repo.punyaPreferensi(pengguna.id),
   };
 }
 

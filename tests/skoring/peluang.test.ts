@@ -39,9 +39,11 @@ describe('posisi siswa (BR-06)', () => {
     expect(persentilKuota(1, 40)).toBe(100);
     expect(persentilKuota(40, 40)).toBeCloseTo(2.5);
   });
-  it('penyesuaian akreditasi dan alumni dalam ±5', () => {
-    expect(penyesuaianPosisi('A', 'diterima')).toEqual({ akreditasi: 3, alumni: 3 });
-    expect(penyesuaianPosisi(null, 'tidak_daftar_ulang')).toEqual({ akreditasi: -3, alumni: -3 });
+  it('penyesuaian akreditasi dan reputasi alumni dalam ±5 (BR-06)', () => {
+    expect(penyesuaianPosisi('A', 'langganan_ptn_top')).toEqual({ akreditasi: 3, alumni: 3 });
+    expect(penyesuaianPosisi('A', 'langganan_ptn_top', true)).toEqual({ akreditasi: 3, alumni: 5 });
+    expect(penyesuaianPosisi(null, 'sekolah_baru', true)).toEqual({ akreditasi: -3, alumni: 2 });
+    expect(penyesuaianPosisi('C', 'satu_lima_per_tahun')).toEqual({ akreditasi: -3, alumni: 1 });
     const { akreditasi, alumni } = penyesuaianPosisi('B', null);
     expect(akreditasi).toBe(0);
     expect(alumni).toBe(0);

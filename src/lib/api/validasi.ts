@@ -4,13 +4,14 @@ import type {
   JenjangProdi,
   PermintaanJawabTestDrive,
   PermintaanKecocokan,
+  IsiPreferensi,
+  NilaiTka,
   PermintaanPeluang,
-  PermintaanRefleksiTestDrive,
-  PreferensiPengguna,
-  RefleksiTestDrive,
   ProfilAkademik,
   RumpunIlmu,
+  TryOut,
 } from '@/types';
+import { MAPEL_PILIHAN_TKA } from '@/lib/skoring';
 import { galatValidasi } from './galat';
 
 const JENJANG: JenjangProdi[] = ['S1', 'D4', 'D3'];
@@ -82,6 +83,35 @@ export function validasiQueryProdi(sp: URLSearchParams): { filter: FilterProdi; 
   };
 }
 
+const REPUTASI = ['langganan_ptn_top', 'rutin_lolos', 'satu_lima_per_tahun', 'sekolah_baru'] as const;
+
+/** BR-18: 3 mapel wajib (opsional) + `pilihan` berisi 0 atau 2 mapel berbeda dari daftar resmi. */
+export function validasiNilaiTka(v: unknown, nama: string): NilaiTka {
+  if (!isObjek(v)) throw galatValidasi(`${nama} harus objek.`);
+  const tka: NilaiTka = {};
+  for (const m of MAPEL_TKA) {
+    const n = opsional(v[m], (x) => angka(x, `${nama}.${m}`, 0, 100));
+    if (n !== undefined) tka[m] = n;
+  }
+  if (v.pilihan !== undefined && v.pilihan !== null) {
+    if (!Array.isArray(v.pilihan) || (v.pilihan.length !== 0 && v.pilihan.length !== 2)) {
+      throw galatValidasi(`${nama}.pilihan harus berisi tepat 2 mapel pilihan (atau kosong).`);
+    }
+    const pilihanTka = v.pilihan.map((p, i) => {
+      if (!isObjek(p)) throw galatValidasi(`${nama}.pilihan[${i}] harus objek {mapel, nilai}.`);
+      return {
+        mapel: pilihan(p.mapel, `${nama}.pilihan[${i}].mapel`, MAPEL_PILIHAN_TKA),
+        nilai: angka(p.nilai, `${nama}.pilihan[${i}].nilai`, 0, 100),
+      };
+    });
+    if (pilihanTka.length === 2 && pilihanTka[0].mapel === pilihanTka[1].mapel) {
+      throw galatValidasi(`${nama}.pilihan: dua mapel pilihan harus berbeda.`);
+    }
+    if (pilihanTka.length) tka.pilihan = pilihanTka;
+  }
+  return tka;
+}
+
 function validasiProfil(v: unknown): ProfilAkademik {
   if (!isObjek(v)) throw galatValidasi('profil wajib diisi.');
   let nilaiMapel: Record<string, number> | undefined;
@@ -90,15 +120,6 @@ function validasiProfil(v: unknown): ProfilAkademik {
     nilaiMapel = Object.fromEntries(
       Object.entries(v.nilai_mapel_pendukung).map(([k, n]) => [k, angka(n, `nilai_mapel_pendukung.${k}`, 0, 100)]),
     );
-  }
-  let tka: ProfilAkademik['nilai_tka'];
-  if (v.nilai_tka !== undefined && v.nilai_tka !== null) {
-    if (!isObjek(v.nilai_tka)) throw galatValidasi('nilai_tka harus objek.');
-    tka = {};
-    for (const m of MAPEL_TKA) {
-      const n = opsional(v.nilai_tka[m], (x) => angka(x, `nilai_tka.${m}`, 0, 100));
-      if (n !== undefined) tka[m] = n;
-    }
   }
   return {
     tahun_lulus: angka(v.tahun_lulus, 'tahun_lulus', 2000, 2100, true),
@@ -110,8 +131,9 @@ function validasiProfil(v: unknown): ProfilAkademik {
     rapor_rata: opsional(v.rapor_rata, (x) => angka(x, 'rapor_rata', 0, 100)),
     nilai_mapel_pendukung: nilaiMapel,
     prestasi_skor: opsional(v.prestasi_skor, (x) => angka(x, 'prestasi_skor', 0, 100)),
-    nilai_tka: tka,
-    alumni: opsional(v.alumni, (x) => pilihan(x, 'alumni', ['diterima', 'tidak_daftar_ulang'] as const)) ?? null,
+    nilai_tka: opsional(v.nilai_tka, (x) => validasiNilaiTka(x, 'nilai_tka')),
+    reputasi_alumni: opsional(v.reputasi_alumni, (x) => pilihan(x, 'reputasi_alumni', REPUTASI)) ?? null,
+    kampus_alumni: opsional(v.kampus_alumni, (x) => daftarAngka(x, 'kampus_alumni', 0, 10)) ?? [],
     skor_to: opsional(v.skor_to, (x) => angka(x, 'skor_to', 0, 1000)),
   };
 }
@@ -150,11 +172,8 @@ export function validasiKecocokan(v: unknown): PermintaanKecocokan {
     mapel_favorit: opsional(v.mapel_favorit, (x) => daftarTeks(x, 'mapel_favorit', 3)) ?? [],
     filter,
     batas: opsional(v.batas, (x) => angka(x, 'batas', 1, 100, true)) ?? 20,
-    refleksi: opsional(v.refleksi, validasiPetaRefleksi),
   };
 }
-
-const REPUTASI = ['langganan_ptn_top', 'rutin_lolos', 'satu_lima_per_tahun', 'sekolah_baru'] as const;
 
 function boolean(v: unknown, nama: string): boolean {
   if (typeof v !== 'boolean') throw galatValidasi(`${nama} harus true atau false.`);
@@ -167,26 +186,45 @@ function nilaiPerMapel(v: unknown, nama: string): Record<string, number> {
   return Object.fromEntries(Object.entries(v).map(([k, n]) => [teks(k, `${nama} (nama mapel)`), angka(n, `${nama}.${k}`, 0, 100)]));
 }
 
-/** PUT /api/preferensi. Kelengkapan skala RIASEC dicek di layanan (butuh daftar item). */
-export function validasiPreferensi(v: unknown): PreferensiPengguna {
-  if (!isObjek(v)) throw galatValidasi('Badan request harus objek.');
-  const { minat, jalur, akademik } = v;
-  if (!isObjek(minat)) throw galatValidasi('minat wajib diisi.');
-  if (!isObjek(jalur)) throw galatValidasi('jalur wajib diisi.');
-  if (!isObjek(minat.jawaban_minat)) throw galatValidasi('minat.jawaban_minat wajib berupa objek {item_id: 0..4}.');
+export function validasiNamaPreferensi(v: unknown): string {
+  return teks(v, 'nama', 40);
+}
 
-  let ak: PreferensiPengguna['akademik'] = null;
+const SUBTES_TO = ['pu', 'ppu', 'pbm', 'pk', 'lit_ind', 'lit_ing', 'pm'] as const;
+const SKALA_TO = ['irt_200_1000', 'bimbel', 'tidak_tahu'] as const;
+
+function validasiTryOut(v: unknown, i: number): TryOut {
+  const nama = `riwayat_to[${i}]`;
+  if (!isObjek(v)) throw galatValidasi(`${nama} harus objek.`);
+  if (typeof v.tanggal !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(v.tanggal) || Number.isNaN(Date.parse(v.tanggal))) {
+    throw galatValidasi(`${nama}.tanggal harus tanggal YYYY-MM-DD.`);
+  }
+  const skorMentah = isObjek(v.skor) ? v.skor : {};
+  const skor = Object.fromEntries(
+    SUBTES_TO.map((s) => [s, opsional(skorMentah[s], (x) => angka(x, `${nama}.skor.${s}`, 0, 1000)) ?? null]),
+  ) as TryOut['skor'];
+  if (SUBTES_TO.every((s) => skor[s] === null)) throw galatValidasi(`${nama}.skor minimal berisi satu subtes.`);
+  return {
+    tanggal: v.tanggal,
+    sumber_to: opsional(v.sumber_to, (x) => teks(x, `${nama}.sumber_to`)) ?? null,
+    skala: opsional(v.skala, (x) => pilihan(x, `${nama}.skala`, SKALA_TO)) ?? 'tidak_tahu',
+    skor,
+  };
+}
+
+/** POST /api/preferensi dan PUT /api/preferensi/[id]. Kelengkapan skala RIASEC dicek di layanan. */
+export function validasiIsiPreferensi(v: unknown): IsiPreferensi {
+  if (!isObjek(v)) throw galatValidasi('Badan request harus objek.');
+  const { minat, kelulusan, akademik } = v;
+  const jalur = pilihan(v.jalur, 'jalur', ['snbp', 'snbt'] as const);
+  if (!isObjek(minat)) throw galatValidasi('minat wajib diisi.');
+  if (!isObjek(minat.jawaban_minat)) throw galatValidasi('minat.jawaban_minat wajib berupa objek {item_id: 0..4}.');
+  const kel = isObjek(kelulusan) ? kelulusan : {};
+
+  let ak: IsiPreferensi['akademik'] = null;
   if (akademik !== undefined && akademik !== null) {
+    if (jalur !== 'snbp') throw galatValidasi('akademik hanya untuk preferensi jalur SNBP.');
     if (!isObjek(akademik)) throw galatValidasi('akademik harus objek atau null.');
-    let tka: NonNullable<PreferensiPengguna['akademik']>['nilai_tka'] = {};
-    if (akademik.nilai_tka !== undefined && akademik.nilai_tka !== null) {
-      if (!isObjek(akademik.nilai_tka)) throw galatValidasi('akademik.nilai_tka harus objek.');
-      tka = {};
-      for (const m of MAPEL_TKA) {
-        const n = opsional(akademik.nilai_tka[m], (x) => angka(x, `nilai_tka.${m}`, 0, 100));
-        if (n !== undefined) tka[m] = n;
-      }
-    }
     const prestasi = akademik.prestasi ?? [];
     if (!Array.isArray(prestasi) || prestasi.length > 3) throw galatValidasi('akademik.prestasi harus daftar maks 3 item.');
     ak = {
@@ -197,7 +235,7 @@ export function validasiPreferensi(v: unknown): PreferensiPengguna {
       peringkat_paralel: opsional(akademik.peringkat_paralel, (x) => angka(x, 'peringkat_paralel', 1, 10_000, true)) ?? null,
       jumlah_siswa_jurusan:
         opsional(akademik.jumlah_siswa_jurusan, (x) => angka(x, 'jumlah_siswa_jurusan', 1, 10_000, true)) ?? null,
-      nilai_tka: tka,
+      nilai_tka: opsional(akademik.nilai_tka, (x) => validasiNilaiTka(x, 'akademik.nilai_tka')) ?? {},
       prestasi: prestasi.map((p, i) => {
         if (!isObjek(p)) throw galatValidasi(`prestasi[${i}] harus objek.`);
         return {
@@ -208,14 +246,16 @@ export function validasiPreferensi(v: unknown): PreferensiPengguna {
       }),
       reputasi_alumni: opsional(akademik.reputasi_alumni, (x) => pilihan(x, 'reputasi_alumni', REPUTASI)) ?? null,
       kampus_alumni: opsional(akademik.kampus_alumni, (x) => daftarAngka(x, 'kampus_alumni', 0, 10)) ?? [],
-      alumni_tidak_daftar_ulang:
-        opsional(akademik.alumni_tidak_daftar_ulang, (x) =>
-          pilihan(x, 'alumni_tidak_daftar_ulang', ['tidak_tahu', 'pernah'] as const),
-        ) ?? null,
     };
   }
 
+  const riwayat = v.riwayat_to ?? [];
+  if (!Array.isArray(riwayat) || riwayat.length > 20) throw galatValidasi('riwayat_to harus daftar maks 20 try out.');
+  if (jalur !== 'snbt' && riwayat.length) throw galatValidasi('riwayat_to hanya untuk preferensi jalur SNBT.');
+
   return {
+    nama: validasiNamaPreferensi(v.nama),
+    jalur,
     minat: {
       mode: opsional(minat.mode, (x) => pilihan(x, 'minat.mode', ['mini_ip_30', 'ipsf_60'] as const)) ?? 'mini_ip_30',
       jawaban_minat: Object.fromEntries(
@@ -224,17 +264,15 @@ export function validasiPreferensi(v: unknown): PreferensiPengguna {
       chip_hobi: opsional(minat.chip_hobi, (x) => daftarTeks(x, 'minat.chip_hobi', 30)) ?? [],
       mapel_favorit: opsional(minat.mapel_favorit, (x) => daftarTeks(x, 'minat.mapel_favorit', 3)) ?? [],
     },
-    jalur: {
-      ikut_snbp: boolean(jalur.ikut_snbp, 'jalur.ikut_snbp'),
-      ikut_snbt: boolean(jalur.ikut_snbt, 'jalur.ikut_snbt'),
-      tahun_lulus: opsional(jalur.tahun_lulus, (x) => angka(x, 'jalur.tahun_lulus', 2000, 2100, true)) ?? null,
-      pernah_lulus_snbp: opsional(jalur.pernah_lulus_snbp, (x) => boolean(x, 'jalur.pernah_lulus_snbp')) ?? false,
+    kelulusan: {
+      tahun_lulus: opsional(kel.tahun_lulus, (x) => angka(x, 'kelulusan.tahun_lulus', 2000, 2100, true)) ?? null,
+      pernah_lulus_snbp: opsional(kel.pernah_lulus_snbp, (x) => boolean(x, 'kelulusan.pernah_lulus_snbp')) ?? false,
     },
     akademik: ak,
+    riwayat_to: riwayat.map(validasiTryOut).sort((a, b) => a.tanggal.localeCompare(b.tanggal)),
   };
 }
 
-const REFLEKSI = ['seru', 'melelahkan'] as const;
 const OPSI = ['A', 'B', 'C', 'D'] as const;
 
 export function validasiIdProdi(v: unknown): number {
@@ -248,20 +286,4 @@ export function validasiJawabTestDrive(v: unknown): PermintaanJawabTestDrive {
     id_soal: teks(v.id_soal, 'id_soal'),
     jawaban: pilihan(v.jawaban, 'jawaban', OPSI),
   };
-}
-
-export function validasiRefleksi(v: unknown): PermintaanRefleksiTestDrive {
-  if (!isObjek(v)) throw galatValidasi('Badan request harus objek.');
-  return { id_prodi: validasiIdProdi(v.id_prodi), refleksi: pilihan(v.refleksi, 'refleksi', REFLEKSI) };
-}
-
-/** {"361036": "seru"} -> sama, dengan kunci id_prodi angka; maks 500 entri. */
-export function validasiPetaRefleksi(v: unknown): Record<string, RefleksiTestDrive> {
-  if (!isObjek(v) || Object.keys(v).length > 500) throw galatValidasi('refleksi harus objek {id_prodi: seru|melelahkan}, maks 500.');
-  return Object.fromEntries(
-    Object.entries(v).map(([k, r]) => {
-      if (!/^\d{1,9}$/.test(k)) throw galatValidasi(`refleksi: kunci ${k} harus id_prodi angka.`);
-      return [k, pilihan(r, `refleksi.${k}`, REFLEKSI)];
-    }),
-  );
 }

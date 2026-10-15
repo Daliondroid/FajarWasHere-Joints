@@ -1,19 +1,12 @@
-/** /api/test-drive: soal berlapis, reveal jawaban, refleksi (T-14, F-11, Hal. 13). */
-import { galatTidakDitemukan, galatTidakLogin, galatValidasi } from '@/lib/api/galat';
-import { validasiIdProdi, validasiJawabTestDrive, validasiRefleksi } from '@/lib/api/validasi';
-import type {
-  RealityCheck,
-  ResponsJawabTestDrive,
-  ResponsRefleksiTestDrive,
-  ResponsTestDrive,
-  SoalTestDrive,
-} from '@/types';
+/** /api/test-drive: Simulasi soal berlapis dan reveal jawaban (T-14, F-11, Hal. 13; tanpa timer & refleksi, K-06/K-08). */
+import { galatTidakDitemukan, galatValidasi } from '@/lib/api/galat';
+import { validasiIdProdi, validasiJawabTestDrive } from '@/lib/api/validasi';
+import type { RealityCheck, ResponsJawabTestDrive, ResponsTestDrive, SoalTestDrive } from '@/types';
 import { ambilSerumpun, hitungFallback, keRingkas } from './prodi';
 import type { DetailTambahan, Repo } from './repo';
 import type { RepoAkun } from './repo_akun';
 import type { BarisSoal, RepoTestDrive } from './repo_test_drive';
 
-export const DURASI_DETIK = 60;
 const MAKS_SOAL = 3;
 const MAKS_KOMPETENSI = 3;
 
@@ -104,7 +97,6 @@ export async function layananTestDrive(
     prodi: { id_prodi: b.id_prodi, nama_prodi: b.nama, nama_ptn: b.nama_ptn, jenjang: b.jenjang, rumpun_id: b.rumpun_id, rumpun: b.rumpun },
     soal: pilihSoal(soal, acak).map(keSoal),
     reality_check: realityCheck(ringkas, tambahan),
-    durasi_detik: DURASI_DETIK,
   };
 }
 
@@ -128,17 +120,4 @@ export async function layananJawabTestDrive(
     tersimpan = true;
   }
   return { id_soal: soal.id_soal, benar, kunci: soal.kunci, pembahasan: soal.pembahasan, tersimpan };
-}
-
-export async function layananRefleksiTestDrive(
-  idSesi: string | null,
-  badan: unknown,
-  deps: { repo: Repo; repoTd: RepoTestDrive; repoAkun: RepoAkun },
-): Promise<ResponsRefleksiTestDrive> {
-  if (!idSesi || !(await deps.repoAkun.ambilPengguna(idSesi))) throw galatTidakLogin();
-  const req = validasiRefleksi(badan);
-  const [prodi] = await deps.repo.prodiByIds([req.id_prodi]);
-  if (!prodi) throw galatTidakDitemukan(`Prodi ${req.id_prodi} tidak ditemukan.`);
-  await deps.repoTd.simpanRefleksi(idSesi, prodi.id_prodi, req.refleksi);
-  return { tersimpan: true };
 }

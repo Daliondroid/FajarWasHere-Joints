@@ -1,24 +1,35 @@
-/** Implementasi RepoAkun dengan supabase-js (server saja). */
-import type { RepoAkun } from '@/lib/layanan/repo_akun';
-import type { PreferensiPengguna, ResponsPreferensi } from '@/types';
+/** Implementasi RepoAkun dengan supabase-js (server saja). Tulis preferensi lewat fungsi SQL atomik (T-18). */
+import { galatValidasi } from '@/lib/api/galat';
+import type { BarisPreferensiRingkas, RepoAkun } from '@/lib/layanan/repo_akun';
+import type { ProfilRiasec } from '@/lib/skoring';
+import type { AkademikSnbp, IsiPreferensi, PreferensiDetail, TryOut } from '@/types';
 import { repoSupabase } from './repo_supabase';
 import { supabaseServer } from './supabase';
 
 type Baris = Record<string, unknown>;
+type GalatSupabase = { message: string; code?: string } | null;
 
 const POLA_UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-function cek<T>(hasil: { data: unknown; error: { message: string } | null }): T {
-  if (hasil.error) throw new Error(`Supabase: ${hasil.error.message}`);
+/** Nama preferensi bentrok dengan indeks unik -> galat VALIDASI; galat lain -> Error biasa (500). */
+function cek<T>(hasil: { data: unknown; error: GalatSupabase }): T {
+  if (hasil.error) {
+    if (hasil.error.code === '23505' && hasil.error.message.includes('preferensi_nama_unik')) {
+      throw galatValidasi('Nama preferensi sudah dipakai; pilih nama lain.');
+    }
+    throw new Error(`Supabase: ${hasil.error.message}`);
+  }
   return hasil.data as T;
 }
 
 const angka = (v: unknown): number | null => (v === null || v === undefined ? null : Number(v));
 
 const KOLOM_PROFIL =
-  'npsn,jurusan_sekolah,rapor_rata,nilai_mapel_pendukung,peringkat_paralel,jumlah_siswa_jurusan,nilai_tka,prestasi,reputasi_alumni,kampus_alumni,alumni_tidak_daftar_ulang';
+  'npsn,jurusan_sekolah,rapor_rata,nilai_mapel_pendukung,peringkat_paralel,jumlah_siswa_jurusan,nilai_tka,prestasi,reputasi_alumni,kampus_alumni';
+const KOLOM_TO = 'tanggal,sumber_to,skala,skor_pu,skor_ppu,skor_pbm,skor_pk,skor_lit_ind,skor_lit_ing,skor_pm';
+const SUBTES = ['pu', 'ppu', 'pbm', 'pk', 'lit_ind', 'lit_ing', 'pm'] as const;
 
-function keAkademik(r: Baris | null): PreferensiPengguna['akademik'] {
+function keAkademik(r: Baris | null): AkademikSnbp | null {
   if (!r) return null;
   return {
     npsn: r.npsn ? String(r.npsn).trim() : null,
@@ -27,12 +38,19 @@ function keAkademik(r: Baris | null): PreferensiPengguna['akademik'] {
     nilai_mapel_pendukung: (r.nilai_mapel_pendukung as Record<string, number>) ?? {},
     peringkat_paralel: angka(r.peringkat_paralel),
     jumlah_siswa_jurusan: angka(r.jumlah_siswa_jurusan),
-    nilai_tka: (r.nilai_tka as NonNullable<PreferensiPengguna['akademik']>['nilai_tka']) ?? {},
-    prestasi: (r.prestasi as NonNullable<PreferensiPengguna['akademik']>['prestasi']) ?? [],
-    reputasi_alumni: (r.reputasi_alumni as NonNullable<PreferensiPengguna['akademik']>['reputasi_alumni']) ?? null,
+    nilai_tka: (r.nilai_tka as AkademikSnbp['nilai_tka']) ?? {},
+    prestasi: (r.prestasi as AkademikSnbp['prestasi']) ?? [],
+    reputasi_alumni: (r.reputasi_alumni as AkademikSnbp['reputasi_alumni']) ?? null,
     kampus_alumni: ((r.kampus_alumni as number[] | null) ?? []).map(Number),
-    alumni_tidak_daftar_ulang:
-      (r.alumni_tidak_daftar_ulang as NonNullable<PreferensiPengguna['akademik']>['alumni_tidak_daftar_ulang']) ?? null,
+  };
+}
+
+function keTryOut(r: Baris): TryOut {
+  return {
+    tanggal: String(r.tanggal),
+    sumber_to: (r.sumber_to as string | null) ?? null,
+    skala: r.skala as TryOut['skala'],
+    skor: Object.fromEntries(SUBTES.map((s) => [s, angka(r[`skor_${s}`])])) as TryOut['skor'],
   };
 }
 
@@ -59,75 +77,98 @@ export const repoAkunSupabase: RepoAkun = {
     cek(await supabaseServer().from('pengguna').delete().eq('id', id));
   },
 
-  async sudahIsiPreferensi(id) {
-    if (!POLA_UUID.test(id)) return false;
-    const data = cek<Baris | null>(
-      await supabaseServer().from('preferensi').select('skor_riasec').eq('pengguna_id', id).maybeSingle(),
-    );
-    return !!data?.skor_riasec;
+  async punyaPreferensi(penggunaId) {
+    if (!POLA_UUID.test(penggunaId)) return false;
+    const hasil = await supabaseServer()
+      .from('preferensi')
+      .select('id', { count: 'exact', head: true })
+      .eq('pengguna_id', penggunaId);
+    cek(hasil);
+    return (hasil.count ?? 0) > 0;
   },
 
-  async ambilPreferensi(id): Promise<ResponsPreferensi['data']> {
-    if (!POLA_UUID.test(id)) return null;
+  async daftarPreferensi(penggunaId) {
+    const data = cek<Baris[]>(
+      await supabaseServer()
+        .from('preferensi')
+        .select('id,nama,jalur,aktif,kode_holland,skor_riasec,chip_hobi,mapel_favorit,diperbarui_pada')
+        .eq('pengguna_id', penggunaId)
+        .order('aktif', { ascending: false })
+        .order('diperbarui_pada', { ascending: false }),
+    );
+    return data.map(
+      (r): BarisPreferensiRingkas => ({
+        id: String(r.id),
+        nama: String(r.nama),
+        jalur: r.jalur as IsiPreferensi['jalur'],
+        aktif: Boolean(r.aktif),
+        kode_holland: String(r.kode_holland).trim(),
+        skor_riasec: r.skor_riasec as ProfilRiasec,
+        chip_hobi: (r.chip_hobi as string[]) ?? [],
+        mapel_favorit: (r.mapel_favorit as string[]) ?? [],
+        diperbarui_pada: String(r.diperbarui_pada),
+      }),
+    );
+  },
+
+  async ambilPreferensi(penggunaId, id): Promise<Omit<PreferensiDetail, 'skor_to_terbaru'> | null> {
     const db = supabaseServer();
-    const [pref, profil] = await Promise.all([
-      db.from('preferensi').select('*').eq('pengguna_id', id).maybeSingle(),
-      db.from('profil_akademik').select(KOLOM_PROFIL).eq('pengguna_id', id).maybeSingle(),
+    const p = cek<Baris | null>(
+      await db.from('preferensi').select('*').eq('id', id).eq('pengguna_id', penggunaId).maybeSingle(),
+    );
+    if (!p) return null;
+    const [profil, to] = await Promise.all([
+      db.from('profil_akademik').select(KOLOM_PROFIL).eq('preferensi_id', id).maybeSingle(),
+      db.from('riwayat_to').select(KOLOM_TO).eq('preferensi_id', id).order('tanggal'),
     ]);
-    const p = cek<Baris | null>(pref);
-    if (!p || !p.skor_riasec) return null;
     return {
+      id: String(p.id),
+      nama: String(p.nama),
+      jalur: p.jalur as IsiPreferensi['jalur'],
+      aktif: Boolean(p.aktif),
       minat: {
-        mode: p.mode_minat as PreferensiPengguna['minat']['mode'],
+        mode: p.mode_minat as IsiPreferensi['minat']['mode'],
         jawaban_minat: (p.jawaban_minat as Record<string, number>) ?? {},
         chip_hobi: (p.chip_hobi as string[]) ?? [],
         mapel_favorit: (p.mapel_favorit as string[]) ?? [],
       },
-      jalur: {
-        ikut_snbp: Boolean(p.ikut_snbp),
-        ikut_snbt: Boolean(p.ikut_snbt),
-        tahun_lulus: angka(p.tahun_lulus),
-        pernah_lulus_snbp: Boolean(p.pernah_lulus_snbp),
-      },
+      kelulusan: { tahun_lulus: angka(p.tahun_lulus), pernah_lulus_snbp: Boolean(p.pernah_lulus_snbp) },
       akademik: keAkademik(cek<Baris | null>(profil)),
-      skor_riasec: p.skor_riasec as NonNullable<ResponsPreferensi['data']>['skor_riasec'],
+      riwayat_to: cek<Baris[]>(to).map(keTryOut),
+      skor_riasec: p.skor_riasec as PreferensiDetail['skor_riasec'],
       kode_holland: String(p.kode_holland).trim(),
+      dibuat_pada: String(p.dibuat_pada),
       diperbarui_pada: String(p.diperbarui_pada),
     };
   },
 
-  async simpanPreferensi(id, d) {
-    const db = supabaseServer();
-    const sekarang = new Date().toISOString();
-    cek(
-      await db.from('preferensi').upsert(
-        {
-          pengguna_id: id,
+  async idPreferensiAktif(penggunaId) {
+    if (!POLA_UUID.test(penggunaId)) return null;
+    const data = cek<Baris | null>(
+      await supabaseServer().from('preferensi').select('id').eq('pengguna_id', penggunaId).eq('aktif', true).maybeSingle(),
+    );
+    return data ? String(data.id) : null;
+  },
+
+  async simpanPreferensi(penggunaId, id, d) {
+    const a = d.akademik;
+    const data = cek<string | null>(
+      await supabaseServer().rpc('simpan_preferensi', {
+        p_pengguna: penggunaId,
+        p_id: id,
+        p_pref: {
+          nama: d.nama,
+          jalur: d.jalur,
           mode_minat: d.minat.mode,
           jawaban_minat: d.minat.jawaban_minat,
           skor_riasec: d.skor_riasec,
           kode_holland: d.kode_holland,
           chip_hobi: d.minat.chip_hobi,
           mapel_favorit: d.minat.mapel_favorit,
-          ikut_snbp: d.jalur.ikut_snbp,
-          ikut_snbt: d.jalur.ikut_snbt,
-          tahun_lulus: d.jalur.tahun_lulus,
-          pernah_lulus_snbp: d.jalur.pernah_lulus_snbp,
-          diperbarui_pada: sekarang,
+          tahun_lulus: d.kelulusan.tahun_lulus,
+          pernah_lulus_snbp: d.kelulusan.pernah_lulus_snbp,
         },
-        { onConflict: 'pengguna_id' },
-      ),
-    );
-    // PUT mengganti seluruh dokumen: akademik null berarti data akademik dihapus.
-    if (!d.akademik) {
-      cek(await db.from('profil_akademik').delete().eq('pengguna_id', id));
-      return;
-    }
-    const a = d.akademik;
-    cek(
-      await db.from('profil_akademik').upsert(
-        {
-          pengguna_id: id,
+        p_profil: a && {
           npsn: a.npsn,
           jurusan_sekolah: a.jurusan_sekolah,
           kode_kab: a.kode_kab,
@@ -139,12 +180,36 @@ export const repoAkunSupabase: RepoAkun = {
           prestasi: a.prestasi,
           reputasi_alumni: a.reputasi_alumni,
           kampus_alumni: a.kampus_alumni,
-          alumni_tidak_daftar_ulang: a.alumni_tidak_daftar_ulang,
-          diperbarui_pada: sekarang,
         },
-        { onConflict: 'pengguna_id' },
-      ),
+        p_to: d.riwayat_to.map((t) => ({
+          tanggal: t.tanggal,
+          sumber_to: t.sumber_to,
+          skala: t.skala,
+          ...Object.fromEntries(SUBTES.map((s) => [`skor_${s}`, t.skor[s]])),
+        })),
+      }),
     );
+    return data ? String(data) : null;
+  },
+
+  async gantiNamaPreferensi(penggunaId, id, nama) {
+    const data = cek<Baris[]>(
+      await supabaseServer()
+        .from('preferensi')
+        .update({ nama: nama.trim(), diperbarui_pada: new Date().toISOString() })
+        .eq('id', id)
+        .eq('pengguna_id', penggunaId)
+        .select('id'),
+    );
+    return data.length > 0;
+  },
+
+  async aktifkanPreferensi(penggunaId, id) {
+    return Boolean(cek<boolean>(await supabaseServer().rpc('aktifkan_preferensi', { p_pengguna: penggunaId, p_preferensi: id })));
+  },
+
+  async hapusPreferensi(penggunaId, id) {
+    return Boolean(cek<boolean>(await supabaseServer().rpc('hapus_preferensi', { p_pengguna: penggunaId, p_preferensi: id })));
   },
 
   async kodeKabSekolah(npsn) {
