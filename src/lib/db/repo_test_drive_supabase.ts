@@ -1,6 +1,5 @@
 /** Implementasi RepoTestDrive dengan supabase-js (server saja). */
 import type { BarisSoal, RepoTestDrive } from '@/lib/layanan/repo_test_drive';
-import type { RefleksiTestDrive } from '@/types';
 import { supabaseServer } from './supabase';
 
 type Baris = Record<string, unknown>;
@@ -54,43 +53,5 @@ export const repoTestDriveSupabase: RepoTestDrive = {
         .from(RIWAYAT)
         .insert({ pengguna_id: penggunaId, id_prodi: d.id_prodi, id_soal: d.id_soal, jawaban: d.jawaban, benar: d.benar }),
     );
-  },
-
-  async simpanRefleksi(penggunaId, idProdi, refleksi) {
-    const db = supabaseServer();
-    const terakhir = cek<Baris | null>(
-      await db
-        .from(RIWAYAT)
-        .select('id')
-        .eq('pengguna_id', penggunaId)
-        .eq('id_prodi', idProdi)
-        .is('refleksi', null)
-        .order('dibuat_pada', { ascending: false })
-        .limit(1)
-        .maybeSingle(),
-    );
-    if (terakhir) {
-      cek(await db.from(RIWAYAT).update({ refleksi }).eq('id', terakhir.id));
-    } else {
-      cek(await db.from(RIWAYAT).insert({ pengguna_id: penggunaId, id_prodi: idProdi, refleksi }));
-    }
-  },
-
-  async refleksiPengguna(penggunaId) {
-    const data = cek<Baris[]>(
-      await supabaseServer()
-        .from(RIWAYAT)
-        .select('id_prodi,refleksi')
-        .eq('pengguna_id', penggunaId)
-        .not('refleksi', 'is', null)
-        .order('dibuat_pada', { ascending: false })
-        .limit(1000),
-    );
-    const hasil: Record<string, RefleksiTestDrive> = {};
-    for (const r of data) {
-      const k = String(r.id_prodi);
-      if (!(k in hasil)) hasil[k] = r.refleksi as RefleksiTestDrive; // baris terbaru menang
-    }
-    return hasil;
   },
 };

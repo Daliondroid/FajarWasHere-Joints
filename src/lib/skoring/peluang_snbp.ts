@@ -5,7 +5,11 @@ import { labelKeketatan, type LabelKeketatan } from './keketatan';
 import { batas, labelPeluang, logistik, persen, rentangDariTitik, type LabelPeluang } from './peluang';
 
 export type MapelTka = keyof typeof PARAM.tka.rerata_nasional;
-export type NilaiTka = Partial<Record<MapelTka, number>>;
+/** 3 mapel wajib + 2 mapel pilihan (BR-18). Mapel pilihan tidak masuk z_TKA (rerata nasional tidak tersedia). */
+export type NilaiTka = Partial<Record<MapelTka, number>> & { pilihan?: { mapel: string; nilai: number }[] };
+
+/** Daftar resmi mapel pilihan TKA (BR-18). */
+export const MAPEL_PILIHAN_TKA: readonly string[] = PARAM.tka_mapel_pilihan.daftar;
 
 const angka = (x: number) => x.toFixed(1).replace('.', ',');
 
@@ -68,14 +72,22 @@ export function persentilKuota(peringkat: number, kuota: number): number {
   return batas((100 * (kuota - peringkat + 1)) / kuota, 0, 100);
 }
 
-export type StatusAlumni = 'diterima' | 'tidak_daftar_ulang' | null;
+export type ReputasiAlumni = keyof typeof PARAM.posisi_siswa.penyesuaian_reputasi_alumni;
 
-/** BR-06: penyesuaian akreditasi sekolah dan alumni self-report, masing-masing maks ±batas. */
-export function penyesuaianPosisi(akreditasi: string | null | undefined, alumni: StatusAlumni) {
+/**
+ * BR-06: penyesuaian akreditasi sekolah dan reputasi alumni self-report, masing-masing maks ±batas.
+ * Reputasi alumni ditambah bonus bila PTN tujuan ada di daftar kampus alumni sekolah.
+ */
+export function penyesuaianPosisi(
+  akreditasi: string | null | undefined,
+  reputasiAlumni: ReputasiAlumni | null = null,
+  ptnDiKampusAlumni = false,
+) {
   const p = PARAM.posisi_siswa;
   const kunci = (akreditasi ?? '').trim().toUpperCase();
   const akr = (p.penyesuaian_akreditasi as Record<string, number>)[kunci] ?? p.penyesuaian_akreditasi.lainnya;
-  const alm = alumni ? p.penyesuaian_alumni[alumni] : 0;
+  const alm =
+    (reputasiAlumni ? p.penyesuaian_reputasi_alumni[reputasiAlumni] : 0) + (ptnDiKampusAlumni ? p.bonus_ptn_di_kampus_alumni : 0);
   return {
     akreditasi: batas(akr, -p.batas_penyesuaian, p.batas_penyesuaian),
     alumni: batas(alm, -p.batas_penyesuaian, p.batas_penyesuaian),
@@ -93,7 +105,9 @@ export interface ProdiSnbp {
 export interface InputPeluangSnbp {
   akademik: InputAkademik;
   eligibilitas: InputEligibilitas;
-  alumni?: StatusAlumni;
+  reputasi_alumni?: ReputasiAlumni | null;
+  /** PTN prodi tujuan termasuk kampus alumni sekolah. */
+  ptn_di_kampus_alumni?: boolean;
   prodi: ProdiSnbp;
 }
 
@@ -146,7 +160,11 @@ export function peluangSnbp(input: InputPeluangSnbp): HasilPeluangSnbp {
 
   const p = PARAM.posisi_siswa;
   const persentil = persentilKuota(input.eligibilitas.peringkat_paralel, elig.kuota);
-  const adj = penyesuaianPosisi(input.eligibilitas.akreditasi_sekolah, input.alumni ?? null);
+  const adj = penyesuaianPosisi(
+    input.eligibilitas.akreditasi_sekolah,
+    input.reputasi_alumni ?? null,
+    input.ptn_di_kampus_alumni ?? false,
+  );
   const posisi = batas(
     p.bobot_skor_akademik * akad.skor + p.bobot_persentil_kuota * persentil + adj.akreditasi + adj.alumni,
     0,

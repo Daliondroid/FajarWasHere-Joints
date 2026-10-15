@@ -74,7 +74,8 @@ function hitungSnbp(
       akreditasi_sekolah: sekolah?.akreditasi ?? null,
       jumlah_siswa_jurusan: profil.jumlah_siswa_jurusan ?? null,
     },
-    alumni: profil.alumni ?? null,
+    reputasi_alumni: profil.reputasi_alumni ?? null,
+    ptn_di_kampus_alumni: (profil.kampus_alumni ?? []).includes(b.id_ptn),
     prodi: { rasio_terima: rasio, rasio_terima_rata3th: b.rasio_terima_snbp_rata3th, data_terbatas: terbatas },
   });
 }
