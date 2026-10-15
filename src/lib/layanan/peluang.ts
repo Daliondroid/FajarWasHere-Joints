@@ -48,7 +48,7 @@ function snbtTidakDihitung(pesan: string, dataTerbatas: boolean): HasilPeluangSn
   return { dihitung: false, peluang: null, rentang: null, label: null, estimasi: true, data_terbatas: dataTerbatas, peringatan_skala: true, pesan };
 }
 
-function hitungSnbp(
+export function hitungSnbp(
   b: BarisProdi,
   fb: FallbackProdi,
   profil: ProfilAkademik,
@@ -80,7 +80,7 @@ function hitungSnbp(
   });
 }
 
-function hitungSnbt(
+export function hitungSnbt(
   b: BarisProdi,
   fb: FallbackProdi,
   profil: ProfilAkademik,

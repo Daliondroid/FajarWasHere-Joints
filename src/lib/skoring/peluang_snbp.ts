@@ -66,6 +66,21 @@ export function skorAkademik(input: InputAkademik, bobot: BobotAkademik = PARAM.
   return { skor: batas(skor, 0, 100), rapor_terkoreksi: raporTerkoreksi, z_tka: z };
 }
 
+/** Skor prestasi 0–100 dari daftar prestasi: bobot tingkat tertinggi (asumsi, PARAM.prestasi). */
+export function skorPrestasi(prestasi: { tingkat: string }[] | null | undefined): number {
+  const bobot = PARAM.prestasi.bobot_tingkat;
+  const nilai = (tingkat: string) => {
+    const t = tingkat.trim().toLowerCase();
+    if (t.includes('internasional')) return bobot.internasional;
+    if (t.includes('nasional')) return bobot.nasional;
+    if (t.includes('provinsi')) return bobot.provinsi;
+    if (t.includes('kab') || t.includes('kota')) return bobot.kabupaten_kota;
+    if (t.includes('sekolah')) return bobot.sekolah;
+    return 0;
+  };
+  return Math.max(0, ...(prestasi ?? []).map((p) => nilai(p.tingkat)));
+}
+
 /** Persentil posisi di kuota eligible: peringkat 1 = 100, peringkat terakhir dalam kuota > 0. */
 export function persentilKuota(peringkat: number, kuota: number): number {
   if (kuota <= 0) return 0;

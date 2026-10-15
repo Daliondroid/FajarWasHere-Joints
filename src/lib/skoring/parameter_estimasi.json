@@ -44,6 +44,11 @@
     "w2_mapel_pendukung": 0.25,
     "w3_prestasi": 0.15
   },
+  "prestasi": {
+    "status": "asumsi (tabel bobot buatan tim, PRD sumber 6.2 / bagian 10 butir 10; disetujui farrelzaki 2026-10-16)",
+    "bobot_tingkat": { "internasional": 100, "nasional": 80, "provinsi": 60, "kabupaten_kota": 40, "sekolah": 20 },
+    "aturan": "skor = bobot tingkat prestasi tertinggi; tingkat tidak dikenali = 0"
+  },
   "posisi_siswa": {
     "status": "asumsi",
     "bobot_skor_akademik": 0.5,
