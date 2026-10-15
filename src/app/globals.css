@@ -1,89 +1,96 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #4285F4;
-  --color-danger: #EA4335;
-  --color-warning: #FBBC05;
-  --color-success: #34A853;
-  --color-border: #1A1A1A;
-  --color-retro-dark: #202124;
-  --color-retro-light: #F8F9FA;
+  --color-primary: #277EFD;
+  --color-primary-hover: #1a6be0;
+  --color-danger: #F1402E;
+  --color-warning: #FEBD01;
+  --color-success: #22A94F;
+  --color-border: #000000;
+  --color-retro-dark: #151D21;
+  --color-retro-light: #FFFFFF;
 
   --font-pixel: var(--font-pixel), 'Press Start 2P', monospace;
   --font-body: var(--font-body), 'Outfit', 'Inter', sans-serif;
-
-  --shadow-pixel: 4px 4px 0px #1A1A1A;
-  --shadow-pixel-sm: 2px 2px 0px #1A1A1A;
-  --shadow-pixel-lg: 6px 6px 0px #1A1A1A;
 }
 
 :root {
-  --background: #F8F9FA;
-  --foreground: #1A1A1A;
-  --border-color: #1A1A1A;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #202124;
-    --foreground: #F8F9FA;
-    --border-color: #1A1A1A;
-  }
+  --background: #FFFFFF;
+  --foreground: #000000;
+  --border-color: #000000;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: #FFFFFF;
+  color: #000000;
   font-family: var(--font-body), system-ui, sans-serif;
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
 }
 
-/* 8-Bit Retro UI Utility Classes */
-.pixel-box {
-  border: 3px solid #1A1A1A;
-  box-shadow: 4px 4px 0px #1A1A1A;
-  border-radius: 0px;
+/* 8-Bit Pixel UI Tokens matching Figma 1:1 */
+.pixel-border {
+  border: 3px solid #000000;
+  box-shadow: 4px 4px 0px #000000;
 }
 
-.pixel-box-sm {
-  border: 2px solid #1A1A1A;
-  box-shadow: 2px 2px 0px #1A1A1A;
-  border-radius: 0px;
+.pixel-border-sm {
+  border: 2px solid #000000;
+  box-shadow: 3px 3px 0px #000000;
 }
 
-.pixel-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 3px solid #1A1A1A;
-  box-shadow: 4px 4px 0px #1A1A1A;
-  border-radius: 0px;
+.pixel-btn-blue {
+  background-color: #277EFD;
+  color: #FFFFFF;
+  border: 3px solid #000000;
+  box-shadow: 4px 4px 0px #000000;
+  font-family: var(--font-pixel), 'Press Start 2P', monospace;
+  font-size: 13px;
   font-weight: 700;
-  text-decoration: none;
+  text-align: center;
   cursor: pointer;
   user-select: none;
   transition: transform 0.05s ease, box-shadow 0.05s ease;
 }
 
-.pixel-btn:hover {
-  filter: brightness(1.05);
+.pixel-btn-blue:hover {
+  background-color: #1b6fe5;
 }
 
-.pixel-btn:active {
+.pixel-btn-blue:active {
   transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0px #1A1A1A;
+  box-shadow: 2px 2px 0px #000000;
 }
 
-.pixel-badge {
-  display: inline-flex;
-  align-items: center;
-  border: 2px solid #1A1A1A;
-  box-shadow: 2px 2px 0px #1A1A1A;
-  border-radius: 0px;
-  padding: 0.125rem 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 800;
-  text-transform: uppercase;
+.pixel-btn-white {
+  background-color: #FFFFFF;
+  color: #000000;
+  border: 3px solid #000000;
+  box-shadow: 4px 4px 0px #000000;
+  font-family: var(--font-pixel), 'Press Start 2P', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.05s ease, box-shadow 0.05s ease;
+}
+
+.pixel-btn-white:hover {
+  background-color: #F3F4F6;
+}
+
+.pixel-btn-white:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #000000;
+}
+
+.pixel-badge-blue {
+  background-color: #277EFD;
+  color: #FFFFFF;
+  border: 3px solid #000000;
+  box-shadow: 3px 3px 0px #000000;
+  font-family: var(--font-pixel), 'Press Start 2P', monospace;
+  padding: 2px 8px;
 }
