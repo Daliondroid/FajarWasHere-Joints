@@ -109,7 +109,6 @@ Sebelum menyunting file bersama (bagian 1), tambahkan baris di sini, commit, dan
 
 | File | Dikunci oleh | Sejak | Alasan |
 | --- | --- | --- | --- |
-| `src/middleware.ts`, `src/types/`, `docs/ARSITEKTUR.md` | farrelzaki | 2026-10-15 | T-13 lanjutan: lindungi /cocokin, smart routing ke /cocokin |
 
 Agen **tidak boleh** menyunting file bersama yang sedang dikunci orang lain.
 
@@ -218,6 +217,7 @@ Format: `- YYYY-MM-DD · T-xx · apa yang dikerjakan · hasil/verifikasi · cata
 - 2026-10-15 · T-04 · modul skoring murni src/lib/skoring (BR-01–BR-11) + 47 test · npm test 50/50, tsc, lint, build lulus; angka cocok skoring_referensi.py · parameter asumsi di src/lib/skoring/parameter_estimasi.json; tipe src/types belum selaras, dibahas di kontrak T-05
 - 2026-10-15 · T-05 · 5 endpoint (school, prodi, prodi/[id], peluang, kecocokan) + kontrak + supabase-js 2.117.3; kunci file bersama dilepas · npm test 81/81, tsc, lint, build, uji e2e ke Supabase lulus · daliondroid: mohon tinjau kontrak ARSITEKTUR bagian 4 / src/types/api.ts; tipe lama di src/types/index.ts diganti; isi NEXT_PUBLIC_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY di .env untuk memanggil API lokal
 - 2026-10-15 · T-13 · login Google next-auth 4.24.15 (sesi JWT 30 hari), /api/auth/lanjut, /api/akun (status, hapus), /api/preferensi GET/PUT, middleware gerbang login, migrasi preferensi (ipsf_60, 0..4); kunci dilepas · npm test 97/97, build, uji e2e login Google nyata lulus · daliondroid: tombol login `signIn('google', { callbackUrl: '/api/auth/lanjut' })`, keluar `signOut()`; isi GOOGLE_CLIENT_ID/SECRET, NEXTAUTH_SECRET, NEXTAUTH_URL di .env (minta ke farrelzaki)
+- 2026-10-15 · T-13 · lanjutan: /cocokin wajib login dan jadi tujuan smart routing; /katalog publik; kunci dilepas · npm test 97/97, build, cek redirect di dev lulus (PR #5) · daliondroid: halaman Hal. 8 tetap di /cocokin
 
 ## 9. Mengubah File Ini
 
