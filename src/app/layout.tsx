@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Press_Start_2P, Outfit } from 'next/font/google';
 import './globals.css';
+import AuthProvider from '@/components/auth/AuthProvider';
 
 const pressStart2P = Press_Start_2P({
   weight: '400',
@@ -28,8 +29,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id">
-      <body className={`${pressStart2P.variable} ${outfit.variable} antialiased`}>
-        {children}
+      <body
+        suppressHydrationWarning
+        className={`${pressStart2P.variable} ${outfit.variable} antialiased`}
+      >
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );
