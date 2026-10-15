@@ -224,6 +224,7 @@ Format: `- YYYY-MM-DD · T-xx · apa yang dikerjakan · hasil/verifikasi · cata
 - 2026-10-15 · T-17 · docs/PRD.md: Test Drive tanpa timer (F-11, K-06), rekomendasi ringkas + popup DETAIL (F-08, K-07) · diff ditinjau; langsung ke main atas izin farrelzaki · daliondroid: ikuti Figma HIFI v3 M13/M14/M18/M19
 - 2026-10-15 · T-17 · docs/PRD.md: hasil Test Drive = versi koreksi layar soal, tanpa rating/refleksi (F-11, K-08) · diff ditinjau · R-06: endpoint/field refleksi dari T-14 perlu dihapus
 - 2026-10-15 · T-17 · docs/PRD.md: keterangan kecil dipindah ke Halaman Syarat & Ketentuan (F-20, K-09), tautan di footer & modal login · diff ditinjau; langsung ke main atas izin farrelzaki · daliondroid: ikuti Figma HIFI v3 M20/D11 + footer
+- 2026-10-15 · T-17 · docs/PRD.md: hasil rekomendasi jadi 3 kartu (#3 Alternatif, F-08, K-10) · diff ditinjau; langsung ke main atas izin farrelzaki · daliondroid: endpoint rekomendasi kembalikan 3 prodi
 
 ## 9. Mengubah File Ini
 
