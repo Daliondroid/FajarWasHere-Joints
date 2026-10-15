@@ -9,11 +9,11 @@ import type {
   HasilValidasiProvinsi,
   NilaiTka,
   ModeMinat,
-  StatusAlumni,
+  ReputasiAlumni,
 } from '@/lib/skoring';
 import type { JenjangProdi, LabelKeketatan, RumpunIlmu } from './index';
 
-export type { HasilJalur, HasilPeluangSnbp, HasilPeluangSnbt, HasilValidasiProvinsi, NilaiTka, ModeMinat, StatusAlumni };
+export type { HasilJalur, HasilPeluangSnbp, HasilPeluangSnbt, HasilValidasiProvinsi, NilaiTka, ModeMinat, ReputasiAlumni };
 
 /** Label sumber angka (BR-13). */
 export type LabelData = 'resmi' | 'estimasi' | 'sintetis';
@@ -169,8 +169,12 @@ export interface ProfilAkademik {
   nilai_mapel_pendukung?: Record<string, number>;
   /** 0–100. */
   prestasi_skor?: number;
+  /** 3 mapel wajib + `pilihan` (2 mapel berbeda dari daftar resmi, BR-18). */
   nilai_tka?: NilaiTka;
-  alumni?: StatusAlumni;
+  /** Reputasi alumni self-report (BR-06). */
+  reputasi_alumni?: ReputasiAlumni | null;
+  /** id_ptn kampus tempat alumni sekolah diterima; bonus kecil bila PTN prodi tujuan termasuk. */
+  kampus_alumni?: number[];
   /** SNBT: rata-rata 7 subtes TO. */
   skor_to?: number;
 }
@@ -217,11 +221,6 @@ export interface PermintaanKecocokan {
   filter?: Omit<FilterProdi, 'q' | 'portofolio'> & { id_prodi?: number[] };
   /** 1–100, bawaan 20. */
   batas?: number;
-  /**
-   * Refleksi Test Drive per prodi ({"361036": "seru"}), tie-breaker setelah mapel favorit (BR-10).
-   * Kosong + login -> diambil dari riwayat Test Drive pengguna.
-   */
-  refleksi?: Record<string, RefleksiTestDrive>;
 }
 
 export interface HasilKecocokanProdi {
@@ -238,7 +237,6 @@ export interface HasilKecocokanProdi {
   skor_hobi: number | null;
   c_index: number;
   mapel_favorit_cocok: number;
-  refleksi: RefleksiTestDrive | null;
 }
 
 export interface ResponsKecocokan {
@@ -253,7 +251,7 @@ export interface ResponsKecocokan {
 
 // ---------- Akun & sesi (T-13) ----------
 // Login: signIn('google', { callbackUrl: '/api/auth/lanjut' }) dari next-auth/react.
-// GET /api/auth/lanjut -> 302 ke /cocokin (sudah isi preferensi), /preferensi (belum), atau / (belum login).
+// GET /api/auth/lanjut -> 302 ke /cocokin (punya minimal satu preferensi), /preferensi (belum), atau / (belum login).
 
 /** GET /api/akun (200 juga saat belum login). */
 export interface ResponsAkun {
@@ -271,9 +269,18 @@ export interface ResponsHapusAkun {
   terhapus: true;
 }
 
-// ---------- GET/PUT /api/preferensi (wajib login, 401 jika belum) ----------
+// ---------- Preferensi (T-18, PRD 2.2: F-18, F-19, BR-16, BR-17). Semua wajib login (401) ----------
+// GET    /api/preferensi              -> ResponsDaftarPreferensi (kartu Hal. P)
+// POST   /api/preferensi              (IsiPreferensi) -> ResponsPreferensi; preferensi baru otomatis aktif
+// GET    /api/preferensi/aktif        -> ResponsPreferensi (data null bila belum punya)
+// GET    /api/preferensi/[id]         -> ResponsPreferensi (404 bila bukan milik pengguna)
+// PUT    /api/preferensi/[id]         (IsiPreferensi) -> ResponsPreferensi; mengganti seluruh isi; jalur tidak bisa diubah (400)
+// PATCH  /api/preferensi/[id]         ({ nama }) -> ResponsPreferensi
+// POST   /api/preferensi/[id]/aktif   -> ResponsPreferensi; jadikan preferensi aktif (F-19)
+// DELETE /api/preferensi/[id]         -> ResponsHapusPreferensi; bila aktif, preferensi lain terbaru jadi aktif
 
-export type ReputasiAlumni = 'langganan_ptn_top' | 'rutin_lolos' | 'satu_lima_per_tahun' | 'sekolah_baru';
+export type JalurPreferensi = 'snbp' | 'snbt';
+export type SkalaTo = 'irt_200_1000' | 'bimbel' | 'tidak_tahu';
 
 export interface PrestasiSiswa {
   tingkat: string;
@@ -281,7 +288,38 @@ export interface PrestasiSiswa {
   peringkat: string;
 }
 
-export interface PreferensiPengguna {
+/** Bahan SNBP (Hal. 5–6). */
+export interface AkademikSnbp {
+  npsn: string | null;
+  jurusan_sekolah: string | null;
+  rapor_rata: number | null;
+  nilai_mapel_pendukung: Record<string, number>;
+  peringkat_paralel: number | null;
+  jumlah_siswa_jurusan: number | null;
+  /** 3 mapel wajib + `pilihan`: 0 atau 2 mapel berbeda dari daftar resmi (BR-18). */
+  nilai_tka: NilaiTka;
+  /** Maks 3 prestasi terbaik. */
+  prestasi: PrestasiSiswa[];
+  reputasi_alumni: ReputasiAlumni | null;
+  /** id_ptn, maks 10. */
+  kampus_alumni: number[];
+}
+
+/** Satu try out (Hal. 7). Skor per subtes 0–1000; null bila tidak diisi. */
+export interface TryOut {
+  /** YYYY-MM-DD */
+  tanggal: string;
+  sumber_to: string | null;
+  skala: SkalaTo;
+  skor: { pu: number | null; ppu: number | null; pbm: number | null; pk: number | null; lit_ind: number | null; lit_ing: number | null; pm: number | null };
+}
+
+/** Badan POST /api/preferensi dan PUT /api/preferensi/[id]. */
+export interface IsiPreferensi {
+  /** 1–40 karakter, unik per akun (tanpa beda huruf besar/kecil). */
+  nama: string;
+  /** Dipilih saat membuat; tidak bisa diubah (BR-17). BR-11 dicek saat memilih. */
+  jalur: JalurPreferensi;
   minat: {
     mode: ModeMinat;
     /** {"IP01": 0..4}; tiap skala RIASEC minimal 1 jawaban. */
@@ -290,45 +328,52 @@ export interface PreferensiPengguna {
     /** Maks 3. */
     mapel_favorit: string[];
   };
-  jalur: {
-    ikut_snbp: boolean;
-    ikut_snbt: boolean;
-    tahun_lulus: number | null;
-    pernah_lulus_snbp: boolean;
-  };
-  /** null = belum diisi. Alamat tidak disimpan; kab/kota diambil dari data sekolah (BR-14). */
-  akademik: {
-    npsn: string | null;
-    jurusan_sekolah: string | null;
-    rapor_rata: number | null;
-    nilai_mapel_pendukung: Record<string, number>;
-    peringkat_paralel: number | null;
-    jumlah_siswa_jurusan: number | null;
-    nilai_tka: NilaiTka;
-    /** Maks 3 prestasi terbaik. */
-    prestasi: PrestasiSiswa[];
-    reputasi_alumni: ReputasiAlumni | null;
-    /** id_ptn, maks 10. */
-    kampus_alumni: number[];
-    alumni_tidak_daftar_ulang: 'tidak_tahu' | 'pernah' | null;
-  } | null;
+  kelulusan: { tahun_lulus: number | null; pernah_lulus_snbp: boolean };
+  /** Hanya untuk jalur snbp (null = belum diisi); wajib null untuk snbt. */
+  akademik: AkademikSnbp | null;
+  /** Hanya untuk jalur snbt, maks 20, urut tanggal; wajib kosong untuk snbp. */
+  riwayat_to: TryOut[];
 }
 
-/** GET -> data null jika belum pernah disimpan. PUT (badan = PreferensiPengguna) -> data tersimpan. */
+export interface PreferensiDetail extends IsiPreferensi {
+  id: string;
+  aktif: boolean;
+  /** Dihitung server dari jawaban_minat. */
+  skor_riasec: { R: number; I: number; A: number; S: number; E: number; C: number };
+  kode_holland: string;
+  /** Rata-rata 7 subtes TO terbaru (untuk /api/peluang SNBT); null bila tidak ada. */
+  skor_to_terbaru: number | null;
+  dibuat_pada: string;
+  diperbarui_pada: string;
+}
+
+export interface PreferensiRingkas {
+  id: string;
+  nama: string;
+  jalur: JalurPreferensi;
+  aktif: boolean;
+  kode_holland: string;
+  /** Prodi dengan kecocokan tertinggi menurut preferensi ini. */
+  rekomendasi_teratas: { id_prodi: number; nama_prodi: string; nama_ptn: string; skor: number } | null;
+  diperbarui_pada: string;
+}
+
+export interface ResponsDaftarPreferensi {
+  data: PreferensiRingkas[];
+}
+
 export interface ResponsPreferensi {
-  data:
-    | (PreferensiPengguna & {
-        /** Dihitung server dari jawaban_minat. */
-        skor_riasec: { R: number; I: number; A: number; S: number; E: number; C: number };
-        kode_holland: string;
-        diperbarui_pada: string;
-      })
-    | null;
+  data: PreferensiDetail | null;
 }
 
-// ---------- Test Drive (T-14, Hal. 13, F-11). UI: /test-drive/[id_prodi] ----------
+export interface ResponsHapusPreferensi {
+  terhapus: true;
+  /** id preferensi yang kini aktif, null bila tidak ada lagi. */
+  id_aktif: string | null;
+}
 
-export type RefleksiTestDrive = 'seru' | 'melelahkan';
+// ---------- Simulasi (nama teknis Test Drive, T-14; PRD 2.2 F-11: tanpa timer & tanpa refleksi). UI: /test-drive/[id_prodi] ----------
+
 export type LapisanSoal = 'spesifik' | 'umum' | 'rumpun';
 
 /** Soal tanpa kunci; kunci & pembahasan baru dikirim lewat POST /api/test-drive/jawab. */
@@ -367,7 +412,6 @@ export interface ResponsTestDrive {
   /** Maks 3, urut: spesifik/umum, rumpun, cadangan. Diacak tiap permintaan. */
   soal: SoalTestDrive[];
   reality_check: RealityCheck;
-  durasi_detik: 60;
 }
 
 /** POST /api/test-drive/jawab (tidak wajib login; jika login, jawaban dicatat di riwayat). */
@@ -383,14 +427,4 @@ export interface ResponsJawabTestDrive {
   kunci: 'A' | 'B' | 'C' | 'D';
   pembahasan: string | null;
   tersimpan: boolean;
-}
-
-/** POST /api/test-drive/refleksi (wajib login, 401 jika belum). */
-export interface PermintaanRefleksiTestDrive {
-  id_prodi: number;
-  refleksi: RefleksiTestDrive;
-}
-
-export interface ResponsRefleksiTestDrive {
-  tersimpan: true;
 }
