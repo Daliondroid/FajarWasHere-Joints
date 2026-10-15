@@ -94,7 +94,7 @@ Aturan untuk agen:
 | T-03 | Skema DB (migrasi) + skrip impor dataset `Data/` ke Supabase | farrelzaki | `[x]` | `main` (PR #1) | `supabase/`, `scripts/` | 2026-10-15 | TBD-05. Skema + data sudah dimuat ke Supabase `cocokin` |
 | T-04 | Modul skoring murni + test (provinsi, keketatan, eligibilitas, peluang, kecocokan) | farrelzaki | `[x]` | `main` (PR #2) | `src/lib/` | 2026-10-15 | BR-01–BR-11. Modul di `src/lib/skoring/`, asumsi di `parameter_estimasi.json` |
 | T-13 | Login Google (NextAuth), sesi 30 hari, smart routing, hapus akun | farrelzaki | `[ ]` | | `src/app/api/auth/`, `src/lib/` | | F-02, F-16; setelah T-02 |
-| T-05 | API `/api/school`, `/api/prodi`, `/api/peluang`, `/api/kecocokan` + kontrak di ARSITEKTUR | farrelzaki | `[ ]` | | `src/app/api/`, `src/lib/` | | Kontrak disepakati dengan daliondroid sebelum dibekukan |
+| T-05 | API `/api/school`, `/api/prodi`, `/api/peluang`, `/api/kecocokan` + kontrak di ARSITEKTUR | farrelzaki | `[~]` | `fitur/farrelzaki-T-05` | `src/app/api/`, `src/lib/` | 2026-10-15 | Kontrak disepakati dengan daliondroid sebelum dibekukan |
 | T-14 | API `/api/test-drive` (soal berlapis, reveal, refleksi) | farrelzaki | `[ ]` | | `src/app/api/`, `src/lib/` | | F-11 |
 | T-09 | Chatbot Gemini 2.5 Flash + function calling, API `/api/chat` | farrelzaki | `[ ]` | | `src/app/api/`, `src/lib/` | | F-09 |
 | T-10 | QA 10 skenario siswa + tinjau soal 3–5 prodi demo | farrelzaki | `[ ]` | | `src/lib/`, `Data/` | | R-02 |
@@ -107,6 +107,7 @@ Sebelum menyunting file bersama (bagian 1), tambahkan baris di sini, commit, dan
 
 | File | Dikunci oleh | Sejak | Alasan |
 | --- | --- | --- | --- |
+| `package.json`, lockfile, `.env.example`, `src/types/`, `docs/ARSITEKTUR.md` | farrelzaki | 2026-10-15 | T-05: tambah supabase-js, tipe & kontrak API |
 
 Agen **tidak boleh** menyunting file bersama yang sedang dikunci orang lain.
 
