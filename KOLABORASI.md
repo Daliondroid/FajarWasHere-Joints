@@ -107,6 +107,7 @@ Sebelum menyunting file bersama (bagian 1), tambahkan baris di sini, commit, dan
 
 | File | Dikunci oleh | Sejak | Alasan |
 | --- | --- | --- | --- |
+| `src/middleware.ts`, `src/types/`, `docs/ARSITEKTUR.md` | farrelzaki | 2026-10-15 | T-13 lanjutan: lindungi /cocokin, smart routing ke /cocokin |
 
 Agen **tidak boleh** menyunting file bersama yang sedang dikunci orang lain.
 
