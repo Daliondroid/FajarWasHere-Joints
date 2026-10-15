@@ -101,6 +101,7 @@ Aturan untuk agen:
 | T-17 | Revisi PRD 2.2: scroll progress navbar, modal login & CTA sudah login, banyak preferensi + preferensi aktif, desktop, mapel pilihan TKA, hapus riwayat alumni | farrelzaki | `[x]` | `main` | `docs/PRD.md` | 2026-10-15 | Langsung ke main tanpa PR atas izin farrelzaki. Desain: Figma page "HIFI v3 — PRD 2.2" |
 | T-18 | DB + API banyak preferensi per akun (nama, jalur tunggal, status aktif) + pemilih preferensi aktif | farrelzaki | `[x]` | `main` (PR #8) | `supabase/migrations/`, `src/app/api/preferensi/`, `src/lib/`, `docs/ARSITEKTUR.md` | 2026-10-16 | F-18, F-19, BR-16, BR-17. Perubahan besar: skema `preferensi` kini satu baris per akun Scope + TKA 2 mapel pilihan (BR-18), hapus alumni tidak daftar ulang (K-04), data TO per preferensi SNBT, hapus refleksi & durasi simulasi (K-06, K-08, R-06), atas perintah farrelzaki |
 | T-19 | API rekomendasi 3 kartu (Dream Goal, Safety Net serumpun, Alternatif) + data popup DETAIL dari preferensi aktif | farrelzaki | `[~]` | `fitur/farrelzaki-T-19` | `src/app/api/rekomendasi/`, `src/lib/` | 2026-10-16 | F-08, K-07, K-10, BR-01. Ditambah atas perintah farrelzaki |
+| T-20 | UI 8-bit Mobile v3 (Tahap A–C): fondasi, beranda v3, modal login, wizard preferensi multi-preferensi & RIASEC | daliondroid | `[~]` | `fitur/daliondroid-T-20` | `src/app/`, `src/components/`, `src/styles/`, `public/` | 2026-10-16 | Sesuai Figma HIFI v3 M01–M12, M10b, M20 |
 
 Rincian langkah task (rencana, checklist) ditulis di `TASK.md` pribadi, bukan di sini.
 
@@ -208,6 +209,7 @@ Format: `- YYYY-MM-DD · T-xx · apa yang dikerjakan · hasil/verifikasi · cata
 - 2026-10-15 · T-02 · scaffolding Next.js 15, Tailwind, Vitest, token visual · test, lint, build lulus · branch fitur/daliondroid-T-02 digabung farrelzaki ke main
 - 2026-10-15 · T-06 · UI landing page, navbar 8-bit, CTA, wizard preferensi langkah 1-3 modular · 100% persis Figma · branch fitur/daliondroid-T-07
 - 2026-10-15 · T-07, T-08, T-15 · implementasi dashboard rekomendasi (/cocokin), chat & drawer (/chat), katalog (/katalog), mini challenge 60s (/test-drive/[id]), dropdown menu overlay di Navbar · 100% persis Figma, 84/84 test passed, lint 0 error, build 16 routes sukses · branch fitur/daliondroid-T-07 di-push ke remote, siap di-merge
+- 2026-10-16 · T-20 · mulai pengerjaan UI Mobile v3 (Tahap A–C): fondasi, beranda v3, modal login, wizard preferensi RIASEC & SNBP/SNBT · branch fitur/daliondroid-T-20 · koordinasi desain HIFI v3 PRD 2.2
 
 ### Log farrelzaki
 
