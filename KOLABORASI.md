@@ -93,7 +93,7 @@ Aturan untuk agen:
 | T-11 | Pitch deck 10 slide + video demo 2 menit | daliondroid | `[ ]` | | di luar repo | | Materi lomba; data dan hasil QA dari farrelzaki |
 | T-03 | Skema DB (migrasi) + skrip impor dataset `Data/` ke Supabase | farrelzaki | `[x]` | `main` (PR #1) | `supabase/`, `scripts/` | 2026-10-15 | TBD-05. Skema + data sudah dimuat ke Supabase `cocokin` |
 | T-04 | Modul skoring murni + test (provinsi, keketatan, eligibilitas, peluang, kecocokan) | farrelzaki | `[x]` | `main` (PR #2) | `src/lib/` | 2026-10-15 | BR-01–BR-11. Modul di `src/lib/skoring/`, asumsi di `parameter_estimasi.json` |
-| T-13 | Login Google (NextAuth), sesi 30 hari, smart routing, hapus akun | farrelzaki | `[ ]` | | `src/app/api/auth/`, `src/lib/` | | F-02, F-16; setelah T-02 |
+| T-13 | Login Google (NextAuth), sesi 30 hari, smart routing, hapus akun + API simpan preferensi | farrelzaki | `[~]` | `fitur/farrelzaki-T-13` | `src/app/api/auth/`, `src/app/api/akun/`, `src/app/api/preferensi/`, `src/lib/`, `src/middleware.ts` | 2026-10-15 | F-02, F-16. Scope + `/api/preferensi` dan middleware, atas perintah farrelzaki |
 | T-05 | API `/api/school`, `/api/prodi`, `/api/peluang`, `/api/kecocokan` + kontrak di ARSITEKTUR | farrelzaki | `[x]` | `main` (PR #3) | `src/app/api/`, `src/lib/` | 2026-10-15 | Kontrak (ARSITEKTUR bagian 4, `src/types/api.ts`) **menunggu tinjauan daliondroid** sebelum dibekukan |
 | T-14 | API `/api/test-drive` (soal berlapis, reveal, refleksi) | farrelzaki | `[ ]` | | `src/app/api/`, `src/lib/` | | F-11 |
 | T-09 | Chatbot Gemini 2.5 Flash + function calling, API `/api/chat` | farrelzaki | `[ ]` | | `src/app/api/`, `src/lib/` | | F-09 |
@@ -107,6 +107,7 @@ Sebelum menyunting file bersama (bagian 1), tambahkan baris di sini, commit, dan
 
 | File | Dikunci oleh | Sejak | Alasan |
 | --- | --- | --- | --- |
+| `package.json`, lockfile, `src/middleware.ts`, `supabase/migrations/`, `src/types/`, `docs/ARSITEKTUR.md` | farrelzaki | 2026-10-15 | T-13: next-auth, middleware halaman wajib login, migrasi preferensi, kontrak akun/preferensi |
 
 Agen **tidak boleh** menyunting file bersama yang sedang dikunci orang lain.
 
