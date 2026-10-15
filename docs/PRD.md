@@ -94,6 +94,7 @@ Prioritas disepakati 2026-10-15: halaman inti dan hapus akun = Wajib; yang opsio
 | F-17 | Input suara di chatbot | 10 | Nanti | — |
 | F-18 | Halaman Preferensi (kelola banyak preferensi) | P | Wajib | Pintu masuk menu **Preferensi** (navbar dan drawer), menggantikan "Edit Preferensi". Berisi kartu preferensi tersimpan + kotak bergaris putus-putus "+ Tambah preferensi" (keadaan kosong: hanya kotak ini). Warna kartu mengikuti jalur: **kuning = SNBP, biru = SNBT**. Kartu menampilkan nama, jalur, status aktif, kode Holland, rekomendasi teratas, dan waktu diperbarui. Aksi: jadikan aktif, edit (membuka wizard yang sudah terisi), ganti nama, hapus (dengan konfirmasi). Tambah: isi nama + pilih jalur → Hal. 3 → bahan sesuai jalur |
 | F-19 | Pemilih preferensi aktif | 8, 10–12 | Wajib | Kontrol "Preferensi: <nama>" di Hal. 8, chatbot/drawer, dan katalog Test Drive. Mengganti preferensi aktif (BR-16) lalu memuat ulang hasil; tautan "Kelola" ke Hal. P |
+| F-20 | Halaman Syarat & Ketentuan | S&K | Wajib | Satu halaman berisi catatan kecil yang dipindah dari layar lain: angka & estimasi (rentang, ±5 poin persentil, data terbatas, skala TO), aturan SNBP/SNBT (BR-01, BR-11, BR-18, mapel pendukung, BR-15), kecocokan & preferensi (BR-10, BR-16, BR-17), data sekolah & alumni, privasi (BR-14), AI & sumber data (BR-12, atribusi O*NET). Dibuka dari tautan "Syarat & ketentuan" di footer dan kalimat persetujuan di modal login (K-09) |
 
 ### Alur pengguna utama
 
@@ -157,7 +158,7 @@ Seluruh dataset ada di `Data/` (detail: PRD sumber bagian 6.1, `Data/README.md`,
 ## 8. Kebutuhan Non-Fungsional
 
 - **Bahasa:** antarmuka Bahasa Indonesia.
-- **Transparansi:** setiap angka punya sumber dan label (resmi/estimasi/sintetis); tombol "Kenapa?" di peluang.
+- **Transparansi:** setiap angka punya sumber dan label (resmi/estimasi/sintetis); tombol "Kenapa?" di peluang. Penjelasan rinci (aturan, rumus, sumber, privasi) cukup di Halaman Syarat & Ketentuan (F-20) agar layar tetap ringkas.
 - **Privasi & keamanan:** BR-14; sesi HttpOnly cookie; tidak ada rahasia (API key Gemini, OAuth) di repo.
 - **Keandalan AI:** output Gemini divalidasi skema; selalu ada fallback non-AI.
 - **Performa:** katalog 5.150 prodi memakai virtualized list dan pencarian instan.
@@ -204,6 +205,7 @@ Seluruh dataset ada di `Data/` (detail: PRD sumber bagian 6.1, `Data/README.md`,
 | K-06 | Test Drive tanpa timer: siswa menjawab tanpa batas waktu; "60 detik" tidak dipakai lagi sebagai klaim — farrelzaki 2026-10-15. |
 | K-07 | Halaman rekomendasi memakai kartu ringkas; detail peluang, alasan "Kenapa?", dan PDDikti dipindah ke popup `DETAIL` — farrelzaki 2026-10-15. |
 | K-08 | Test Drive tanpa rating/refleksi; hasil tampil sebagai versi koreksi layar soal dengan insight di bawah — farrelzaki 2026-10-15. |
+| K-09 | Keterangan kecil (catatan aturan, sumber, privasi, penjelasan rumus) tidak ditampilkan di layar kerja; dikumpulkan di Halaman Syarat & Ketentuan (F-20). Yang tetap tampil: label data (resmi/estimasi/sintetis), status penting (eligible, pelanggaran provinsi), alasan "Kenapa?", dan disclaimer footer — farrelzaki 2026-10-15. |
 
 ## 11. Riwayat Revisi
 
@@ -222,3 +224,4 @@ Seluruh dataset ada di `Data/` (detail: PRD sumber bagian 6.1, `Data/README.md`,
 | 9 | Test Drive tanpa timer | Ringkasan, solusi, F-11, F-19, K-06 | Mini challenge (soal & hasil), beranda, D10 |
 | 10 | Rekomendasi ringkas seperti v2 + popup detail | F-08, K-07 | Rekomendasi + popup detail |
 | 11 | Hasil Test Drive = versi koreksi layar soal, insight di bawah, tanpa rating/refleksi | F-11, F-19, BR-10, BR-16, alur, K-08, R-06 | Mini challenge hasil (M19), D10 |
+| 12 | Keterangan kecil dihapus dari layar dan dipindah ke Halaman Syarat & Ketentuan; tautan di footer & modal login | F-20, NFR Transparansi, K-09 | Semua layar wizard & hasil, footer, modal login, M20 & D11 (S&K) |
