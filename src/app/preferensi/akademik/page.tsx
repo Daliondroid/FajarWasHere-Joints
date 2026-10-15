@@ -42,8 +42,8 @@ export default function PreferensiAkademikPage() {
       }
     }
     setSnbpError('');
-    // Mock direct ke halaman rekomendasi
-    router.push('/rekomendasi');
+    // Direct ke halaman rekomendasi /cocokin
+    router.push('/cocokin');
   };
 
   const handleBack = () => {
