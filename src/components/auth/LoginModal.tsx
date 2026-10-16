@@ -23,27 +23,29 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       role="dialog"
       aria-modal="true"
       aria-labelledby="login-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-[2px]"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-[2px] animate-fade-in"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-[360px] bg-white border-3 border-black shadow-[4px_4px_0px_#000000] overflow-hidden"
+        className="w-full max-w-[360px] bg-white border-2 border-black shadow-[4px_4px_0px_#000000] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Retro Window Header */}
-        <div className="bg-[#4285F4] px-3 py-2 border-b-2 border-black flex items-center justify-between text-white select-none">
+        {/* Retro Window Header persis Figma M03 (node 172:502) */}
+        <div className="bg-[#277EFD] px-3.5 py-2 border-b-2 border-black flex items-center justify-between text-white select-none">
           <span
             id="login-modal-title"
-            className="font-['Press_Start_2P',monospace] text-[10px] tracking-tight text-white font-bold"
+            className="font-['Press_Start_2P',monospace] text-[10px] tracking-wider text-white font-bold"
           >
             MASUK KE COCOKIN!
           </span>
           <div className="flex items-center gap-1.5">
+            <span className="w-2 h-2 bg-white border border-black inline-block" />
+            <span className="w-2 h-2 bg-white border border-black inline-block" />
             <button
               type="button"
               onClick={onClose}
               aria-label="Tutup jendela login"
-              className="w-5 h-5 bg-white border border-black flex items-center justify-center text-black hover:bg-red-500 hover:text-white transition-colors text-xs font-bold"
+              className="w-4 h-4 bg-white border border-black flex items-center justify-center text-black hover:bg-[#F1402E] hover:text-white transition-colors text-[10px] font-bold cursor-pointer leading-none"
             >
               ×
             </button>
@@ -51,31 +53,32 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         </div>
 
         {/* Modal Body */}
-        <div className="p-5 flex flex-col items-center text-center">
-          {/* Logo Toga */}
-          <div className="w-16 h-16 bg-[#EEF5FF] border-2 border-black flex items-center justify-center mb-4 shadow-[2px_2px_0px_#000000]">
+        <div className="p-6 flex flex-col items-center text-center">
+          {/* Logo Toga Pixel langsung tanpa frame kotak */}
+          <div className="mb-3">
             <Image
               src="/assets/logo-cap.png"
               alt="Cocokin Logo"
-              width={48}
-              height={48}
-              className="w-12 h-12 object-contain image-pixelated"
+              width={64}
+              height={64}
+              priority
+              className="w-16 h-16 object-contain image-pixelated"
             />
           </div>
 
-          <h3 className="font-['Press_Start_2P',monospace] text-sm text-black mb-2">
+          <h3 className="font-['Press_Start_2P',monospace] text-sm text-[#151D21] mb-2 leading-snug">
             Masuk dulu, yuk!
           </h3>
 
-          <p className="text-xs text-gray-700 leading-relaxed mb-6 font-['Outfit',sans-serif]">
+          <p className="text-xs text-[#3A444B] leading-relaxed mb-6 font-['Outfit',sans-serif] max-w-[280px]">
             Preferensi dan hasil rekomendasimu tersimpan di akun, jadi tetap aman walau cache browser terhapus.
           </p>
 
-          {/* Tombol Google */}
+          {/* Tombol Google Neobrutalis */}
           <button
             type="button"
             onClick={handleGoogleLogin}
-            className="w-full py-3 px-4 bg-white border-2 border-black shadow-[3px_3px_0px_#000000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[1px_1px_0px_#000000] flex items-center justify-center gap-3 transition-all hover:bg-gray-50 mb-5 cursor-pointer"
+            className="w-full py-3 px-4 bg-white border-2 border-black shadow-[3px_3px_0px_#000000] active:translate-x-[1px] active:translate-y-[1px] flex items-center justify-center gap-3 transition-all hover:bg-gray-50 mb-4 cursor-pointer"
           >
             <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
               <path
@@ -95,22 +98,22 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
               />
             </svg>
-            <span className="font-['Outfit',sans-serif] font-bold text-sm text-black">
+            <span className="font-['Outfit',sans-serif] font-bold text-sm text-[#151D21]">
               Masuk dengan Google
             </span>
           </button>
 
-          {/* Privacy Note */}
-          <div className="flex items-center justify-center gap-1.5 text-[11px] text-gray-600 font-['Outfit',sans-serif]">
-            <Icon name="lock" className="w-3.5 h-3.5 shrink-0 text-gray-500" />
+          {/* Privacy Note persis Box Figma */}
+          <div className="w-full bg-[#F6F5F2] border border-[#D9D5CB] p-3 flex items-center justify-center gap-2 text-[11px] text-[#3A444B] font-['Outfit',sans-serif]">
+            <Icon name="lock" className="w-3.5 h-3.5 shrink-0 text-[#6B7680]" />
             <span>
               Dengan masuk, kamu menyetujui{' '}
               <Link
                 href="/syarat-ketentuan"
                 onClick={onClose}
-                className="text-[#4285F4] underline hover:text-[#277EFD]"
+                className="text-[#277EFD] underline font-bold hover:opacity-80"
               >
-                Syarat & Ketentuan
+                Syarat &amp; Ketentuan
               </Link>
               .
             </span>
