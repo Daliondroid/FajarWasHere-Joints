@@ -68,6 +68,11 @@
     "pembulatan_rentang": 5,
     "label": { "sedang_min": 35, "tinggi_min": 65 }
   },
+  "rekomendasi": {
+    "status": "asumsi (tuning QA Q-5, disetujui farrelzaki 2026-10-16)",
+    "selisih_kecocokan_safety_net": [5, 10],
+    "catatan": "Safety Net dicari di antara prodi serumpun yang kecocokannya paling banyak N poin di bawah Dream Goal; jendela dilebarkan bertahap, lalu tanpa batas bila tetap kosong"
+  },
   "kecocokan": {
     "status": "PRD 6.2-E (BR-10)",
     "bobot_profil": 0.8,

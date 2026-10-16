@@ -70,5 +70,5 @@ Perubahan ada di `scripts/tinjau_soal_demo.sql` (idempoten). Sudah diterapkan ke
 | Q-2 | Soal otomatis PDDikti: pengecoh kadang terpotong, generik ("mengembangkan diri…"), atau masih satu bidang sehingga ambigu | Diperbaiki untuk prodi demo; prodi lain tetap berlabel `otomatis_perlu_review` |
 | Q-3 | UI T-20 (daliondroid): tombol hapus akun memanggil `DELETE /api/akun` tanpa badan `{"konfirmasi":"HAPUS"}` → akun tidak terhapus, UI tetap redirect | Dilaporkan di log KOLABORASI (2026-10-16) |
 | Q-4 | UI `/cocokin` (daliondroid): catatan "minat 40%, gaya belajar 25%, peluang 35%" tidak sesuai BR-10 | Dilaporkan di log KOLABORASI (2026-10-16) |
-| Q-5 | Safety Net memprioritaskan peluang sehingga bisa memilih prodi serumpun dengan kecocokan lebih rendah (mis. 86,9 vs 95,6) | Usulan tuning: batas minimal kecocokan |
+| Q-5 | Safety Net memprioritaskan peluang sehingga bisa memilih prodi serumpun dengan kecocokan lebih rendah (mis. 86,9 vs 95,6) | Diperbaiki (T-21): kandidat dibatasi ≤ 5 poin di bawah Dream Goal (lalu 10, lalu tanpa batas + catatan). Siswa S1 kini mendapat Biologi UIN Ar-Raniry (95,6) |
 | Q-6 | Chatbot: pemeriksaan BR-12 hanya untuk angka; tautan/teks faktual dari pengetahuan model tidak diperiksa | Dicatat; risiko kecil untuk demo |
