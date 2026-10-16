@@ -6,7 +6,8 @@ import { RetroWindow } from '@/components/ui/RetroWindow';
 import { Isian, Pilihan } from '@/components/ui/Isian';
 import Tag from '@/components/ui/Tag';
 import Tombol from '@/components/ui/Tombol';
-import { BarisNilai, Chip, JudulWizard, Opsi, Stepper, ZonaUnggah } from '@/components/preferensi/BagianWizard';
+import { BarisNilai, Chip, JudulWizard, Opsi, Stepper } from '@/components/preferensi/BagianWizard';
+import UnggahRapor from '@/components/preferensi/UnggahRapor';
 import { cekEligibilitas } from '@/lib/skoring/eligibilitas';
 import { MAPEL_PILIHAN_TKA } from '@/lib/skoring/peluang_snbp';
 import { OPSI_MAPEL_FAVORIT } from '@/lib/skoring/parameter';
@@ -99,7 +100,7 @@ function LembarMapelTka({ awal, onBatal, onSimpan }: { awal: string[]; onBatal: 
   );
 }
 
-/** Langkah 2 SNBP layar 1 (M10 `174:1038`): sekolah, rapor & peringkat, TKA, prestasi. */
+/** Langkah 2 SNBP layar 1 (M10 `174:1038`): sekolah, rapor & peringkat (unggah rapor F-13 di atas isian manual), TKA, prestasi. */
 export function FormSnbpSekolah({ a, ubah, sekolah, setSekolah }: { a: AkademikSnbp; ubah: (a: AkademikSnbp) => void; sekolah: SekolahDetail | null; setSekolah: (s: SekolahDetail | null) => void }) {
   const [cari, setCari] = useState(a.npsn ?? '');
   const [hasilCari, setHasilCari] = useState<SekolahDetail[]>([]);
@@ -219,6 +220,7 @@ export function FormSnbpSekolah({ a, ubah, sekolah, setSekolah }: { a: AkademikS
       </RetroWindow>
 
       <RetroWindow title="2 · Rapor & peringkat" variant="blue" contentClassName="flex flex-col gap-3.5 px-4 pt-4 pb-[18px]">
+        <UnggahRapor a={a} ubah={ubah} />
         <BarisNilai label="Rata-rata rapor smt 1–5" nilai={a.rapor_rata} onUbah={(v) => ubah({ ...a, rapor_rata: v })} />
         {sekolah && !sekolah.ada_data_pdss && (
           <BarisNilai
@@ -289,7 +291,6 @@ export function FormSnbpSekolah({ a, ubah, sekolah, setSekolah }: { a: AkademikS
             </div>
           )}
         </div>
-        <ZonaUnggah judul="Unggah foto/PDF rapor (opsional)" />
       </RetroWindow>
 
       <RetroWindow title="3 · Nilai TKA (wajib)" variant="red" contentClassName="flex flex-col gap-3.5 px-4 pt-4 pb-[18px]">

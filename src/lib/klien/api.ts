@@ -11,11 +11,13 @@ export class GalatPermintaan extends Error {
   }
 }
 
+/** `body` FormData dikirim apa adanya (multipart, mis. unggah rapor); selain itu dikirim sebagai JSON. */
 export async function panggilApi<T>(url: string, init?: { method?: string; body?: unknown }): Promise<T> {
+  const form = typeof FormData !== 'undefined' && init?.body instanceof FormData;
   const res = await fetch(url, {
     method: init?.method ?? 'GET',
-    headers: init?.body !== undefined ? { 'Content-Type': 'application/json' } : undefined,
-    body: init?.body !== undefined ? JSON.stringify(init.body) : undefined,
+    headers: init?.body !== undefined && !form ? { 'Content-Type': 'application/json' } : undefined,
+    body: form ? (init!.body as FormData) : init?.body !== undefined ? JSON.stringify(init.body) : undefined,
     cache: 'no-store',
   });
   const isi = await res.json().catch(() => null);
