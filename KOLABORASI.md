@@ -113,8 +113,6 @@ Sebelum menyunting file bersama (bagian 1), tambahkan baris di sini, commit, dan
 
 | File | Dikunci oleh | Sejak | Alasan |
 | --- | --- | --- | --- |
-| `README.md` | farrelzaki | 2026-10-16 | T-17: ganti istilah "Test Drive" jadi "Simulasi" (K-11) |
-| `docs/ARSITEKTUR.md` | farrelzaki | 2026-10-16 | T-17: ganti istilah "Test Drive" jadi "Simulasi" di diagram (K-11) |
 
 Agen **tidak boleh** menyunting file bersama yang sedang dikunci orang lain.
 
@@ -240,6 +238,7 @@ Format: `- YYYY-MM-DD · T-xx · apa yang dikerjakan · hasil/verifikasi · cata
 - 2026-10-15 · T-17 · docs/PRD.md: "Test Drive" diganti "Simulasi" (K-11) · diff ditinjau; langsung ke main atas izin farrelzaki · daliondroid: ganti label UI, rute/API boleh tetap
 - 2026-10-16 · T-17 · docs/DESIGN_SYSTEM.md v3 diambil dari Figma HIFI v3 (token warna, text style, bayangan, komponen, ikon, token CSS) atas permintaan farrelzaki; file milik daliondroid · diff ditinjau; langsung ke main · daliondroid: selaraskan globals.css (bingkai 2 px ink, shadow 3/5 px, Plus Jakarta Sans + Pixelify Sans)
 - 2026-10-16 · T-21 · Safety Net dibatasi kecocokan ≤ 5 poin di bawah Dream Goal (lalu 10, lalu tanpa batas + catatan) di /api/rekomendasi; QA Q-5 selesai; kunci ARSITEKTUR dilepas · npm test 162 lulus, tsc & lint bersih, PR #12 merge · daliondroid: tidak ada perubahan kontrak respons
+- 2026-10-16 · T-17 · README.md & docs/ARSITEKTUR.md: "Test Drive 60 detik" diganti "Simulasi" (K-11, K-06); T-22 dialihkan ke farrelzaki · PR #13 merge, kunci README & ARSITEKTUR dilepas · daliondroid: sisa "Test Drive" di UI (katalog, /cocokin, metadata layout) ditangani lewat T-22 setelah T-20 merge
 
 ## 9. Mengubah File Ini
 
