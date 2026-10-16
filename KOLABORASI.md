@@ -233,6 +233,7 @@ Format: `- YYYY-MM-DD · T-xx · apa yang dikerjakan · hasil/verifikasi · cata
 - 2026-10-15 · T-17 · docs/PRD.md: keterangan kecil dipindah ke Halaman Syarat & Ketentuan (F-20, K-09), tautan di footer & modal login · diff ditinjau; langsung ke main atas izin farrelzaki · daliondroid: ikuti Figma HIFI v3 M20/D11 + footer
 - 2026-10-15 · T-17 · docs/PRD.md: hasil rekomendasi jadi 3 kartu (#3 Alternatif, F-08, K-10) · diff ditinjau; langsung ke main atas izin farrelzaki · daliondroid: endpoint rekomendasi kembalikan 3 prodi
 - 2026-10-15 · T-17 · docs/PRD.md: "Test Drive" diganti "Simulasi" (K-11) · diff ditinjau; langsung ke main atas izin farrelzaki · daliondroid: ganti label UI, rute/API boleh tetap
+- 2026-10-16 · T-17 · docs/DESIGN_SYSTEM.md v3 diambil dari Figma HIFI v3 (token warna, text style, bayangan, komponen, ikon, token CSS) atas permintaan farrelzaki; file milik daliondroid · diff ditinjau; langsung ke main · daliondroid: selaraskan globals.css (bingkai 2 px ink, shadow 3/5 px, Plus Jakarta Sans + Pixelify Sans)
 
 ## 9. Mengubah File Ini
 
