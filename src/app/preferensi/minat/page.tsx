@@ -2,7 +2,9 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Navbar from '@/components/Navbar';
+import { TopBar } from '@/components/ui/TopBar';
+import { Icon } from '@/components/ui/Icon';
+import { RetroWindow } from '@/components/ui/RetroWindow';
 import { usePreferensiStorage } from '@/components/preferensi/usePreferensiStorage';
 
 const FIGMA_HOBI_CHIPS = [
@@ -82,30 +84,44 @@ export default function MinatHobiPage() {
     router.push('/preferensi/akademik');
   };
 
+  // Skor 6 dimensi Holland RIASEC (sesuai Figma M09)
+  const riasecScores = [
+    { key: 'R', score: 3.4, color: '#FEBD01', width: 68 },
+    { key: 'I', score: 4.6, color: '#277EFD', width: 92 },
+    { key: 'A', score: 2.0, color: '#D3D6DA', width: 40 },
+    { key: 'S', score: 1.8, color: '#D3D6DA', width: 36 },
+    { key: 'E', score: 2.4, color: '#D3D6DA', width: 48 },
+    { key: 'C', score: 4.1, color: '#22A94F', width: 82 },
+  ];
+
   return (
     <div className="min-h-screen bg-[#FDFBF7] flex justify-center">
-      <div className="w-full max-w-[402px] bg-white border-x-2 border-black flex flex-col min-h-screen">
-        <Navbar backHref="/preferensi/riasec" title={draft.nama || 'Informatika Impian'} />
+      <div className="w-full max-w-[402px] bg-white border-x-2 border-[#151D21] flex flex-col min-h-screen">
+        {/* TopBar persis M09 */}
+        <TopBar
+          title={draft.nama || 'Informatika Impian'}
+          onBack={() => router.push('/preferensi/riasec')}
+        />
 
-        <main className="p-4 flex-1 flex flex-col font-['Outfit',sans-serif] space-y-5">
-          {/* Stepper Header (M09) */}
-          <div className="flex items-center justify-between px-1">
+        <main className="p-6 pb-8 flex-1 flex flex-col font-['Outfit',sans-serif] space-y-5">
+          {/* Stepper Header Persis Figma M09 */}
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-[#FEBD01] border-2 border-[#151D21] flex items-center justify-center font-['Press_Start_2P',monospace] text-[10px] font-bold text-[#151D21] shadow-[1px_1px_0px_#151D21]">
+              <div className="w-6 h-6 bg-[#277EFD] border-2 border-[#151D21] flex items-center justify-center font-['Press_Start_2P',monospace] text-[10px] font-bold text-white shadow-[1px_1px_0px_#151D21]">
                 1
               </div>
-              <span className="font-['Press_Start_2P',monospace] text-[9px] text-[#151D21] font-bold">
+              <span className="font-['Press_Start_2P',monospace] text-[10px] text-[#151D21] font-bold tracking-tight">
                 MINAT
               </span>
             </div>
 
             <div className="flex-1 mx-3 h-0.5 bg-[#151D21]" />
 
-            <div className="flex items-center gap-2 opacity-50">
-              <div className="w-6 h-6 bg-gray-100 border-2 border-[#151D21] flex items-center justify-center font-['Press_Start_2P',monospace] text-[10px] font-bold text-gray-500">
+            <div className="flex items-center gap-2 opacity-60">
+              <div className="w-6 h-6 bg-white border-2 border-[#151D21] flex items-center justify-center font-['Press_Start_2P',monospace] text-[10px] font-bold text-[#6B7680]">
                 2
               </div>
-              <span className="font-['Press_Start_2P',monospace] text-[9px] text-gray-500">
+              <span className="font-['Press_Start_2P',monospace] text-[10px] text-[#6B7680] tracking-tight">
                 BAHAN
               </span>
             </div>
@@ -113,7 +129,7 @@ export default function MinatHobiPage() {
 
           {/* Heading */}
           <div>
-            <span className="font-['Press_Start_2P',monospace] text-[8px] sm:text-[9px] text-[#277EFD] tracking-wider uppercase block mb-1.5">
+            <span className="font-['Pixelify_Sans',sans-serif] text-[12px] font-medium text-[#277EFD] tracking-wider uppercase block mb-1">
               HASIL KUIS MINAT
             </span>
             <h1 className="font-['Press_Start_2P',monospace] text-xs sm:text-sm text-[#151D21] leading-relaxed">
@@ -121,54 +137,52 @@ export default function MinatHobiPage() {
             </h1>
           </div>
 
-          {/* Box Hasil Karakter ICR Persis Figma M09 */}
-          <div className="bg-white border-2 border-[#151D21] shadow-[3px_3px_0px_#151D21] p-4 flex flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <div>
-                <span className="font-['Press_Start_2P',monospace] text-xl sm:text-2xl font-bold text-[#277EFD]">
+          {/* Box Hasil Karakter ICR Retro Hitam Persis Figma M09 (node 174:852) */}
+          <div className="bg-[#151D21] border-2 border-[#151D21] shadow-[5px_5px_0px_#151D21] p-4 flex flex-col gap-4 text-white">
+            {/* Top: Kode ICR + Nama Karakter */}
+            <div className="flex items-start gap-3">
+              <div className="px-2.5 py-1.5 border-2 border-[#FEBD01] bg-transparent">
+                <span className="font-['Press_Start_2P',monospace] text-lg font-bold text-[#FEBD01]">
                   ICR
                 </span>
-                <h3 className="font-bold text-base text-[#151D21] mt-0.5">
+              </div>
+              <div className="flex flex-col">
+                <h2 className="font-['Press_Start_2P',monospace] text-xs sm:text-sm text-white font-bold leading-snug">
                   Pemikir Sistematis
-                </h3>
+                </h2>
+                <p className="font-['Plus_Jakarta_Sans',sans-serif] text-xs text-[#D9D5CB] mt-0.5">
+                  Investigative · Conventional · Realistic
+                </p>
               </div>
             </div>
-            <p className="text-xs text-[#6B7680] leading-relaxed">
-              Investigative · Conventional · Realistic
-            </p>
 
-            {/* Skor 6 Dimensi Holland Bar */}
-            <div className="grid grid-cols-6 gap-1 pt-2 border-t border-gray-200 text-center">
-              <div>
-                <span className="text-[10px] font-bold text-[#151D21] block">R</span>
-                <span className="text-xs text-[#6B7680]">3,4</span>
-              </div>
-              <div>
-                <span className="text-[10px] font-bold text-[#277EFD] block">I</span>
-                <span className="text-xs font-bold text-[#277EFD]">4,6</span>
-              </div>
-              <div>
-                <span className="text-[10px] font-bold text-[#151D21] block">A</span>
-                <span className="text-xs text-[#6B7680]">2,0</span>
-              </div>
-              <div>
-                <span className="text-[10px] font-bold text-[#151D21] block">S</span>
-                <span className="text-xs text-[#6B7680]">1,8</span>
-              </div>
-              <div>
-                <span className="text-[10px] font-bold text-[#151D21] block">E</span>
-                <span className="text-xs text-[#6B7680]">2,4</span>
-              </div>
-              <div>
-                <span className="text-[10px] font-bold text-[#22A94F] block">C</span>
-                <span className="text-xs font-bold text-[#22A94F]">4,1</span>
-              </div>
+            {/* Profil RIASEC (6 Baris Progres Horizontal M09) */}
+            <div className="flex flex-col gap-2 pt-2 border-t border-[#3A444B]">
+              {riasecScores.map((item) => (
+                <div key={item.key} className="flex items-center gap-3">
+                  <span className="font-['Press_Start_2P',monospace] text-[11px] text-white w-4">
+                    {item.key}
+                  </span>
+                  <div className="flex-1 h-2 bg-[#3A444B] rounded-full overflow-hidden">
+                    <div
+                      className="h-full rounded-full"
+                      style={{
+                        width: `${item.width}%`,
+                        backgroundColor: item.color,
+                      }}
+                    />
+                  </div>
+                  <span className="font-['Plus_Jakarta_Sans',sans-serif] text-xs font-semibold text-white w-7 text-right">
+                    {item.score.toFixed(1).replace('.', ',')}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
 
           {/* Hobi Pelengkap (8 Chip Persis Figma M09) */}
           <div>
-            <h2 className="font-bold text-sm text-[#151D21] mb-2.5">
+            <h2 className="font-['Plus_Jakarta_Sans',sans-serif] font-bold text-sm text-[#151D21] mb-2">
               Hobi pelengkap
             </h2>
             <div className="flex flex-wrap gap-2">
@@ -181,7 +195,7 @@ export default function MinatHobiPage() {
                     onClick={() => toggleChip(chip)}
                     className={`px-3 py-1.5 border-2 border-[#151D21] text-xs font-medium transition-all cursor-pointer ${
                       isSelected
-                        ? 'bg-[#FEBD01] text-[#151D21] shadow-[2px_2px_0px_#151D21] font-bold'
+                        ? 'bg-[#277EFD] text-white shadow-[2px_2px_0px_#151D21] font-bold'
                         : 'bg-white text-[#151D21] hover:bg-gray-50'
                     }`}
                   >
@@ -194,11 +208,9 @@ export default function MinatHobiPage() {
 
           {/* Mapel Favorit (3/3 Dipilih) */}
           <div>
-            <div className="flex items-center justify-between mb-2.5">
-              <h2 className="font-bold text-sm text-[#151D21]">
-                Mapel favorit · {selectedMapel.length}/3
-              </h2>
-            </div>
+            <h2 className="font-['Plus_Jakarta_Sans',sans-serif] font-bold text-sm text-[#151D21] mb-2">
+              Mapel favorit · {selectedMapel.length}/3
+            </h2>
             <div className="flex flex-wrap gap-2">
               {FIGMA_MAPEL_OPTIONS.map((mapel) => {
                 const isSelected = selectedMapel.includes(mapel);
@@ -220,38 +232,42 @@ export default function MinatHobiPage() {
             </div>
           </div>
 
-          {/* Cerita Bebas (Opsional) + Saran Chip AI */}
-          <div className="bg-white border-2 border-[#151D21] shadow-[3px_3px_0px_#151D21] p-3.5 flex flex-col gap-2.5">
-            <span className="font-['Press_Start_2P',monospace] text-[8px] text-[#277EFD] tracking-wider uppercase">
-              CERITA BEBAS (OPSIONAL)
-            </span>
+          {/* Cerita Bebas (Opsional) Menggunakan RetroWindow Hitam */}
+          <RetroWindow
+            title="CERITA BEBAS (OPSIONAL)"
+            variant="black"
+            contentClassName="p-3.5 flex flex-col gap-3"
+          >
             <textarea
               rows={3}
               value={story}
               onChange={(e) => setStory(e.target.value)}
               placeholder="Ceritakan minat atau hobimu yang belum tercakup di atas..."
-              className="w-full p-2.5 bg-[#F9F8F6] border border-[#D9D5CB] text-xs text-[#151D21] leading-relaxed focus:outline-none"
+              className="w-full p-2.5 bg-[#F7F5F0] border-2 border-[#151D21] text-xs text-[#151D21] leading-relaxed focus:outline-none"
             />
 
-            {/* Kotak DIBANTU AI */}
-            <div className="bg-[#EEF5FF] border border-[#277EFD] p-2.5 flex flex-col gap-1.5">
-              <div className="flex items-center justify-between">
-                <span className="font-['Press_Start_2P',monospace] text-[8px] text-[#277EFD]">
+            {/* Kotak DIBANTU AI Persis M09 */}
+            <div className="bg-[#EAF2FF] border-2 border-[#277EFD] p-3 flex flex-col gap-2">
+              <div className="flex items-center gap-2">
+                <span className="px-1.5 py-0.5 bg-[#151D21] text-white font-['Press_Start_2P',monospace] text-[7px] font-bold">
                   DIBANTU AI
                 </span>
-                <button
-                  type="button"
-                  onClick={applyAiSuggestion}
-                  className="font-['Press_Start_2P',monospace] text-[7px] bg-white border border-[#151D21] px-2 py-1 shadow-[1px_1px_0px_#151D21] hover:bg-gray-50 active:translate-x-[1px] cursor-pointer"
-                >
-                  TERAPKAN SARAN
-                </button>
+                <span className="font-['Plus_Jakarta_Sans',sans-serif] text-xs text-[#151D21] font-bold">
+                  Saran chip dari ceritamu
+                </span>
               </div>
-              <p className="text-[11px] text-[#151D21]">
-                Saran chip dari ceritamu: <span className="font-semibold text-[#277EFD]">+ Ngoprek Kode & Gadget · + Informatika</span>
+              <p className="font-['Plus_Jakarta_Sans',sans-serif] text-xs text-[#3A444B]">
+                + Ngoprek Kode & Gadget · + Informatika
               </p>
+              <button
+                type="button"
+                onClick={applyAiSuggestion}
+                className="self-start py-1.5 px-2.5 bg-white hover:bg-gray-50 text-[#151D21] border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] active:translate-x-[1px] active:translate-y-[1px] font-['Press_Start_2P',monospace] text-[8px] cursor-pointer"
+              >
+                TERAPKAN SARAN
+              </button>
             </div>
-          </div>
+          </RetroWindow>
 
           {/* Sticky Bottom Action Bar Persis Figma M09 */}
           <div className="mt-auto pt-4 pb-2 border-t border-gray-200 grid grid-cols-2 gap-3 sticky bottom-0 bg-white">
@@ -265,9 +281,10 @@ export default function MinatHobiPage() {
             <button
               type="button"
               onClick={handleNext}
-              className="py-3 bg-[#22A94F] hover:bg-[#1E9646] text-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] active:translate-x-[1px] active:translate-y-[1px] font-['Press_Start_2P',monospace] text-[10px] text-center transition-all cursor-pointer"
+              className="py-3 bg-[#277EFD] hover:bg-[#1E6FD9] text-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] active:translate-x-[1px] active:translate-y-[1px] font-['Press_Start_2P',monospace] text-[10px] text-center transition-all cursor-pointer flex items-center justify-center gap-1.5"
             >
-              LANJUT
+              <span>LANJUT</span>
+              <Icon name="arrow-right" className="w-3.5 h-3.5 text-white" />
             </button>
           </div>
         </main>

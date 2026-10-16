@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { MAPEL_PILIHAN_TKA_OPTIONS } from './riasecData';
+import { Icon } from '@/components/ui/Icon';
 
 interface ModalPilihTkaProps {
   isOpen: boolean;
@@ -9,6 +9,34 @@ interface ModalPilihTkaProps {
   onSave: (mapel: string[]) => void;
   onClose: () => void;
 }
+
+interface CategoryMapel {
+  category: string;
+  items: string[];
+}
+
+const TKA_CATEGORIES: CategoryMapel[] = [
+  {
+    category: 'DISARANKAN UNTUK TEKNOLOGI INFORMASI',
+    items: ['Matematika Tingkat Lanjut'],
+  },
+  {
+    category: 'SAINS',
+    items: ['Fisika', 'Kimia', 'Biologi'],
+  },
+  {
+    category: 'SOSIAL',
+    items: ['Sosiologi', 'Ekonomi', 'Geografi', 'Antropologi'],
+  },
+  {
+    category: 'BAHASA',
+    items: ['Bahasa Indonesia Tingkat Lanjut', 'Bahasa Inggris Tingkat Lanjut'],
+  },
+  {
+    category: 'KHUSUS SMK/MAK',
+    items: ['Konsentrasi Keahlian / Kejuruan'],
+  },
+];
 
 export default function ModalPilihTka({
   isOpen,
@@ -27,7 +55,7 @@ export default function ModalPilihTka({
       if (tempSelected.length < 2) {
         setTempSelected((prev) => [...prev, mapel]);
       } else {
-        alert('Sesuai aturan Kemendikdasmen (BR-18), kamu hanya memilih tepat 2 mata pelajaran pilihan!');
+        alert('Sesuai aturan SNBP, kamu hanya dapat memilih tepat 2 mata pelajaran pilihan!');
       }
     }
   };
@@ -43,84 +71,74 @@ export default function ModalPilihTka({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-[2px]"
+      className="fixed inset-0 z-50 bg-[#151D21]/60 flex items-end justify-center animate-fade-in"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-[360px] bg-white border-3 border-black shadow-[4px_4px_0px_#000000] overflow-hidden"
+        className="w-full max-w-[402px] bg-white border-t-2 border-x-2 border-[#151D21] shadow-[0px_-6px_20px_rgba(0,0,0,0.2)] p-5 pb-7 flex flex-col gap-4 max-h-[85vh] overflow-y-auto animate-slide-up"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Retro Header */}
-        <div className="bg-[#4285F4] px-3 py-2 border-b-2 border-black flex items-center justify-between text-white">
-          <span className="font-['Press_Start_2P',monospace] text-[9px] font-bold">
-            PILIH 2 MAPEL PILIHAN TKA
+        {/* Handle Bar */}
+        <div className="w-12 h-1.5 bg-[#D3D6DA] rounded-full mx-auto shrink-0" />
+
+        {/* Judul + Tag Kuota Terpilih */}
+        <div className="flex items-center justify-between">
+          <h2 className="font-['Press_Start_2P',monospace] text-xs sm:text-sm text-[#151D21]">
+            Mapel pilihan TKA
+          </h2>
+          <span className="px-2 py-0.5 bg-[#151D21] text-white font-['Press_Start_2P',monospace] text-[8px] font-bold">
+            {tempSelected.length}/2 DIPILIH
           </span>
+        </div>
+
+        {/* Kategori Mapel Persis Figma M10b */}
+        <div className="flex flex-col gap-4 my-1 font-['Outfit',sans-serif]">
+          {TKA_CATEGORIES.map((cat) => (
+            <div key={cat.category} className="flex flex-col gap-2">
+              <span className="font-['Pixelify_Sans',sans-serif] text-[11px] font-bold text-[#6B7680] tracking-wider uppercase">
+                {cat.category}
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {cat.items.map((mapel) => {
+                  const isChecked = tempSelected.includes(mapel);
+                  return (
+                    <button
+                      key={mapel}
+                      type="button"
+                      onClick={() => handleToggle(mapel)}
+                      className={`px-3 py-1.5 border-2 border-[#151D21] text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                        isChecked
+                          ? 'bg-[#277EFD] text-white shadow-[2px_2px_0px_#151D21]'
+                          : 'bg-white text-[#151D21] hover:bg-gray-50'
+                      }`}
+                    >
+                      {isChecked && <Icon name="check" className="w-3.5 h-3.5 text-white" />}
+                      <span>{mapel}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Aksi Bawah */}
+        <div className="pt-2 border-t border-gray-200 grid grid-cols-2 gap-3 shrink-0">
           <button
             type="button"
             onClick={onClose}
-            className="w-5 h-5 bg-white border border-black flex items-center justify-center text-black hover:bg-red-500 hover:text-white text-xs font-bold"
+            className="py-3 bg-white hover:bg-gray-50 text-[#151D21] border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] active:translate-x-[1px] active:translate-y-[1px] font-['Press_Start_2P',monospace] text-[10px] text-center transition-all cursor-pointer"
           >
-            ×
+            BATAL
           </button>
-        </div>
-
-        {/* Body */}
-        <div className="p-4 font-['Outfit',sans-serif]">
-          <p className="text-xs text-gray-700 leading-relaxed mb-3">
-            Pilih <strong>2 mata pelajaran pilihan</strong> yang kamu ikuti dalam Tes Kemampuan Akademik (TKA) sesuai Kurikulum Merdeka.
-          </p>
-
-          <div className="space-y-1.5 max-h-64 overflow-y-auto pr-1 mb-4">
-            {MAPEL_PILIHAN_TKA_OPTIONS.map((mapel) => {
-              const isChecked = tempSelected.includes(mapel);
-              return (
-                <button
-                  key={mapel}
-                  type="button"
-                  onClick={() => handleToggle(mapel)}
-                  className={`w-full p-2 border-2 border-black flex items-center justify-between text-xs font-bold transition-all shadow-[1px_1px_0px_#000000] active:translate-x-[1px] active:translate-y-[1px] cursor-pointer ${
-                    isChecked
-                      ? 'bg-[#EEF5FF] text-[#277EFD] ring-1 ring-black'
-                      : 'bg-white text-black hover:bg-gray-50'
-                  }`}
-                >
-                  <span>{mapel}</span>
-                  <div
-                    className={`w-4 h-4 border border-black flex items-center justify-center text-[10px] ${
-                      isChecked ? 'bg-[#277EFD] text-white' : 'bg-white'
-                    }`}
-                  >
-                    {isChecked ? '✓' : ''}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="flex items-center justify-between text-xs font-bold mb-3">
-            <span>Terpilih: {tempSelected.length} dari 2</span>
-            {tempSelected.length === 2 && (
-              <span className="text-[#34A853]">✓ Lengkap</span>
-            )}
-          </div>
-
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 py-2 border-2 border-black text-xs font-bold hover:bg-gray-100"
-            >
-              Batal
-            </button>
-            <button
-              type="button"
-              onClick={handleApply}
-              disabled={tempSelected.length !== 2}
-              className="flex-1 py-2 bg-[#4285F4] hover:bg-[#277EFD] text-white border-2 border-black font-['Press_Start_2P',monospace] text-[8px] disabled:opacity-50 cursor-pointer"
-            >
-              SIMPAN MAPEL
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={handleApply}
+            disabled={tempSelected.length !== 2}
+            className="py-3 bg-[#277EFD] hover:bg-[#1E6FD9] text-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] active:translate-x-[1px] active:translate-y-[1px] font-['Press_Start_2P',monospace] text-[10px] text-center transition-all cursor-pointer disabled:opacity-50"
+          >
+            SIMPAN PILIHAN
+          </button>
         </div>
       </div>
     </div>
