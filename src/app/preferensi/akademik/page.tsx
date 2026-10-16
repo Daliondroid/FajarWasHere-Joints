@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import type { ResponsSekolah, SekolahDetail } from '@/types';
 import { TopBar } from '@/components/ui/TopBar';
 import BingkaiMobile from '@/components/ui/BingkaiMobile';
-import { BarAksi } from '@/components/preferensi/BagianWizard';
+import { BarAksi, PenandaPreferensi } from '@/components/preferensi/BagianWizard';
 import { AKADEMIK_KOSONG, FormSnbpAlumni, FormSnbpSekolah } from '@/components/preferensi/FormSnbp';
 import { FormSnbt } from '@/components/preferensi/FormSnbt';
 import { panggilApi, pesanGalat } from '@/lib/klien/api';
@@ -65,33 +65,38 @@ export default function BahanJalurPage() {
     } else void simpan();
   };
 
+  const penanda = <PenandaPreferensi jalur={draf.isi.jalur} nama={draf.isi.nama} />;
+  const bawah = (
+    <>
+      {snbp && layar === 1 && pilihanTka === 1 && <p className="t-body-s font-bold text-red">Pilih tepat 2 mapel pilihan TKA.</p>}
+      {kurang.length > 0 && (
+        <div className="flex flex-col gap-1 border-[1.5px] border-yellow bg-yellow-50 p-3" role="status">
+          <p className="t-body-s font-bold text-ink">Lengkapi dulu sebelum dicocokkan:</p>
+          <ul className="list-disc pl-5 t-body-s text-ink-2">
+            {kurang.map((k) => (
+              <li key={k}>{k}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {galat && <p className="t-body-s font-bold text-red">{galat}</p>}
+    </>
+  );
+
   return (
     <BingkaiMobile>
       <TopBar title={draf.isi.nama} onBack={kembali} />
-      <main className="flex flex-col gap-5 px-6 pt-6 pb-8">
-        {snbp ? (
-          layar === 1 ? (
-            <FormSnbpSekolah a={a} ubah={ubahAkademik} sekolah={sekolah} setSekolah={setSekolah} />
-          ) : (
-            <FormSnbpAlumni a={a} ubah={ubahAkademik} sekolah={sekolah} />
-          )
+      {snbp ? (
+        layar === 1 ? (
+          <FormSnbpSekolah a={a} ubah={ubahAkademik} sekolah={sekolah} setSekolah={setSekolah} penanda={penanda} bawah={bawah} />
         ) : (
-          <FormSnbt riwayat={draf.isi.riwayat_to} ubah={(r) => ubahIsi((isi) => ({ ...isi, riwayat_to: r }))} />
-        )}
-        {snbp && layar === 1 && pilihanTka === 1 && <p className="t-body-s font-bold text-red">Pilih tepat 2 mapel pilihan TKA.</p>}
-        {kurang.length > 0 && (
-          <div className="flex flex-col gap-1 border-[1.5px] border-yellow bg-yellow-50 p-3" role="status">
-            <p className="t-body-s font-bold text-ink">Lengkapi dulu sebelum dicocokkan:</p>
-            <ul className="list-disc pl-5 t-body-s text-ink-2">
-              {kurang.map((k) => (
-                <li key={k}>{k}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-        {galat && <p className="t-body-s font-bold text-red">{galat}</p>}
-      </main>
+          <FormSnbpAlumni a={a} ubah={ubahAkademik} sekolah={sekolah} penanda={penanda} bawah={bawah} />
+        )
+      ) : (
+        <FormSnbt riwayat={draf.isi.riwayat_to} ubah={(r) => ubahIsi((isi) => ({ ...isi, riwayat_to: r }))} penanda={penanda} bawah={bawah} />
+      )}
       <BarAksi
+        lebarKiri={340}
         onKembali={kembali}
         onLanjut={lanjut}
         label={terakhir ? 'Cocokkan!' : 'Lanjut'}

@@ -192,3 +192,7 @@ body {
   font-family: var(--font-pixel), 'Press Start 2P', monospace;
   padding: 2px 8px;
 }
+
+/* Wizard desktop: bar aksi sejajar kolom kanan (kolom kiri 380/340 + jarak 56) */
+@utility pl-aksi-380 { padding-left: calc(max(48px, (100% - 1200px) / 2) + 436px); }
+@utility pl-aksi-340 { padding-left: calc(max(48px, (100% - 1200px) / 2) + 396px); }

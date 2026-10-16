@@ -38,14 +38,85 @@ export function Stepper({ langkah }: { langkah: 1 | 2 }) {
   );
 }
 
-/** Judul halaman wizard: label biru, Display/M, keterangan Body/M muted. */
+/** Judul halaman wizard: label biru, Display/M, keterangan Body/M muted. Desktop (D05 `186:2519`): 24/35 dan 17/25. */
 export function JudulWizard({ label, judul, keterangan }: { label: string; judul: string; keterangan?: string }) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 lg:gap-2.5">
       <p className="t-label-s text-blue">{label}</p>
-      <h1 className="t-display-m text-ink">{judul}</h1>
-      {keterangan && <p className="t-body-m text-muted">{keterangan}</p>}
+      <h1 className="t-display-m text-ink lg:text-[24px] lg:leading-[35px]">{judul}</h1>
+      {keterangan && <p className="t-body-m text-muted lg:text-[17px] lg:leading-[25px]">{keterangan}</p>}
     </div>
+  );
+}
+
+/** Penanda preferensi yang sedang dibuat/diubah (Figma `168:181`), hanya tampil di desktop (kolom kiri wizard). */
+export function PenandaPreferensi({ jalur, nama }: { jalur: 'snbp' | 'snbt'; nama: string }) {
+  return (
+    <div className="hidden w-full items-center gap-2.5 border-2 border-ink bg-paper py-2 pr-3 pl-2.5 shadow-pixel-sm lg:flex">
+      <span className={`size-4 shrink-0 border-[1.5px] border-ink ${jalur === 'snbp' ? 'bg-yellow' : 'bg-blue'}`} />
+      <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+        <span className="whitespace-nowrap t-label-s text-muted">PREFERENSI AKTIF · {jalur.toUpperCase()}</span>
+        <span className="truncate t-label-m text-ink">{nama}</span>
+      </span>
+    </div>
+  );
+}
+
+/**
+ * Tata letak halaman wizard. Mobile: satu kolom. Desktop (D05–D06c): kolom kiri 380/340 px (penanda, stepper, judul)
+ * dan kolom kanan konten, jarak 56 px, tanpa footer.
+ */
+export function LayoutWizard({
+  kiri,
+  children,
+  lebarKiri = 380,
+  gap = 'gap-4',
+  jarak = 4,
+}: {
+  kiri: ReactNode;
+  children: ReactNode;
+  lebarKiri?: 380 | 340;
+  gap?: 'gap-4' | 'gap-5';
+  /** Jarak konten ke bar aksi di desktop: 4 = 16 px, 6 = 24 px. */
+  jarak?: 4 | 6;
+}) {
+  return (
+    <main
+      className={`flex flex-col px-6 pt-6 pb-8 lg:flex-1 lg:flex-row lg:items-start lg:gap-14 lg:px-konten lg:pt-12 ${
+        jarak === 4 ? 'lg:pb-4' : 'lg:pb-6'
+      } ${gap}`}
+    >
+      <div
+        className={`contents lg:flex lg:shrink-0 lg:flex-col lg:gap-6 ${lebarKiri === 380 ? 'lg:w-[380px]' : 'lg:w-[340px]'}`}
+      >
+        {kiri}
+      </div>
+      <div className="contents lg:flex lg:min-w-0 lg:flex-1 lg:flex-col lg:gap-4">{children}</div>
+    </main>
+  );
+}
+
+/** Grid dua kolom isi wizard desktop (Kolom A | Kolom B); di mobile semua jendela mengalir dalam satu kolom. */
+export function GridKolom({ a, b }: { a: ReactNode; b: ReactNode }) {
+  return (
+    <div className="contents lg:grid lg:grid-cols-2 lg:items-start lg:gap-6">
+      <div className="contents lg:flex lg:min-w-0 lg:flex-col lg:gap-6">{a}</div>
+      <div className="contents lg:flex lg:min-w-0 lg:flex-col lg:gap-6">{b}</div>
+    </div>
+  );
+}
+
+/** Checklist kemajuan bahan jalur (Figma D06 `188:2539`), hanya tampil di desktop. */
+export function ChecklistBahan({ item }: { item: { label: string; selesai: boolean }[] }) {
+  return (
+    <ul className="hidden w-full flex-col gap-2.5 border-[1.5px] border-ink bg-canvas p-4 lg:flex" aria-label="Kemajuan bahan">
+      {item.map((i) => (
+        <li key={i.label} className="flex items-center gap-2.5">
+          <img src={i.selesai ? '/figma/icon-check-bahan-14.svg' : '/figma/icon-clock.svg'} alt="" width={14} height={14} />
+          <span className={`t-body-m ${i.selesai ? 'text-ink' : 'text-muted'}`}>{i.label}</span>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -56,19 +127,25 @@ export function BarAksi({
   label = 'Lanjut',
   nonaktif = false,
   sibuk = false,
+  lebarKiri = 380,
 }: {
   onKembali: () => void;
   onLanjut: () => void;
   label?: string;
   nonaktif?: boolean;
   sibuk?: boolean;
+  lebarKiri?: 380 | 340;
 }) {
   return (
-    <div className="sticky bottom-0 z-30 flex items-center gap-3 border-t-2 border-ink bg-paper px-6 pt-4 pb-6">
+    <div
+      className={`sticky bottom-0 z-30 flex items-center gap-3 border-t-2 border-ink bg-paper px-6 pt-4 pb-6 lg:static lg:justify-end lg:border-t-0 lg:pt-0 lg:pr-konten lg:pb-16 ${
+        lebarKiri === 380 ? 'lg:pl-aksi-380' : 'lg:pl-aksi-340'
+      }`}
+    >
       <Tombol jenis="secondary" onClick={onKembali} disabled={sibuk}>
         Kembali
       </Tombol>
-      <Tombol ikon onClick={onLanjut} disabled={nonaktif || sibuk} className="min-w-0 flex-1">
+      <Tombol ikon onClick={onLanjut} disabled={nonaktif || sibuk} className="min-w-0 flex-1 lg:flex-none">
         {sibuk ? 'Menyimpan…' : label}
       </Tombol>
     </div>

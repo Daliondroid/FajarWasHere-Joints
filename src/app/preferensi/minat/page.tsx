@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import type { ResponsKecocokan } from '@/types';
 import { TopBar } from '@/components/ui/TopBar';
 import BingkaiMobile from '@/components/ui/BingkaiMobile';
-import { BarAksi, Chip, JudulWizard, Stepper } from '@/components/preferensi/BagianWizard';
+import { BarAksi, Chip, JudulWizard, LayoutWizard, PenandaPreferensi, Stepper } from '@/components/preferensi/BagianWizard';
 import { OPSI_HOBI, OPSI_MAPEL_FAVORIT } from '@/lib/skoring/parameter';
 import { panggilApi, pesanGalat } from '@/lib/klien/api';
 import { useDraf } from '@/lib/klien/draf_preferensi';
@@ -44,13 +44,24 @@ export default function HasilMinatPage() {
   return (
     <BingkaiMobile>
       <TopBar title={draf.isi.nama} onBack={() => router.push('/preferensi/riasec')} />
-      <main className="flex flex-col gap-5 px-6 pt-6 pb-8">
-        <Stepper langkah={1} />
-        <JudulWizard label="HASIL KUIS MINAT" judul={hasil ? `Kelas karaktermu: ${kode}` : 'Menghitung kelas karaktermu…'} />
+      <LayoutWizard
+        gap="gap-5"
+        kiri={
+          <>
+            <PenandaPreferensi jalur={draf.isi.jalur} nama={draf.isi.nama} />
+            <Stepper langkah={1} />
+            <JudulWizard label="HASIL KUIS MINAT" judul={hasil ? `Kelas karaktermu: ${kode}` : 'Menghitung kelas karaktermu…'} />
+          </>
+        }
+      >
         {galat && <p className="t-body-s font-bold text-red">{galat}</p>}
 
+        <div className="contents lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-6 lg:gap-y-6">
         {hasil && (
-          <section className="flex flex-col gap-3.5 border-2 border-ink bg-ink p-4 shadow-pixel-md" aria-label="Profil RIASEC">
+          <section
+            className="flex flex-col gap-3.5 border-2 border-ink bg-ink p-4 shadow-pixel-md lg:col-start-1 lg:row-start-1"
+            aria-label="Profil RIASEC"
+          >
             <div className="flex items-center gap-3.5">
               <span className="border-2 border-yellow px-3 py-2.5 t-display-l text-yellow">{kode}</span>
               <div className="flex min-w-0 flex-1 flex-col gap-1">
@@ -84,7 +95,7 @@ export default function HasilMinatPage() {
           </section>
         )}
 
-        <section className="flex flex-col gap-2.5">
+        <section className="flex flex-col gap-2.5 lg:col-start-2 lg:row-span-2 lg:row-start-1">
           <h2 className="t-label-m text-ink">Hobi pelengkap</h2>
           <div className="flex flex-wrap gap-2">
             {OPSI_HOBI.map((h) => (
@@ -98,7 +109,7 @@ export default function HasilMinatPage() {
           </div>
         </section>
 
-        <section className="flex flex-col gap-2.5">
+        <section className="flex flex-col gap-2.5 lg:col-start-1 lg:row-start-2">
           <h2 className="t-label-m text-ink">
             Mapel favorit · {mapel_favorit.length}/{MAKS_MAPEL}
           </h2>
@@ -115,7 +126,8 @@ export default function HasilMinatPage() {
             ))}
           </div>
         </section>
-      </main>
+        </div>
+      </LayoutWizard>
       <BarAksi onKembali={() => router.push('/preferensi/riasec')} onLanjut={() => router.push('/preferensi/akademik')} nonaktif={!hasil} />
     </BingkaiMobile>
   );

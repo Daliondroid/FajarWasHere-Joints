@@ -1,12 +1,21 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import type { AkademikSnbp, ProdiRingkas, ReputasiAlumni, ResponsDaftarProdi, ResponsSekolah, SekolahDetail } from '@/types';
 import { RetroWindow } from '@/components/ui/RetroWindow';
 import { Isian, Pilihan } from '@/components/ui/Isian';
 import Tag from '@/components/ui/Tag';
 import Tombol from '@/components/ui/Tombol';
-import { BarisNilai, Chip, JudulWizard, Opsi, Stepper } from '@/components/preferensi/BagianWizard';
+import {
+  BarisNilai,
+  ChecklistBahan,
+  Chip,
+  GridKolom,
+  JudulWizard,
+  LayoutWizard,
+  Opsi,
+  Stepper,
+} from '@/components/preferensi/BagianWizard';
 import UnggahRapor from '@/components/preferensi/UnggahRapor';
 import { cekEligibilitas } from '@/lib/skoring/eligibilitas';
 import { MAPEL_PILIHAN_TKA } from '@/lib/skoring/peluang_snbp';
@@ -59,6 +68,18 @@ const REPUTASI: { id: ReputasiAlumni; label: string }[] = [
   { id: 'sekolah_baru', label: 'Sekolah baru / belum ada jejak' },
 ];
 
+/** Item checklist kemajuan bahan (Figma D06 `188:2539`). */
+export function itemChecklist(a: AkademikSnbp) {
+  const wajib = TKA_WAJIB.every((m) => a.nilai_tka[m.kunci] != null);
+  return [
+    { label: 'Sekolah (NPSN)', selesai: !!a.npsn },
+    { label: 'Rapor & peringkat', selesai: a.rapor_rata != null && a.peringkat_paralel != null },
+    { label: 'Nilai TKA', selesai: wajib && (a.nilai_tka.pilihan?.length ?? 0) === 2 },
+    { label: 'Prestasi', selesai: a.prestasi.length > 0 },
+    { label: 'Wilayah & alumni', selesai: a.reputasi_alumni != null },
+  ];
+}
+
 const TINGKAT = ['Sekolah', 'Kabupaten/Kota', 'Provinsi', 'Nasional', 'Internasional'];
 
 /** Sheet pilih 2 mapel pilihan TKA (Figma M10b). */
@@ -101,7 +122,21 @@ function LembarMapelTka({ awal, onBatal, onSimpan }: { awal: string[]; onBatal: 
 }
 
 /** Langkah 2 SNBP layar 1 (M10 `174:1038`): sekolah, rapor & peringkat (unggah rapor F-13 di atas isian manual), TKA, prestasi. */
-export function FormSnbpSekolah({ a, ubah, sekolah, setSekolah }: { a: AkademikSnbp; ubah: (a: AkademikSnbp) => void; sekolah: SekolahDetail | null; setSekolah: (s: SekolahDetail | null) => void }) {
+export function FormSnbpSekolah({
+  a,
+  ubah,
+  sekolah,
+  setSekolah,
+  penanda,
+  bawah,
+}: {
+  a: AkademikSnbp;
+  ubah: (a: AkademikSnbp) => void;
+  sekolah: SekolahDetail | null;
+  setSekolah: (s: SekolahDetail | null) => void;
+  penanda: ReactNode;
+  bawah?: ReactNode;
+}) {
   const [cari, setCari] = useState(a.npsn ?? '');
   const [hasilCari, setHasilCari] = useState<SekolahDetail[]>([]);
   const [galat, setGalat] = useState<string | null>(null);
@@ -156,15 +191,26 @@ export function FormSnbpSekolah({ a, ubah, sekolah, setSekolah }: { a: AkademikS
   const mapelPendukung = Object.entries(a.nilai_mapel_pendukung);
 
   return (
-    <>
-      <Stepper langkah={2} />
-      <JudulWizard
-        label="LANGKAH 2 · BAHAN SNBP"
-        judul="Sekolah, rapor & TKA"
-        keterangan="Dipakai untuk cek kuota eligible sekolah dan menghitung peluang SNBP."
-      />
-
-      <RetroWindow title="1 · Sekolah" variant="yellow" contentClassName="flex flex-col gap-3.5 px-4 pt-4 pb-[18px]">
+    <LayoutWizard
+      lebarKiri={340}
+      jarak={6}
+      kiri={
+        <>
+          {penanda}
+          <Stepper langkah={2} />
+          <JudulWizard
+            label="LANGKAH 2 · BAHAN SNBP"
+            judul="Sekolah, rapor & TKA"
+            keterangan="Dipakai untuk cek kuota eligible sekolah dan menghitung peluang SNBP."
+          />
+          <ChecklistBahan item={itemChecklist(a)} />
+        </>
+      }
+    >
+      <GridKolom
+        a={
+          <>
+        <RetroWindow className="order-1" title="1 · Sekolah" variant="yellow" contentClassName="flex flex-col gap-3.5 px-4 pt-4 pb-[18px] lg:p-[18px]">
         <Isian label="NPSN atau nama sekolah" placeholder="Contoh: 20403161" value={cari} onChange={(e) => setCari(e.target.value)} />
         {galat && <p className="t-body-s font-bold text-red">{galat}</p>}
         {hasilCari.length > 0 && (
@@ -218,8 +264,69 @@ export function FormSnbpSekolah({ a, ubah, sekolah, setSekolah }: { a: AkademikS
           </Pilihan>
         )}
       </RetroWindow>
-
-      <RetroWindow title="2 · Rapor & peringkat" variant="blue" contentClassName="flex flex-col gap-3.5 px-4 pt-4 pb-[18px]">
+        <RetroWindow className="order-3" title="3 · Nilai TKA (wajib)" variant="red" contentClassName="flex flex-col gap-3.5 px-4 pt-4 pb-[18px] lg:p-[18px]">
+        <p className="t-label-s text-muted">MAPEL WAJIB</p>
+        {TKA_WAJIB.map((m) => (
+          <BarisNilai
+            key={m.kunci}
+            label={m.label}
+            nilai={a.nilai_tka[m.kunci] ?? null}
+            onUbah={(v) => {
+              const tka = { ...a.nilai_tka };
+              if (v === null) delete tka[m.kunci];
+              else tka[m.kunci] = v;
+              ubah({ ...a, nilai_tka: tka });
+            }}
+          />
+        ))}
+        <img src="/figma/garis-putus-318.svg" alt="" className="h-0.5 w-full" />
+        <div className="flex items-center gap-2">
+          <p className="t-label-s text-muted">MAPEL PILIHAN</p>
+          <span className="flex-1" />
+          <Tag warna="ink">PILIH 2</Tag>
+        </div>
+        {pilihan.length === 0 ? (
+          <Tombol jenis="secondary" ukuran="M" onClick={() => setLembarTka(true)}>
+            Pilih 2 mapel
+          </Tombol>
+        ) : (
+          pilihan.map((p, i) => (
+            <div key={p.mapel} className="flex flex-col gap-1.5">
+              <p className="t-body-s font-bold text-ink-2">Mapel pilihan {i + 1}</p>
+              <div className="flex items-center gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => setLembarTka(true)}
+                  className="flex h-12 w-[200px] items-center gap-2 border-2 border-ink bg-paper px-3 text-left cursor-pointer"
+                >
+                  <span className="min-w-0 flex-1 truncate t-body-m text-ink">{p.mapel}</span>
+                  <img src="/figma/icon-chevron-down-14.svg" alt="" width={14} height={14} />
+                </button>
+                <input
+                  type="number"
+                  aria-label={`Nilai ${p.mapel}`}
+                  min={0}
+                  max={100}
+                  step={0.01}
+                  value={p.nilai}
+                  onChange={(e) =>
+                    ubah({
+                      ...a,
+                      nilai_tka: { ...a.nilai_tka, pilihan: pilihan.map((q, k) => (k === i ? { ...q, nilai: Number(e.target.value) } : q)) },
+                    })
+                  }
+                  className="h-12 w-20 border-2 border-ink bg-paper px-3 text-right t-body-m font-semibold text-ink outline-none"
+                />
+              </div>
+            </div>
+          ))
+        )}
+      </RetroWindow>
+          </>
+        }
+        b={
+          <>
+        <RetroWindow className="order-2" title="2 · Rapor & peringkat" variant="blue" contentClassName="flex flex-col gap-3.5 px-4 pt-4 pb-[18px] lg:p-[18px]">
         <UnggahRapor a={a} ubah={ubah} />
         <BarisNilai label="Rata-rata rapor smt 1–5" nilai={a.rapor_rata} onUbah={(v) => ubah({ ...a, rapor_rata: v })} />
         {sekolah && !sekolah.ada_data_pdss && (
@@ -292,67 +399,7 @@ export function FormSnbpSekolah({ a, ubah, sekolah, setSekolah }: { a: AkademikS
           )}
         </div>
       </RetroWindow>
-
-      <RetroWindow title="3 · Nilai TKA (wajib)" variant="red" contentClassName="flex flex-col gap-3.5 px-4 pt-4 pb-[18px]">
-        <p className="t-label-s text-muted">MAPEL WAJIB</p>
-        {TKA_WAJIB.map((m) => (
-          <BarisNilai
-            key={m.kunci}
-            label={m.label}
-            nilai={a.nilai_tka[m.kunci] ?? null}
-            onUbah={(v) => {
-              const tka = { ...a.nilai_tka };
-              if (v === null) delete tka[m.kunci];
-              else tka[m.kunci] = v;
-              ubah({ ...a, nilai_tka: tka });
-            }}
-          />
-        ))}
-        <img src="/figma/garis-putus-318.svg" alt="" className="h-0.5 w-full" />
-        <div className="flex items-center gap-2">
-          <p className="t-label-s text-muted">MAPEL PILIHAN</p>
-          <span className="flex-1" />
-          <Tag warna="ink">PILIH 2</Tag>
-        </div>
-        {pilihan.length === 0 ? (
-          <Tombol jenis="secondary" ukuran="M" onClick={() => setLembarTka(true)}>
-            Pilih 2 mapel
-          </Tombol>
-        ) : (
-          pilihan.map((p, i) => (
-            <div key={p.mapel} className="flex flex-col gap-1.5">
-              <p className="t-body-s font-bold text-ink-2">Mapel pilihan {i + 1}</p>
-              <div className="flex items-center gap-2.5">
-                <button
-                  type="button"
-                  onClick={() => setLembarTka(true)}
-                  className="flex h-12 w-[200px] items-center gap-2 border-2 border-ink bg-paper px-3 text-left cursor-pointer"
-                >
-                  <span className="min-w-0 flex-1 truncate t-body-m text-ink">{p.mapel}</span>
-                  <img src="/figma/icon-chevron-down-14.svg" alt="" width={14} height={14} />
-                </button>
-                <input
-                  type="number"
-                  aria-label={`Nilai ${p.mapel}`}
-                  min={0}
-                  max={100}
-                  step={0.01}
-                  value={p.nilai}
-                  onChange={(e) =>
-                    ubah({
-                      ...a,
-                      nilai_tka: { ...a.nilai_tka, pilihan: pilihan.map((q, k) => (k === i ? { ...q, nilai: Number(e.target.value) } : q)) },
-                    })
-                  }
-                  className="h-12 w-20 border-2 border-ink bg-paper px-3 text-right t-body-m font-semibold text-ink outline-none"
-                />
-              </div>
-            </div>
-          ))
-        )}
-      </RetroWindow>
-
-      <RetroWindow title="4 · Prestasi" variant="green" contentClassName="flex flex-col gap-3.5 px-4 pt-4 pb-[18px]">
+        <RetroWindow className="order-4" title="4 · Prestasi" variant="green" contentClassName="flex flex-col gap-3.5 px-4 pt-4 pb-[18px] lg:p-[18px]">
         {a.prestasi.map((p, i) => (
           <div key={`${p.bidang}-${i}`} className="flex flex-col gap-2 border-[1.5px] border-ink bg-canvas p-3">
             <div className="flex items-start gap-2">
@@ -409,6 +456,11 @@ export function FormSnbpSekolah({ a, ubah, sekolah, setSekolah }: { a: AkademikS
           )
         )}
       </RetroWindow>
+          </>
+        }
+      />
+      {bawah}
+
 
       {lembarTka && (
         <LembarMapelTka
@@ -421,12 +473,24 @@ export function FormSnbpSekolah({ a, ubah, sekolah, setSekolah }: { a: AkademikS
           }}
         />
       )}
-    </>
+    </LayoutWizard>
   );
 }
 
 /** Langkah 2 SNBP layar 2 (M11 `175:1016`): wilayah sekolah (otomatis dari NPSN) dan reputasi alumni. */
-export function FormSnbpAlumni({ a, ubah, sekolah }: { a: AkademikSnbp; ubah: (a: AkademikSnbp) => void; sekolah: SekolahDetail | null }) {
+export function FormSnbpAlumni({
+  a,
+  ubah,
+  sekolah,
+  penanda,
+  bawah,
+}: {
+  a: AkademikSnbp;
+  ubah: (a: AkademikSnbp) => void;
+  sekolah: SekolahDetail | null;
+  penanda: ReactNode;
+  bawah?: ReactNode;
+}) {
   const [namaPtn, setNamaPtn] = useState<Record<number, string>>({});
   const [cari, setCari] = useState('');
   const [hasil, setHasil] = useState<{ id_ptn: number; nama_ptn: string }[]>([]);
@@ -462,14 +526,30 @@ export function FormSnbpAlumni({ a, ubah, sekolah }: { a: AkademikSnbp; ubah: (a
   }, [cari]);
 
   return (
-    <>
-      <Stepper langkah={2} />
-      <JudulWizard label="LANGKAH 2 · WILAYAH & ALUMNI" judul="Wilayah & reputasi alumni" />
-      <RetroWindow title="Wilayah sekolah" variant="blue" contentClassName="flex flex-col gap-3.5 px-4 pt-4 pb-[18px]">
+    <LayoutWizard
+      lebarKiri={340}
+      jarak={6}
+      kiri={
+        <>
+          {penanda}
+          <Stepper langkah={2} />
+          <JudulWizard label="LANGKAH 2 · WILAYAH & ALUMNI" judul="Wilayah & reputasi alumni" />
+          <ChecklistBahan item={itemChecklist(a)} />
+        </>
+      }
+    >
+      <GridKolom
+        a={
+          <>
+            <RetroWindow title="Wilayah sekolah" variant="blue" contentClassName="flex flex-col gap-3.5 px-4 pt-4 pb-[18px]">
         <Isian label="Provinsi" value={sekolah?.provinsi ?? ''} placeholder="Terisi otomatis dari NPSN" readOnly />
         <Isian label="Kabupaten/Kota" value={sekolah?.kab_kota ?? ''} placeholder="Terisi otomatis dari NPSN" readOnly />
       </RetroWindow>
-      <RetroWindow title="Reputasi alumni · self-report" variant="yellow" contentClassName="flex flex-col gap-3.5 px-4 pt-4 pb-[18px]">
+          </>
+        }
+        b={
+          <>
+            <RetroWindow title="Reputasi alumni · self-report" variant="yellow" contentClassName="flex flex-col gap-3.5 px-4 pt-4 pb-[18px]">
         <div className="flex flex-col gap-1" role="radiogroup" aria-label="Reputasi alumni">
           {REPUTASI.map((r) => (
             <Opsi key={r.id} label={r.label} pilih={a.reputasi_alumni === r.id} onClick={() => ubah({ ...a, reputasi_alumni: r.id })} />
@@ -521,6 +601,10 @@ export function FormSnbpAlumni({ a, ubah, sekolah }: { a: AkademikSnbp; ubah: (a
           </div>
         </div>
       </RetroWindow>
-    </>
+          </>
+        }
+      />
+      {bawah}
+    </LayoutWizard>
   );
 }
