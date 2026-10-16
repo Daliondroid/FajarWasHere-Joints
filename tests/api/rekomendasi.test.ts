@@ -106,6 +106,31 @@ describe('pemilihan 3 kartu (K-10)', () => {
     expect(h.catatan.join(' ')).not.toContain('Lengkapi');
   });
 
+  it('Q-5: Safety Net tidak memilih prodi serumpun yang kecocokannya jauh di bawah Dream Goal', () => {
+    const LEMAH = { r: 1, i: 3, a: 2, s: 6, e: 5, c: 2 }; // serumpun, tapi profil jauh dari siswa
+    const daftar = [
+      prodi({ id_prodi: 1, kode_bps_ptn: '35', rasio_terima_snbp_2025: 0.05 }),
+      prodi({ id_prodi: 2, kode_bps_ptn: '35', rasio_terima_snbp_2025: 0.2 }), // vektor sama dengan Dream: cocok tinggi
+      prodi({ id_prodi: 3, kode_bps_ptn: '35', rasio_terima_snbp_2025: 0.9, ...LEMAH }), // peluang tertinggi, cocok rendah
+      prodi({ id_prodi: 4, kode_bps_ptn: '35', rumpun_id: 'hukum', rasio_terima_snbp_2025: 0.3, ...HUKUM }),
+    ];
+    const h = pilihKartu({ pref: pref(), semuaProdi: daftar, sekolah: SEKOLAH });
+    expect(h.kartu[1].b.id_prodi).toBe(2);
+    const skor = (id: number) => h.kecocokanPerId.get(id)!.skor;
+    expect(skor(1) - skor(2)).toBeLessThanOrEqual(5);
+  });
+
+  it('Q-5: hanya ada prodi serumpun yang jauh -> tetap dipakai, dengan catatan', () => {
+    const daftar = [
+      prodi({ id_prodi: 1, kode_bps_ptn: '35', rasio_terima_snbp_2025: 0.05 }),
+      prodi({ id_prodi: 3, kode_bps_ptn: '35', rasio_terima_snbp_2025: 0.9, r: 1, i: 3, a: 2, s: 6, e: 5, c: 2 }),
+      prodi({ id_prodi: 4, kode_bps_ptn: '35', rumpun_id: 'hukum', ...HUKUM }),
+    ];
+    const h = pilihKartu({ pref: pref(), semuaProdi: daftar, sekolah: SEKOLAH });
+    expect(h.kartu[1].b.id_prodi).toBe(3);
+    expect(h.catatan.join(' ')).toContain('jauh di bawah Dream Goal');
+  });
+
   it('tanpa kandidat -> tanpa kartu', () => {
     expect(pilihKartu({ pref: pref(), semuaProdi: [], sekolah: null }).kartu).toEqual([]);
   });

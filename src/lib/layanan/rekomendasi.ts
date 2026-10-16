@@ -5,6 +5,7 @@
 import { galatTidakLogin } from '@/lib/api/galat';
 import {
   ATURAN,
+  PARAM,
   buatPetaProvinsi,
   rasioSnbt,
   skorPrestasi,
@@ -111,6 +112,14 @@ export function pilihKartu(k: KonteksRekomendasi) {
     if (lokal.length) serumpun = lokal;
     else catatan.push('Tidak ada prodi serumpun di provinsi sekolah; pasangan Dream Goal + Safety Net melanggar aturan satu provinsi SNBP.');
   }
+  // Q-5: Safety Net tetap harus cocok; batasi selisih kecocokan dari Dream Goal (jendela dilebarkan bertahap).
+  const skorDream = kecocokanPerId.get(dream.id_prodi)!.skor;
+  const dekat = PARAM.rekomendasi.selisih_kecocokan_safety_net
+    .map((selisih) => serumpun.filter((b) => skorDream - kecocokanPerId.get(b.id_prodi)!.skor <= selisih))
+    .find((daftar) => daftar.length);
+  if (dekat) serumpun = dekat;
+  else if (serumpun.length) catatan.push('Safety Net serumpun yang tersedia kecocokannya jauh di bawah Dream Goal.');
+
   const urutAman = (a: BarisProdi, b: BarisProdi) => {
     const pa = nilaiPeluang(peluang(a));
     const pb = nilaiPeluang(peluang(b));
