@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import type { ResponsJawabTestDrive, ResponsTestDrive, SoalTestDrive } from '@/types';
 import { TopBar } from '@/components/ui/TopBar';
@@ -9,7 +10,9 @@ import { RetroWindow } from '@/components/ui/RetroWindow';
 import IkonFigma from '@/components/ui/IkonFigma';
 import Tag from '@/components/ui/Tag';
 import Tombol from '@/components/ui/Tombol';
+import PemilihPreferensi from '@/components/ui/PemilihPreferensi';
 import { panggilApi, pesanGalat } from '@/lib/klien/api';
+import { useDaftarPreferensi } from '@/lib/klien/preferensi';
 
 type Huruf = 'A' | 'B' | 'C' | 'D';
 const HURUF: Huruf[] = ['A', 'B', 'C', 'D'];
@@ -17,9 +20,9 @@ const kapital = (s: string) => s.toLowerCase().replace(/\b\w/g, (h) => h.toUpper
 const persen = (r: number) => `${(r * 100).toFixed(1).replace('.', ',')}%`;
 
 /** Banner pembuka/hasil (Figma "Intro banner"): garis putus-putus merah + aksen kiri. */
-function Banner({ children }: { children: React.ReactNode }) {
+function Banner({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className="flex border-2 border-dashed border-red bg-paper">
+    <div className={`flex border-2 border-dashed border-red bg-paper ${className}`}>
       <span className="w-2 shrink-0 bg-red" />
       <p className="flex-1 p-4 t-label-l text-ink">{children}</p>
     </div>
@@ -68,7 +71,7 @@ function OpsiJawaban({
   );
 }
 
-/** M18 soal (`206:3221`) + M19 hasil koreksi (`207:3189`). GET /api/test-drive, POST /api/test-drive/jawab. Tanpa timer (K-06). */
+/** M18 soal (`206:3221`) + M19 hasil koreksi (`207:3189`); desktop D10 (`190:3108`) / D10b (`272:4558`) dua kolom. GET /api/test-drive, POST /api/test-drive/jawab. Tanpa timer (K-06). */
 export default function SimulasiPage() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
@@ -79,6 +82,7 @@ export default function SimulasiPage() {
   const [pilihan, setPilihan] = useState<Huruf | null>(null);
   const [hasil, setHasil] = useState<ResponsJawabTestDrive | null>(null);
   const [sibuk, setSibuk] = useState(false);
+  const { daftar, aktifkan } = useDaftarPreferensi(true);
 
   useEffect(() => {
     if (!Number.isInteger(idProdi) || idProdi <= 0) {
@@ -121,22 +125,35 @@ export default function SimulasiPage() {
   return (
     <BingkaiMobile>
       <TopBar title={namaProdi} onBack={() => router.back()} />
-      <main className="flex flex-col gap-6 px-6 pt-6 pb-8">
+      <main className="flex flex-col gap-6 px-6 pt-6 pb-8 lg:px-konten lg:pt-10 lg:pb-16">
+        {/* Kepala desktop (Figma D10 `190:3151`–`190:3152`) */}
+        <Link href="/katalog" className="hidden t-body-s font-bold text-blue lg:block">
+          ← Kembali ke katalog
+        </Link>
+        {data && (
+          <div className="hidden items-end gap-6 lg:flex">
+            <div className="flex min-w-0 flex-1 flex-col gap-1">
+              <h1 className="font-display text-[28px] leading-[41px] text-ink">{namaProdi}</h1>
+              <p className="text-[17px] leading-[25px] font-body text-muted">
+                {kampus} · {data.prodi.jenjang} · rumpun {data.prodi.rumpun}
+              </p>
+            </div>
+            {daftar && daftar.length > 0 && <PemilihPreferensi daftar={daftar} onPilih={aktifkan} className="w-[232px] shrink-0" />}
+          </div>
+        )}
         {galat && <p className="t-body-s font-bold text-red">{galat}</p>}
         {!data && !galat && <p className="t-body-m text-muted">Menyiapkan soal…</p>}
         {data && data.soal.length === 0 && <Banner>Belum ada soal simulasi untuk prodi ini.</Banner>}
 
         {soal && (
-          <>
-            <Banner>
-              {hasil
-                ? hasil.benar
-                  ? `Mantap, jawabanmu ${pilihan} tepat!`
-                  : `Jawabanmu ${pilihan} belum tepat. Jawaban yang benar ditandai hijau.`
-                : `Yuk, rasakan cara berpikir anak ${namaProdi}!`}
-            </Banner>
-
-            <RetroWindow title={`Skenario · soal ${nomor + 1}/${data!.soal.length}`} variant="yellow" contentClassName="flex flex-col gap-4 px-4 pt-4 pb-5">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-10">
+          <div className="contents lg:flex lg:min-w-0 lg:flex-1 lg:flex-col">
+            <RetroWindow
+              className="order-2"
+              title={`Skenario · soal ${nomor + 1}/${data!.soal.length}`}
+              variant="yellow"
+              contentClassName="flex flex-col gap-4 px-4 pt-4 pb-5"
+            >
               {soal.status?.startsWith('otomatis') && (
                 <Tag warna="ink" className="self-start">
                   DIBANTU AI · PERLU TINJAUAN
@@ -150,9 +167,18 @@ export default function SimulasiPage() {
               </div>
               {soal.sumber && <p className="t-body-s text-muted">Sumber: {soal.sumber}</p>}
             </RetroWindow>
+          </div>
+          <div className="contents lg:flex lg:w-[460px] lg:shrink-0 lg:flex-col lg:gap-6">
+            <Banner className="order-1">
+              {hasil
+                ? hasil.benar
+                  ? `Mantap, jawabanmu ${pilihan} tepat!`
+                  : `Jawabanmu ${pilihan} belum tepat. Jawaban yang benar ditandai hijau.`
+                : `Yuk, rasakan cara berpikir anak ${namaProdi}!`}
+            </Banner>
 
             {hasil && (
-              <RetroWindow title="Pembahasan" variant="green" contentClassName="flex flex-col gap-4 px-4 pt-4 pb-5">
+              <RetroWindow className="order-3" title="Pembahasan" variant="green" contentClassName="flex flex-col gap-4 px-4 pt-4 pb-5">
                 <p className="flex items-center gap-2 t-label-l text-green">
                   <img src="/figma/icon-check-hijau-18.svg" alt="" width={18} height={18} />
                   Jawaban benar: {hasil.kunci}
@@ -162,7 +188,7 @@ export default function SimulasiPage() {
             )}
 
             {hasil && terakhir && rc && (
-              <RetroWindow title={`Kenyataan kuliah · ${namaProdi}`} variant="blue" contentClassName="flex flex-col gap-4 px-4 pt-4 pb-5">
+              <RetroWindow className="order-4" title={`Kenyataan kuliah · ${namaProdi}`} variant="blue" contentClassName="flex flex-col gap-4 px-4 pt-4 pb-5">
                 {rc.kompetensi_lulusan.length > 0 && (
                   <p className="flex items-start gap-3 t-body-m text-ink-2">
                     <img src="/figma/icon-panah-biru.svg" alt="" width={14} height={14} className="mt-1 shrink-0" />
@@ -193,7 +219,7 @@ export default function SimulasiPage() {
               </RetroWindow>
             )}
 
-            <div className="flex flex-col gap-3">
+            <div className="order-5 flex flex-col gap-3">
               {!hasil ? (
                 <Tombol ikon penuh disabled={!pilihan || sibuk} onClick={kunci}>
                   {sibuk ? 'Memeriksa…' : 'Kunci jawaban'}
@@ -213,7 +239,8 @@ export default function SimulasiPage() {
                 </Tombol>
               )}
             </div>
-          </>
+          </div>
+          </div>
         )}
       </main>
     </BingkaiMobile>
