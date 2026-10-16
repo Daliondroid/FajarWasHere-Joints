@@ -32,26 +32,42 @@ export default function ScrollProgress({ className = '' }: ScrollProgressProps) 
     };
   }, []);
 
+  // Segment ranges: 0-25%, 25-50%, 50-75%, 75-100%
+  const getSegmentWidth = (index: number) => {
+    const start = index * 25;
+    const end = (index + 1) * 25;
+    if (progress <= start) return 0;
+    if (progress >= end) return 100;
+    return ((progress - start) / 25) * 100;
+  };
+
+  const segmentColors = ['#277EFD', '#F1402E', '#FEBD01', '#22A94F'];
+
   return (
     <div
-      className={`w-full h-1 bg-[#D3D6DA] relative overflow-hidden ${className}`}
+      className={`w-full max-w-[402px] mx-auto px-4 py-1.5 bg-white grid grid-cols-4 gap-2 ${className}`}
       role="progressbar"
       aria-valuenow={Math.round(progress)}
       aria-valuemin={0}
       aria-valuemax={100}
     >
-      {/* 4-Color Strip mengisi proporsional sejauh progress scroll */}
-      <div
-        className="h-full absolute left-0 top-0 transition-[width] duration-75 ease-out overflow-hidden"
-        style={{ width: `${progress}%` }}
-      >
-        <div className="w-screen max-w-[402px] h-full grid grid-cols-4">
-          <div className="bg-[#277EFD]"></div>
-          <div className="bg-[#F1402E]"></div>
-          <div className="bg-[#FEBD01]"></div>
-          <div className="bg-[#22A94F]"></div>
-        </div>
-      </div>
+      {segmentColors.map((color, index) => {
+        const segWidth = getSegmentWidth(index);
+        return (
+          <div
+            key={index}
+            className="h-1 bg-[#D3D6DA] rounded-full overflow-hidden relative"
+          >
+            <div
+              className="h-full rounded-full transition-[width] duration-75 ease-out"
+              style={{
+                width: `${segWidth}%`,
+                backgroundColor: color,
+              }}
+            />
+          </div>
+        );
+      })}
     </div>
   );
 }
