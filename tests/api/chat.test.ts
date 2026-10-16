@@ -150,6 +150,7 @@ describe('POST /api/chat', () => {
     const r = await layananKirimPesan(id, { pesan: 'Halo' }, deps);
     expect(r.balasan).toBe('Selesai.');
     expect(masukan.at(-1)!.alat).toEqual([]);
+    expect(JSON.stringify(masukan.at(-1)!.konten.at(-1))).toContain('Batas pemanggilan alat');
   });
 
   it('tanpa kunci Gemini atau Gemini galat -> jawaban cadangan dari rekomendasi', async () => {

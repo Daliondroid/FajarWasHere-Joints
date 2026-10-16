@@ -144,6 +144,7 @@ export const repoSupabase: Repo = {
     const syarat = [
       ...k.teks_prodi.map(aman).filter(Boolean).map((t) => `nama.ilike."*${t}*"`),
       ...(k.id_ptn_teks.length ? [`id_ptn.in.(${k.id_ptn_teks.join(',')})`] : []),
+      ...(k.rumpun_teks.length ? [`rumpun_id.in.(${k.rumpun_teks.map(aman).join(',')})`] : []),
     ];
     if (syarat.length) kueri = kueri.or(syarat.join(','));
     const hasil = await kueri.order('nama').order('id_prodi').range(offset, offset + limit - 1);

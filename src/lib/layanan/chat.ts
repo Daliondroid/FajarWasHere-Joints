@@ -30,6 +30,9 @@ Aturan wajib:
 7. Jangan meminta data pribadi (nama lengkap, alamat, nomor telepon). Jangan membahas topik di luar pendidikan tinggi.
 8. Boleh menyarankan fitur aplikasi: Simulasi (mencoba soal prodi), Preferensi (mengisi/mengganti data), Katalog prodi.`;
 
+const JAWAB_SEKARANG =
+  'Batas pemanggilan alat tercapai. Jawab sekarang dengan data dari hasil alat yang sudah ada; bila datanya tidak ditemukan, katakan "datanya tidak tersedia" dan sarankan memakai Katalog prodi.';
+
 const PESAN_ULANG = (angka: number[]) =>
   `Periksa ulang jawabanmu: angka ${angka.join(', ')} tidak ada di hasil alat. Tulis ulang jawaban tanpa angka yang tidak berasal dari hasil alat; jika datanya tidak ada, katakan "datanya tidak tersedia".`;
 
@@ -101,6 +104,7 @@ export async function jalankanPercakapan(
 
   for (let putaran = 0; putaran <= MAKS_PUTARAN_ALAT && balasan === null; putaran++) {
     const habis = putaran === MAKS_PUTARAN_ALAT;
+    if (habis) konten.push({ peran: 'user', bagian: [{ teks: JAWAB_SEKARANG }] });
     const k1 = await model.hasilkan({ sistem, konten, alat: habis ? [] : DEKLARASI_ALAT });
     if (k1.panggilan.length && !habis) {
       const hasil = await Promise.all(k1.panggilan.map((p) => jalankanAlat(p.nama, p.argumen, k)));
