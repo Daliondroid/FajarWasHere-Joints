@@ -63,6 +63,9 @@ export async function jawabanCadangan(k: KonteksAlat): Promise<string> {
   const { data } = await layananRekomendasi(k.penggunaId, { repo: k.repo, repoAkun: k.repoAkun });
   const pembuka = 'Maaf, asisten AI sedang tidak tersedia.';
   if (!data) return `${pembuka} Isi Preferensi dulu supaya aku bisa memberi rekomendasi jurusan.`;
+  if (data.bahan_kurang?.length) {
+    return `${pembuka} Preferensi "${data.preferensi.nama}" belum lengkap: ${data.bahan_kurang.join(', ')}. Lengkapi dulu di halaman Preferensi supaya rekomendasinya bisa dihitung.`;
+  }
   const nama = { dream_goal: 'Dream Goal', safety_net: 'Safety Net', alternatif: 'Alternatif' } as const;
   const baris = data.kartu.map((c) => {
     const pel = c.detail.peluang_snbp ?? c.detail.peluang_snbt;
