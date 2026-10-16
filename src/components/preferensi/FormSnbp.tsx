@@ -82,15 +82,15 @@ export function itemChecklist(a: AkademikSnbp) {
 
 const TINGKAT = ['Sekolah', 'Kabupaten/Kota', 'Provinsi', 'Nasional', 'Internasional'];
 
-/** Sheet pilih 2 mapel pilihan TKA (Figma M10b). */
+/** Sheet pilih 2 mapel pilihan TKA (Figma M10b); desktop: modal di tengah (popover D06 `199:3347` diganti modal agar daftar panjang tetap terbaca). */
 function LembarMapelTka({ awal, onBatal, onSimpan }: { awal: string[]; onBatal: () => void; onSimpan: (m: string[]) => void }) {
   const [pilih, setPilih] = useState<string[]>(awal);
   const alihkan = (m: string) => setPilih((p) => (p.includes(m) ? p.filter((x) => x !== m) : p.length < 2 ? [...p, m] : p));
   return (
-    <div role="dialog" aria-modal="true" aria-label="Mapel pilihan TKA" className="fixed inset-0 z-[60] flex items-end justify-center">
+    <div role="dialog" aria-modal="true" aria-label="Mapel pilihan TKA" className="fixed inset-0 z-[60] flex items-end justify-center lg:items-center">
       <div className="absolute inset-0 bg-ink/55" onClick={onBatal} />
-      <div className="relative flex max-h-[90vh] w-full max-w-[402px] flex-col gap-3.5 overflow-y-auto border-t-2 border-ink bg-paper px-6 pt-3 pb-6">
-        <div className="flex justify-center">
+      <div className="relative flex max-h-[90vh] w-full max-w-[402px] flex-col gap-3.5 overflow-y-auto border-t-2 border-ink bg-paper px-6 pt-3 pb-6 lg:max-w-[520px] lg:border-2 lg:p-7 lg:shadow-pixel-md">
+        <div className="flex justify-center lg:hidden">
           <span className="h-1 w-12 bg-track" />
         </div>
         <div className="flex items-center gap-2">
@@ -459,7 +459,7 @@ export function FormSnbpSekolah({
           </>
         }
       />
-      {bawah}
+      <div className="order-last flex flex-col gap-3 empty:hidden">{bawah}</div>
 
 
       {lembarTka && (
@@ -604,7 +604,7 @@ export function FormSnbpAlumni({
           </>
         }
       />
-      {bawah}
+      <div className="order-last flex flex-col gap-3 empty:hidden">{bawah}</div>
     </LayoutWizard>
   );
 }

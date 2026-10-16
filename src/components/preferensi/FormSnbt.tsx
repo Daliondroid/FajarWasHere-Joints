@@ -149,7 +149,7 @@ export function FormSnbt({
           </>
         }
       />
-      {bawah}
+      <div className="order-last flex flex-col gap-3 empty:hidden">{bawah}</div>
     </LayoutWizard>
   );
 }

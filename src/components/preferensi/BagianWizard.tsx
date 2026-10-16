@@ -82,7 +82,7 @@ export function LayoutWizard({
 }) {
   return (
     <main
-      className={`flex flex-col px-6 pt-6 pb-8 lg:flex-1 lg:flex-row lg:items-start lg:gap-14 lg:px-konten lg:pt-12 ${
+      className={`flex flex-col px-6 pt-6 pb-8 lg:flex-row lg:items-start lg:gap-14 lg:px-konten lg:pt-12 ${
         jarak === 4 ? 'lg:pb-4' : 'lg:pb-6'
       } ${gap}`}
     >
