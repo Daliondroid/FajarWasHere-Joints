@@ -83,7 +83,7 @@ describe('pemilihan 3 kartu (K-10)', () => {
     const h = pilihKartu({ pref: pref({ akademik: null }), semuaProdi: PRODI, sekolah: null });
     expect(h.kartu[1].b.id_prodi).toBe(2); // tanpa sekolah, aturan provinsi tidak bisa dicek
     expect(h.kartu.every((k) => !k.peluang.dihitung)).toBe(true);
-    expect(h.catatan.join(' ')).toContain('peluang SNBP');
+    expect(h.catatan).toEqual(['Isi rata-rata rapor untuk estimasi SNBP.']);
     expect(h.validasi).toBeNull();
   });
 
@@ -97,6 +97,13 @@ describe('pemilihan 3 kartu (K-10)', () => {
     const h = pilihKartu({ pref: pref({ jalur: 'snbt', akademik: null, skor_to_terbaru: 600 }), semuaProdi: snbt, sekolah: null });
     expect(h.kartu.map((k) => k.b.id_prodi)).toEqual([1, 2, 4]);
     expect(h.kartu[1].peluang.dihitung).toBe(true);
+  });
+
+  it('di luar kuota eligible -> catatan memakai alasan mesin, bukan "lengkapi data"', () => {
+    const p = pref();
+    const h = pilihKartu({ pref: { ...p, akademik: { ...p.akademik!, peringkat_paralel: 41 } }, semuaProdi: PRODI, sekolah: SEKOLAH });
+    expect(h.catatan[0]).toContain('fokus ke SNBT');
+    expect(h.catatan.join(' ')).not.toContain('Lengkapi');
   });
 
   it('tanpa kandidat -> tanpa kartu', () => {
