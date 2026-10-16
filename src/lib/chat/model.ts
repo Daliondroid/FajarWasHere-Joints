@@ -38,5 +38,17 @@ export interface KeluaranModel {
 }
 
 export interface ModelChat {
+  /** Nama model (untuk log). */
+  nama?: string;
   hasilkan(masukan: MasukanModel): Promise<KeluaranModel>;
+}
+
+/** Kuota model habis (HTTP 429). Layanan lalu mencoba model berikutnya. */
+export class GalatKuota extends Error {
+  constructor(
+    public readonly model: string,
+    public readonly jedaMs: number,
+  ) {
+    super(`Kuota ${model} habis; coba lagi dalam ${Math.round(jedaMs / 1000)} detik.`);
+  }
 }

@@ -6,7 +6,7 @@
 import { ApiGalat, galatTidakLogin, galatValidasi } from '@/lib/api/galat';
 import { DEKLARASI_ALAT, jalankanAlat, type KonteksAlat } from '@/lib/chat/alat';
 import { periksaAngka } from '@/lib/chat/grounding';
-import type { Konten, ModelChat } from '@/lib/chat/model';
+import { GalatKuota, type Konten, type ModelChat } from '@/lib/chat/model';
 import type { PembatasLaju } from '@/lib/chat/pembatas';
 import type { ResponsChat, ResponsHapusRiwayatChat, ResponsRiwayatChat } from '@/types';
 import { layananRekomendasi } from './rekomendasi';
@@ -34,8 +34,8 @@ const PESAN_ULANG = (angka: number[]) =>
   `Periksa ulang jawabanmu: angka ${angka.join(', ')} tidak ada di hasil alat. Tulis ulang jawaban tanpa angka yang tidak berasal dari hasil alat; jika datanya tidak ada, katakan "datanya tidak tersedia".`;
 
 export interface DepsChat {
-  /** null = kunci Gemini tidak diisi; pakai jawaban cadangan. */
-  model: ModelChat | null;
+  /** Model siap pakai, urut prioritas; kosong = kunci Gemini tidak diisi atau semua kuota habis -> cadangan. */
+  model: ModelChat[];
   repo: Repo;
   repoAkun: RepoAkun;
   repoChat: RepoChat;
@@ -69,13 +69,31 @@ export async function jawabanCadangan(k: KonteksAlat): Promise<string> {
   return `${pembuka} Ini rekomendasi dari preferensi "${data.preferensi.nama}":\n${baris.join('\n')}\nBuka halaman Rekomendasi untuk detailnya.`;
 }
 
+/** Data siswa yang selalu disertakan di instruksi sistem agar pertanyaan umum terjawab tanpa putaran alat. */
+export async function konteksSiswa(k: KonteksAlat): Promise<Record<string, unknown>> {
+  const [preferensi, rekomendasi] = await Promise.all([
+    jalankanAlat('preferensi_aktif', {}, k),
+    jalankanAlat('rekomendasi_saya', {}, k),
+  ]);
+  return { preferensi_aktif: preferensi, rekomendasi_saya: rekomendasi };
+}
+
+export function instruksiDenganKonteks(konteks: Record<string, unknown>): string {
+  return `${INSTRUKSI_SISTEM}
+
+Data siswa saat ini dari API internal (boleh langsung dipakai tanpa memanggil alat preferensi_aktif/rekomendasi_saya):
+${JSON.stringify(konteks)}`;
+}
+
 /** Percakapan dengan alat; mengembalikan balasan, alat yang dipakai, dan status grounding. */
 export async function jalankanPercakapan(
   model: ModelChat,
   riwayat: Konten[],
   pesan: string,
   k: KonteksAlat,
+  konteks: Record<string, unknown> = {},
 ): Promise<{ balasan: string; alat_dipakai: string[]; angka_terverifikasi: boolean }> {
+  const sistem = instruksiDenganKonteks(konteks);
   const konten: Konten[] = [...riwayat, { peran: 'user', bagian: [{ teks: pesan }] }];
   const hasilAlat: unknown[] = [];
   const alatDipakai: string[] = [];
@@ -83,7 +101,7 @@ export async function jalankanPercakapan(
 
   for (let putaran = 0; putaran <= MAKS_PUTARAN_ALAT && balasan === null; putaran++) {
     const habis = putaran === MAKS_PUTARAN_ALAT;
-    const k1 = await model.hasilkan({ sistem: INSTRUKSI_SISTEM, konten, alat: habis ? [] : DEKLARASI_ALAT });
+    const k1 = await model.hasilkan({ sistem, konten, alat: habis ? [] : DEKLARASI_ALAT });
     if (k1.panggilan.length && !habis) {
       const hasil = await Promise.all(k1.panggilan.map((p) => jalankanAlat(p.nama, p.argumen, k)));
       hasilAlat.push(...hasil);
@@ -96,12 +114,12 @@ export async function jalankanPercakapan(
   }
   if (!balasan) throw new Error('Model tidak memberi jawaban.');
 
-  // BR-12: angka harus berasal dari hasil alat atau pesan siswa. Satu kali kesempatan memperbaiki.
-  const sumber = [...hasilAlat, pesan];
+  // BR-12: angka harus berasal dari hasil alat, konteks siswa, atau pesan siswa. Satu kali kesempatan memperbaiki.
+  const sumber = [...hasilAlat, konteks, pesan];
   let cek = periksaAngka(balasan, sumber);
   if (!cek.valid) {
     konten.push({ peran: 'model', bagian: [{ teks: balasan }] }, { peran: 'user', bagian: [{ teks: PESAN_ULANG(cek.tanpa_sumber) }] });
-    const ulang = await model.hasilkan({ sistem: INSTRUKSI_SISTEM, konten, alat: [] });
+    const ulang = await model.hasilkan({ sistem, konten, alat: [] });
     if (ulang.teks) {
       balasan = ulang.teks;
       cek = periksaAngka(balasan, sumber);
@@ -122,14 +140,27 @@ export async function layananKirimPesan(idSesi: string | null, badan: unknown, d
     bagian: [{ teks: m.isi }],
   }));
 
-  let hasil: Omit<ResponsChat, 'dibuat_pada'>;
-  try {
-    if (!deps.model) throw new Error('GEMINI_API_KEY belum diisi.');
-    hasil = { ...(await jalankanPercakapan(deps.model, riwayat, pesan, k)), cadangan: false };
-  } catch (e) {
-    console.error('Chatbot memakai jawaban cadangan:', e instanceof Error ? e.message : e);
-    hasil = { balasan: await jawabanCadangan(k), alat_dipakai: ['rekomendasi_saya'], angka_terverifikasi: true, cadangan: true };
+  let hasil: Omit<ResponsChat, 'dibuat_pada'> | null = null;
+  if (!deps.model.length) {
+    console.error('Chatbot memakai jawaban cadangan: GEMINI_API_KEY belum diisi atau kuota semua model habis.');
+  } else {
+    const konteks = await konteksSiswa(k);
+    // Satu pesan memakai satu model dari awal sampai akhir (thought signature terikat ke model).
+    for (const model of deps.model) {
+      try {
+        hasil = { ...(await jalankanPercakapan(model, riwayat, pesan, k, konteks)), cadangan: false };
+        break;
+      } catch (e) {
+        if (e instanceof GalatKuota) {
+          console.warn(e.message);
+          continue;
+        }
+        console.error('Chatbot memakai jawaban cadangan:', e instanceof Error ? e.message : e);
+        break;
+      }
+    }
   }
+  hasil ??= { balasan: await jawabanCadangan(k), alat_dipakai: ['rekomendasi_saya'], angka_terverifikasi: true, cadangan: true };
 
   await deps.repoChat.simpanPesan(penggunaId, 'pengguna', pesan);
   await deps.repoChat.simpanPesan(penggunaId, 'asisten', hasil.balasan);

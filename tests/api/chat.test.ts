@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { DEKLARASI_ALAT, jalankanAlat } from '@/lib/chat/alat';
 import { angkaDariTeks, periksaAngka } from '@/lib/chat/grounding';
-import type { KeluaranModel, MasukanModel, ModelChat } from '@/lib/chat/model';
+import { jedaKuota } from '@/lib/chat/gemini';
+import { GalatKuota, type KeluaranModel, type MasukanModel, type ModelChat } from '@/lib/chat/model';
 import { PembatasLaju } from '@/lib/chat/pembatas';
 import { sinkronPengguna } from '@/lib/layanan/akun';
 import {
@@ -55,7 +56,7 @@ async function siap(model: ModelChat | null, dgnPreferensi = true) {
   const id = await sinkronPengguna(PROFIL, repoAkun);
   if (dgnPreferensi) await layananBuatPreferensi(id, BADAN_PREF, repoAkun);
   const { repoChat, pesan } = repoChatPalsu();
-  const deps = { model, repo: repoPalsu(PRODI), repoAkun, repoChat, pembatas: new PembatasLaju(), sekarang: () => new Date('2026-10-16T00:00:00Z') };
+  const deps = { model: model ? [model] : [], repo: repoPalsu(PRODI), repoAkun, repoChat, pembatas: new PembatasLaju(), sekarang: () => new Date('2026-10-16T00:00:00Z') };
   return { id, deps, pesan };
 }
 
@@ -195,5 +196,37 @@ describe('adapter Gemini', () => {
     await layananKirimPesan(id, { pesan: 'Preferensiku apa?' }, deps);
     const giliranModel = masukan[1].konten.find((k) => k.peran === 'model' && 'panggilan' in k.bagian[0])!;
     expect(giliranModel.bagian[0]).toMatchObject({ panggilan: { tanda: 'sig-abc' } });
+  });
+});
+
+describe('rotasi model gratis dan konteks siswa', () => {
+  it('model pertama kena kuota -> pesan diulang dengan model berikutnya', async () => {
+    const habis = modelSkrip([new GalatKuota('model-a', 30_000)]);
+    const cadang = modelSkrip([{ teks: 'Halo dari model B.', panggilan: [] }]);
+    const { id, deps } = await siap(null);
+    const r = await layananKirimPesan(id, { pesan: 'Halo' }, { ...deps, model: [habis.model, cadang.model] });
+    expect(r).toMatchObject({ balasan: 'Halo dari model B.', cadangan: false });
+  });
+
+  it('semua model kena kuota -> jawaban cadangan', async () => {
+    const { id, deps } = await siap(null);
+    const r = await layananKirimPesan(id, { pesan: 'Halo' }, { ...deps, model: [modelSkrip([new GalatKuota('a', 1)]).model, modelSkrip([new GalatKuota('b', 1)]).model] });
+    expect(r.cadangan).toBe(true);
+  });
+
+  it('data preferensi & rekomendasi ada di instruksi sistem; angkanya sah tanpa memanggil alat', async () => {
+    const { model, masukan } = modelSkrip([{ teks: 'Dream Goal-mu kecocokannya tinggi.', panggilan: [] }]);
+    const { id, deps } = await siap(model);
+    await layananKirimPesan(id, { pesan: 'Rekomendasiku?' }, deps);
+    expect(masukan[0].sistem).toContain('"rekomendasi_saya"');
+    expect(masukan[0].sistem).toContain('"preferensi_aktif"');
+    expect(masukan).toHaveLength(1);
+  });
+
+  it('membaca jeda kuota dari galat 429 Gemini', () => {
+    expect(jedaKuota({ status: 429, message: '{"retryDelay":"31s"}' })).toBe(31_000);
+    expect(jedaKuota(new Error('RESOURCE_EXHAUSTED ... Please retry in 12.5s.'))).toBe(12_500);
+    expect(jedaKuota({ status: 429, message: 'x' })).toBe(60_000);
+    expect(jedaKuota(new Error('500 internal'))).toBeNull();
   });
 });
