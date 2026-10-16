@@ -27,7 +27,7 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   title: 'Cocokin! — Temukan Jurusan Kuliah Impianmu',
   description:
-    'Platform uji kecocokan jurusan (RIASEC/O*NET), estimasi peluang SNBP & SNBT resmi SNPMB, dan Test Drive 60 detik per prodi.',
+    'Platform uji kecocokan jurusan (RIASEC/O*NET), estimasi peluang SNBP & SNBT resmi SNPMB, dan Simulasi soal kuliah per prodi.',
 };
 
 export default function RootLayout({
