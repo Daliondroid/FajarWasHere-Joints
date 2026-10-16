@@ -7,11 +7,14 @@ import { Icon } from '@/components/ui/Icon';
 import { RetroWindow } from '@/components/ui/RetroWindow';
 import { usePreferensiStorage } from '@/components/preferensi/usePreferensiStorage';
 import ModalPilihTka from '@/components/preferensi/ModalPilihTka';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
 export default function PreferensiAkademikPage() {
   const router = useRouter();
   const { draft, updateDraft, simpanDraftSebagaiPreferensi } = usePreferensiStorage();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [snbpDesktopTab, setSnbpDesktopTab] = useState<'akademik' | 'wilayah'>('akademik');
 
   // Jalur aktif dari draft
   const isSNBP = draft.jalur === 'snbp';
@@ -108,9 +111,11 @@ export default function PreferensiAkademikPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] flex justify-center">
-      <div className="w-full max-w-[402px] bg-white border-x-2 border-[#151D21] flex flex-col min-h-screen">
-        {/* TopBar persis M10 / M12 */}
+    <div className="min-h-screen bg-[#FDFBF7]">
+      {/* ── MOBILE CONTAINER (<1024px, Figma M10, M10b, M11, M12) ── */}
+      <div className="lg:hidden flex justify-center w-full min-h-screen">
+        <div className="w-full max-w-[402px] bg-white border-x-2 border-[#151D21] flex flex-col min-h-screen">
+          {/* TopBar persis M10 / M12 */}
         <TopBar
           title={draft.nama || (isSNBP ? 'Informatika Impian' : 'Cadangan SNBT')}
           onBack={() => router.push('/preferensi/minat')}
@@ -621,15 +626,721 @@ export default function PreferensiAkademikPage() {
             </button>
           </div>
         </main>
-
-        {/* Modal Bottom Sheet M10b untuk memilih mapel pilihan TKA */}
-        <ModalPilihTka
-          isOpen={isTkaModalOpen}
-          onClose={() => setIsTkaModalOpen(false)}
-          selected={Object.keys(tkaPilihan)}
-          onSave={handleSaveTkaMapel}
-        />
       </div>
+    </div>
+
+      {/* ── DESKTOP CONTAINER (≥1024px, Figma D06, D06b, D06c) ── */}
+      <div className="hidden lg:flex flex-col w-full min-h-screen bg-[#FDFBF7]">
+        <Navbar />
+
+        <main className="w-full max-w-[1200px] mx-auto px-6 py-10 flex gap-8 font-['Outfit',sans-serif] items-start flex-1">
+          {/* Kolom Kiri (340px) */}
+          <div className="w-[340px] shrink-0 sticky top-28 flex flex-col gap-5">
+            {/* Pemilih Preferensi (340x58) */}
+            <div className="bg-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] p-3 flex items-center justify-between">
+              <div className="flex items-center gap-3 min-w-0">
+                <div
+                  className={`w-4 h-4 border border-[#151D21] shrink-0 ${
+                    isSNBP ? 'bg-[#FEBD01]' : 'bg-[#277EFD]'
+                  }`}
+                />
+                <div className="flex flex-col min-w-0">
+                  <span className="font-['Pixelify_Sans',sans-serif] text-[10px] text-[#6B7680] uppercase tracking-wider font-bold">
+                    PREFERENSI AKTIF · {isSNBP ? 'SNBP' : 'SNBT'}
+                  </span>
+                  <span className="font-['Press_Start_2P',monospace] text-[10px] text-[#151D21] font-bold truncate">
+                    {draft.nama || (isSNBP ? 'Informatika Impian' : 'Cadangan SNBT')}
+                  </span>
+                </div>
+              </div>
+              <Icon name="chevron-down" className="w-4 h-4 text-[#151D21] shrink-0" />
+            </div>
+
+            {/* Stepper (340x60) */}
+            <div className="bg-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] p-4 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 bg-[#22A94F] text-white border-2 border-[#151D21] flex items-center justify-center font-['Press_Start_2P',monospace] text-[10px] font-bold shadow-[1px_1px_0px_#151D21]">
+                  ✓
+                </div>
+                <span className="font-['Press_Start_2P',monospace] text-[10px] text-[#151D21] font-bold">
+                  MINAT
+                </span>
+              </div>
+              <div className="flex-1 h-0.5 bg-[#151D21] mx-3" />
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 bg-[#277EFD] text-white border-2 border-[#151D21] flex items-center justify-center font-['Press_Start_2P',monospace] text-[10px] font-bold shadow-[1px_1px_0px_#151D21]">
+                  2
+                </div>
+                <span className="font-['Press_Start_2P',monospace] text-[10px] text-[#151D21] font-bold">
+                  BAHAN
+                </span>
+              </div>
+            </div>
+
+            {/* Heading Info */}
+            <div className="bg-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] p-5">
+              <span className="font-['Pixelify_Sans',sans-serif] text-[12px] font-bold text-[#277EFD] tracking-wider uppercase block mb-1">
+                {isSNBP
+                  ? snbpDesktopTab === 'wilayah'
+                    ? 'LANGKAH 2 · WILAYAH & ALUMNI'
+                    : 'LANGKAH 2 · BAHAN SNBP'
+                  : 'LANGKAH 2 · BAHAN SNBT'}
+              </span>
+              <h1 className="font-['Press_Start_2P',monospace] text-sm text-[#151D21] leading-relaxed mb-2">
+                {isSNBP
+                  ? snbpDesktopTab === 'wilayah'
+                    ? 'Wilayah & reputasi alumni'
+                    : 'Sekolah, rapor & TKA'
+                  : 'Nilai try out terakhirmu'}
+              </h1>
+              <p className="font-['Plus_Jakarta_Sans',sans-serif] text-xs text-[#6B7680] leading-relaxed">
+                {isSNBP
+                  ? snbpDesktopTab === 'wilayah'
+                    ? 'Data wilayah dan sebaran alumni menentukan faktor indeks sekolah di SNBP.'
+                    : 'Dipakai untuk cek kuota eligible sekolah dan menghitung peluang SNBP.'
+                  : 'Peluang SNBT dihitung dari skor TO dibanding estimasi skor UTBK tiap prodi.'}
+              </p>
+            </div>
+
+            {/* Checklist (SNBP D06 & D06b) / Score Overview (SNBT D06c) */}
+            {isSNBP ? (
+              <div className="bg-[#F7F5F0] border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] p-4 flex flex-col gap-2.5">
+                <span className="font-['Pixelify_Sans',sans-serif] text-[11px] font-bold text-[#6B7680] uppercase tracking-wider block mb-1">
+                  CHECKLIST KELENGKAPAN
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setSnbpDesktopTab('akademik')}
+                  className={`flex items-center gap-2.5 text-xs text-left p-1.5 transition-colors cursor-pointer ${
+                    snbpDesktopTab === 'akademik'
+                      ? 'bg-white border border-[#151D21] font-bold text-[#151D21]'
+                      : 'text-[#151D21] hover:bg-black/5'
+                  }`}
+                >
+                  <span className="w-4 h-4 bg-[#22A94F] text-white flex items-center justify-center text-[10px] font-bold">
+                    ✓
+                  </span>
+                  <span>Sekolah (NPSN)</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSnbpDesktopTab('akademik')}
+                  className={`flex items-center gap-2.5 text-xs text-left p-1.5 transition-colors cursor-pointer ${
+                    snbpDesktopTab === 'akademik'
+                      ? 'bg-white border border-[#151D21] font-bold text-[#151D21]'
+                      : 'text-[#151D21] hover:bg-black/5'
+                  }`}
+                >
+                  <span className="w-4 h-4 bg-[#22A94F] text-white flex items-center justify-center text-[10px] font-bold">
+                    ✓
+                  </span>
+                  <span>Rapor &amp; peringkat</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSnbpDesktopTab('akademik')}
+                  className={`flex items-center gap-2.5 text-xs text-left p-1.5 transition-colors cursor-pointer ${
+                    snbpDesktopTab === 'akademik'
+                      ? 'bg-white border border-[#151D21] font-bold text-[#151D21]'
+                      : 'text-[#151D21] hover:bg-black/5'
+                  }`}
+                >
+                  <span className="w-4 h-4 bg-[#22A94F] text-white flex items-center justify-center text-[10px] font-bold">
+                    ✓
+                  </span>
+                  <span>Nilai TKA</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSnbpDesktopTab('akademik')}
+                  className={`flex items-center gap-2.5 text-xs text-left p-1.5 transition-colors cursor-pointer ${
+                    snbpDesktopTab === 'akademik'
+                      ? 'bg-white border border-[#151D21] font-bold text-[#151D21]'
+                      : 'text-[#151D21] hover:bg-black/5'
+                  }`}
+                >
+                  <span className="w-4 h-4 bg-[#22A94F] text-white flex items-center justify-center text-[10px] font-bold">
+                    ✓
+                  </span>
+                  <span>Prestasi</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSnbpDesktopTab('wilayah')}
+                  className={`flex items-center gap-2.5 text-xs text-left p-1.5 transition-colors cursor-pointer ${
+                    snbpDesktopTab === 'wilayah'
+                      ? 'bg-white border border-[#151D21] font-bold text-[#151D21]'
+                      : 'text-[#6B7680] hover:bg-black/5'
+                  }`}
+                >
+                  <span
+                    className={`w-4 h-4 flex items-center justify-center text-[10px] font-bold ${
+                      snbpDesktopTab === 'wilayah'
+                        ? 'bg-[#277EFD] text-white'
+                        : 'bg-[#D3D6DA] text-[#151D21]'
+                    }`}
+                  >
+                    {snbpDesktopTab === 'wilayah' ? '✓' : '⏱'}
+                  </span>
+                  <span>Wilayah &amp; alumni</span>
+                </button>
+              </div>
+            ) : (
+              <div className="bg-[#F7F5F0] border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] p-4 flex flex-col gap-2">
+                <span className="font-['Pixelify_Sans',sans-serif] text-[11px] font-bold text-[#6B7680] uppercase tracking-wider">
+                  RATA-RATA TRY OUT
+                </span>
+                <div className="font-['Press_Start_2P',monospace] text-2xl text-[#277EFD]">
+                  {rataTo}
+                </div>
+                <div className="flex items-center gap-1.5 mt-1">
+                  <span className="px-1.5 py-0.5 bg-[#EAF7EE] text-[#22A94F] font-bold text-[9px] border border-[#22A94F]">
+                    +72 SEJAK AGUSTUS
+                  </span>
+                  <span className="text-[11px] text-[#6B7680]">Tren Positif</span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Kolom Kanan (804px) */}
+          <div className="flex-1 min-w-0 flex flex-col gap-6">
+            {isSNBP ? (
+              snbpDesktopTab === 'akademik' ? (
+                /* ── FRAME D06 · Bahan SNBP (Sekolah, Rapor & TKA) ── */
+                <>
+                  <div className="grid grid-cols-2 gap-6 items-start">
+                    {/* Kolom A */}
+                    <div className="flex flex-col gap-6">
+                      {/* 1. SEKOLAH */}
+                      <RetroWindow
+                        title="1 · SEKOLAH"
+                        variant="yellow"
+                        contentClassName="p-4 space-y-3 font-['Outfit',sans-serif]"
+                      >
+                        <div>
+                          <label className="text-xs font-semibold text-[#6B7680] block mb-1">
+                            NPSN atau nama sekolah
+                          </label>
+                          <input
+                            type="text"
+                            value={npsn}
+                            onChange={(e) => setNpsn(e.target.value)}
+                            className="w-full p-2.5 bg-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] text-xs font-bold text-[#151D21] focus:outline-none"
+                          />
+                        </div>
+
+                        <div className="bg-[#F9F8F6] border-2 border-[#151D21] p-3 flex flex-col gap-1.5">
+                          <div className="font-['Plus_Jakarta_Sans',sans-serif] font-bold text-sm text-[#151D21]">
+                            SMAN 8 Yogyakarta
+                          </div>
+                          <div className="text-xs text-[#6B7680]">
+                            Kota Yogyakarta · D.I. Yogyakarta
+                          </div>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="px-2 py-0.5 bg-[#EEF5FF] border border-[#277EFD] text-[#277EFD] font-bold text-[10px]">
+                              AKREDITASI A
+                            </span>
+                            <span className="text-[11px] text-[#6B7680]">terkunci dari data resmi</span>
+                          </div>
+                          <div className="flex items-center justify-between gap-2 mt-1 pt-2 border-t border-gray-200">
+                            <span className="text-xs font-semibold text-[#151D21]">
+                              Kuota eligible: 115 dari 287 siswa (40%)
+                            </span>
+                            <span className="px-1.5 py-0.5 bg-[#EAF7EE] text-[#22A94F] font-bold text-[8px] border border-[#22A94F]">
+                              RESMI · SNPMB 2026
+                            </span>
+                          </div>
+                        </div>
+                      </RetroWindow>
+
+                      {/* 3. NILAI TKA (WAJIB & PILIHAN) */}
+                      <RetroWindow
+                        title="3 · NILAI TKA (WAJIB &amp; PILIHAN)"
+                        variant="red"
+                        contentClassName="p-4 space-y-3 font-['Outfit',sans-serif]"
+                      >
+                        <span className="text-[10px] font-['Press_Start_2P',monospace] text-[#6B7680] block">
+                          MAPEL WAJIB
+                        </span>
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="font-medium text-[#151D21]">Bahasa Indonesia</span>
+                            <input
+                              type="number"
+                              step="0.1"
+                              value={tkaWajib.bahasa_indonesia}
+                              onChange={(e) =>
+                                setTkaWajib((p) => ({ ...p, bahasa_indonesia: Number(e.target.value) }))
+                              }
+                              className="w-16 p-1.5 bg-white border-2 border-[#151D21] text-center font-bold text-xs"
+                            />
+                          </div>
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="font-medium text-[#151D21]">Matematika</span>
+                            <input
+                              type="number"
+                              step="0.1"
+                              value={tkaWajib.matematika}
+                              onChange={(e) =>
+                                setTkaWajib((p) => ({ ...p, matematika: Number(e.target.value) }))
+                              }
+                              className="w-16 p-1.5 bg-white border-2 border-[#151D21] text-center font-bold text-xs"
+                            />
+                          </div>
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="font-medium text-[#151D21]">Bahasa Inggris</span>
+                            <input
+                              type="number"
+                              step="0.1"
+                              value={tkaWajib.bahasa_inggris}
+                              onChange={(e) =>
+                                setTkaWajib((p) => ({ ...p, bahasa_inggris: Number(e.target.value) }))
+                              }
+                              className="w-16 p-1.5 bg-white border-2 border-[#151D21] text-center font-bold text-xs"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Mapel Pilihan */}
+                        <div className="pt-2 border-t border-gray-200">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-[10px] font-['Press_Start_2P',monospace] text-[#6B7680]">
+                              MAPEL PILIHAN
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => setIsTkaModalOpen(true)}
+                              className="px-2.5 py-1 bg-[#FEBD01] hover:bg-yellow-400 border-2 border-[#151D21] text-[9px] font-bold shadow-[2px_2px_0px_#151D21] cursor-pointer"
+                            >
+                              PILIH 2
+                            </button>
+                          </div>
+
+                          <div className="space-y-2">
+                            {Object.entries(tkaPilihan).map(([namaMapel, nilai], idx) => (
+                              <div key={namaMapel} className="flex items-center justify-between text-xs">
+                                <div className="flex flex-col">
+                                  <span className="text-[11px] text-[#6B7680]">
+                                    Mapel pilihan {idx + 1}
+                                  </span>
+                                  <span className="font-semibold text-[#151D21]">{namaMapel}</span>
+                                </div>
+                                <input
+                                  type="number"
+                                  step="0.1"
+                                  value={nilai}
+                                  onChange={(e) =>
+                                    setTkaPilihan((prev) => ({
+                                      ...prev,
+                                      [namaMapel]: Number(e.target.value),
+                                    }))
+                                  }
+                                  className="w-16 p-1.5 bg-white border-2 border-[#151D21] text-center font-bold text-xs"
+                                />
+                              </div>
+                            ))}
+                          </div>
+
+                          <div className="mt-3 p-2 bg-[#F9F8F6] border border-dashed border-[#151D21] text-[10px] text-[#6B7680]">
+                            + 7 lainnya: Sejarah, Antropologi, PPKn, B. Indonesia/Inggris Tk. Lanjut, Bahasa Asing, PKK (SMK)
+                          </div>
+                        </div>
+                      </RetroWindow>
+                    </div>
+
+                    {/* Kolom B */}
+                    <div className="flex flex-col gap-6">
+                      {/* 2. RAPOR & PERINGKAT */}
+                      <RetroWindow
+                        title="2 · RAPOR &amp; PERINGKAT"
+                        variant="blue"
+                        contentClassName="p-4 space-y-3 font-['Outfit',sans-serif]"
+                      >
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="text-xs text-[#151D21] font-medium block mb-1">
+                              Rata-rata rapor smt 1–5
+                            </label>
+                            <input
+                              type="number"
+                              step="0.01"
+                              value={raporRata}
+                              onChange={(e) => setRaporRata(Number(e.target.value))}
+                              className="w-full p-2.5 bg-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] text-xs font-bold text-[#151D21]"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-xs text-[#151D21] font-medium block mb-1">
+                              Peringkat paralel (dari 287)
+                            </label>
+                            <input
+                              type="number"
+                              value={peringkat}
+                              onChange={(e) => setPeringkat(Number(e.target.value))}
+                              className="w-full p-2.5 bg-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] text-xs font-bold text-[#151D21]"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="p-2.5 bg-[#EAF7EE] border-2 border-[#22A94F] text-xs text-[#22A94F] font-semibold">
+                          Masuk kuota eligible sekolah ({peringkat} ≤ 115)
+                        </div>
+
+                        <div>
+                          <label className="text-xs font-bold text-[#151D21] block mb-1.5">
+                            Mapel pendukung
+                          </label>
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="text"
+                              value={mapelPendukung.nama}
+                              onChange={(e) =>
+                                setMapelPendukung((p) => ({ ...p, nama: e.target.value }))
+                              }
+                              className="flex-1 p-2 bg-white border-2 border-[#151D21] text-xs font-semibold"
+                            />
+                            <input
+                              type="number"
+                              value={mapelPendukung.nilai}
+                              onChange={(e) =>
+                                setMapelPendukung((p) => ({ ...p, nilai: Number(e.target.value) }))
+                              }
+                              className="w-16 p-2 bg-white border-2 border-[#151D21] text-xs font-bold text-center"
+                            />
+                          </div>
+                          <span className="text-[11px] text-[#277EFD] font-bold block mt-1 cursor-pointer">
+                            + Tambah mapel pendukung
+                          </span>
+                        </div>
+
+                        <div className="p-3 bg-[#F9F8F6] border-2 border-dashed border-[#151D21] text-center">
+                          <span className="text-xs font-bold text-[#151D21] block">
+                            Unggah foto/PDF rapor (opsional)
+                          </span>
+                          <span className="text-[11px] text-[#6B7680]">PDF atau foto · maks. 10 MB</span>
+                        </div>
+                      </RetroWindow>
+
+                      {/* 4. PRESTASI */}
+                      <RetroWindow
+                        title="4 · PRESTASI"
+                        variant="green"
+                        contentClassName="p-4 space-y-3 font-['Outfit',sans-serif]"
+                      >
+                        <div className="p-2.5 bg-[#F9F8F6] border-2 border-[#151D21] flex items-center justify-between">
+                          <div className="flex flex-col">
+                            <span className="text-xs font-bold text-[#151D21]">
+                              Olimpiade Sains Provinsi · Informatika
+                            </span>
+                            <div className="flex items-center gap-1.5 mt-1">
+                              <span className="px-1.5 py-0.5 bg-[#EEF5FF] text-[#277EFD] text-[9px] font-bold border border-[#277EFD]">
+                                PROVINSI
+                              </span>
+                              <span className="px-1.5 py-0.5 bg-[#EAF7EE] text-[#22A94F] text-[9px] font-bold border border-[#22A94F]">
+                                JUARA 2
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <span className="text-[11px] text-[#277EFD] font-bold block pt-1 cursor-pointer">
+                          + Tambah prestasi (maks 3)
+                        </span>
+                      </RetroWindow>
+                    </div>
+                  </div>
+
+                  {/* Desktop Action Bar */}
+                  <div className="flex items-center justify-between pt-6 border-t-2 border-[#151D21]">
+                    <button
+                      type="button"
+                      onClick={() => router.push('/preferensi/minat')}
+                      className="px-6 py-3 bg-white hover:bg-gray-50 text-[#151D21] border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] active:translate-x-[1px] active:translate-y-[1px] font-['Press_Start_2P',monospace] text-[10px] text-center transition-all cursor-pointer flex items-center gap-2"
+                    >
+                      <Icon name="back" className="w-3.5 h-3.5 text-[#151D21]" />
+                      <span>KEMBALI KE MINAT</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSnbpDesktopTab('wilayah')}
+                      className="px-6 py-3 bg-[#277EFD] hover:bg-[#1E6FD9] text-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] active:translate-x-[1px] active:translate-y-[1px] font-['Press_Start_2P',monospace] text-[10px] text-center transition-all cursor-pointer flex items-center gap-2"
+                    >
+                      <span>LANJUT: WILAYAH &amp; ALUMNI</span>
+                      <Icon name="arrow-right" className="w-3.5 h-3.5 text-white" />
+                    </button>
+                  </div>
+                </>
+              ) : (
+                /* ── FRAME D06b · Bahan SNBP (Wilayah & Alumni) ── */
+                <>
+                  <div className="grid grid-cols-2 gap-6 items-start">
+                    {/* Kolom A: WILAYAH SEKOLAH */}
+                    <RetroWindow
+                      title="WILAYAH SEKOLAH"
+                      variant="blue"
+                      contentClassName="p-4 space-y-4 font-['Outfit',sans-serif]"
+                    >
+                      <div className="grid grid-cols-2 gap-4 text-xs">
+                        <div className="p-3 bg-[#F9F8F6] border-2 border-[#151D21]">
+                          <span className="text-[#6B7680] text-[11px] block mb-1">Provinsi</span>
+                          <span className="font-bold text-sm text-[#151D21] block">D.I. Yogyakarta</span>
+                        </div>
+                        <div className="p-3 bg-[#F9F8F6] border-2 border-[#151D21]">
+                          <span className="text-[#6B7680] text-[11px] block mb-1">Kabupaten/Kota</span>
+                          <span className="font-bold text-sm text-[#151D21] block">Kota Yogyakarta</span>
+                        </div>
+                      </div>
+                      <div className="p-3 bg-[#EEF5FF] border border-[#277EFD] text-xs text-[#277EFD] font-semibold flex items-center gap-2">
+                        <Icon name="check" className="w-4 h-4 text-[#277EFD] shrink-0" />
+                        <span>Terkunci otomatis dari data Dapodik &amp; Pusdatin Kemendikbudristek (NPSN: {npsn})</span>
+                      </div>
+                    </RetroWindow>
+
+                    {/* Kolom B: REPUTASI ALUMNI · SELF-REPORT */}
+                    <RetroWindow
+                      title="REPUTASI ALUMNI · SELF-REPORT"
+                      variant="yellow"
+                      contentClassName="p-4 space-y-4 font-['Outfit',sans-serif]"
+                    >
+                      <div>
+                        <label className="text-xs font-bold text-[#151D21] block mb-1.5">
+                          Tingkat Kelolosan Alumni di PTN
+                        </label>
+                        <select
+                          value={reputasiAlumni}
+                          onChange={(e) => setReputasiAlumni(e.target.value)}
+                          className="w-full p-2.5 bg-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] text-xs font-semibold cursor-pointer"
+                        >
+                          <option value="Langganan banjir PTN top">Langganan banjir PTN top</option>
+                          <option value="Rutin lolos PTN">Rutin lolos PTN</option>
+                          <option value="1–5 siswa per tahun">1–5 siswa per tahun</option>
+                          <option value="Sekolah baru / belum ada jejak">Sekolah baru / belum ada jejak</option>
+                        </select>
+                      </div>
+
+                      <div className="pt-3 border-t border-gray-200">
+                        <label className="text-xs font-bold text-[#151D21] block mb-2">
+                          Kampus basis alumni
+                        </label>
+                        <div className="flex flex-wrap gap-2 mb-3">
+                          {kampusAlumni.map((kampus) => (
+                            <span
+                              key={kampus}
+                              className="px-2.5 py-1 bg-white border-2 border-[#151D21] text-xs font-bold flex items-center gap-1.5 shadow-[1px_1px_0px_#151D21]"
+                            >
+                              {kampus}
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveCampus(kampus)}
+                                className="text-red-500 hover:text-red-700 font-bold ml-1 cursor-pointer"
+                              >
+                                ×
+                              </button>
+                            </span>
+                          ))}
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="text"
+                            value={newCampusInput}
+                            onChange={(e) => setNewCampusInput(e.target.value)}
+                            placeholder="Cari dari 146 PTN..."
+                            className="flex-1 p-2 bg-white border-2 border-[#151D21] text-xs font-medium"
+                          />
+                          <button
+                            type="button"
+                            onClick={handleAddCampus}
+                            className="px-3 py-2 bg-[#FEBD01] hover:bg-yellow-400 border-2 border-[#151D21] text-xs font-bold shadow-[2px_2px_0px_#151D21] active:translate-x-[1px] active:translate-y-[1px] cursor-pointer"
+                          >
+                            + TAMBAH
+                          </button>
+                        </div>
+                      </div>
+                    </RetroWindow>
+                  </div>
+
+                  {/* Desktop Action Bar */}
+                  <div className="flex items-center justify-between pt-6 border-t-2 border-[#151D21]">
+                    <button
+                      type="button"
+                      onClick={() => setSnbpDesktopTab('akademik')}
+                      className="px-6 py-3 bg-white hover:bg-gray-50 text-[#151D21] border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] active:translate-x-[1px] active:translate-y-[1px] font-['Press_Start_2P',monospace] text-[10px] text-center transition-all cursor-pointer flex items-center gap-2"
+                    >
+                      <Icon name="back" className="w-3.5 h-3.5 text-[#151D21]" />
+                      <span>KEMBALI KE RAPOR &amp; TKA</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleSubmit}
+                      disabled={isSubmitting}
+                      className="px-6 py-3 bg-[#277EFD] hover:bg-[#1E6FD9] text-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] active:translate-x-[1px] active:translate-y-[1px] font-['Press_Start_2P',monospace] text-[10px] text-center transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2"
+                    >
+                      <span>{isSubmitting ? 'MENYIMPAN...' : 'SIMPAN &amp; LIHAT REKOMENDASI'}</span>
+                      <Icon name="arrow-right" className="w-3.5 h-3.5 text-white" />
+                    </button>
+                  </div>
+                </>
+              )
+            ) : (
+              /* ── FRAME D06c · Bahan SNBT (Try Out & Portofolio) ── */
+              <>
+                <div className="grid grid-cols-2 gap-6 items-start">
+                  {/* Kolom A: SUMBER & SKOR TRY OUT */}
+                  <RetroWindow
+                    title="SUMBER &amp; SKOR TRY OUT"
+                    variant="blue"
+                    contentClassName="p-4 space-y-3 font-['Outfit',sans-serif]"
+                  >
+                    <div>
+                      <label className="text-xs font-semibold text-[#6B7680] block mb-1">
+                        Sumber try out
+                      </label>
+                      <input
+                        type="text"
+                        readOnly
+                        value="Skala IRT 200–1000 (seperti UTBK)"
+                        className="w-full p-2.5 bg-[#F9F8F6] border-2 border-[#151D21] text-xs font-bold text-[#151D21] cursor-not-allowed"
+                      />
+                    </div>
+
+                    <div className="space-y-2 pt-2">
+                      {[
+                        { label: 'Penalaran Umum (PU)', key: 'pu' },
+                        { label: 'Pengetahuan & Pemahaman Umum', key: 'ppu' },
+                        { label: 'Pemahaman Bacaan & Menulis', key: 'pbm' },
+                        { label: 'Pengetahuan Kuantitatif (PK)', key: 'pk' },
+                        { label: 'Literasi Bahasa Indonesia', key: 'lit_ind' },
+                        { label: 'Literasi Bahasa Inggris', key: 'lit_ing' },
+                        { label: 'Penalaran Matematika (PM)', key: 'pm' },
+                      ].map((item) => (
+                        <div key={item.key} className="flex items-center justify-between text-xs">
+                          <span className="font-medium text-[#151D21]">{item.label}</span>
+                          <input
+                            type="number"
+                            value={skorTo[item.key as keyof typeof skorTo]}
+                            onChange={(e) =>
+                              setSkorTo((prev) => ({
+                                ...prev,
+                                [item.key]: Number(e.target.value),
+                              }))
+                            }
+                            className="w-20 p-1.5 bg-white border-2 border-[#151D21] text-center font-bold text-xs"
+                          />
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Bar Rata-rata 7 Subtes */}
+                    <div className="pt-3 border-t-2 border-[#151D21] flex items-center justify-between">
+                      <span className="font-['Press_Start_2P',monospace] text-[10px] text-[#151D21] font-bold">
+                        RATA-RATA 7 SUBTES
+                      </span>
+                      <span className="font-['Press_Start_2P',monospace] text-sm text-[#277EFD] font-bold bg-[#EEF5FF] px-3 py-1 border border-[#277EFD]">
+                        {rataTo}
+                      </span>
+                    </div>
+                  </RetroWindow>
+
+                  {/* Kolom B: RIWAYAT TRY OUT & PORTOFOLIO */}
+                  <div className="flex flex-col gap-6">
+                    {/* RIWAYAT TRY OUT */}
+                    <RetroWindow
+                      title="RIWAYAT TRY OUT"
+                      variant="yellow"
+                      contentClassName="p-4 space-y-4 font-['Outfit',sans-serif]"
+                    >
+                      {/* Bar chart visualizer persis Figma D06c */}
+                      <div className="p-4 bg-[#F9F8F6] border-2 border-[#151D21] flex items-end justify-around h-48 pt-6">
+                        {/* Bulan AGU */}
+                        <div className="flex flex-col items-center gap-1.5">
+                          <span className="text-[11px] font-bold text-[#6B7680]">612</span>
+                          <div className="w-12 h-16 bg-[#D3D6DA] border-2 border-[#151D21]" />
+                          <span className="text-[10px] text-[#6B7680] mt-1">08 Agu</span>
+                        </div>
+                        {/* Bulan SEP */}
+                        <div className="flex flex-col items-center gap-1.5">
+                          <span className="text-[11px] font-bold text-[#6B7680]">646</span>
+                          <div className="w-12 h-24 bg-[#FEBD01] border-2 border-[#151D21]" />
+                          <span className="text-[10px] text-[#6B7680] mt-1">18 Agu</span>
+                        </div>
+                        {/* Bulan OKT */}
+                        <div className="flex flex-col items-center gap-1.5">
+                          <span className="text-[11px] font-bold text-[#277EFD]">{rataTo}</span>
+                          <div className="w-12 h-32 bg-[#277EFD] border-2 border-[#151D21]" />
+                          <span className="text-[10px] font-bold text-[#151D21] mt-1">19 Sep</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between text-xs pt-1">
+                        <span className="px-2 py-0.5 bg-[#EAF7EE] text-[#22A94F] font-bold text-[9px] border border-[#22A94F]">
+                          +72 SEJAK AGUSTUS
+                        </span>
+                        <span className="text-[#6B7680] text-[11px]">Rata-rata naik tiap bulan</span>
+                      </div>
+
+                      <button
+                        type="button"
+                        className="w-full py-2 bg-white hover:bg-gray-50 border-2 border-[#151D21] text-[#151D21] font-['Press_Start_2P',monospace] text-[9px] shadow-[2px_2px_0px_#151D21] cursor-pointer"
+                      >
+                        + TAMBAH RIWAYAT TO
+                      </button>
+                    </RetroWindow>
+
+                    {/* PORTOFOLIO */}
+                    <RetroWindow
+                      title="PORTOFOLIO"
+                      variant="green"
+                      contentClassName="p-4 text-center font-['Outfit',sans-serif]"
+                    >
+                      <div className="p-6 bg-[#F9F8F6] border-2 border-dashed border-[#151D21] flex flex-col items-center gap-2">
+                        <Icon name="upload" className="w-8 h-8 text-[#151D21]" />
+                        <span className="text-xs font-bold text-[#151D21] block">
+                          Unggah portofolio (opsional)
+                        </span>
+                        <span className="text-[11px] text-[#6B7680]">
+                          PDF, JPG, atau MP4 · maks. 25 MB
+                        </span>
+                      </div>
+                    </RetroWindow>
+                  </div>
+                </div>
+
+                {/* Desktop Action Bar */}
+                <div className="flex items-center justify-between pt-6 border-t-2 border-[#151D21]">
+                  <button
+                    type="button"
+                    onClick={() => router.push('/preferensi/minat')}
+                    className="px-6 py-3 bg-white hover:bg-gray-50 text-[#151D21] border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] active:translate-x-[1px] active:translate-y-[1px] font-['Press_Start_2P',monospace] text-[10px] text-center transition-all cursor-pointer flex items-center gap-2"
+                  >
+                    <Icon name="back" className="w-3.5 h-3.5 text-[#151D21]" />
+                    <span>KEMBALI KE MINAT</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleSubmit}
+                    disabled={isSubmitting}
+                    className="px-6 py-3 bg-[#277EFD] hover:bg-[#1E6FD9] text-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] active:translate-x-[1px] active:translate-y-[1px] font-['Press_Start_2P',monospace] text-[10px] text-center transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2"
+                  >
+                    <span>{isSubmitting ? 'MENYIMPAN...' : 'SIMPAN &amp; LIHAT REKOMENDASI'}</span>
+                    <Icon name="arrow-right" className="w-3.5 h-3.5 text-white" />
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </main>
+
+        <Footer />
+      </div>
+
+      {/* Modal Bottom Sheet M10b untuk memilih mapel pilihan TKA */}
+      <ModalPilihTka
+        isOpen={isTkaModalOpen}
+        onClose={() => setIsTkaModalOpen(false)}
+        selected={Object.keys(tkaPilihan)}
+        onSave={handleSaveTkaMapel}
+      />
     </div>
   );
 }

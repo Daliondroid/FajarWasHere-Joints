@@ -27,14 +27,14 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       onClick={onClose}
     >
       <div
-        className="w-full max-w-[360px] bg-white border-2 border-black shadow-[4px_4px_0px_#000000] overflow-hidden"
+        className="w-full max-w-[360px] lg:max-w-[440px] bg-white border-2 border-black shadow-[4px_4px_0px_#000000] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Retro Window Header persis Figma M03 (node 172:502) */}
-        <div className="bg-[#277EFD] px-3.5 py-2 border-b-2 border-black flex items-center justify-between text-white select-none">
+        {/* Retro Window Header persis Figma M03 (172:502) & D02 (184:2066) */}
+        <div className="bg-[#277EFD] px-4 py-2.5 border-b-2 border-black flex items-center justify-between text-white select-none">
           <span
             id="login-modal-title"
-            className="font-['Press_Start_2P',monospace] text-[10px] tracking-wider text-white font-bold"
+            className="font-['Pixelify_Sans',sans-serif] text-xs lg:text-[13px] tracking-wider text-white font-semibold"
           >
             MASUK KE COCOKIN!
           </span>

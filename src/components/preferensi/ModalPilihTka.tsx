@@ -71,15 +71,15 @@ export default function ModalPilihTka({
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-[#151D21]/60 flex items-end justify-center animate-fade-in"
+      className="fixed inset-0 z-50 bg-[#151D21]/60 flex items-end lg:items-center justify-center p-0 lg:p-4 animate-fade-in"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-[402px] bg-white border-t-2 border-x-2 border-[#151D21] shadow-[0px_-6px_20px_rgba(0,0,0,0.2)] p-5 pb-7 flex flex-col gap-4 max-h-[85vh] overflow-y-auto animate-slide-up"
+        className="w-full max-w-[402px] lg:max-w-[460px] bg-white border-t-2 border-x-2 lg:border-b-2 border-[#151D21] shadow-[0px_-6px_20px_rgba(0,0,0,0.2)] lg:shadow-[4px_4px_0px_#151D21] p-5 pb-7 flex flex-col gap-4 max-h-[85vh] overflow-y-auto animate-slide-up"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Handle Bar */}
-        <div className="w-12 h-1.5 bg-[#D3D6DA] rounded-full mx-auto shrink-0" />
+        <div className="w-12 h-1.5 bg-[#D3D6DA] rounded-full mx-auto shrink-0 lg:hidden" />
 
         {/* Judul + Tag Kuota Terpilih */}
         <div className="flex items-center justify-between">

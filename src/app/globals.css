@@ -11,7 +11,25 @@
   --color-retro-light: #FFFFFF;
 
   --font-pixel: var(--font-pixel), 'Press Start 2P', monospace;
-  --font-body: var(--font-body), 'Outfit', 'Inter', sans-serif;
+  --font-pixelify: var(--font-pixelify), 'Pixelify Sans', sans-serif;
+  --font-body: var(--font-body), 'Plus Jakarta Sans', 'Outfit', 'Inter', sans-serif;
+  --font-mono: var(--font-mono), 'JetBrains Mono', monospace;
+}
+
+.font-pixel {
+  font-family: var(--font-pixel), 'Press Start 2P', monospace;
+}
+
+.font-pixelify {
+  font-family: var(--font-pixelify), 'Pixelify Sans', sans-serif;
+}
+
+.font-body {
+  font-family: var(--font-body), 'Plus Jakarta Sans', 'Outfit', system-ui, sans-serif;
+}
+
+.font-mono {
+  font-family: var(--font-mono), 'JetBrains Mono', monospace;
 }
 
 :root {
