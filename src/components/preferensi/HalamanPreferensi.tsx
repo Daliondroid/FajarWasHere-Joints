@@ -4,6 +4,7 @@ import { useState, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import type { PreferensiRingkas, ResponsHapusPreferensi, ResponsPreferensi } from '@/types';
 import { TopBar } from '@/components/ui/TopBar';
+import Footer from '@/components/Footer';
 import BingkaiMobile from '@/components/ui/BingkaiMobile';
 import { RetroWindow } from '@/components/ui/RetroWindow';
 import { Isian } from '@/components/ui/Isian';
@@ -49,7 +50,10 @@ function Dialog({ judul, warna, children, onTutup }: { judul: string; warna: 'bl
   );
 }
 
-/** Halaman Preferensi: M05 kosong (`173:476`), M06 tersimpan (`173:518`), M07 bottom sheet baru (`173:642`). */
+/**
+ * Halaman Preferensi: M05 kosong (`173:476`), M06 tersimpan (`173:518`), M07 bottom sheet baru (`173:642`).
+ * Desktop: D04 grid 3 kolom (`186:2285`), D04b modal baru (`272:4935`).
+ */
 export default function HalamanPreferensi({ bukaBaru = false }: { bukaBaru?: boolean }) {
   const router = useRouter();
   const { daftar, galat, aktifkan, muatUlang } = useDaftarPreferensi(true);
@@ -88,19 +92,41 @@ export default function HalamanPreferensi({ bukaBaru = false }: { bukaBaru?: boo
   return (
     <BingkaiMobile>
       <TopBar title="Preferensi" onBack={() => router.push('/')} />
-      <main className="flex flex-col gap-4 px-6 pt-6 pb-8">
-        <div className={`flex flex-col gap-2 ${daftar ? '' : 'invisible'}`}>
-          <p className="t-label-s text-blue">PREFERENSI</p>
-          <h1 className="t-display-m text-ink">{jumlah ? `Preferensimu (${jumlah})` : 'Simpan beberapa rencana sekaligus'}</h1>
-          <p className="t-body-m text-muted">
-            {jumlah
-              ? 'Ketuk JADIKAN AKTIF untuk berganti. Rekomendasi, chat, dan Simulasi langsung mengikuti.'
-              : 'Buat preferensi terpisah untuk SNBP dan SNBT. Rekomendasi, chat, dan Simulasi selalu mengikuti preferensi yang aktif.'}
-          </p>
+      <main className="flex flex-col gap-4 px-6 pt-6 pb-8 lg:flex-1 lg:gap-8 lg:px-konten lg:pt-14 lg:pb-20">
+        <div className={`flex items-end gap-8 ${daftar ? '' : 'invisible'}`}>
+          <div className="flex min-w-0 flex-1 flex-col gap-2 lg:gap-2.5">
+            <p className="t-label-s text-blue">PREFERENSI</p>
+            <h1 className="t-display-m text-ink lg:text-[28px] lg:leading-[41px]">
+              {jumlah ? `Preferensimu (${jumlah})` : 'Simpan beberapa rencana sekaligus'}
+            </h1>
+            <p className="t-body-m text-muted lg:hidden">
+              {jumlah
+                ? 'Ketuk JADIKAN AKTIF untuk berganti. Rekomendasi, chat, dan Simulasi langsung mengikuti.'
+                : 'Buat preferensi terpisah untuk SNBP dan SNBT. Rekomendasi, chat, dan Simulasi selalu mengikuti preferensi yang aktif.'}
+            </p>
+            <p className="hidden text-[17px] leading-[25px] font-body text-muted lg:block">
+              Simpan rencana SNBP dan SNBT terpisah, lalu pilih mana yang aktif. Rekomendasi, chat, dan Simulasi selalu mengikuti preferensi
+              aktif.
+            </p>
+          </div>
+          {/* Header kanan desktop (Figma D04 `186:2326`): legenda + tombol preferensi baru */}
+          <div className="hidden shrink-0 flex-col items-end gap-3 lg:flex">
+            <div className="flex gap-4">
+              <span className="flex items-center gap-2">
+                <span className="size-3.5 border-[1.5px] border-ink bg-yellow" />
+                <span className="t-body-s font-bold text-ink-2">SNBP · jalur prestasi</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="size-3.5 border-[1.5px] border-ink bg-blue" />
+                <span className="t-body-s font-bold text-ink-2">SNBT · jalur tes</span>
+              </span>
+            </div>
+            <Tombol onClick={() => setLembar(true)}>+ Preferensi baru</Tombol>
+          </div>
         </div>
 
         {daftar && !jumlah && (
-          <div className="flex gap-4 py-2">
+          <div className="flex gap-4 py-2 lg:hidden">
             <span className="flex items-center gap-2">
               <span className="size-3.5 border-[1.5px] border-ink bg-yellow" />
               <span className="t-body-s font-bold text-ink-2">SNBP · jalur prestasi</span>
@@ -115,6 +141,7 @@ export default function HalamanPreferensi({ bukaBaru = false }: { bukaBaru?: boo
         {galat && <p className="t-body-s font-bold text-red">{galat}</p>}
         {!daftar && !galat && <p className="t-body-s text-muted">Memuat preferensi…</p>}
 
+        <div className="flex flex-col gap-4 lg:grid lg:grid-cols-3 lg:items-start lg:gap-6">
         {daftar?.map((p) => (
           <KartuPreferensi
             key={p.id}
@@ -132,13 +159,19 @@ export default function HalamanPreferensi({ bukaBaru = false }: { bukaBaru?: boo
             }}
           />
         ))}
-        {galatAksi && !gantiNama && !hapus && <p className="t-body-s font-bold text-red">{galatAksi}</p>}
+        {galatAksi && !gantiNama && !hapus && (
+          <p className="t-body-s font-bold text-red lg:order-last lg:col-span-3">{galatAksi}</p>
+        )}
 
         {daftar && <TambahPreferensi onClick={() => setLembar(true)} />}
+        </div>
         {daftar && !jumlah && (
-          <p className="t-body-s text-center text-muted">Belum ada preferensi. Mulai dari jurusan yang paling kamu incar dulu.</p>
+          <p className="t-body-s text-center text-muted lg:text-left">Belum ada preferensi. Mulai dari jurusan yang paling kamu incar dulu.</p>
         )}
       </main>
+      <div className="hidden lg:block">
+        <Footer />
+      </div>
 
       {lembar && daftar && (
         <LembarPreferensiBaru

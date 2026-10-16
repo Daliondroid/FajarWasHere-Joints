@@ -51,6 +51,9 @@
 @utility t-body-m { font-family: var(--font-body); font-size: 14px; line-height: 22px; }
 @utility t-body-s { font-family: var(--font-body); font-size: 12px; line-height: 18px; }
 
+/* Desktop v3: konten 1200 px di tengah frame 1440 (px 120), minimal 48 px pada layar lebih sempit */
+@utility px-konten { padding-inline: max(48px, calc((100% - 1200px) / 2)); }
+
 :root {
   --background: #FFFFFF;
   --foreground: #000000;

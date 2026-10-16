@@ -21,7 +21,7 @@ const SUMBER_DATA = [
   'Kepmendikdasmen 102/M/2025',
 ];
 
-/** Footer mobile (Figma `169:336`, PRD F-08, F-16 hapus akun, BR-13 sumber data). */
+/** Footer Mobile / Desktop (Figma `169:336`, PRD F-08, F-16 hapus akun, BR-13 sumber data). */
 export default function Footer() {
   const { status } = useSession();
   const [konfirmasi, setKonfirmasi] = useState(false);
@@ -49,16 +49,16 @@ export default function Footer() {
   };
 
   return (
-    <footer className="flex w-full flex-col gap-6 bg-ink px-6 pt-8 pb-6">
-      <div className="flex flex-col gap-6">
-        <div className="flex flex-col gap-2.5">
+    <footer className="flex w-full flex-col gap-6 bg-ink px-6 pt-8 pb-6 lg:gap-8 lg:px-konten lg:pt-14 lg:pb-10">
+      <div className="flex flex-col gap-6 lg:flex-row lg:gap-16">
+        <div className="flex flex-col gap-2.5 lg:w-[380px]">
           <div className="flex items-center gap-2.5">
             <Logo />
             <span className="t-label-l text-paper">Cocokin!</span>
           </div>
           <p className="t-body-s text-line">Cari yang cocok, uji rasanya, tembus kampus impianmu.</p>
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 lg:flex-1">
           <p className="t-label-s text-yellow">JELAJAHI</p>
           {JELAJAHI.map((j) => (
             <Link key={j.href} href={j.href} className="t-body-s text-paper hover:underline">
@@ -66,7 +66,7 @@ export default function Footer() {
             </Link>
           ))}
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 lg:flex-1">
           <p className="t-label-s text-yellow">SUMBER DATA</p>
           {SUMBER_DATA.map((s) => (
             <p key={s} className="t-body-s text-paper">
@@ -83,8 +83,8 @@ export default function Footer() {
         </p>
       </div>
 
-      <div className="flex flex-col items-start gap-2">
-        <p className="t-body-s text-line">© 2026 Cocokin! · Hackathon JOINTS UGM 2026</p>
+      <div className="flex flex-col items-start gap-2 lg:flex-row lg:items-start lg:gap-6">
+        <p className="t-body-s text-line lg:flex-1">© 2026 Cocokin! · Hackathon JOINTS UGM 2026</p>
         <Link href="/syarat-ketentuan" className="t-body-s font-bold text-paper underline">
           Syarat &amp; ketentuan
         </Link>

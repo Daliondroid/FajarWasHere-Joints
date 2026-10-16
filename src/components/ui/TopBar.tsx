@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ScrollProgress from '@/components/ui/ScrollProgress';
 import MenuDrawer from '@/components/MenuDrawer';
+import NavbarDesktop from '@/components/NavbarDesktop';
 
 interface TopBarProps {
   title: string;
@@ -14,14 +15,14 @@ interface TopBarProps {
   denganMenu?: boolean;
 }
 
-/** Top Bar varian Back (Figma `80:108`): tombol kembali 40, judul Display/S di tengah, aksi opsional. */
+/** Top Bar varian Back (Figma `80:108`): tombol kembali 40, judul Display/S di tengah, aksi opsional. lg ke atas: Navbar Desktop. */
 export const TopBar: React.FC<TopBarProps> = ({ title, onBack, rightElement, showBack = true, denganMenu = false }) => {
   const router = useRouter();
   const [menu, setMenu] = useState(false);
 
   return (
     <>
-    <header className="sticky top-0 z-50 bg-paper">
+    <header className="sticky top-0 z-50 bg-paper lg:hidden">
       <div className="flex h-[60px] items-center gap-2 px-3">
         <div className="size-10 shrink-0">
           {showBack && (
@@ -54,6 +55,7 @@ export const TopBar: React.FC<TopBarProps> = ({ title, onBack, rightElement, sho
       </div>
       <ScrollProgress />
     </header>
+    <NavbarDesktop />
     {denganMenu && <MenuDrawer terbuka={menu} setTerbuka={setMenu} />}
     </>
   );

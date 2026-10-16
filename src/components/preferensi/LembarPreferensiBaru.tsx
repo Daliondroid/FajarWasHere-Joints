@@ -23,7 +23,7 @@ export interface IsianPreferensiBaru {
 }
 
 /**
- * Bottom sheet "Preferensi baru" (Figma M07 `173:655`): nama, jalur (BR-17, tidak bisa diubah), tahun lulus.
+ * Bottom sheet "Preferensi baru" (Figma M07 `173:655`; desktop = modal D04b `272:4960`): nama, jalur (BR-17, tidak bisa diubah), tahun lulus.
  * BR-11 dicek di sini supaya siswa tahu sebelum mengisi kuis.
  */
 export default function LembarPreferensiBaru({
@@ -55,16 +55,16 @@ export default function LembarPreferensiBaru({
             : null;
 
   return (
-    <div role="dialog" aria-modal="true" aria-label="Preferensi baru" className="fixed inset-0 z-[60] flex items-end justify-center">
+    <div role="dialog" aria-modal="true" aria-label="Preferensi baru" className="fixed inset-0 z-[60] flex items-end justify-center lg:items-start lg:pt-[140px]">
       <div className="absolute inset-0 bg-ink/55" onClick={onBatal} />
       <form
-        className="relative flex w-full max-w-[402px] flex-col gap-4 border-t-2 border-ink bg-paper px-6 pt-3 pb-7"
+        className="relative flex w-full max-w-[402px] flex-col gap-4 border-t-2 border-ink bg-paper px-6 pt-3 pb-7 lg:max-w-[520px] lg:gap-[18px] lg:border-2 lg:p-7 lg:shadow-pixel-md"
         onSubmit={(e) => {
           e.preventDefault();
           if (bersih && !galat) onBuat({ nama: bersih, jalur, tahun_lulus: tahun, pernah_lulus_snbp: pernahSnbp });
         }}
       >
-        <div className="flex justify-center">
+        <div className="flex justify-center lg:hidden">
           <span className="h-1 w-12 bg-track" />
         </div>
         <h2 className="t-display-s text-ink">Preferensi baru</h2>

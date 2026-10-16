@@ -7,16 +7,11 @@ import ScrollProgress from '@/components/ui/ScrollProgress';
 import Logo from '@/components/ui/Logo';
 import MenuDrawer from '@/components/MenuDrawer';
 
-/** Inisial avatar dari nama akun Google (maks. 2 huruf). */
-export function inisial(nama: string | null | undefined): string {
-  const huruf = (nama ?? '')
-    .split(/\s+/)
-    .filter(Boolean)
-    .map((k) => k[0]);
-  return huruf.slice(0, 2).join('').toUpperCase() || '?';
-}
+import NavbarDesktop, { inisial } from '@/components/NavbarDesktop';
 
-/** Top Bar varian Brand (Figma `80:95`) + drawer menu (M02 `172:344`). */
+export { inisial };
+
+/** Top Bar varian Brand (Figma `80:95`) + drawer menu (M02 `172:344`); lg ke atas memakai Navbar Desktop. */
 export default function Navbar() {
   const [terbuka, setTerbuka] = useState(false);
   const { data: session, status } = useSession();
@@ -24,7 +19,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-paper">
+      <header className="sticky top-0 z-50 bg-paper lg:hidden">
         <div className="flex h-[60px] items-center gap-2 px-3">
           <Link href="/" onClick={() => setTerbuka(false)} className="flex flex-1 min-w-0 items-center gap-2 pl-1">
             <Logo />
@@ -51,6 +46,7 @@ export default function Navbar() {
         <ScrollProgress />
       </header>
 
+      <NavbarDesktop />
       <MenuDrawer terbuka={terbuka} setTerbuka={setTerbuka} />
     </>
   );
