@@ -113,6 +113,7 @@ Aturan untuk agen:
 | T-29 | Rekomendasi dua tahap: (1) 3 rumpun jurusan dari minat RIASEC + pilihan jenjang S1/vokasi, (2) kampus per jurusan dikelompokkan Ambisius / Realistis / Aman dari peluang nilai siswa, diurutkan sinyal kualitas (PTN-BH, akreditasi, keketatan), plus tingkat kepercayaan estimasi. Mengganti Dream Goal = rasio keketatan terkecil dan pemecah seri `id_prodi` | farrelzaki | `[ ]` | | `docs/PRD.md`, `docs/ARSITEKTUR.md`, `src/lib/`, `src/app/api/rekomendasi/`, UI rekomendasi | 2026-10-16 | Diputuskan farrelzaki (opsi b), dikerjakan nanti. Perubahan besar: BR-01, BR-10, F-08, kontrak `/api/rekomendasi`. Pola acuan: O*NET Job Zone, Naviance, Gaokao 冲稳保, Kawaijuku A-E |
 | T-30 | F-13 unggah foto/PDF rapor + ekstraksi AI (dikonfirmasi siswa, file tidak disimpan) dan rekomendasi baru dihitung setelah bahan akademik lengkap (rapor, peringkat, TKA wajib) | farrelzaki | `[x]` | `main` (PR #15) | `src/app/api/`, `src/lib/`, `src/components/preferensi/`, `src/app/preferensi/` | 2026-10-16 | Rencana disetujui farrelzaki 2026-10-16 (Gemini gratis, rapor dummy). PR #15 merge |
 | T-31 | Chatbot lanjutan: percepat jawaban (sekarang 15–45 dtk karena 3–4 panggilan Gemini per pesan; mis. gabungkan cari_prodi + peluang_saya) dan kamus singkatan prodi ("TPL SV IPB" tertebak TPMP) | farrelzaki | `[ ]` | | `src/lib/chat/`, `src/lib/layanan/` | 2026-10-16 | Sisa T-24 |
+| T-32 | Tulis ulang README.md jadi README resmi proyek (ikhtisar, fitur, stack, cara menjalankan, data & metodologi), tanpa isi internal tim | farrelzaki | `[~]` | `docs/farrelzaki-T-32` | `README.md` | 2026-10-17 | Ditambah atas perintah farrelzaki |
 
 Rincian langkah task (rencana, checklist) ditulis di `TASK.md` pribadi, bukan di sini.
 
@@ -122,6 +123,7 @@ Sebelum menyunting file bersama (bagian 1), tambahkan baris di sini, commit, dan
 
 | File | Dikunci oleh | Sejak | Alasan |
 | --- | --- | --- | --- |
+| `README.md` | farrelzaki | 2026-10-17 | T-32 README resmi |
 
 Agen **tidak boleh** menyunting file bersama yang sedang dikunci orang lain.
 
