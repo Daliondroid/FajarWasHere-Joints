@@ -102,7 +102,7 @@ Aturan untuk agen:
 | T-18 | DB + API banyak preferensi per akun (nama, jalur tunggal, status aktif) + pemilih preferensi aktif | farrelzaki | `[x]` | `main` (PR #8) | `supabase/migrations/`, `src/app/api/preferensi/`, `src/lib/`, `docs/ARSITEKTUR.md` | 2026-10-16 | F-18, F-19, BR-16, BR-17. Perubahan besar: skema `preferensi` kini satu baris per akun Scope + TKA 2 mapel pilihan (BR-18), hapus alumni tidak daftar ulang (K-04), data TO per preferensi SNBT, hapus refleksi & durasi simulasi (K-06, K-08, R-06), atas perintah farrelzaki |
 | T-19 | API rekomendasi 3 kartu (Dream Goal, Safety Net serumpun, Alternatif) + data popup DETAIL dari preferensi aktif | farrelzaki | `[x]` | `main` (PR #9) | `src/app/api/rekomendasi/`, `src/lib/` | 2026-10-16 | F-08, K-07, K-10, BR-01. Ditambah atas perintah farrelzaki |
 | T-20 | UI 8-bit Mobile v3 (Tahap A–C): fondasi, beranda v3, modal login, wizard preferensi multi-preferensi & RIASEC | daliondroid | `[~]` | `fitur/daliondroid-T-20` | `src/app/`, `src/components/`, `src/styles/`, `public/` | 2026-10-16 | Sesuai Figma HIFI v3 M01–M12, M10b, M20 |
-| T-21 | Tuning Safety Net: batas minimal kecocokan relatif terhadap Dream Goal (QA Q-5) | farrelzaki | `[~]` | `perbaikan/farrelzaki-T-21` | `src/lib/`, `docs/ARSITEKTUR.md` | 2026-10-16 | Ditambah atas perintah farrelzaki |
+| T-21 | Tuning Safety Net: batas minimal kecocokan relatif terhadap Dream Goal (QA Q-5) | farrelzaki | `[x]` | `main` (PR #12) | `src/lib/`, `docs/ARSITEKTUR.md` | 2026-10-16 | Ditambah atas perintah farrelzaki |
 
 Rincian langkah task (rencana, checklist) ditulis di `TASK.md` pribadi, bukan di sini.
 
@@ -112,7 +112,6 @@ Sebelum menyunting file bersama (bagian 1), tambahkan baris di sini, commit, dan
 
 | File | Dikunci oleh | Sejak | Alasan |
 | --- | --- | --- | --- |
-| `docs/ARSITEKTUR.md` | farrelzaki | 2026-10-16 | T-21: aturan Safety Net di kontrak /api/rekomendasi |
 
 Agen **tidak boleh** menyunting file bersama yang sedang dikunci orang lain.
 
@@ -237,6 +236,7 @@ Format: `- YYYY-MM-DD · T-xx · apa yang dikerjakan · hasil/verifikasi · cata
 - 2026-10-15 · T-17 · docs/PRD.md: hasil rekomendasi jadi 3 kartu (#3 Alternatif, F-08, K-10) · diff ditinjau; langsung ke main atas izin farrelzaki · daliondroid: endpoint rekomendasi kembalikan 3 prodi
 - 2026-10-15 · T-17 · docs/PRD.md: "Test Drive" diganti "Simulasi" (K-11) · diff ditinjau; langsung ke main atas izin farrelzaki · daliondroid: ganti label UI, rute/API boleh tetap
 - 2026-10-16 · T-17 · docs/DESIGN_SYSTEM.md v3 diambil dari Figma HIFI v3 (token warna, text style, bayangan, komponen, ikon, token CSS) atas permintaan farrelzaki; file milik daliondroid · diff ditinjau; langsung ke main · daliondroid: selaraskan globals.css (bingkai 2 px ink, shadow 3/5 px, Plus Jakarta Sans + Pixelify Sans)
+- 2026-10-16 · T-21 · Safety Net dibatasi kecocokan ≤ 5 poin di bawah Dream Goal (lalu 10, lalu tanpa batas + catatan) di /api/rekomendasi; QA Q-5 selesai; kunci ARSITEKTUR dilepas · npm test 162 lulus, tsc & lint bersih, PR #12 merge · daliondroid: tidak ada perubahan kontrak respons
 
 ## 9. Mengubah File Ini
 
