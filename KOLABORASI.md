@@ -102,6 +102,7 @@ Aturan untuk agen:
 | T-18 | DB + API banyak preferensi per akun (nama, jalur tunggal, status aktif) + pemilih preferensi aktif | farrelzaki | `[x]` | `main` (PR #8) | `supabase/migrations/`, `src/app/api/preferensi/`, `src/lib/`, `docs/ARSITEKTUR.md` | 2026-10-16 | F-18, F-19, BR-16, BR-17. Perubahan besar: skema `preferensi` kini satu baris per akun Scope + TKA 2 mapel pilihan (BR-18), hapus alumni tidak daftar ulang (K-04), data TO per preferensi SNBT, hapus refleksi & durasi simulasi (K-06, K-08, R-06), atas perintah farrelzaki |
 | T-19 | API rekomendasi 3 kartu (Dream Goal, Safety Net serumpun, Alternatif) + data popup DETAIL dari preferensi aktif | farrelzaki | `[x]` | `main` (PR #9) | `src/app/api/rekomendasi/`, `src/lib/` | 2026-10-16 | F-08, K-07, K-10, BR-01. Ditambah atas perintah farrelzaki |
 | T-20 | UI 8-bit Mobile v3 (Tahap A–C): fondasi, beranda v3, modal login, wizard preferensi multi-preferensi & RIASEC | daliondroid | `[~]` | `fitur/daliondroid-T-20` | `src/app/`, `src/components/`, `src/styles/`, `public/` | 2026-10-16 | Sesuai Figma HIFI v3 M01–M12, M10b, M20 |
+| T-21 | Tuning Safety Net: batas minimal kecocokan relatif terhadap Dream Goal (QA Q-5) | farrelzaki | `[~]` | `perbaikan/farrelzaki-T-21` | `src/lib/`, `docs/ARSITEKTUR.md` | 2026-10-16 | Ditambah atas perintah farrelzaki |
 
 Rincian langkah task (rencana, checklist) ditulis di `TASK.md` pribadi, bukan di sini.
 
@@ -111,6 +112,7 @@ Sebelum menyunting file bersama (bagian 1), tambahkan baris di sini, commit, dan
 
 | File | Dikunci oleh | Sejak | Alasan |
 | --- | --- | --- | --- |
+| `docs/ARSITEKTUR.md` | farrelzaki | 2026-10-16 | T-21: aturan Safety Net di kontrak /api/rekomendasi |
 
 Agen **tidak boleh** menyunting file bersama yang sedang dikunci orang lain.
 
