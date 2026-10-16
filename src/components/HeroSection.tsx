@@ -1,220 +1,192 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Icon } from '@/components/ui/Icon';
+import { useSession } from 'next-auth/react';
+import LoginModal from '@/components/auth/LoginModal';
+import PemilihPreferensi from '@/components/ui/PemilihPreferensi';
+import IlustrasiSiswa from '@/components/ui/IlustrasiSiswa';
+import Tag from '@/components/ui/Tag';
+import Tombol from '@/components/ui/Tombol';
+import { useDaftarPreferensi } from '@/lib/klien/preferensi';
 
+const LANGKAH = [
+  { no: '01', warna: 'bg-yellow text-ink', judul: 'Isi kuis minat', isi: '30 kegiatan singkat (RIASEC) menentukan kode Holland-mu.' },
+  { no: '02', warna: 'bg-blue text-paper', judul: 'Lengkapi data jalurmu', isi: 'SNBP: NPSN, rapor & TKA. SNBT: nilai try out 7 subtes.' },
+  {
+    no: '03',
+    warna: 'bg-green text-paper',
+    judul: 'Lihat peluang & Simulasi',
+    isi: 'Kecocokan, peluang per kampus berlabel estimasi, lalu cicipi soal kuliahnya.',
+  },
+];
+
+const STATISTIK = [
+  { nilai: '5.150', label: 'Program studi' },
+  { nilai: '146', label: 'PTN' },
+  { nilai: '1 Klik', label: 'Simulasi Kuliah' },
+];
+
+/** Posisi bintang pixel di ilustrasi (Figma `172:264`), relatif kotak 320 × 330. */
+const BINTANG = [
+  { x: 34, y: 24, s: 20 },
+  { x: 246, y: 8, s: 22 },
+  { x: 262, y: 58, s: 34 },
+  { x: 22, y: 96, s: 30 },
+  { x: 276, y: 142, s: 40 },
+  { x: 40, y: 176, s: 16 },
+  { x: 254, y: 222, s: 18 },
+  { x: 18, y: 248, s: 14 },
+];
+
+function KataSorot({ children, warna }: { children: string; warna: string }) {
+  return <span className={`border-2 border-ink px-2 py-1.5 shadow-pixel-sm ${warna}`}>{children}</span>;
+}
+
+function Ilustrasi({ masuk }: { masuk: boolean }) {
+  return masuk ? (
+    <IlustrasiSiswa gambar={['/figma/siswa-login-1.png', '/figma/siswa-login-2.png']} bintang={BINTANG} posisi="top-[-1px] left-1/2 -translate-x-1/2" />
+  ) : (
+    <IlustrasiSiswa gambar={['/figma/siswa-1.png', '/figma/siswa-2.png']} bintang={BINTANG} />
+  );
+}
+
+/** Beranda mobile: M01 belum login (`172:203`) dan M04 sudah login (`172:601`). */
 export default function HeroSection() {
-  const scrollToCaraKerja = () => {
-    const el = document.getElementById('cara-kerja');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  };
+  const { status } = useSession();
+  const masuk = status === 'authenticated';
+  const [loginTerbuka, setLoginTerbuka] = useState(false);
+  const [kembali, setKembali] = useState<string | null>(null);
+
+  // Gerbang login dari middleware: /?login=1&kembali=/halaman-asal (src/lib/auth/rute.ts).
+  useEffect(() => {
+    if (status !== 'unauthenticated') return;
+    const q = new URLSearchParams(window.location.search);
+    if (q.get('login') !== '1') return;
+    const k = q.get('kembali');
+    setKembali(k && k.startsWith('/') && !k.startsWith('//') ? k : null);
+    setLoginTerbuka(true);
+  }, [status]);
+  const { daftar, aktifkan } = useDaftarPreferensi(masuk);
+  const punyaPreferensi = masuk && (daftar?.length ?? 0) > 0;
+
+  const keCaraKerja = () => document.getElementById('cara-kerja')?.scrollIntoView({ behavior: 'smooth' });
+  const mulai = masuk
+    ? { href: punyaPreferensi ? '/cocokin' : '/preferensi/baru' }
+    : { onClick: () => setLoginTerbuka(true) };
 
   return (
-    <div className="w-full max-w-[402px] mx-auto flex flex-col items-center px-4 pt-6 pb-12">
-      {/* 1. Tagline Pill */}
-      <div className="mb-4 inline-flex items-center px-3 py-1 border-[2px] border-[#277EFD] bg-white">
-        <span className="font-['Press_Start_2P',monospace] text-[9px] sm:text-[10px] text-[#277EFD] tracking-wider uppercase">
-          5.000+ PRODI · SNBP & SNBT
-        </span>
-      </div>
+    <>
+      {/* Hero dengan latar kampus impian + fade (Figma `172:205`) */}
+      <section className="relative flex flex-col gap-5 overflow-hidden px-6 pt-8">
+        <div className="pointer-events-none absolute bottom-0 left-1/2 h-[805px] w-[402px] -translate-x-1/2">
+          <Image src="/figma/kampus-impian.png" alt="" fill priority sizes="402px" className="object-cover" />
+        </div>
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[110px] bg-gradient-to-b from-white/0 via-white via-70% to-white" />
 
-      {/* 2. Headline with Badges */}
-      <div className="flex flex-col items-center text-center mb-3">
-        <h1 className="font-['Press_Start_2P',monospace] text-[17px] sm:text-[19px] leading-[1.6] text-black">
-          Temukan jurusan
+        <Tag className="relative self-start">5.150 PRODI · 146 PTN · SNBP &amp; SNBT</Tag>
+        <h1 className="relative flex flex-wrap items-center gap-x-2.5 gap-y-3 t-display-l text-ink">
+          <span>Temukan</span>
+          <span>jurusan</span>
+          <span>yang</span>
+          <KataSorot warna="bg-blue text-paper">cocok</KataSorot>
+          <span>&amp;</span>
+          <span>tembus</span>
+          <span>kampus</span>
+          <KataSorot warna="bg-yellow text-ink">impian</KataSorot>
         </h1>
-        <div className="flex items-center justify-center gap-2 mt-2">
-          <span className="font-['Press_Start_2P',monospace] text-[17px] sm:text-[19px] text-black">
-            yang
-          </span>
-          <span className="pixel-badge-blue text-[15px] sm:text-[17px]">
-            cocok
-          </span>
-          <span className="font-['Press_Start_2P',monospace] text-[17px] sm:text-[19px] text-black">
-            &
-          </span>
+        <p className="relative t-body-l text-ink-2">
+          Uji rasa kuliahmu lewat studi kasus singkat, cocokkan minat, dan hitung peluang tembus PTN lewat data resmi SNPMB &amp; PDDikti.
+        </p>
+        <div className="relative flex flex-col gap-3">
+          {punyaPreferensi ? (
+            <Tombol href="/cocokin" ikon penuh>
+              Lihat rekomendasi
+            </Tombol>
+          ) : (
+            <Tombol jenis="success" ikon penuh {...mulai}>
+              Mulai sekarang
+            </Tombol>
+          )}
+          <Tombol jenis="secondary" penuh onClick={keCaraKerja}>
+            Lihat cara kerja
+          </Tombol>
         </div>
-        <div className="font-['Press_Start_2P',monospace] text-[17px] sm:text-[19px] leading-[1.6] text-black mt-2">
-          tembus kampus
-        </div>
-        <div className="mt-2.5">
-          <span className="pixel-badge-yellow text-[15px] sm:text-[17px]">
-            impian
-          </span>
-        </div>
-      </div>
-
-      {/* 3. Subtitle */}
-      <p className="text-center text-[13px] leading-relaxed text-[#4B5563] mt-3 mb-6 max-w-[340px]">
-        Cocokkan minatmu dengan 5.000+ prodi se-Indonesia, rasakan studi kasusnya, dan ketahui peluang masuk PTN-mu.
-      </p>
-
-      {/* 4. Action Buttons */}
-      <div className="w-full flex flex-col gap-3 max-w-[340px] mb-6">
-        <Link
-          href="/preferensi"
-          className="w-full pixel-btn-blue py-3.5 text-center text-xs tracking-wider"
-        >
-          <span>MULAI SEKARANG</span>
-          <Icon name="arrow-right" className="w-4 h-4 text-white" />
-        </Link>
+        <div className="h-[400px]" />
         <button
           type="button"
-          onClick={scrollToCaraKerja}
-          className="w-full pixel-btn-white py-3.5 text-center text-xs tracking-wider"
+          onClick={keCaraKerja}
+          className="absolute bottom-3.5 left-1/2 flex -translate-x-1/2 flex-col items-center gap-0.5 cursor-pointer"
         >
-          LIHAT CARA KERJA
+          <img src="/figma/icon-chevron-down.svg" alt="" width={20} height={20} />
+          <span className="t-label-m text-ink">Jelajahi</span>
         </button>
-      </div>
+      </section>
 
-      {/* 5. Campus Illustration */}
-      <div className="w-full relative flex flex-col items-center">
-        <div className="w-full h-[280px] sm:h-[320px] relative overflow-hidden flex items-end justify-center">
-          <Image
-            src="/assets/hero-campus.png"
-            alt="Kampus Impian Pixel"
-            width={402}
-            height={600}
-            priority
-            className="w-full object-cover object-bottom"
-          />
-        </div>
-
-        {/* Scroll indicator */}
-        <div className="flex flex-col items-center justify-center pt-3 pb-6">
-          <Icon name="chevron-down" className="w-5 h-5 text-black animate-bounce mb-1" />
-          <p className="font-['Press_Start_2P',monospace] text-[9px] text-[#151D21] text-center">
-            Scroll ke bawah untuk info lebih lanjut
-          </p>
-        </div>
-      </div>
-
-      {/* 6. Stats Section (3 Cards) */}
-      <div className="w-full grid grid-cols-3 gap-2 my-6">
-        <div className="bg-white border-2 border-black p-2.5 flex flex-col items-center text-center">
-          <span className="font-['Press_Start_2P',monospace] text-xs sm:text-[13px] font-bold text-black mb-1">
-            5.140
-          </span>
-          <span className="text-[11px] text-[#6B7280]">Program studi</span>
-        </div>
-        <div className="bg-white border-2 border-black p-2.5 flex flex-col items-center text-center">
-          <span className="font-['Press_Start_2P',monospace] text-xs sm:text-[13px] font-bold text-black mb-1">
-            85
-          </span>
-          <span className="text-[11px] text-[#6B7280]">PTN terdata</span>
-        </div>
-        <div className="bg-white border-2 border-black p-2.5 flex flex-col items-center text-center">
-          <span className="font-['Press_Start_2P',monospace] text-xs sm:text-[13px] font-bold text-black mb-1">
-            1 Klik
-          </span>
-          <span className="text-[11px] text-[#6B7280]">Simulasi Kuliah</span>
-        </div>
-      </div>
-
-      {/* 7. Section CARA KERJA */}
-      <section id="cara-kerja" className="w-full pt-6 pb-8 flex flex-col">
-        <div className="mb-2">
-          <span className="font-['Press_Start_2P',monospace] text-[10px] text-[#277EFD] tracking-wider uppercase">
-            CARA KERJA
-          </span>
-        </div>
-        <h2 className="font-['Press_Start_2P',monospace] text-sm sm:text-base text-black leading-relaxed mb-5">
-          3 langkah menuju jurusan yang pas
-        </h2>
-
-        <div className="flex flex-col gap-4">
-          {/* Step 01 */}
-          <div className="bg-white pixel-border p-3.5 flex items-start gap-3">
-            <div className="w-9 h-9 shrink-0 bg-[#FEBD01] border-2 border-black flex items-center justify-center font-['Press_Start_2P',monospace] text-xs font-bold text-black">
-              01
+      {/* Statistik (Figma `172:228`) */}
+      <section className="px-6 pt-6">
+        <div className="flex gap-3">
+          {STATISTIK.map((s) => (
+            <div key={s.label} className="flex min-w-0 flex-1 flex-col gap-1 border-[1.5px] border-line bg-paper p-3 whitespace-nowrap">
+              <span className="t-display-s text-ink">{s.nilai}</span>
+              <span className="t-body-s text-muted">{s.label}</span>
             </div>
-            <div className="flex flex-col">
-              <h3 className="font-['Press_Start_2P',monospace] text-xs text-black mb-1.5 leading-snug">
-                Ceritakan dirimu
-              </h3>
-              <p className="text-xs text-[#4B5563] leading-relaxed">
-                Tulis minat, hobi, dan gaya belajarmu dengan bahasamu sendiri.
-              </p>
-            </div>
-          </div>
-
-          {/* Step 02 */}
-          <div className="bg-white pixel-border p-3.5 flex items-start gap-3">
-            <div className="w-9 h-9 shrink-0 bg-[#277EFD] border-2 border-black flex items-center justify-center font-['Press_Start_2P',monospace] text-xs font-bold text-white">
-              02
-            </div>
-            <div className="flex flex-col">
-              <h3 className="font-['Press_Start_2P',monospace] text-xs text-black mb-1.5 leading-snug">
-                Lengkapi data akademik
-              </h3>
-              <p className="text-xs text-[#4B5563] leading-relaxed">
-                Unggah rapor atau nilai try out sesuai jalur SNBP/SNBT.
-              </p>
-            </div>
-          </div>
-
-          {/* Step 03 */}
-          <div className="bg-white pixel-border p-3.5 flex items-start gap-3">
-            <div className="w-9 h-9 shrink-0 bg-[#22A94F] border-2 border-black flex items-center justify-center font-['Press_Start_2P',monospace] text-xs font-bold text-white">
-              03
-            </div>
-            <div className="flex flex-col">
-              <h3 className="font-['Press_Start_2P',monospace] text-xs text-black mb-1.5 leading-snug">
-                Lihat hasil & coba simulasi
-              </h3>
-              <p className="text-xs text-[#4B5563] leading-relaxed">
-                Dapatkan persentase kecocokan, lalu rasakan studi kasus tiap jurusan.
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* 8. Preferensi CTA Section */}
-      <section className="w-full pt-8 pb-10 flex flex-col items-center text-center">
-        <h2 className="font-['Press_Start_2P',monospace] text-base sm:text-lg text-black leading-relaxed mb-2">
-          Isi <span className="text-[#22A94F]">preferensi</span> dulu, yuk!
-        </h2>
-        <p className="text-xs text-[#4B5563] max-w-[320px] mb-4">
-          Cuma butuh ±3 menit. Datamu aman dan hanya dipakai untuk rekomendasi.
-        </p>
-
-        {/* Character Illustration with Stars */}
-        <div className="relative w-[240px] h-[340px] flex items-center justify-center my-2">
-          <Image
-            src="/assets/student-character.png"
-            alt="Siswa Ceria"
-            width={240}
-            height={340}
-            className="w-full h-full object-contain"
-          />
-          {/* Pixel Stars matching Figma */}
-          <span className="absolute top-10 left-6 text-sm text-[#FEBD01] animate-pulse">★</span>
-          <span className="absolute top-4 right-10 text-xs text-[#FEBD01] animate-pulse">★</span>
-          <span className="absolute top-24 right-4 text-base text-[#FEBD01] animate-pulse">★</span>
-          <span className="absolute top-36 left-2 text-base text-[#FEBD01] animate-pulse">★</span>
-          <span className="absolute bottom-20 right-2 text-xl text-[#FEBD01] animate-pulse">★</span>
-          <span className="absolute bottom-28 left-6 text-xs text-[#FEBD01] animate-pulse">★</span>
-          <span className="absolute bottom-12 left-2 text-xs text-[#FEBD01] animate-pulse">★</span>
-          <span className="absolute bottom-16 right-12 text-xs text-[#FEBD01] animate-pulse">★</span>
-        </div>
-
-        {/* Action Button */}
-        <div className="w-full max-w-[340px] mt-4 flex flex-col items-center">
-          <Link
-            href="/preferensi"
-            className="w-full pixel-btn-blue py-3.5 text-center text-xs tracking-wider"
-          >
-            <span>MULAI</span>
-            <Icon name="arrow-right" className="w-4 h-4 text-white" />
-          </Link>
-          <div className="mt-3 inline-flex items-center gap-1.5 text-xs text-gray-500">
-            <Icon name="lock" className="w-3.5 h-3.5 text-gray-500" />
-            <span>Tidak dibagikan ke pihak lain</span>
+      {/* Cara kerja (Figma `172:239`) */}
+      <section id="cara-kerja" className="flex scroll-mt-16 flex-col gap-4 px-6 pt-10 pb-8">
+        <p className="t-label-s text-blue">CARA KERJA</p>
+        <h2 className="t-display-m text-ink">3 langkah menuju jurusan yang pas</h2>
+        {LANGKAH.map((l) => (
+          <div key={l.no} className="flex items-start gap-4 border-2 border-ink bg-paper p-4 shadow-pixel-sm">
+            <span className={`flex size-11 shrink-0 items-center justify-center border-2 border-ink t-display-s ${l.warna}`}>{l.no}</span>
+            <div className="flex min-w-0 flex-1 flex-col gap-1">
+              <h3 className="t-label-m text-ink">{l.judul}</h3>
+              <p className="t-body-s text-muted">{l.isi}</p>
+            </div>
           </div>
+        ))}
+      </section>
+
+      {/* Ajakan preferensi (Figma `172:260` / `172:658`) */}
+      <section className="px-6 pt-2 pb-8">
+        <div className="flex flex-col items-center gap-4 pt-8 pb-6 text-center">
+          {punyaPreferensi && daftar ? (
+            <>
+              <h2 className="t-display-m text-ink">
+                Yuk, lihat <span className="text-blue">rekomendasi</span> jurusan untukmu!
+              </h2>
+              <p className="t-body-m text-muted">
+                Kamu punya {daftar.length} preferensi tersimpan. Hasilnya mengikuti preferensi yang sedang aktif.
+              </p>
+              <PemilihPreferensi daftar={daftar} onPilih={aktifkan} className="w-[232px]" />
+              <Ilustrasi masuk />
+              <Tombol href="/cocokin" ikon penuh>
+                Lihat rekomendasi
+              </Tombol>
+              <Link href="/preferensi" className="t-body-s font-bold text-blue">
+                Kelola preferensi →
+              </Link>
+            </>
+          ) : (
+            <>
+              <h2 className="t-display-m text-ink">
+                Isi p<span className="text-green">referensi </span>dulu yuu, biar ramalan Cocokin! makin akurat!
+              </h2>
+              <p className="t-body-m text-muted">Kuis minat ±3 menit + data jalur SNBP/SNBT. Bisa simpan beberapa preferensi sekaligus.</p>
+              <Ilustrasi masuk={false} />
+              <Tombol jenis="success" ikon penuh {...mulai}>
+                Mulai sekarang
+              </Tombol>
+            </>
+          )}
         </div>
       </section>
-    </div>
+
+      <LoginModal isOpen={loginTerbuka} onClose={() => setLoginTerbuka(false)} kembali={kembali} />
+    </>
   );
 }

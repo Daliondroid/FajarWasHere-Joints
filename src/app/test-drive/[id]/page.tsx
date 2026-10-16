@@ -1,191 +1,221 @@
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import type { ResponsJawabTestDrive, ResponsTestDrive, SoalTestDrive } from '@/types';
 import { TopBar } from '@/components/ui/TopBar';
+import BingkaiMobile from '@/components/ui/BingkaiMobile';
 import { RetroWindow } from '@/components/ui/RetroWindow';
-import { Icon } from '@/components/ui/Icon';
+import IkonFigma from '@/components/ui/IkonFigma';
+import Tag from '@/components/ui/Tag';
+import Tombol from '@/components/ui/Tombol';
+import { panggilApi, pesanGalat } from '@/lib/klien/api';
 
-export default function TestDriveDetailPage() {
+type Huruf = 'A' | 'B' | 'C' | 'D';
+const HURUF: Huruf[] = ['A', 'B', 'C', 'D'];
+const kapital = (s: string) => s.toLowerCase().replace(/\b\w/g, (h) => h.toUpperCase());
+const persen = (r: number) => `${(r * 100).toFixed(1).replace('.', ',')}%`;
+
+/** Banner pembuka/hasil (Figma "Intro banner"): garis putus-putus merah + aksen kiri. */
+function Banner({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex border-2 border-dashed border-red bg-paper">
+      <span className="w-2 shrink-0 bg-red" />
+      <p className="flex-1 p-4 t-label-l text-ink">{children}</p>
+    </div>
+  );
+}
+
+/** Opsi jawaban: belum dijawab = Option Compact; sesudah koreksi = BENAR hijau / JAWABANMU merah (K-08). */
+function OpsiJawaban({
+  huruf,
+  teks,
+  pilih,
+  hasil,
+  onPilih,
+}: {
+  huruf: Huruf;
+  teks: string;
+  pilih: boolean;
+  hasil: ResponsJawabTestDrive | null;
+  onPilih: () => void;
+}) {
+  const benar = hasil?.kunci === huruf;
+  const salahKu = !!hasil && pilih && !benar;
+  const gaya = benar
+    ? 'border-[1.5px] border-green bg-green-50'
+    : salahKu
+      ? 'border-[1.5px] border-red bg-red-50'
+      : pilih && !hasil
+        ? 'bg-blue-50'
+        : '';
+  const kotak = benar ? 'border-green bg-green' : salahKu ? 'border-red bg-red' : pilih && !hasil ? 'border-blue bg-blue' : 'border-ink bg-paper';
+  const warnaTeks = hasil ? (benar || salahKu ? 'text-ink' : 'text-muted') : pilih ? 'text-blue-700' : 'text-ink';
+  return (
+    <button type="button" role="radio" aria-checked={pilih} disabled={!!hasil} onClick={onPilih} className={`flex w-full items-center gap-3 p-2 text-left cursor-pointer disabled:cursor-default ${gaya}`}>
+      <span className={`flex size-[22px] shrink-0 items-center justify-center border-2 ${kotak}`}>
+        {(benar || (pilih && !hasil)) && <IkonFigma src="/figma/icon-check-12.svg" ukuran={12} className="text-paper" />}
+        {salahKu && <img src="/figma/icon-silang-12.svg" alt="" width={12} height={12} />}
+      </span>
+      <span className="flex min-w-0 flex-1 items-start gap-2">
+        <span className={`flex-1 t-body-m ${warnaTeks}`}>
+          {huruf}. {teks}
+        </span>
+        {benar && <Tag warna="green">BENAR</Tag>}
+        {salahKu && <Tag warna="red">JAWABANMU</Tag>}
+      </span>
+    </button>
+  );
+}
+
+/** M18 soal (`206:3221`) + M19 hasil koreksi (`207:3189`). GET /api/test-drive, POST /api/test-drive/jawab. Tanpa timer (K-06). */
+export default function SimulasiPage() {
   const router = useRouter();
-  const params = useParams();
-  const prodiId = typeof params?.id === 'string' ? params.id : 'informatika';
+  const params = useParams<{ id: string }>();
+  const idProdi = Number(params.id);
+  const [data, setData] = useState<ResponsTestDrive | null>(null);
+  const [galat, setGalat] = useState<string | null>(null);
+  const [nomor, setNomor] = useState(0);
+  const [pilihan, setPilihan] = useState<Huruf | null>(null);
+  const [hasil, setHasil] = useState<ResponsJawabTestDrive | null>(null);
+  const [sibuk, setSibuk] = useState(false);
 
-  const prodiTitle = prodiId
-    .split('-')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+  useEffect(() => {
+    if (!Number.isInteger(idProdi) || idProdi <= 0) {
+      setGalat('Prodi tidak valid.');
+      return;
+    }
+    panggilApi<ResponsTestDrive>(`/api/test-drive?id_prodi=${idProdi}`)
+      .then(setData)
+      .catch((e) => setGalat(pesanGalat(e)));
+  }, [idProdi]);
 
-  const [selectedOption, setSelectedOption] = useState<number>(1); // Option B default selected as shown in Figma
+  const soal: SoalTestDrive | undefined = data?.soal[nomor];
+  const terakhir = !!data && nomor >= data.soal.length - 1;
 
-  const options = [
-    { label: 'A. Diskon memang menambah harga asli', correct: false },
-    { label: 'B. Rumusnya keliru: harga malah ditambah diskon', correct: true },
-    { label: 'C. Diskon 20% terlalu besar untuk Rp50.000 pada Minimarket', correct: false },
-  ];
+  const kunci = async () => {
+    if (!soal || !pilihan) return;
+    setSibuk(true);
+    try {
+      setHasil(await panggilApi<ResponsJawabTestDrive>('/api/test-drive/jawab', { method: 'POST', body: { id_prodi: idProdi, id_soal: soal.id_soal, jawaban: pilihan } }));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (e) {
+      setGalat(pesanGalat(e));
+    } finally {
+      setSibuk(false);
+    }
+  };
+
+  const berikutnya = () => {
+    setNomor((n) => n + 1);
+    setPilihan(null);
+    setHasil(null);
+    window.scrollTo({ top: 0 });
+  };
+
+  const namaProdi = data ? kapital(data.prodi.nama_prodi) : 'Simulasi';
+  const rc = data?.reality_check;
+  const kampus = data ? kapital(data.prodi.nama_ptn) : '';
+  const ketat = rc?.fakta_persaingan.keketatan_snbp ?? rc?.fakta_persaingan.keketatan_snbt ?? null;
 
   return (
-    <div className="min-h-screen bg-white text-black flex flex-col font-['Outfit',sans-serif]">
-      {/* 1. Top Bar */}
-      <TopBar title={prodiTitle} onBack={() => router.push('/katalog')} />
+    <BingkaiMobile>
+      <TopBar title={namaProdi} onBack={() => router.back()} />
+      <main className="flex flex-col gap-6 px-6 pt-6 pb-8">
+        {galat && <p className="t-body-s font-bold text-red">{galat}</p>}
+        {!data && !galat && <p className="t-body-m text-muted">Menyiapkan soal…</p>}
+        {data && data.soal.length === 0 && <Banner>Belum ada soal simulasi untuk prodi ini.</Banner>}
 
-      <main className="w-full max-w-[402px] mx-auto px-4 pt-5 pb-16 flex flex-col flex-1 gap-5">
-        {/* 2. Intro Banner (Red dashed with solid red left border) */}
-        <div className="w-full border-2 border-dashed border-[#F1402E] border-l-[8px] border-l-[#F1402E] bg-white p-3.5">
-          <p className="font-['Press_Start_2P',monospace] text-[10px] sm:text-[11px] text-black leading-relaxed">
-            Yuk, rasakan cara berpikir anak IT!
-          </p>
-        </div>
+        {soal && (
+          <>
+            <Banner>
+              {hasil
+                ? hasil.benar
+                  ? `Mantap, jawabanmu ${pilihan} tepat!`
+                  : `Jawabanmu ${pilihan} belum tepat. Jawaban yang benar ditandai hijau.`
+                : `Yuk, rasakan cara berpikir anak ${namaProdi}!`}
+            </Banner>
 
-        {/* 3. Window 1: SKENARIO */}
-        <RetroWindow
-          title="SKENARIO"
-          variant="yellow"
-          contentClassName="p-4 flex flex-col"
-        >
-          <p className="text-xs text-black leading-relaxed mb-3">
-            Aplikasi kasir minimarket error saat jam sibuk. Harga barang Rp50.000 dengan diskon 20%, tapi struk pelanggan malah menampilkan total Rp60.000!
-          </p>
-
-          <span className="font-['Press_Start_2P',monospace] text-[8px] sm:text-[9px] text-[#6B7280] tracking-wider uppercase mb-2">
-            KODE DI BALIK LAYAR
-          </span>
-
-          {/* Code Block */}
-          <div className="w-full bg-[#181E24] border border-black overflow-hidden mb-4">
-            <div className="px-3 py-1 bg-[#222A32] border-b border-black text-[11px] font-mono text-gray-400">
-              kasir.js
-            </div>
-            <div className="p-3 font-mono text-xs leading-relaxed text-white">
-              <div className="flex items-center">
-                <span className="text-gray-500 w-5 select-none text-[11px]">1</span>
-                <span>
-                  <span className="text-[#FEBD01]">let</span> harga = 50000;
-                </span>
+            <RetroWindow title={`Skenario · soal ${nomor + 1}/${data!.soal.length}`} variant="yellow" contentClassName="flex flex-col gap-4 px-4 pt-4 pb-5">
+              {soal.status?.startsWith('otomatis') && (
+                <Tag warna="ink" className="self-start">
+                  DIBANTU AI · PERLU TINJAUAN
+                </Tag>
+              )}
+              <p className="t-label-m whitespace-pre-wrap text-ink">{soal.pertanyaan}</p>
+              <div className="flex flex-col gap-2" role="radiogroup" aria-label="Pilihan jawaban">
+                {HURUF.map((h) => (
+                  <OpsiJawaban key={h} huruf={h} teks={soal.opsi[h]} pilih={pilihan === h} hasil={hasil} onPilih={() => setPilihan(h)} />
+                ))}
               </div>
-              <div className="flex items-center mt-1">
-                <span className="text-gray-500 w-5 select-none text-[11px]">2</span>
-                <span>
-                  <span className="text-[#FEBD01]">let</span> diskon = harga * 0.2;{' '}
-                  <span className="text-gray-500">{'// 10rb'}</span>
-                </span>
-              </div>
-              <div className="flex items-center mt-1">
-                <span className="text-gray-500 w-5 select-none text-[11px]">3</span>
-                <span>
-                  <span className="text-[#FEBD01]">let</span> total = harga + diskon;{' '}
-                  <span className="text-[#F1402E] font-bold">{'// bug'}</span>
-                </span>
-              </div>
-            </div>
-          </div>
+              {soal.sumber && <p className="t-body-s text-muted">Sumber: {soal.sumber}</p>}
+            </RetroWindow>
 
-          <h3 className="font-['Press_Start_2P',monospace] text-[11px] sm:text-xs font-bold text-black leading-relaxed mb-3">
-            Kenapa totalnya jadi lebih mahal dari harga asli?
-          </h3>
+            {hasil && (
+              <RetroWindow title="Pembahasan" variant="green" contentClassName="flex flex-col gap-4 px-4 pt-4 pb-5">
+                <p className="flex items-center gap-2 t-label-l text-green">
+                  <img src="/figma/icon-check-hijau-18.svg" alt="" width={18} height={18} />
+                  Jawaban benar: {hasil.kunci}
+                </p>
+                <p className="t-body-m whitespace-pre-wrap text-ink-2">{hasil.pembahasan ?? 'Pembahasan untuk soal ini belum tersedia.'}</p>
+              </RetroWindow>
+            )}
 
-          {/* Options */}
-          <div className="flex flex-col gap-2">
-            {options.map((opt, idx) => {
-              const isSelected = selectedOption === idx;
-              const isCorrect = isSelected && opt.correct;
-              return (
-                <div
-                  key={idx}
-                  onClick={() => setSelectedOption(idx)}
-                  className={`p-3 border flex items-start gap-3 cursor-pointer transition-colors ${
-                    isCorrect
-                      ? 'bg-[#EAF7EE] border-2 border-[#22A94F]'
-                      : isSelected
-                      ? 'bg-blue-50 border-2 border-[#277EFD]'
-                      : 'bg-white border-gray-300 hover:bg-gray-50'
-                  }`}
-                >
-                  <div
-                    className={`w-5 h-5 border-2 border-black flex items-center justify-center shrink-0 mt-0.5 ${
-                      isCorrect ? 'bg-[#22A94F]' : 'bg-white'
-                    }`}
-                  >
-                    {isCorrect && <Icon name="check" className="w-3.5 h-3.5 text-white" />}
-                  </div>
-                  <span className="text-xs text-black leading-relaxed font-medium">
-                    {opt.label}
+            {hasil && terakhir && rc && (
+              <RetroWindow title={`Kenyataan kuliah · ${namaProdi}`} variant="blue" contentClassName="flex flex-col gap-4 px-4 pt-4 pb-5">
+                {rc.kompetensi_lulusan.length > 0 && (
+                  <p className="flex items-start gap-3 t-body-m text-ink-2">
+                    <img src="/figma/icon-panah-biru.svg" alt="" width={14} height={14} className="mt-1 shrink-0" />
+                    <span>
+                      <b className="text-ink">Kompetensi lulusan:</b> {rc.kompetensi_lulusan.join(', ')} (PDDikti).
+                    </span>
+                  </p>
+                )}
+                {rc.fakta_kampus && (
+                  <p className="flex items-start gap-3 t-body-m text-ink-2">
+                    <img src="/figma/icon-panah-biru.svg" alt="" width={14} height={14} className="mt-1 shrink-0" />
+                    <span>
+                      <b className="text-ink">Kampus {kampus}:</b> akreditasi {rc.fakta_kampus.akreditasi}
+                      {rc.fakta_kampus.rasio_dosen_mhs && ` · dosen:mhs ${rc.fakta_kampus.rasio_dosen_mhs}`}
+                      {rc.fakta_kampus.rata_masa_studi_th != null && ` · masa studi ${String(rc.fakta_kampus.rata_masa_studi_th).replace('.', ',')} tahun`} (PDDikti).
+                    </span>
+                  </p>
+                )}
+                <p className="flex items-start gap-3 t-body-m text-ink-2">
+                  <img src="/figma/icon-panah-biru.svg" alt="" width={14} height={14} className="mt-1 shrink-0" />
+                  <span>
+                    <b className="text-ink">Persaingan:</b>{' '}
+                    {rc.fakta_persaingan.daya_tampung_snbp_2026 != null && `daya tampung SNBP 2026 ${rc.fakta_persaingan.daya_tampung_snbp_2026} kursi`}
+                    {rc.fakta_persaingan.daya_tampung_snbp_2026 == null && rc.fakta_persaingan.daya_tampung_snbt_2026 != null && `daya tampung SNBT 2026 ${rc.fakta_persaingan.daya_tampung_snbt_2026} kursi`}
+                    {ketat && ` · rasio ${ketat.tahun} ${persen(ketat.rasio)}`} (snpmb.id).
                   </span>
-                </div>
-              );
-            })}
-          </div>
-        </RetroWindow>
+                </p>
+              </RetroWindow>
+            )}
 
-        {/* 4. Window 2: FEEDBACK */}
-        <RetroWindow
-          title="FEEDBACK"
-          variant="green"
-          contentClassName="p-4 flex flex-col"
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <Icon name="check" className="w-4 h-4 text-[#22A94F]" />
-            <span className="font-['Press_Start_2P',monospace] text-xs font-bold text-[#22A94F]">
-              Tepat sekali!
-            </span>
-          </div>
-
-          <p className="text-xs text-black leading-relaxed mb-3">
-            Kamu baru saja melakukan debugging logika kode — hal paling mendasar yang akan kamu temui setiap hari di jurusan Informatika.
-          </p>
-
-          <div className="w-full bg-[#181E24] border border-black p-2.5 font-mono text-xs text-white">
-            <span className="text-[#FEBD01]">let</span> total = harga - diskon;{' '}
-            <span className="text-[#22A94F] font-semibold">{'// ✔ 40rb'}</span>
-          </div>
-        </RetroWindow>
-
-        {/* 5. Window 3: KENYATAAN KULIAH */}
-        <RetroWindow
-          title={`KENYATAAN KULIAH ${prodiTitle.toUpperCase()}`}
-          variant="blue"
-          contentClassName="p-4 flex flex-col gap-3"
-        >
-          <div className="flex items-start gap-2.5">
-            <Icon name="arrow-right" className="w-4 h-4 text-[#277EFD] shrink-0 mt-0.5" />
-            <p className="text-xs text-black leading-relaxed">
-              <strong className="font-bold">Bukan sekadar pakai software.</strong> Kamu merancang logika di balik aplikasinya.
-            </p>
-          </div>
-
-          <div className="flex items-start gap-2.5">
-            <Icon name="arrow-right" className="w-4 h-4 text-[#277EFD] shrink-0 mt-0.5" />
-            <p className="text-xs text-black leading-relaxed">
-              <strong className="font-bold">Mata kuliah terkait:</strong> Dasar Pemrograman, Algoritma & Struktur Data.
-            </p>
-          </div>
-
-          <div className="flex items-start gap-2.5">
-            <Icon name="arrow-right" className="w-4 h-4 text-[#277EFD] shrink-0 mt-0.5" />
-            <p className="text-xs text-black leading-relaxed">
-              <strong className="font-bold">Tantangan nyata:</strong> Bisa berjam-jam mencari satu titik koma (;) yang hilang.
-            </p>
-          </div>
-        </RetroWindow>
-
-        {/* 6. Action Buttons */}
-        <div className="flex flex-col gap-3 mt-2">
-          <Link
-            href="/katalog"
-            className="w-full pixel-btn-blue py-3.5 text-xs tracking-wider flex items-center justify-center gap-2"
-          >
-            <span>COBA JURUSAN LAIN</span>
-            <Icon name="arrow-right" className="w-4 h-4 text-white" />
-          </Link>
-          <Link
-            href="/cocokin"
-            className="w-full pixel-btn-white py-3.5 text-xs tracking-wider text-center"
-          >
-            KEMBALI KE COCOKIN
-          </Link>
-        </div>
+            <div className="flex flex-col gap-3">
+              {!hasil ? (
+                <Tombol ikon penuh disabled={!pilihan || sibuk} onClick={kunci}>
+                  {sibuk ? 'Memeriksa…' : 'Kunci jawaban'}
+                </Tombol>
+              ) : terakhir ? (
+                <>
+                  <Tombol href="/katalog" ikon penuh>
+                    Coba jurusan lain
+                  </Tombol>
+                  <Tombol href="/cocokin" jenis="secondary" penuh>
+                    Kembali ke Cocokin
+                  </Tombol>
+                </>
+              ) : (
+                <Tombol ikon penuh onClick={berikutnya}>
+                  Soal berikutnya
+                </Tombol>
+              )}
+            </div>
+          </>
+        )}
       </main>
-    </div>
+    </BingkaiMobile>
   );
 }

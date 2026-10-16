@@ -28,3 +28,6 @@ export interface OpsiHobi {
   riasec: Partial<Record<'R' | 'I' | 'A' | 'S' | 'E' | 'C', number>>;
 }
 export const OPSI_HOBI: OpsiHobi[] = formMinat.bagian_pendukung.hobi.opsi;
+
+/** Opsi mapel favorit (maks 3, tie-breaker BR-10). */
+export const OPSI_MAPEL_FAVORIT: string[] = formMinat.bagian_pendukung.mapel_favorit.opsi;

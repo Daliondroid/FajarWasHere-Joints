@@ -1,191 +1,90 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import type { ResponsSekolah, SekolahDetail } from '@/types';
 import { TopBar } from '@/components/ui/TopBar';
-import { Icon } from '@/components/ui/Icon';
-import StepperHeader from '@/components/preferensi/StepperHeader';
-import StepPilihJalur from '@/components/preferensi/StepPilihJalur';
-import StepFormSNBP from '@/components/preferensi/StepFormSNBP';
-import StepFormSNBT, { SubtestScores } from '@/components/preferensi/StepFormSNBT';
-import { usePreferensiStorage } from '@/components/preferensi/usePreferensiStorage';
+import BingkaiMobile from '@/components/ui/BingkaiMobile';
+import { BarAksi } from '@/components/preferensi/BagianWizard';
+import { AKADEMIK_KOSONG, FormSnbpAlumni, FormSnbpSekolah } from '@/components/preferensi/FormSnbp';
+import { FormSnbt } from '@/components/preferensi/FormSnbt';
+import { panggilApi, pesanGalat } from '@/lib/klien/api';
+import { kirimDraf, useDraf } from '@/lib/klien/draf_preferensi';
 
-export default function PreferensiAkademikPage() {
+/** Langkah 2 · Bahan jalur: SNBP = M10 (+M10b) lalu M11; SNBT = M12. Tombol terakhir menyimpan preferensi. */
+export default function BahanJalurPage() {
   const router = useRouter();
-  const { draft, isLoaded, updateDraft } = usePreferensiStorage();
+  const { draf, ubahIsi } = useDraf();
+  const [layar, setLayar] = useState<1 | 2>(1);
+  const [sekolah, setSekolah] = useState<SekolahDetail | null>(null);
+  const [sibuk, setSibuk] = useState(false);
+  const [galat, setGalat] = useState<string | null>(null);
 
-  const [subStep, setSubStep] = useState<'jalur' | 'form'>('jalur');
-  const [trackError, setTrackError] = useState<string>('');
+  // Mode ubah: muat detail sekolah dari NPSN yang tersimpan.
+  const npsn = draf?.isi.akademik?.npsn;
+  useEffect(() => {
+    if (!npsn || sekolah?.npsn === npsn) return;
+    panggilApi<ResponsSekolah>(`/api/school?npsn=${npsn}`)
+      .then(({ data }) => !Array.isArray(data) && setSekolah(data))
+      .catch(() => undefined);
+  }, [npsn, sekolah?.npsn]);
 
-  // Default SNBT scores if not yet populated
-  const defaultScores: SubtestScores = {
-    pu: '720',
-    ppu: '680',
-    pbm: '650',
-    pk: '700',
-    lbind: '640',
-    lbing: '710',
-    pm: '690',
-  };
+  if (!draf) return null;
+  const snbp = draf.isi.jalur === 'snbp';
+  const a = draf.isi.akademik ?? AKADEMIK_KOSONG;
+  const ubahAkademik = (baru: typeof a) => ubahIsi((isi) => ({ ...isi, akademik: baru }));
+  const pilihanTka = a.nilai_tka.pilihan?.length ?? 0;
+  const terakhir = !snbp || layar === 2;
 
-  const currentScores: SubtestScores = {
-    pu: draft.tryoutList?.[0]?.scores.pu || defaultScores.pu,
-    ppu: draft.tryoutList?.[0]?.scores.ppu || defaultScores.ppu,
-    pbm: draft.tryoutList?.[0]?.scores.pbm || defaultScores.pbm,
-    pk: draft.tryoutList?.[0]?.scores.pk || defaultScores.pk,
-    lbind: draft.tryoutList?.[0]?.scores.lbind || defaultScores.lbind,
-    lbing: draft.tryoutList?.[0]?.scores.lbing || defaultScores.lbing,
-    pm: draft.tryoutList?.[0]?.scores.pm || defaultScores.pm,
-  };
-
-  const handleScoreChange = (key: keyof SubtestScores, val: string) => {
-    const updated = { ...currentScores, [key]: val };
-    const list = [...(draft.tryoutList || [])];
-    if (list.length > 0) {
-      list[0] = { ...list[0], scores: updated };
-    } else {
-      list.push({ date: '15 Okt 2026', scores: updated });
-    }
-    updateDraft({ tryoutList: list });
-  };
-
-  const handleSelectTrack = (track: 'SNBP' | 'SNBT') => {
-    updateDraft({ selectedTrack: track });
-    setTrackError('');
-  };
-
-  const handleNextFromJalur = () => {
-    if (!draft.selectedTrack) {
-      setTrackError('Pilih salah satu jalur seleksi (SNBP atau SNBT) untuk lanjut!');
-      return;
-    }
-    setTrackError('');
-    setSubStep('form');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleSubmitForm = () => {
-    router.push('/cocokin');
-  };
-
-  const handleBack = () => {
-    setTrackError('');
-    if (subStep === 'form') {
-      setSubStep('jalur');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      router.push('/preferensi/minat');
+  const simpan = async () => {
+    setSibuk(true);
+    setGalat(null);
+    try {
+      await kirimDraf(draf);
+      router.push('/cocokin');
+    } catch (e) {
+      setGalat(pesanGalat(e));
+      setSibuk(false);
     }
   };
 
-  if (!isLoaded) {
-    return (
-      <main className="min-h-screen bg-white flex items-center justify-center">
-        <span className="font-['Press_Start_2P',monospace] text-xs">MEMUAT...</span>
-      </main>
-    );
-  }
+  const kembali = () => {
+    if (snbp && layar === 2) {
+      setLayar(1);
+      window.scrollTo({ top: 0 });
+    } else router.push('/preferensi/minat');
+  };
 
-  const pageTitle = subStep === 'form' ? 'Data Akademik' : 'Preferensi';
+  const lanjut = () => {
+    if (!terakhir) {
+      setLayar(2);
+      window.scrollTo({ top: 0 });
+    } else void simpan();
+  };
 
   return (
-    <main className="min-h-screen bg-white text-black flex flex-col">
-      <TopBar title={pageTitle} onBack={handleBack} />
-
-      {/* Top Action Bar when on form sub-step matching Figma 84:272 */}
-      {subStep === 'form' && (
-        <div className="w-full max-w-[402px] mx-auto px-4 pt-3 pb-1 flex items-center justify-between gap-3">
-          <button
-            type="button"
-            onClick={handleBack}
-            className="flex-1 pixel-btn-white py-2.5 text-xs tracking-wider"
-          >
-            KEMBALI
-          </button>
-          <button
-            type="button"
-            onClick={handleSubmitForm}
-            className="flex-1 pixel-btn-blue py-2.5 text-xs tracking-wider flex items-center justify-center gap-2"
-          >
-            <span>LIHAT HASIL</span>
-            <Icon name="arrow-right" className="w-4 h-4 text-white" />
-          </button>
-        </div>
-      )}
-
-      <div className="w-full max-w-[402px] mx-auto px-4 pt-4 flex-1 flex flex-col">
-        {/* Stepper Wizard: Stage 2 (Akademik) */}
-        <StepperHeader currentStage={2} />
-
-        {/* SUB-STEP 1: PILIH JALUR SNBP / SNBT (Figma 84:203) */}
-        {subStep === 'jalur' && (
-          <StepPilihJalur
-            selectedTrack={draft.selectedTrack}
-            errorMessage={trackError}
-            onSelectTrack={handleSelectTrack}
-            onBack={handleBack}
-            onNext={handleNextFromJalur}
-          />
+    <BingkaiMobile>
+      <TopBar title={draf.isi.nama} onBack={kembali} />
+      <main className="flex flex-col gap-5 px-6 pt-6 pb-8">
+        {snbp ? (
+          layar === 1 ? (
+            <FormSnbpSekolah a={a} ubah={ubahAkademik} sekolah={sekolah} setSekolah={setSekolah} />
+          ) : (
+            <FormSnbpAlumni a={a} ubah={ubahAkademik} sekolah={sekolah} />
+          )
+        ) : (
+          <FormSnbt riwayat={draf.isi.riwayat_to} ubah={(r) => ubahIsi((isi) => ({ ...isi, riwayat_to: r }))} />
         )}
-
-        {/* SUB-STEP 2: FORM DATA AKADEMIK (Figma 84:272) */}
-        {subStep === 'form' && (
-          <div className="flex flex-col pb-16">
-            {/* Heading */}
-            <div className="mb-2">
-              <span className="font-['Press_Start_2P',monospace] text-[9px] sm:text-[10px] text-[#277EFD] tracking-wider uppercase">
-                LANGKAH 2 DARI 2
-              </span>
-            </div>
-            <h2 className="font-['Press_Start_2P',monospace] text-base sm:text-lg text-black leading-relaxed mb-1.5">
-              Lengkapi data akademikmu
-            </h2>
-            <p className="text-xs text-[#6B7280] mb-6">
-              Dipakai untuk menghitung peluang lolos di setiap jalur yang kamu pilih.
-            </p>
-
-            {/* Always show both windows or selected track window */}
-            <StepFormSNBP
-              npsn={draft.npsn || '20403214'}
-              alamat={draft.alamat}
-              selectedAlumniRep={draft.selectedAlumniRep || 'Langganan banjir PTN top'}
-              selectedCampuses={draft.selectedCampuses || ['IPB']}
-              onChangeNpsn={(val) => updateDraft({ npsn: val })}
-              onChangeAlamat={(val) => updateDraft({ alamat: val })}
-              onSelectAlumniRep={(val) => updateDraft({ selectedAlumniRep: val })}
-              onToggleCampus={(c) => {
-                const list = draft.selectedCampuses || ['IPB'];
-                const updated = list.includes(c) ? list.filter((x) => x !== c) : [...list, c];
-                updateDraft({ selectedCampuses: updated });
-              }}
-            />
-
-            <StepFormSNBT
-              scores={currentScores}
-              onChangeScore={handleScoreChange}
-            />
-
-            {/* Bottom button for convenience */}
-            <div className="w-full flex items-center justify-between gap-3 mt-4 mb-8">
-              <button
-                type="button"
-                onClick={handleBack}
-                className="flex-1 pixel-btn-white py-3 text-xs tracking-wider"
-              >
-                KEMBALI
-              </button>
-              <button
-                type="button"
-                onClick={handleSubmitForm}
-                className="flex-1 pixel-btn-blue py-3 text-xs tracking-wider flex items-center justify-center gap-2"
-              >
-                <span>LIHAT HASIL</span>
-                <Icon name="arrow-right" className="w-4 h-4 text-white" />
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-    </main>
+        {snbp && layar === 1 && pilihanTka === 1 && <p className="t-body-s font-bold text-red">Pilih tepat 2 mapel pilihan TKA.</p>}
+        {galat && <p className="t-body-s font-bold text-red">{galat}</p>}
+      </main>
+      <BarAksi
+        onKembali={kembali}
+        onLanjut={lanjut}
+        label={terakhir ? 'Cocokkan!' : 'Lanjut'}
+        nonaktif={snbp && layar === 1 && (!sekolah || pilihanTka === 1)}
+        sibuk={sibuk}
+      />
+    </BingkaiMobile>
   );
 }

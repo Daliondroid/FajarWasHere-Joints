@@ -1,6 +1,5 @@
-import { redirect } from 'next/navigation';
+import HalamanPreferensi from '@/components/preferensi/HalamanPreferensi';
 
-export default function PreferensiIndexPage() {
-  // Pengalihan default rute /preferensi ke /preferensi/minat
-  redirect('/preferensi/minat');
+export default function PreferensiPage() {
+  return <HalamanPreferensi />;
 }

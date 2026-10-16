@@ -3,8 +3,12 @@ import { describe, it, expect } from 'vitest';
 describe('Aplikasi Cocokin! - Rute & Data Katalog Mock', () => {
   const routes = [
     { path: '/', label: 'Beranda' },
+    { path: '/preferensi', label: 'Daftar Preferensi' },
+    { path: '/preferensi/baru', label: 'Preferensi Baru Jalur' },
+    { path: '/preferensi/riasec', label: 'Kuis Minat RIASEC' },
     { path: '/preferensi/minat', label: 'Preferensi Minat' },
     { path: '/preferensi/akademik', label: 'Preferensi Akademik' },
+    { path: '/syarat-ketentuan', label: 'Syarat & Ketentuan' },
     { path: '/cocokin', label: 'Dashboard Rekomendasi' },
     { path: '/chat', label: 'Chatbot' },
     { path: '/katalog', label: 'Katalog Simulation' },

@@ -2,13 +2,14 @@ import React from 'react';
 
 interface RetroWindowProps {
   title: string;
-  variant?: 'yellow' | 'blue' | 'green' | 'red';
+  variant?: 'yellow' | 'blue' | 'green' | 'red' | 'black';
   children: React.ReactNode;
   className?: string;
   contentClassName?: string;
   headerRight?: React.ReactNode;
 }
 
+/** Window Figma (`80:94`): border 2, shadow-md; header 36 px, garis bawah 2, judul Label/S + tiga kotak kontrol. */
 export const RetroWindow: React.FC<RetroWindowProps> = ({
   title,
   variant = 'yellow',
@@ -17,30 +18,26 @@ export const RetroWindow: React.FC<RetroWindowProps> = ({
   contentClassName = 'p-4',
   headerRight,
 }) => {
-  const headerBg = {
-    yellow: 'bg-[#FEBD01] text-black border-b-[3px] border-black',
-    blue: 'bg-[#277EFD] text-white border-b-[3px] border-black',
-    green: 'bg-[#22A94F] text-white border-b-[3px] border-black',
-    red: 'bg-[#F1402E] text-white border-b-[3px] border-black',
+  const header = {
+    yellow: 'bg-yellow text-ink',
+    blue: 'bg-blue text-paper',
+    green: 'bg-green text-paper',
+    red: 'bg-red text-paper',
+    black: 'bg-ink text-paper',
   }[variant];
 
   return (
-    <div className={`bg-white pixel-border overflow-hidden ${className}`}>
-      {/* Window Header */}
-      <div className={`px-3 py-2 flex items-center justify-between font-['Press_Start_2P'] text-[11px] tracking-wider font-bold select-none ${headerBg}`}>
-        <span className="uppercase truncate">{title}</span>
-        {headerRight ? (
-          headerRight
-        ) : (
-          <div className="flex items-center gap-1.5 shrink-0 ml-2" aria-hidden="true">
-            <div className="w-3 h-3 bg-white border-[1.5px] border-black" />
-            <div className="w-3 h-3 bg-white border-[1.5px] border-black" />
-            <div className="w-3 h-3 bg-white border-[1.5px] border-black" />
+    <div className={`bg-paper border-2 border-ink shadow-pixel-md ${className}`}>
+      <div className={`flex h-9 items-center gap-2 border-b-2 border-ink px-3 select-none ${header}`}>
+        <span className="flex-1 min-w-0 truncate t-label-s uppercase">{title}</span>
+        {headerRight ?? (
+          <div className="flex shrink-0 gap-1" aria-hidden="true">
+            <span className="size-2.5 border-[1.5px] border-ink bg-paper" />
+            <span className="size-2.5 border-[1.5px] border-ink bg-paper" />
+            <span className="size-2.5 border-[1.5px] border-ink bg-paper" />
           </div>
         )}
       </div>
-
-      {/* Content */}
       <div className={contentClassName}>{children}</div>
     </div>
   );
