@@ -26,7 +26,7 @@ function gayaAlasan(teks: string): { ikon: string; tag: WarnaTag; label: string 
 
 const Garis = () => <img src="/figma/garis-putus.svg" alt="" className="h-0.5 w-full" />;
 
-/** Popup DETAIL rekomendasi (Figma M14 `205:3552`, K-07): kecocokan, peluang + keketatan, 3 alasan, PDDikti. */
+/** Popup DETAIL rekomendasi (Figma M14 `205:3552`, desktop D07b `272:4316`, K-07): kecocokan, peluang + keketatan, 3 alasan, PDDikti. */
 export default function PopupDetail({
   k,
   jalur,
@@ -55,10 +55,10 @@ export default function PopupDetail({
   const kampus = judulKapital(k.prodi.nama_ptn);
 
   return (
-    <div role="dialog" aria-modal="true" aria-label={`Detail ${k.prodi.nama_prodi}`} className="fixed inset-0 z-[60] flex items-end justify-center">
+    <div role="dialog" aria-modal="true" aria-label={`Detail ${k.prodi.nama_prodi}`} className="fixed inset-0 z-[60] flex items-end justify-center lg:items-start lg:pt-[120px]">
       <div className="absolute inset-0 bg-ink/55" onClick={onTutup} />
-      <div className="relative flex max-h-[88vh] w-full max-w-[402px] flex-col gap-[18px] overflow-y-auto border-t-2 border-ink bg-paper px-6 pt-3 pb-6">
-        <div className="flex justify-center">
+      <div className="relative flex max-h-[88vh] w-full max-w-[402px] flex-col gap-[18px] overflow-y-auto border-t-2 border-ink bg-paper px-6 pt-3 pb-6 lg:max-h-[calc(100vh-160px)] lg:max-w-[560px] lg:border-2 lg:p-[30px] lg:shadow-pixel-md">
+        <div className="flex justify-center lg:hidden">
           <span className="h-1 w-12 bg-track" />
         </div>
         <div className="flex items-center gap-3">
@@ -77,7 +77,7 @@ export default function PopupDetail({
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2.5">
             <span className="t-body-s font-bold text-ink">Cocok</span>
-            <span className="h-3.5 w-[200px] border-[1.5px] border-ink bg-canvas p-0.5">
+            <span className="h-3.5 w-[200px] border-[1.5px] border-ink bg-canvas p-0.5 lg:w-[200px]">
               <span className="block h-2.5 bg-yellow" style={{ width: `${skor}%` }} />
             </span>
             <span className="t-label-m text-ink">{skor}%</span>
