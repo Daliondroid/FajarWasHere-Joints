@@ -103,7 +103,7 @@ Aturan untuk agen:
 | T-19 | API rekomendasi 3 kartu (Dream Goal, Safety Net serumpun, Alternatif) + data popup DETAIL dari preferensi aktif | farrelzaki | `[x]` | `main` (PR #9) | `src/app/api/rekomendasi/`, `src/lib/` | 2026-10-16 | F-08, K-07, K-10, BR-01. Ditambah atas perintah farrelzaki |
 | T-20 | UI 8-bit Mobile v3 (Tahap A–C): fondasi, beranda v3, modal login, wizard preferensi multi-preferensi & RIASEC | daliondroid | `[~]` | `fitur/daliondroid-T-20` | `src/app/`, `src/components/`, `src/styles/`, `public/` | 2026-10-16 | Sesuai Figma HIFI v3 M01–M12, M10b, M20 |
 | T-21 | Tuning Safety Net: batas minimal kecocokan relatif terhadap Dream Goal (QA Q-5) | farrelzaki | `[x]` | `main` (PR #12) | `src/lib/`, `docs/ARSITEKTUR.md` | 2026-10-16 | Ditambah atas perintah farrelzaki |
-| T-22 | Sambungkan UI ke API: hubungkan layar yang masih mock ke endpoint backend, yaitu rekomendasi (`GET /api/rekomendasi`), katalog (`/api/prodi`), simulasi (`/api/test-drive`), chat (`/api/chat`), pemilih preferensi (`/api/preferensi`). Kontrak: `docs/ARSITEKTUR.md` dan `src/types/api.ts` | daliondroid | `[ ]` | | `src/app/` (kecuali `src/app/api/`), `src/components/`, `src/styles/` | 2026-10-16 | Mulai setelah T-20 merge. Temuan: (1) hapus akun butuh badan `{"konfirmasi":"HAPUS"}` (QA Q-3); (2) teks "40/25/35" di `/cocokin` tidak konsisten dengan BR-10 (QA Q-4); (3) `globals.css` perlu diselaraskan dengan `docs/DESIGN_SYSTEM.md` (bingkai 2 px ink, shadow 3/5 px, Plus Jakarta Sans + Pixelify Sans); (4) UI ikut Figma: 3 kartu rekomendasi, istilah "Simulasi" (rute teknis `/test-drive` tetap). Ditambah atas perintah farrelzaki |
+| T-22 | Sambungkan UI ke API: hubungkan layar yang masih mock ke endpoint backend, yaitu rekomendasi (`GET /api/rekomendasi`), katalog (`/api/prodi`), simulasi (`/api/test-drive`), chat (`/api/chat`), pemilih preferensi (`/api/preferensi`). Kontrak: `docs/ARSITEKTUR.md` dan `src/types/api.ts` | farrelzaki | `[ ]` | | `src/app/` (kecuali `src/app/api/`), `src/components/`, `src/styles/` | 2026-10-16 | Mulai setelah T-20 merge. Dialihkan dari daliondroid ke farrelzaki atas perintah farrelzaki 2026-10-16; menyentuh wilayah UI daliondroid, konfirmasi daliondroid diperlukan sebelum menyunting `src/app/**`. Temuan: (1) hapus akun butuh badan `{"konfirmasi":"HAPUS"}` (QA Q-3); (2) teks "40/25/35" di `/cocokin` tidak konsisten dengan BR-10 (QA Q-4); (3) `globals.css` perlu diselaraskan dengan `docs/DESIGN_SYSTEM.md` (bingkai 2 px ink, shadow 3/5 px, Plus Jakarta Sans + Pixelify Sans); (4) UI ikut Figma: 3 kartu rekomendasi, istilah "Simulasi" (rute teknis `/test-drive` tetap). Ditambah atas perintah farrelzaki |
 
 Rincian langkah task (rencana, checklist) ditulis di `TASK.md` pribadi, bukan di sini.
 
@@ -113,6 +113,8 @@ Sebelum menyunting file bersama (bagian 1), tambahkan baris di sini, commit, dan
 
 | File | Dikunci oleh | Sejak | Alasan |
 | --- | --- | --- | --- |
+| `README.md` | farrelzaki | 2026-10-16 | T-17: ganti istilah "Test Drive" jadi "Simulasi" (K-11) |
+| `docs/ARSITEKTUR.md` | farrelzaki | 2026-10-16 | T-17: ganti istilah "Test Drive" jadi "Simulasi" di diagram (K-11) |
 
 Agen **tidak boleh** menyunting file bersama yang sedang dikunci orang lain.
 
