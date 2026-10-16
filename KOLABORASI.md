@@ -121,6 +121,7 @@ Sebelum menyunting file bersama (bagian 1), tambahkan baris di sini, commit, dan
 
 | File | Dikunci oleh | Sejak | Alasan |
 | --- | --- | --- | --- |
+| `src/types/api.ts`, `docs/ARSITEKTUR.md` (kontrak) | farrelzaki | 2026-10-16 | T-30: tambah `POST /api/rapor/ekstrak` dan field opsional `bahan_kurang` di `/api/rekomendasi` |
 
 Agen **tidak boleh** menyunting file bersama yang sedang dikunci orang lain.
 
