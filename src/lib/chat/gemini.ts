@@ -2,11 +2,15 @@
 import { GoogleGenAI, type Content, type Part } from '@google/genai';
 import type { Bagian, KeluaranModel, MasukanModel, ModelChat } from './model';
 
-export const MODEL_BAWAAN = 'gemini-2.5-flash';
+/** Model termurah seri 3.5 yang mendukung function calling (dipilih farrelzaki 2026-10-16 untuk hemat token). */
+export const MODEL_BAWAAN = 'gemini-3.5-flash-lite';
 
 function keBagianGemini(b: Bagian): Part {
   if ('teks' in b) return { text: b.teks };
-  if ('panggilan' in b) return { functionCall: { name: b.panggilan.nama, args: b.panggilan.argumen, id: b.panggilan.id } };
+  if ('panggilan' in b) {
+    const p = b.panggilan;
+    return { functionCall: { name: p.nama, args: p.argumen, id: p.id }, ...(p.tanda ? { thoughtSignature: p.tanda } : {}) };
+  }
   return { functionResponse: { name: b.hasil.nama, id: b.hasil.id, response: { hasil: b.hasil.isi } } };
 }
 
@@ -29,10 +33,22 @@ class ModelGemini implements ModelChat {
           : undefined,
       },
     });
-    return {
-      teks: res.text?.trim() || null,
-      panggilan: (res.functionCalls ?? []).map((f) => ({ nama: f.name ?? '', argumen: f.args ?? {}, id: f.id })),
-    };
+    // Baca dari parts (bukan res.functionCalls) agar thought signature ikut tersimpan.
+    const parts = res.candidates?.[0]?.content?.parts ?? [];
+    const panggilan = parts
+      .filter((p) => p.functionCall)
+      .map((p) => ({
+        nama: p.functionCall!.name ?? '',
+        argumen: p.functionCall!.args ?? {},
+        id: p.functionCall!.id,
+        tanda: p.thoughtSignature,
+      }));
+    const teks = res.text?.trim() || null;
+    if (!teks && !panggilan.length) {
+      const k = res.candidates?.[0];
+      console.warn('Gemini tanpa teks/panggilan:', k?.finishReason, k?.finishMessage ?? '', parts.map((p) => Object.keys(p).join('+')));
+    }
+    return { teks, panggilan };
   }
 }
 

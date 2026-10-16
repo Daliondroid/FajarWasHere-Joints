@@ -184,3 +184,16 @@ describe('POST /api/chat', () => {
     await expect(layananKirimPesan(id, { pesan: 'Dua' }, ketat)).rejects.toMatchObject({ kode: 'TERLALU_SERING', status: 429 });
   });
 });
+
+describe('adapter Gemini', () => {
+  it('thought signature panggilan alat dikirim balik pada giliran berikutnya', async () => {
+    const { model, masukan } = modelSkrip([
+      { teks: null, panggilan: [{ nama: 'preferensi_aktif', argumen: {}, id: 'c1', tanda: 'sig-abc' }] },
+      { teks: 'Preferensimu jalur SNBP.', panggilan: [] },
+    ]);
+    const { id, deps } = await siap(model);
+    await layananKirimPesan(id, { pesan: 'Preferensiku apa?' }, deps);
+    const giliranModel = masukan[1].konten.find((k) => k.peran === 'model' && 'panggilan' in k.bagian[0])!;
+    expect(giliranModel.bagian[0]).toMatchObject({ panggilan: { tanda: 'sig-abc' } });
+  });
+});

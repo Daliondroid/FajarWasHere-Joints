@@ -7,6 +7,8 @@ export interface PanggilanAlat {
   nama: string;
   argumen: Record<string, unknown>;
   id?: string;
+  /** Thought signature Gemini 3; wajib dikirim balik apa adanya pada giliran berikutnya. */
+  tanda?: string;
 }
 
 export type Bagian = { teks: string } | { panggilan: PanggilanAlat } | { hasil: { nama: string; id?: string; isi: unknown } };
