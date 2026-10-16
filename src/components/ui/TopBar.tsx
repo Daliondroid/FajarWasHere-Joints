@@ -1,64 +1,60 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Icon } from '@/components/ui/Icon';
-
 import ScrollProgress from '@/components/ui/ScrollProgress';
+import MenuDrawer from '@/components/MenuDrawer';
 
 interface TopBarProps {
   title: string;
   onBack?: () => void;
   rightElement?: React.ReactNode;
   showBack?: boolean;
+  /** Tombol menu di kanan yang membuka drawer navigasi (mis. Chat M15). */
+  denganMenu?: boolean;
 }
 
-export const TopBar: React.FC<TopBarProps> = ({
-  title,
-  onBack,
-  rightElement,
-  showBack = true,
-}) => {
+/** Top Bar varian Back (Figma `80:108`): tombol kembali 40, judul Display/S di tengah, aksi opsional. */
+export const TopBar: React.FC<TopBarProps> = ({ title, onBack, rightElement, showBack = true, denganMenu = false }) => {
   const router = useRouter();
-
-  const handleBack = () => {
-    if (onBack) {
-      onBack();
-    } else {
-      router.back();
-    }
-  };
+  const [menu, setMenu] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 bg-white border-b-2 border-[#151D21]">
-      <div className="w-full max-w-[402px] mx-auto px-4 py-3 flex items-center justify-between">
-        {/* Left: Back Arrow */}
-        <div className="w-8 flex items-center justify-start">
+    <>
+    <header className="sticky top-0 z-50 bg-paper">
+      <div className="flex h-[60px] items-center gap-2 px-3">
+        <div className="size-10 shrink-0">
           {showBack && (
             <button
               type="button"
-              onClick={handleBack}
+              onClick={onBack ?? (() => router.back())}
               aria-label="Kembali"
-              className="p-1 cursor-pointer hover:opacity-70 active:scale-90 transition-transform"
+              className="flex size-10 items-center justify-center cursor-pointer"
             >
-              <Icon name="back" className="w-5 h-5 text-[#151D21]" />
+              <img src="/figma/icon-back.svg" alt="" width={20} height={20} />
             </button>
           )}
         </div>
-
-        {/* Center: Title */}
-        <h1 className="font-['Press_Start_2P',monospace] text-[12px] text-[#151D21] text-center truncate max-w-[260px] tracking-tight">
-          {title}
-        </h1>
-
-        {/* Right: Custom element or spacer */}
-        <div className="w-8 flex items-center justify-end">
-          {rightElement || null}
+        <h1 className="flex-1 min-w-0 truncate text-center t-display-s text-ink">{title}</h1>
+        <div className="flex size-10 shrink-0 items-center justify-center">
+          {denganMenu ? (
+            <button
+              type="button"
+              aria-label={menu ? 'Tutup menu' : 'Buka menu'}
+              aria-expanded={menu}
+              onClick={() => setMenu((m) => !m)}
+              className="flex size-10 items-center justify-center cursor-pointer"
+            >
+              <img src={menu ? '/figma/icon-close.svg' : '/figma/icon-menu.svg'} alt="" width={20} height={20} />
+            </button>
+          ) : (
+            (rightElement ?? null)
+          )}
         </div>
       </div>
-
-      {/* Scroll Progress 4 Segmen Berjarak sesuai Figma */}
-      <ScrollProgress className="pb-1" />
+      <ScrollProgress />
     </header>
+    {denganMenu && <MenuDrawer terbuka={menu} setTerbuka={setMenu} />}
+    </>
   );
 };

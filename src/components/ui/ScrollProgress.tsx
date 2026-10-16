@@ -2,72 +2,42 @@
 
 import { useEffect, useState } from 'react';
 
-interface ScrollProgressProps {
-  className?: string;
-}
+/** Scroll Progress Figma (`167:105`): 4 segmen terputus blue → red → yellow → green, latar track. */
+const WARNA_SEGMEN = ['bg-blue', 'bg-red', 'bg-yellow', 'bg-green'];
 
-export default function ScrollProgress({ className = '' }: ScrollProgressProps) {
+export default function ScrollProgress({ className = '' }: { className?: string }) {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      const scrollHeight =
-        document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      if (scrollHeight <= 0) {
-        setProgress(0);
-        return;
-      }
-      const currentProgress = Math.min(100, Math.max(0, (scrollTop / scrollHeight) * 100));
-      setProgress(currentProgress);
+      const tinggi = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      setProgress(tinggi <= 0 ? 0 : Math.min(100, Math.max(0, (window.scrollY / tinggi) * 100)));
     };
-
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleScroll);
     handleScroll();
-
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
     };
   }, []);
 
-  // Segment ranges: 0-25%, 25-50%, 50-75%, 75-100%
-  const getSegmentWidth = (index: number) => {
-    const start = index * 25;
-    const end = (index + 1) * 25;
-    if (progress <= start) return 0;
-    if (progress >= end) return 100;
-    return ((progress - start) / 25) * 100;
-  };
-
-  const segmentColors = ['#277EFD', '#F1402E', '#FEBD01', '#22A94F'];
+  const isi = (i: number) => Math.min(100, Math.max(0, ((progress - i * 25) / 25) * 100));
 
   return (
     <div
-      className={`w-full max-w-[402px] mx-auto px-4 h-1 bg-white grid grid-cols-4 gap-2 ${className}`}
+      className={`flex w-full h-1 gap-2 ${className}`}
       role="progressbar"
+      aria-label="Progres gulir halaman"
       aria-valuenow={Math.round(progress)}
       aria-valuemin={0}
       aria-valuemax={100}
     >
-      {segmentColors.map((color, index) => {
-        const segWidth = getSegmentWidth(index);
-        return (
-          <div
-            key={index}
-            className="h-1 bg-[#D3D6DA] rounded-full overflow-hidden relative"
-          >
-            <div
-              className="h-full rounded-full transition-[width] duration-75 ease-out"
-              style={{
-                width: `${segWidth}%`,
-                backgroundColor: color,
-              }}
-            />
-          </div>
-        );
-      })}
+      {WARNA_SEGMEN.map((warna, i) => (
+        <div key={warna} className="relative flex-1 h-full overflow-hidden bg-track">
+          <div className={`absolute inset-y-0 left-0 ${warna}`} style={{ width: `${isi(i)}%` }} />
+        </div>
+      ))}
     </div>
   );
 }

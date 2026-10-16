@@ -1,17 +1,25 @@
 import type { Metadata } from 'next';
-import { Press_Start_2P, Outfit } from 'next/font/google';
+import { Pixelify_Sans, Plus_Jakarta_Sans, Press_Start_2P } from 'next/font/google';
 import './globals.css';
 import AuthProvider from '@/components/auth/AuthProvider';
 
 const pressStart2P = Press_Start_2P({
   weight: '400',
-  variable: '--font-pixel',
+  variable: '--ff-press',
   subsets: ['latin'],
   display: 'swap',
 });
 
-const outfit = Outfit({
-  variable: '--font-body',
+const pixelify = Pixelify_Sans({
+  weight: ['500', '600'],
+  variable: '--ff-pixelify',
+  subsets: ['latin'],
+  display: 'swap',
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  weight: ['400', '600', '700'],
+  variable: '--ff-jakarta',
   subsets: ['latin'],
   display: 'swap',
 });
@@ -28,10 +36,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id">
+    <html lang="id" className={`${pressStart2P.variable} ${pixelify.variable} ${jakarta.variable}`}>
       <body
         suppressHydrationWarning
-        className={`${pressStart2P.variable} ${outfit.variable} antialiased`}
+        className="antialiased"
       >
         <AuthProvider>{children}</AuthProvider>
       </body>

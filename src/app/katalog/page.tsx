@@ -1,298 +1,195 @@
 'use client';
 
-import React, { useState } from 'react';
-import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import type { JenjangProdi, LabelKeketatan, ProdiRingkas, ResponsDaftarProdi, RumpunIlmu } from '@/types';
 import { TopBar } from '@/components/ui/TopBar';
-import { Icon } from '@/components/ui/Icon';
+import BingkaiMobile from '@/components/ui/BingkaiMobile';
 import PemilihPreferensi from '@/components/ui/PemilihPreferensi';
-import { usePreferensiStorage } from '@/components/preferensi/usePreferensiStorage';
+import Tag, { type WarnaTag } from '@/components/ui/Tag';
+import Tombol from '@/components/ui/Tombol';
+import { panggilApi, pesanGalat } from '@/lib/klien/api';
+import { useDaftarPreferensi } from '@/lib/klien/preferensi';
 
-interface MajorItem {
-  id: string;
-  slug: string;
-  name: string;
-  campus: string;
-  location: string;
-  jenjang: 'S1' | 'D4' | 'D3';
-  klaster: string;
-  akreditasi: string;
-  tingkatKeketatan: string;
-  category: 'SAINTEK' | 'SOSHUM';
+const PER_HALAMAN = 20;
+const KETAT: Record<LabelKeketatan, { warna: WarnaTag; teks: string }> = {
+  sangat_ketat: { warna: 'red', teks: 'SANGAT KETAT' },
+  ketat: { warna: 'yellow', teks: 'KETAT' },
+  sedang: { warna: 'blue', teks: 'SEDANG' },
+  longgar: { warna: 'green', teks: 'LONGGAR' },
+};
+const ribuan = (n: number | null | undefined) => (n == null ? '…' : n.toLocaleString('id-ID'));
+const persen = (r: number) => `${(r * 100).toFixed(1).replace('.', ',')}%`;
+const kapital = (s: string) => s.toLowerCase().replace(/\b\w/g, (h) => h.toUpperCase());
+
+/** Kartu Prodi (Figma `169:260`): nama, PTN · provinsi, badge jenjang/rumpun/keketatan, tombol Simulasi. */
+function KartuProdi({ p, onSimulasi }: { p: ProdiRingkas; onSimulasi: () => void }) {
+  const k = p.keketatan_snbp ?? p.keketatan_snbt;
+  return (
+    <article className="flex flex-col gap-2.5 border-2 border-ink bg-paper p-3.5 shadow-pixel-sm">
+      <div className="flex flex-col gap-0.5">
+        <h3 className="t-label-m text-ink">{kapital(p.nama_prodi)}</h3>
+        <p className="t-body-s text-muted">
+          {kapital(p.nama_ptn)} · {kapital(p.provinsi_ptn)}
+        </p>
+      </div>
+      <div className="flex flex-wrap gap-1.5">
+        <Tag warna="ink">{p.jenjang}</Tag>
+        <Tag warna="blue">{p.kelompok.toUpperCase()}</Tag>
+        {k && <Tag warna={KETAT[k.label].warna}>{KETAT[k.label].teks}</Tag>}
+        {p.portofolio && <Tag warna="yellow">PORTOFOLIO</Tag>}
+      </div>
+      <div className="flex items-center gap-2">
+        <p className="min-w-0 flex-1 t-body-s text-ink-2">
+          {p.keketatan_snbp
+            ? `Diterima SNBP ${p.keketatan_snbp.tahun}: ${persen(p.keketatan_snbp.rasio)}`
+            : p.keketatan_snbt
+              ? `Rasio SNBT ${p.keketatan_snbt.tahun}: ${persen(p.keketatan_snbt.rasio)}`
+              : 'Data keketatan belum ada'}
+        </p>
+        <Tombol ukuran="M" ikon onClick={onSimulasi}>
+          Simulasi
+        </Tombol>
+      </div>
+    </article>
+  );
 }
 
-const MAJOR_DATA: MajorItem[] = [
-  {
-    id: '1',
-    slug: 'teknologi-informasi',
-    name: 'Teknologi Informasi',
-    campus: 'Universitas Gadjah Mada',
-    location: 'D.I. Yogyakarta',
-    jenjang: 'S1',
-    klaster: 'KLASTER: TEKNOLOGI',
-    akreditasi: 'UNGGUL',
-    tingkatKeketatan: 'Diterima SNBP 2025: 3,7%',
-    category: 'SAINTEK',
-  },
-  {
-    id: '2',
-    slug: 'ilmu-komputer',
-    name: 'Ilmu Komputer',
-    campus: 'Universitas Gadjah Mada',
-    location: 'D.I. Yogyakarta',
-    jenjang: 'S1',
-    klaster: 'KLASTER: TEKNOLOGI',
-    akreditasi: 'UNGGUL',
-    tingkatKeketatan: 'Diterima SNBP 2025: 4,0%',
-    category: 'SAINTEK',
-  },
-  {
-    id: '3',
-    slug: 'pendidikan-teknik-informatika',
-    name: 'Pend. Teknik Informatika',
-    campus: 'Universitas Negeri Yogyakarta',
-    location: 'D.I. Yogyakarta',
-    jenjang: 'S1',
-    klaster: 'KLASTER: TEKNOLOGI',
-    akreditasi: 'UNGGUL',
-    tingkatKeketatan: 'Diterima SNBP 2025: 3,6%',
-    category: 'SAINTEK',
-  },
-  {
-    id: '4',
-    slug: 'sistem-informasi',
-    name: 'Sistem Informasi',
-    campus: 'UPN "Veteran" Yogyakarta',
-    location: 'D.I. Yogyakarta',
-    jenjang: 'S1',
-    klaster: 'KLASTER: TEKNOLOGI',
-    akreditasi: 'A',
-    tingkatKeketatan: 'Diterima SNBP 2025: 8,1%',
-    category: 'SAINTEK',
-  },
-  {
-    id: '5',
-    slug: 'desain-komunikasi-visual',
-    name: 'Desain Komunikasi Visual',
-    campus: 'ISI Yogyakarta',
-    location: 'D.I. Yogyakarta',
-    jenjang: 'S1',
-    klaster: 'KLASTER: SENI & DESAIN',
-    akreditasi: 'A',
-    tingkatKeketatan: 'Diterima SNBP 2025: 6,8%',
-    category: 'SOSHUM',
-  },
-  {
-    id: '6',
-    slug: 'teknik-informatika-polban',
-    name: 'Teknik Informatika',
-    campus: 'Politeknik Negeri Bandung',
-    location: 'Jawa Barat',
-    jenjang: 'D4',
-    klaster: 'KLASTER: TEKNOLOGI',
-    akreditasi: 'UNGGUL',
-    tingkatKeketatan: 'Diterima SNBP 2025: 3,5%',
-    category: 'SAINTEK',
-  },
-];
-
+/** M17 · Katalog Simulasi (Figma `180:1706`, Hal. 12): cari + filter rumpun/jenjang lewat GET /api/prodi. */
 export default function KatalogPage() {
   const router = useRouter();
-  const { savedList, setAktif } = usePreferensiStorage();
-  const [activeTab, setActiveTab] = useState<'SEMUA' | 'SAINTEK' | 'SOSHUM'>('SEMUA');
-  const [activeJenjang, setActiveJenjang] = useState<string>('SEMUA');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedKlaster, setSelectedKlaster] = useState<string | null>('TEKNOLOGI');
+  const { status } = useSession();
+  const { daftar, aktifkan } = useDaftarPreferensi(status === 'authenticated');
+  const [q, setQ] = useState('');
+  const [kelompok, setKelompok] = useState<RumpunIlmu | ''>('');
+  const [jenjang, setJenjang] = useState<JenjangProdi | ''>('');
+  const [hasil, setHasil] = useState<ProdiRingkas[]>([]);
+  const [total, setTotal] = useState<number | null>(null);
+  const [halaman, setHalaman] = useState(1);
+  const [memuat, setMemuat] = useState(false);
+  const [galat, setGalat] = useState<string | null>(null);
+  const [hitung, setHitung] = useState<Record<string, number>>({});
 
-  const filtered = MAJOR_DATA.filter((m) => {
-    const matchCategory =
-      activeTab === 'SEMUA' || m.category === activeTab;
-    const matchJenjang =
-      activeJenjang === 'SEMUA' || m.jenjang === activeJenjang;
-    const matchKlaster =
-      !selectedKlaster || m.klaster.includes(selectedKlaster);
-    const matchSearch =
-      m.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      m.campus.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchCategory && matchJenjang && matchKlaster && matchSearch;
-  });
+  // Jumlah prodi per rumpun & jenjang (total dari /api/prodi, 1 baris per permintaan).
+  useEffect(() => {
+    const kunci: [string, string][] = [
+      ['semua', ''],
+      ['saintek', 'kelompok=saintek'],
+      ['soshum', 'kelompok=soshum'],
+      ['S1', 'jenjang=S1'],
+      ['D4', 'jenjang=D4'],
+      ['D3', 'jenjang=D3'],
+    ];
+    Promise.all(
+      kunci.map(([k, qs]) => panggilApi<ResponsDaftarProdi>(`/api/prodi?per_halaman=1&${qs}`).then((r) => [k, r.total] as const)),
+    )
+      .then((p) => setHitung(Object.fromEntries(p)))
+      .catch(() => undefined);
+  }, []);
+
+  useEffect(() => {
+    const t = setTimeout(async () => {
+      setMemuat(true);
+      try {
+        const sp = new URLSearchParams({ halaman: String(halaman), per_halaman: String(PER_HALAMAN) });
+        if (q.trim()) sp.set('q', q.trim());
+        if (kelompok) sp.set('kelompok', kelompok);
+        if (jenjang) sp.set('jenjang', jenjang);
+        const r = await panggilApi<ResponsDaftarProdi>(`/api/prodi?${sp}`);
+        setHasil((h) => (halaman === 1 ? r.data : [...h, ...r.data]));
+        setTotal(r.total);
+        setGalat(null);
+      } catch (e) {
+        setGalat(pesanGalat(e));
+      } finally {
+        setMemuat(false);
+      }
+    }, q ? 350 : 0);
+    return () => clearTimeout(t);
+  }, [q, kelompok, jenjang, halaman]);
+
+  const saring = (ubah: () => void) => {
+    setHalaman(1);
+    ubah();
+  };
+
+  const RUMPUN: { id: RumpunIlmu | ''; label: string; n?: number }[] = [
+    { id: '', label: 'SEMUA', n: hitung.semua },
+    { id: 'saintek', label: 'SAINTEK', n: hitung.saintek },
+    { id: 'soshum', label: 'SOSHUM', n: hitung.soshum },
+  ];
+  const JENJANG: (JenjangProdi | '')[] = ['', 'S1', 'D4', 'D3'];
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] flex justify-center">
-      <div className="w-full max-w-[402px] bg-white border-x-2 border-black flex flex-col min-h-screen font-['Outfit',sans-serif]">
-        {/* 1. Top Bar M17 */}
-        <TopBar title="Simulasi" onBack={() => router.push('/cocokin')} />
-
-        {/* Subheader: Preferensi Aktif Container (M17) */}
-        <div className="p-3 bg-[#F7F5F0] border-b border-gray-200">
-          <PemilihPreferensi
-            preferensiList={savedList}
-            onPilih={setAktif}
-          />
+    <BingkaiMobile>
+      <TopBar title="Simulasi" onBack={() => router.back()} />
+      {daftar && daftar.length > 0 && (
+        <div className="border-b-[1.5px] border-line bg-canvas px-6 py-2.5">
+          <PemilihPreferensi daftar={daftar} onPilih={aktifkan} className="w-full" />
         </div>
-
-        <main className="w-full px-4 pt-5 pb-16 flex flex-col flex-1">
-          {/* 2. Tag */}
-          <div className="mb-2">
-            <span className="font-['Press_Start_2P',monospace] text-[8px] text-[#277EFD] tracking-wider uppercase">
-              TEST DRIVE JURUSAN
-            </span>
-          </div>
-
-          {/* 3. Heading Persis Figma M17 */}
-          <h1 className="font-['Press_Start_2P',monospace] text-sm sm:text-base leading-relaxed text-[#151D21] mb-4">
-            5.150 prodi dari 146 PTN
-          </h1>
-
-          {/* 4. Search Box */}
-          <div className="w-full h-11 border-2 border-[#151D21] shadow-[3px_3px_0px_#151D21] bg-white px-3 flex items-center gap-2.5 mb-3">
-            <Icon name="search" className="w-4 h-4 text-[#151D21] shrink-0" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder='Cari prodi/kampus · coba "TI", "DKV", "POLBAN"'
-              className="w-full text-xs text-[#151D21] placeholder:text-gray-400 focus:outline-none bg-transparent font-['Plus_Jakarta_Sans',sans-serif]"
-            />
-          </div>
-
-          {/* 5. Segmented Tabs (SEMUA 5.150 | SAINTEK 2.952 | SOSHUM 2.198) */}
-          <div className="w-full border-2 border-[#151D21] bg-white flex overflow-hidden mb-3">
-            {[
-              { id: 'SEMUA', label: 'SEMUA', count: '5.150' },
-              { id: 'SAINTEK', label: 'SAINTEK', count: '2.952' },
-              { id: 'SOSHUM', label: 'SOSHUM', count: '2.198' },
-            ].map((tab, idx) => (
+      )}
+      <main className="flex flex-col gap-4 px-6 pt-5 pb-8">
+        <div className="flex flex-col gap-1.5">
+          <p className="t-label-s text-blue">SIMULASI JURUSAN</p>
+          <h1 className="t-display-m text-ink">{ribuan(hitung.semua)} prodi dari 146 PTN</h1>
+        </div>
+        <label className="flex h-[52px] items-center gap-2.5 border-2 border-ink bg-paper px-3.5 shadow-pixel-sm">
+          <img src="/figma/icon-search-18.svg" alt="" width={18} height={18} />
+          <input
+            value={q}
+            onChange={(e) => saring(() => setQ(e.target.value))}
+            placeholder='Cari prodi/kampus · coba "TI", "DKV", "POLBAN"'
+            aria-label="Cari prodi atau kampus"
+            className="min-w-0 flex-1 bg-transparent t-body-s text-ink outline-none placeholder:text-muted"
+          />
+        </label>
+        <div className="flex border-2 border-ink bg-paper" role="tablist" aria-label="Rumpun ilmu">
+          {RUMPUN.map((r) => {
+            const pilih = kelompok === r.id;
+            return (
               <button
-                key={tab.id}
+                key={r.label}
                 type="button"
-                onClick={() => setActiveTab(tab.id as 'SEMUA' | 'SAINTEK' | 'SOSHUM')}
-                className={`flex-1 py-2 text-center flex flex-col items-center justify-center transition-colors cursor-pointer ${
-                  idx < 2 ? 'border-r-2 border-[#151D21]' : ''
-                } ${
-                  activeTab === tab.id
-                    ? 'bg-[#277EFD] text-white'
-                    : 'bg-white text-[#151D21] hover:bg-gray-50'
-                }`}
+                role="tab"
+                aria-selected={pilih}
+                onClick={() => saring(() => setKelompok(r.id))}
+                className={`flex min-w-0 flex-1 flex-col items-center gap-0.5 py-2 cursor-pointer ${pilih ? 'bg-blue text-paper' : 'text-ink'}`}
               >
-                <span className="font-['Press_Start_2P',monospace] text-[8px] font-bold">
-                  {tab.label}
-                </span>
-                <span className="text-[10px] opacity-80 mt-0.5">{tab.count}</span>
+                <span className="t-button">{r.label}</span>
+                <span className={`t-body-s ${pilih ? 'text-paper' : 'text-muted'}`}>{ribuan(r.n)}</span>
               </button>
-            ))}
-          </div>
-
-          {/* 6. Jenjang Filter Chips (Persis Figma M17) */}
-          <div className="flex items-center gap-2 mb-3 overflow-x-auto pb-1">
-            {[
-              { id: 'SEMUA', label: 'Semua Jenjang' },
-              { id: 'S1', label: 'S1 · 3.823' },
-              { id: 'D4', label: 'D4 · 787' },
-              { id: 'D3', label: 'D3 · 540' },
-            ].map((chip) => {
-              const isSelected = activeJenjang === chip.id;
-              return (
-                <button
-                  key={chip.id}
-                  type="button"
-                  onClick={() => setActiveJenjang(chip.id)}
-                  className={`px-3 py-1 font-['Pixelify_Sans',sans-serif] text-[12px] font-medium shrink-0 transition-all cursor-pointer ${
-                    isSelected
-                      ? 'bg-[#151D21] text-white shadow-[2px_2px_0px_#151D21]'
-                      : 'bg-[#EAF2FF] text-[#1A5FD1] hover:bg-blue-100'
-                  }`}
-                >
-                  {chip.label}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* 7. Active Klaster Filter + Filter Button (Persis Figma M17) */}
-          <div className="flex items-center justify-between gap-2 mb-4">
-            {selectedKlaster ? (
+            );
+          })}
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {JENJANG.map((j) => {
+            const pilih = jenjang === j;
+            return (
               <button
+                key={j || 'semua'}
                 type="button"
-                onClick={() => setSelectedKlaster(null)}
-                className="px-2.5 py-1 bg-[#FFF6D6] border border-[#151D21] font-['Pixelify_Sans',sans-serif] text-[12px] font-medium text-[#151D21] flex items-center gap-1 cursor-pointer hover:bg-yellow-100"
+                aria-pressed={pilih}
+                onClick={() => saring(() => setJenjang(j))}
+                className={`border-[1.5px] px-2.5 py-2 t-label-s cursor-pointer ${pilih ? 'border-ink bg-ink text-paper' : 'border-blue bg-blue-50 text-blue-700'}`}
               >
-                <span>KLASTER: {selectedKlaster} ×</span>
+                {j ? `${j} · ${ribuan(hitung[j])}` : 'SEMUA'}
               </button>
-            ) : (
-              <span />
-            )}
-
-            <button
-              type="button"
-              onClick={() => setSelectedKlaster(selectedKlaster ? null : 'TEKNOLOGI')}
-              className="flex items-center gap-1.5 font-['Pixelify_Sans',sans-serif] text-[12px] font-medium text-[#151D21] cursor-pointer hover:underline ml-auto"
-            >
-              <Icon name="filter" className="w-3.5 h-3.5 text-[#151D21]" />
-              <span>FILTER (3)</span>
-            </button>
-          </div>
-
-          {/* 8. Header List (Persis Figma M17) */}
-          <div className="mb-3">
-            <span className="font-['Pixelify_Sans',sans-serif] text-[12px] font-medium text-[#151D21] uppercase tracking-wider block">
-              {filtered.length} PRODI · URUT DARI KECOCOKAN
-            </span>
-          </div>
-
-          {/* 9. Prodi Cards List (Persis Figma M17: node 180:1706) */}
-          <div className="flex flex-col gap-3">
-            {filtered.map((item) => (
-              <div
-                key={item.id}
-                className="p-3.5 bg-white border-2 border-[#151D21] shadow-[3px_3px_0px_#151D21] flex flex-col gap-2.5"
-              >
-                <div>
-                  <h3 className="font-['Pixelify_Sans',sans-serif] text-[16px] font-semibold text-[#151D21] leading-tight">
-                    {item.name}
-                  </h3>
-                  <p className="font-['Plus_Jakarta_Sans',sans-serif] text-[12px] text-[#6B7680] mt-0.5">
-                    {item.campus} · {item.location}
-                  </p>
-                </div>
-
-                {/* Badges: Jenjang + Klaster + Akreditasi */}
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="px-2 py-0.5 bg-[#151D21] text-white font-['Pixelify_Sans',sans-serif] text-[11px] font-medium">
-                    {item.jenjang}
-                  </span>
-                  <span className="px-2 py-0.5 bg-[#EAF2FF] text-[#1A5FD1] font-['Pixelify_Sans',sans-serif] text-[11px] font-medium">
-                    {item.klaster}
-                  </span>
-                  <span
-                    className={`px-2 py-0.5 font-['Pixelify_Sans',sans-serif] text-[11px] font-medium border ${
-                      item.akreditasi === 'UNGGUL'
-                        ? 'bg-[#E6F6EC] text-[#22A94F] border-[#22A94F]'
-                        : 'bg-[#FFF6D6] text-[#8F6600] border-[#8F6600]'
-                    }`}
-                  >
-                    {item.akreditasi}
-                  </span>
-                </div>
-
-                {/* Bottom Row: Keketatan + Button SIMULASI */}
-                <div className="pt-2 border-t border-gray-100 flex items-center justify-between">
-                  <span className="font-['Plus_Jakarta_Sans',sans-serif] text-[12px] text-[#3A444B]">
-                    {item.tingkatKeketatan}
-                  </span>
-                  <Link
-                    href={`/test-drive/${item.slug}`}
-                    className="px-3 py-1.5 bg-[#277EFD] hover:bg-[#1E6FD9] text-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] font-['Press_Start_2P',monospace] text-[10px] flex items-center gap-1.5 active:translate-x-[1px] active:translate-y-[1px]"
-                  >
-                    <span>SIMULASI</span>
-                    <Icon name="arrow-right" className="w-3 h-3 text-white" />
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        </main>
-      </div>
-    </div>
+            );
+          })}
+        </div>
+        <p className="t-label-s text-ink">{total === null ? 'MEMUAT…' : `${ribuan(total)} PRODI`}</p>
+        {galat && <p className="t-body-s font-bold text-red">{galat}</p>}
+        {hasil.map((p) => (
+          <KartuProdi key={p.id_prodi} p={p} onSimulasi={() => router.push(`/test-drive/${p.id_prodi}`)} />
+        ))}
+        {total !== null && hasil.length === 0 && !memuat && <p className="t-body-m text-muted">Tidak ada prodi yang cocok dengan pencarianmu.</p>}
+        {total !== null && hasil.length < total && (
+          <Tombol jenis="secondary" penuh disabled={memuat} onClick={() => setHalaman((h) => h + 1)}>
+            {memuat ? 'Memuat…' : 'Muat lagi'}
+          </Tombol>
+        )}
+      </main>
+    </BingkaiMobile>
   );
 }

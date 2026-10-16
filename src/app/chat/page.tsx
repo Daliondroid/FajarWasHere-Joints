@@ -1,412 +1,219 @@
 'use client';
 
-import React, { useState } from 'react';
-import Link from 'next/link';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { signOut } from 'next-auth/react';
-import { Icon } from '@/components/ui/Icon';
+import type { PesanChat, ResponsChat, ResponsRiwayatChat } from '@/types';
+import { TopBar } from '@/components/ui/TopBar';
+import BingkaiMobile from '@/components/ui/BingkaiMobile';
+import Logo from '@/components/ui/Logo';
 import PemilihPreferensi from '@/components/ui/PemilihPreferensi';
-import { usePreferensiStorage } from '@/components/preferensi/usePreferensiStorage';
+import Tag from '@/components/ui/Tag';
+import LaciChat from '@/components/chat/LaciChat';
+import { panggilApi, pesanGalat } from '@/lib/klien/api';
+import { useDaftarPreferensi } from '@/lib/klien/preferensi';
 
-interface Message {
-  id: string;
-  sender: 'user' | 'bot';
-  text: string;
-  badge?: string;
-  time?: string;
+interface Pesan extends PesanChat {
+  /** Hanya pada balasan baru (riwayat tidak menyimpan metadata). */
+  info?: Pick<ResponsChat, 'alat_dipakai' | 'angka_terverifikasi' | 'cadangan'>;
 }
 
+/** Markdown minimal dari model: **tebal** jadi <b>, *miring* cukup dibuang tanda bintangnya. */
+function TeksBalasan({ teks }: { teks: string }) {
+  return (
+    <>
+      {teks.split(/(\*\*[^*]+\*\*)/g).map((b, i) =>
+        b.startsWith('**') && b.endsWith('**') ? <b key={i}>{b.slice(2, -2)}</b> : b.replace(/\*([^*\n]+)\*/g, '$1'),
+      )}
+    </>
+  );
+}
+
+const jam = (iso: string) => new Date(iso).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+/** Chat Bubble (Figma `169:259`): bot paper + avatar logo, kamu blue; label data bila angka dari API internal (BR-12, BR-13). */
+function Gelembung({ p }: { p: Pesan }) {
+  if (p.peran === 'pengguna') {
+    return (
+      <div className="flex w-full justify-end">
+        <p className="max-w-[250px] border-2 border-ink bg-blue p-3 t-body-m whitespace-pre-wrap text-paper shadow-pixel-sm">{p.isi}</p>
+      </div>
+    );
+  }
+  const i = p.info;
+  return (
+    <div className="flex w-full items-start gap-2">
+      <span className="flex size-8 shrink-0 items-center justify-center border-[1.5px] border-ink bg-paper">
+        <Logo ukuran={24} />
+      </span>
+      <div className="flex max-w-[290px] flex-col items-start gap-2 border-2 border-ink bg-paper p-3 shadow-pixel-sm">
+        <p className="t-body-m whitespace-pre-wrap text-ink">
+          <TeksBalasan teks={p.isi} />
+        </p>
+        {i && i.alat_dipakai.length > 0 && i.angka_terverifikasi && <Tag warna="green">DATA RESMI · SNPMB.ID</Tag>}
+        {i && !i.angka_terverifikasi && <Tag warna="yellow">ANGKA BELUM TERVERIFIKASI</Tag>}
+        {i?.cadangan && <Tag warna="ink">JAWABAN CADANGAN</Tag>}
+      </div>
+    </div>
+  );
+}
+
+/** M15 · Cocokin AI chat (Figma `177:1569`, Hal. 10). POST/GET /api/chat; konteks = preferensi aktif. */
 export default function ChatPage() {
   const router = useRouter();
-  const { savedList, setAktif } = usePreferensiStorage();
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [inputText, setInputText] = useState('');
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 'm1',
-      sender: 'bot',
-      text: 'Halo, Ari! Aku menjawab berdasarkan preferensi Informatika Impian (SNBP). Mau tanya apa?',
-      time: '21.40',
-    },
-    {
-      id: 'm2',
-      sender: 'user',
-      text: 'Peluangku di Teknologi Informasi UGM?',
-      time: '21.41',
-    },
-    {
-      id: 'm3',
-      sender: 'bot',
-      badge: 'DATA RESMI · SNPMB.ID',
-      text: 'Daya tampung SNBP 2026: 29 kursi. Tahun lalu 24 dari 645 pendaftar diterima (3,7%, Sangat Ketat). Dengan peringkat 36/287, peluangmu sekitar 10–20% (estimasi).',
-      time: '21.41',
-    },
-    {
-      id: 'm4',
-      sender: 'user',
-      text: 'UKT-nya berapa?',
-      time: '21.42',
-    },
-    {
-      id: 'm5',
-      sender: 'bot',
-      text: 'Maaf, datanya tidak tersedia. UKT per prodi belum ada di data resmi yang aku pakai, jadi aku tidak mau menebak.',
-      time: '21.42',
-    },
-  ]);
+  const { daftar, aktifkan } = useDaftarPreferensi(true);
+  const [pesan, setPesan] = useState<Pesan[]>([]);
+  const [teks, setTeks] = useState('');
+  const [mengirim, setMengirim] = useState(false);
+  const [galat, setGalat] = useState<string | null>(null);
+  const [laci, setLaci] = useState(false);
+  const bawah = useRef<HTMLDivElement>(null);
 
-  const quickChips = [
-    'Peluangku di Teknologi Informasi UGM?',
-    'Bandingkan Informatika ITB dan ITS',
+  useEffect(() => {
+    panggilApi<ResponsRiwayatChat>('/api/chat')
+      .then((r) => setPesan(r.data))
+      .catch((e) => setGalat(pesanGalat(e)));
+  }, []);
+
+  useEffect(() => {
+    bawah.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [pesan.length, mengirim]);
+
+  const aktif = daftar?.find((p) => p.aktif);
+  const top = aktif?.rekomendasi_teratas;
+  const saran = [
+    top ? `Peluangku di ${top.nama_prodi.toLowerCase()} ${top.nama_ptn.toLowerCase()}?` : 'Jurusan apa yang paling cocok untukku?',
+    'Bandingkan rekomendasi #1 dan #2',
     'Prodi serumpun yang lebih longgar?',
   ];
 
-  const handleSend = (textToSend?: string) => {
-    const text = textToSend || inputText;
-    if (!text.trim()) return;
+  const kirim = async (isi: string) => {
+    const bersih = isi.trim();
+    if (!bersih || mengirim) return;
+    setTeks('');
+    setGalat(null);
+    setPesan((p) => [...p, { peran: 'pengguna', isi: bersih, dibuat_pada: new Date().toISOString() }]);
+    setMengirim(true);
+    try {
+      const r = await panggilApi<ResponsChat>('/api/chat', { method: 'POST', body: { pesan: bersih } });
+      setPesan((p) => [
+        ...p,
+        { peran: 'asisten', isi: r.balasan, dibuat_pada: r.dibuat_pada, info: { alat_dipakai: r.alat_dipakai, angka_terverifikasi: r.angka_terverifikasi, cadangan: r.cadangan } },
+      ]);
+    } catch (e) {
+      setGalat(pesanGalat(e));
+    } finally {
+      setMengirim(false);
+    }
+  };
 
-    const userMsg: Message = {
-      id: Date.now().toString(),
-      sender: 'user',
-      text: text.trim(),
-      time: '21.43',
-    };
+  const pertama = pesan.find((p) => p.peran === 'pengguna');
 
-    setMessages((prev) => [...prev, userMsg]);
-    if (!textToSend) setInputText('');
-
-    setTimeout(() => {
-      let botResponse =
-        'Berdasarkan data snpmb.id dan PDDikti, prodi ini memiliki tingkat keketatan yang cukup tinggi. Perhatikan nilai rapor semester 1-5 dan mata pelajaran pendukung pilihanmu.';
-      let badge: string | undefined = 'DATA RESMI · SNPMB.ID';
-
-      if (text.toLowerCase().includes('ukt') || text.toLowerCase().includes('biaya')) {
-        botResponse =
-          'Maaf, datanya tidak tersedia. UKT per prodi belum ada di data resmi yang aku pakai, jadi aku tidak mau menebak.';
-        badge = undefined;
-      }
-
-      const botMsg: Message = {
-        id: (Date.now() + 1).toString(),
-        sender: 'bot',
-        text: botResponse,
-        badge,
-        time: '21.43',
-      };
-      setMessages((prev) => [...prev, botMsg]);
-    }, 400);
+  const hapusRiwayat = async () => {
+    try {
+      await panggilApi('/api/chat', { method: 'DELETE' });
+      setPesan([]);
+      setLaci(false);
+    } catch (e) {
+      setGalat(pesanGalat(e));
+    }
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] flex justify-center">
-      <div className="w-full max-w-[402px] bg-white border-x-2 border-black flex flex-col min-h-screen font-['Outfit',sans-serif] relative">
-        {/* 1. Header M15: Back + Title + Menu Action + 4-Color Stripe Bar */}
-        <header className="sticky top-0 z-40 bg-white border-b-2 border-[#151D21]">
-          <div className="px-4 py-3 flex items-center justify-between">
-            <button
-              type="button"
-              onClick={() => router.push('/cocokin')}
-              aria-label="Kembali"
-              className="p-1 cursor-pointer hover:opacity-70 active:scale-90"
-            >
-              <Icon name="back" className="w-5 h-5 text-[#151D21]" />
-            </button>
+    <BingkaiMobile>
+      <TopBar
+        title="Cocokin AI"
+        onBack={() => router.push('/cocokin')}
+        rightElement={
+          <button type="button" aria-label="Buka menu chat" onClick={() => setLaci(true)} className="flex size-10 items-center justify-center cursor-pointer">
+            <img src="/figma/icon-menu.svg" alt="" width={20} height={20} />
+          </button>
+        }
+      />
+      <div className="flex items-center border-b-[1.5px] border-line bg-canvas px-6 py-2.5">
+        {daftar && daftar.length > 0 ? (
+          <PemilihPreferensi daftar={daftar} onPilih={aktifkan} className="flex-1" />
+        ) : (
+          <p className="t-body-s text-muted">Memuat preferensi…</p>
+        )}
+      </div>
 
-            <h1 className="font-['Press_Start_2P',monospace] text-xs font-bold text-[#151D21]">
-              Cocokin AI
-            </h1>
-
-            <button
-              type="button"
-              onClick={() => setIsDrawerOpen(true)}
-              aria-label="Buka Menu Chat"
-              className="p-1 cursor-pointer hover:opacity-70 active:scale-90"
-            >
-              <Icon name="menu" className="w-5 h-5 text-[#151D21]" />
-            </button>
-          </div>
-
-          {/* 4-Color Stripe Progress Bar */}
-          <div className="w-full grid grid-cols-4 h-1">
-            <div className="bg-[#277EFD]" />
-            <div className="bg-[#F1402E]" />
-            <div className="bg-[#FEBD01]" />
-            <div className="bg-[#22A94F]" />
-          </div>
-
-          {/* Subheader: Preferensi Aktif Container (M15) */}
-          <div className="p-3 bg-[#F7F5F0] border-b border-gray-200">
-            <PemilihPreferensi
-              preferensiList={savedList}
-              onPilih={setAktif}
-            />
-          </div>
-        </header>
-
-        {/* 2. Messages List */}
-        <main className="p-4 flex-1 flex flex-col gap-4 overflow-y-auto pb-24">
-          <div className="text-center my-1">
-            <span className="font-['Pixelify_Sans',sans-serif] text-[12px] font-medium text-[#6B7680] tracking-wider uppercase">
-              HARI INI · 21.40
-            </span>
-          </div>
-
-          {/* Initial Bot Bubble */}
-          <div className="flex items-start gap-2.5 max-w-[90%] self-start">
-            <div className="w-8 h-8 bg-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] flex items-center justify-center shrink-0">
-              <Icon name="school" className="w-4 h-4 text-[#277EFD]" />
-            </div>
-            <div className="p-3 bg-white border-2 border-[#151D21] shadow-[3px_3px_0px_#151D21] text-sm text-[#151D21] font-['Plus_Jakarta_Sans',sans-serif] leading-relaxed">
-              Halo, Ari! Aku menjawab berdasarkan preferensi Informatika Impian (SNBP). Mau tanya apa?
-            </div>
-          </div>
-
-          {/* Quick Prompt Chips (M15) */}
-          <div className="flex flex-col gap-2 my-1 pl-10">
-            {quickChips.map((chip, idx) => (
+      <main className="flex flex-1 flex-col gap-3.5 px-6 py-5" aria-live="polite">
+        <p className="text-center t-label-s text-muted">HARI INI · {jam(pesan[0]?.dibuat_pada ?? new Date().toISOString())}</p>
+        <Gelembung
+          p={{
+            peran: 'asisten',
+            isi: aktif
+              ? `Halo! Aku menjawab berdasarkan preferensi ${aktif.nama} (${aktif.jalur.toUpperCase()}). Mau tanya apa?`
+              : 'Halo! Buat preferensi dulu supaya jawabanku sesuai minat dan data jalurmu.',
+            dibuat_pada: '',
+          }}
+        />
+        {pesan.length === 0 && (
+          <div className="flex flex-col items-start gap-2 pl-10">
+            {saran.map((s) => (
               <button
-                key={idx}
+                key={s}
                 type="button"
-                onClick={() => handleSend(chip)}
-                className="w-full text-left p-2.5 bg-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] hover:bg-gray-50 active:translate-x-[1px] active:translate-y-[1px] font-['Plus_Jakarta_Sans',sans-serif] text-xs font-bold text-[#151D21] flex items-center gap-2 cursor-pointer transition-all"
+                onClick={() => kirim(s)}
+                className="flex items-center gap-2 border-[1.5px] border-ink bg-paper px-3 py-2 text-left shadow-pixel-sm cursor-pointer"
               >
-                <Icon name="spark" className="w-3.5 h-3.5 text-[#277EFD] shrink-0" />
-                <span>{chip}</span>
+                <img src="/figma/icon-spark-14.svg" alt="" width={14} height={14} className="shrink-0" />
+                <span className="t-body-s font-bold text-ink first-letter:uppercase">{s}</span>
               </button>
             ))}
           </div>
-
-          {/* Conversation Messages */}
-          {messages.slice(1).map((m) => {
-            const isUser = m.sender === 'user';
-            return (
-              <div
-                key={m.id}
-                className={`flex items-start gap-2.5 max-w-[90%] ${
-                  isUser ? 'self-end flex-row-reverse' : 'self-start'
-                }`}
-              >
-                {!isUser && (
-                  <div className="w-8 h-8 bg-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] flex items-center justify-center shrink-0">
-                    <Icon name="school" className="w-4 h-4 text-[#277EFD]" />
-                  </div>
-                )}
-                <div className="flex flex-col gap-1">
-                  {m.badge && (
-                    <span className="self-start px-2 py-0.5 bg-[#E6F6EC] border border-[#22A94F] text-[#22A94F] font-bold text-[10px] tracking-wider uppercase">
-                      {m.badge}
-                    </span>
-                  )}
-                  <div
-                    className={`p-3 border-2 border-[#151D21] shadow-[3px_3px_0px_#151D21] text-sm leading-relaxed font-['Plus_Jakarta_Sans',sans-serif] ${
-                      isUser
-                        ? 'bg-[#277EFD] text-white'
-                        : 'bg-white text-[#151D21]'
-                    }`}
-                  >
-                    {m.text}
-                  </div>
-                  {m.time && (
-                    <span
-                      className={`text-[10px] text-[#6B7680] ${
-                        isUser ? 'self-end' : 'self-start'
-                      }`}
-                    >
-                      {m.time}
-                    </span>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </main>
-
-        {/* 3. Sticky Bottom Composer (M15) */}
-        <div className="sticky bottom-0 bg-white border-t-2 border-[#151D21] p-3 flex items-center gap-2 z-30">
-          <button
-            type="button"
-            aria-label="Tambah Lampiran"
-            className="w-10 h-10 bg-white hover:bg-gray-100 text-[#151D21] border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] flex items-center justify-center cursor-pointer active:translate-x-[1px] active:translate-y-[1px] shrink-0"
-          >
-            <Icon name="plus" className="w-4 h-4 text-[#151D21]" />
-          </button>
-          <input
-            type="text"
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') handleSend();
-            }}
-            placeholder="Ketik pertanyaanmu…"
-            className="flex-1 h-10 px-3 bg-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] text-xs text-[#151D21] placeholder:text-[#6B7680] font-['Plus_Jakarta_Sans',sans-serif] focus:outline-none"
-          />
-          <button
-            type="button"
-            onClick={() => handleSend()}
-            aria-label="Kirim Pesan"
-            className="w-10 h-10 bg-[#277EFD] hover:bg-[#1E6FD9] text-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] flex items-center justify-center cursor-pointer active:translate-x-[1px] active:translate-y-[1px] shrink-0"
-          >
-            <Icon name="send" className="w-4 h-4 text-white" />
-          </button>
-        </div>
-
-        {/* 4. SIDE DRAWER MENU CHAT M16 (node 177:1649) */}
-        {isDrawerOpen && (
-          <div className="fixed inset-0 z-50 bg-[#151D21]/60 flex justify-end">
-            <div className="w-[320px] max-w-[85%] bg-white border-l-2 border-[#151D21] h-full flex flex-col p-4 overflow-y-auto animate-in slide-in-from-right duration-200">
-              {/* Drawer Header */}
-              <div className="flex items-center justify-between pb-3 border-b border-[#D3D6DA] mb-4">
-                <span className="font-['Press_Start_2P',monospace] text-xs font-bold text-[#151D21]">
-                  Menu
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setIsDrawerOpen(false)}
-                  aria-label="Tutup Menu"
-                  className="w-7 h-7 border border-[#151D21] hover:bg-gray-100 flex items-center justify-center cursor-pointer"
-                >
-                  <Icon name="close" className="w-4 h-4 text-[#151D21]" />
-                </button>
-              </div>
-
-              {/* Pemilih Preferensi + Link */}
-              <div className="mb-4">
-                <PemilihPreferensi
-                  preferensiList={savedList}
-                  onPilih={setAktif}
-                />
-                <Link
-                  href="/preferensi"
-                  onClick={() => setIsDrawerOpen(false)}
-                  className="font-['Plus_Jakarta_Sans',sans-serif] text-xs font-bold text-[#277EFD] hover:underline mt-2 inline-block"
-                >
-                  Kelola preferensi →
-                </Link>
-              </div>
-
-              {/* Nav Links */}
-              <div className="flex flex-col gap-1 mb-4">
-                <Link
-                  href="/katalog"
-                  onClick={() => setIsDrawerOpen(false)}
-                  className="p-2.5 border border-[#151D21] flex items-center justify-between hover:bg-gray-50 text-[#151D21]"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Icon name="play" className="w-4 h-4 text-[#277EFD]" />
-                    <span className="font-['Pixelify_Sans',sans-serif] text-[15px] font-semibold">
-                      Simulasi
-                    </span>
-                  </div>
-                  <Icon name="chevron-right" className="w-3.5 h-3.5 text-[#151D21]" />
-                </Link>
-
-                <Link
-                  href="/preferensi"
-                  onClick={() => setIsDrawerOpen(false)}
-                  className="p-2.5 border border-[#151D21] flex items-center justify-between hover:bg-gray-50 text-[#151D21]"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Icon name="grid" className="w-4 h-4 text-[#FEBD01]" />
-                    <span className="font-['Pixelify_Sans',sans-serif] text-[15px] font-semibold">
-                      Preferensi
-                    </span>
-                  </div>
-                  <Icon name="chevron-right" className="w-3.5 h-3.5 text-[#151D21]" />
-                </Link>
-
-                <Link
-                  href="/"
-                  onClick={() => setIsDrawerOpen(false)}
-                  className="p-2.5 border border-[#151D21] flex items-center justify-between hover:bg-gray-50 text-[#151D21]"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Icon name="home" className="w-4 h-4 text-[#22A94F]" />
-                    <span className="font-['Pixelify_Sans',sans-serif] text-[15px] font-semibold">
-                      Beranda
-                    </span>
-                  </div>
-                  <Icon name="chevron-right" className="w-3.5 h-3.5 text-[#151D21]" />
-                </Link>
-              </div>
-
-              <div className="border-b border-[#D3D6DA] my-2" />
-
-              {/* Riwayat Chat Section */}
-              <div className="mb-4">
-                <span className="font-['Pixelify_Sans',sans-serif] text-[12px] font-medium text-[#6B7680] uppercase tracking-wider block mb-2">
-                  RIWAYAT CHAT
-                </span>
-
-                <div className="space-y-2">
-                  {/* Chat 1 (Active) */}
-                  <div className="p-2.5 bg-[#EAF2FF] border-2 border-[#277EFD] shadow-[2px_2px_0px_#277EFD] flex items-center gap-2.5 cursor-pointer">
-                    <Icon name="chat" className="w-4 h-4 text-[#277EFD] shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <p className="font-['Pixelify_Sans',sans-serif] text-[13px] font-semibold text-[#151D21] truncate">
-                        Peluang TI UGM
-                      </p>
-                      <p className="font-['Plus_Jakarta_Sans',sans-serif] text-[11px] text-[#6B7680]">
-                        Hari ini · 21.40
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Chat 2 */}
-                  <div className="p-2.5 bg-white border border-[#151D21] hover:bg-gray-50 flex items-center gap-2.5 cursor-pointer">
-                    <Icon name="chat" className="w-4 h-4 text-[#6B7680] shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <p className="font-['Pixelify_Sans',sans-serif] text-[13px] font-semibold text-[#151D21] truncate">
-                        Bandingkan ITB vs ITS
-                      </p>
-                      <p className="font-['Plus_Jakarta_Sans',sans-serif] text-[11px] text-[#6B7680]">
-                        Kemarin · 14.15
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Chat 3 */}
-                  <div className="p-2.5 bg-white border border-[#151D21] hover:bg-gray-50 flex items-center gap-2.5 cursor-pointer">
-                    <Icon name="chat" className="w-4 h-4 text-[#6B7680] shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <p className="font-['Pixelify_Sans',sans-serif] text-[13px] font-semibold text-[#151D21] truncate">
-                        Jurusan alternatif Saintek
-                      </p>
-                      <p className="font-['Plus_Jakarta_Sans',sans-serif] text-[11px] text-[#6B7680]">
-                        12 Okt 2026
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Chat 4 */}
-                  <div className="p-2.5 bg-white border border-[#151D21] hover:bg-gray-50 flex items-center gap-2.5 cursor-pointer">
-                    <Icon name="chat" className="w-4 h-4 text-[#6B7680] shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <p className="font-['Pixelify_Sans',sans-serif] text-[13px] font-semibold text-[#151D21] truncate">
-                        Strategi SNBP Informatika
-                      </p>
-                      <p className="font-['Plus_Jakarta_Sans',sans-serif] text-[11px] text-[#6B7680]">
-                        10 Okt 2026
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Logout Button */}
-              <div className="mt-auto pt-3 border-t border-gray-200">
-                <button
-                  type="button"
-                  onClick={() => signOut({ callbackUrl: '/' })}
-                  className="flex items-center gap-2 text-[#F1402E] hover:underline font-['Pixelify_Sans',sans-serif] text-[15px] font-semibold cursor-pointer w-full"
-                >
-                  <Icon name="logout" className="w-4 h-4 text-[#F1402E]" />
-                  <span>Keluar (Logout)</span>
-                </button>
-              </div>
-            </div>
-          </div>
         )}
-      </div>
-    </div>
+        {pesan.map((p, i) => (
+          <Gelembung key={`${p.dibuat_pada}-${i}`} p={p} />
+        ))}
+        {mengirim && <p className="pl-10 t-body-s text-muted">Cocokin AI sedang mengetik…</p>}
+        {galat && <p className="t-body-s font-bold text-red">{galat}</p>}
+        <div ref={bawah} />
+      </main>
+
+      <form
+        className="sticky bottom-0 flex items-center gap-2.5 border-t-2 border-ink bg-paper px-6 pt-3.5 pb-[22px]"
+        onSubmit={(e) => {
+          e.preventDefault();
+          void kirim(teks);
+        }}
+      >
+        <button
+          type="button"
+          disabled
+          title="Lampiran belum tersedia"
+          aria-label="Lampiran (belum tersedia)"
+          className="flex size-12 shrink-0 items-center justify-center border-2 border-ink bg-paper opacity-50"
+        >
+          <img src="/figma/icon-plus.svg" alt="" width={20} height={20} />
+        </button>
+        <input
+          value={teks}
+          onChange={(e) => setTeks(e.target.value)}
+          maxLength={1000}
+          placeholder="Ketik pertanyaanmu…"
+          aria-label="Pertanyaan"
+          className="h-12 min-w-0 flex-1 border-2 border-ink bg-paper pr-3 pl-3.5 t-body-m text-ink outline-none placeholder:text-muted"
+        />
+        <button
+          type="submit"
+          aria-label="Kirim"
+          disabled={!teks.trim() || mengirim}
+          className="flex size-12 shrink-0 items-center justify-center border-2 border-ink bg-blue shadow-pixel-sm disabled:opacity-50 cursor-pointer"
+        >
+          <img src="/figma/icon-send.svg" alt="" width={20} height={20} />
+        </button>
+      </form>
+      {laci && (
+        <LaciChat
+          daftar={daftar}
+          onPilih={aktifkan}
+          judulPercakapan={pertama?.isi ?? null}
+          tanggal={pertama ? new Date(pertama.dibuat_pada).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) : null}
+          onHapusRiwayat={hapusRiwayat}
+          onTutup={() => setLaci(false)}
+        />
+      )}
+    </BingkaiMobile>
   );
 }

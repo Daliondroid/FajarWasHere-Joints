@@ -1,148 +1,68 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Icon } from '@/components/ui/Icon';
+import { useState } from 'react';
+import Link from 'next/link';
+import type { PreferensiRingkas } from '@/types';
 
-export interface PreferensiItem {
-  id: string;
-  nama: string;
-  jalur: 'snbp' | 'snbt';
-  is_aktif?: boolean;
-}
-
-interface PemilihPreferensiProps {
-  preferensiList?: PreferensiItem[];
-  aktifId?: string;
-  onPilih?: (id: string) => void;
-  className?: string;
-}
-
+/** Pemilih Preferensi (Figma `168:181`, PRD F-19): ganti preferensi aktif di Beranda, Rekomendasi, Chat, Simulasi. */
 export default function PemilihPreferensi({
-  preferensiList = [],
-  aktifId,
+  daftar,
   onPilih,
   className = '',
-}: PemilihPreferensiProps) {
-  const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
-
-  // Cari preferensi yang sedang aktif
-  const aktifItem =
-    preferensiList.find((p) => (aktifId ? p.id === aktifId : p.is_aktif)) ||
-    preferensiList[0] || {
-      id: 'default',
-      nama: 'Informatika Impian',
-      jalur: 'snbp' as const,
-      is_aktif: true,
-    };
-
-  const isSNBP = aktifItem.jalur === 'snbp';
-  const colorBg = isSNBP ? 'bg-[#FBBC05]' : 'bg-[#4285F4]';
-
-  const handleSelect = (id: string) => {
-    if (onPilih) {
-      onPilih(id);
-    }
-    setIsOpen(false);
-  };
+}: {
+  daftar: PreferensiRingkas[];
+  onPilih: (id: string) => void;
+  className?: string;
+}) {
+  const [buka, setBuka] = useState(false);
+  const aktif = daftar.find((p) => p.aktif) ?? daftar[0];
+  if (!aktif) return null;
 
   return (
     <div className={`relative ${className}`}>
-      {/* Selector Trigger Button */}
       <button
         type="button"
-        onClick={() => setIsOpen((prev) => !prev)}
-        className="w-full bg-white border-2 border-black p-2.5 flex items-center justify-between shadow-[2px_2px_0px_#000000] active:translate-x-[1px] active:translate-y-[1px] transition-all hover:bg-gray-50 text-left cursor-pointer"
+        aria-haspopup="listbox"
+        aria-expanded={buka}
+        onClick={() => setBuka((b) => !b)}
+        className="flex w-full items-center gap-2.5 border-2 border-ink bg-paper py-2 pr-3 pl-2.5 text-left shadow-pixel-sm cursor-pointer"
       >
-        <div className="flex items-center gap-2.5 min-w-0">
-          {/* Badge kotak warna jalur */}
-          <div
-            className={`w-3.5 h-3.5 ${colorBg} border border-black shrink-0 shadow-[1px_1px_0px_#000000]`}
-          />
-          <div className="min-w-0 flex flex-col">
-            <span className="font-['Press_Start_2P',monospace] text-[8px] text-gray-500 uppercase tracking-tight truncate">
-              PREFERENSI AKTIF • {aktifItem.jalur.toUpperCase()}
-            </span>
-            <span className="font-['Outfit',sans-serif] font-bold text-sm text-black truncate">
-              {aktifItem.nama}
-            </span>
-          </div>
-        </div>
-        <Icon
-          name="chevron-down"
-          className={`w-4 h-4 text-black shrink-0 transition-transform ${
-            isOpen ? 'rotate-180' : ''
-          }`}
-        />
+        <span className={`size-4 shrink-0 border-[1.5px] border-ink ${aktif.jalur === 'snbp' ? 'bg-yellow' : 'bg-blue'}`} />
+        <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+          <span className="whitespace-nowrap t-label-s text-muted">PREFERENSI AKTIF · {aktif.jalur.toUpperCase()}</span>
+          <span className="truncate t-label-m text-ink">{aktif.nama}</span>
+        </span>
+        <img src="/figma/icon-chevron-down-14.svg" alt="" width={14} height={14} className={buka ? 'rotate-180' : ''} />
       </button>
 
-      {/* Dropdown Menu */}
-      {isOpen && (
+      {buka && (
         <>
-          <div
-            className="fixed inset-0 z-40"
-            onClick={() => setIsOpen(false)}
-          />
-          <div className="absolute top-full left-0 right-0 mt-1 z-50 bg-white border-2 border-black shadow-[4px_4px_0px_#000000] max-h-60 overflow-y-auto">
-            <div className="p-2 border-b border-gray-200 bg-[#F9FAFB]">
-              <span className="font-['Press_Start_2P',monospace] text-[8px] text-gray-600">
-                PILIH PREFERENSI AKTIF:
-              </span>
-            </div>
-
-            {preferensiList.length > 0 ? (
-              preferensiList.map((item) => {
-                const isSelected = item.id === aktifItem.id;
-                const isItemSNBP = item.jalur === 'snbp';
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => handleSelect(item.id)}
-                    className={`w-full px-3 py-2 text-left flex items-center justify-between hover:bg-[#EEF5FF] transition-colors border-b border-gray-100 last:border-b-0 ${
-                      isSelected ? 'bg-[#EEF5FF] font-bold' : ''
-                    }`}
-                  >
-                    <div className="flex items-center gap-2 min-w-0">
-                      <div
-                        className={`w-3 h-3 border border-black shrink-0 ${
-                          isItemSNBP ? 'bg-[#FBBC05]' : 'bg-[#4285F4]'
-                        }`}
-                      />
-                      <span className="font-['Outfit',sans-serif] text-xs text-black truncate">
-                        {item.nama}
-                      </span>
-                    </div>
-                    {isSelected && (
-                      <span className="font-['Press_Start_2P',monospace] text-[7px] text-[#277EFD] shrink-0">
-                        AKTIF
-                      </span>
-                    )}
-                  </button>
-                );
-              })
-            ) : (
-              <div className="p-3 text-xs text-gray-500 font-['Outfit',sans-serif] text-center">
-                Belum ada preferensi lain
-              </div>
-            )}
-
-            {/* Tombol Buat Baru */}
-            <div className="p-2 bg-gray-50 border-t border-black">
-              <button
-                type="button"
-                onClick={() => {
-                  setIsOpen(false);
-                  router.push('/preferensi/baru');
-                }}
-                className="w-full py-1.5 px-2 bg-white border border-black text-center font-['Press_Start_2P',monospace] text-[8px] text-black hover:bg-yellow-100 flex items-center justify-center gap-1.5 transition-colors"
-              >
-                <Icon name="plus" className="w-3 h-3" />
-                <span>TAMBAH PREFERENSI BARU</span>
-              </button>
-            </div>
-          </div>
+          <div className="fixed inset-0 z-40" onClick={() => setBuka(false)} />
+          <ul role="listbox" className="absolute top-full right-0 left-0 z-50 mt-1.5 border-2 border-ink bg-paper shadow-pixel-sm">
+            {daftar.map((p) => (
+              <li key={p.id}>
+                <button
+                  type="button"
+                  role="option"
+                  aria-selected={p.aktif}
+                  onClick={() => {
+                    setBuka(false);
+                    if (!p.aktif) onPilih(p.id);
+                  }}
+                  className={`flex w-full items-center gap-2.5 px-2.5 py-2 text-left cursor-pointer ${p.aktif ? 'bg-blue-50' : 'hover:bg-canvas'}`}
+                >
+                  <span className={`size-3.5 shrink-0 border-[1.5px] border-ink ${p.jalur === 'snbp' ? 'bg-yellow' : 'bg-blue'}`} />
+                  <span className="flex-1 truncate t-label-m text-ink">{p.nama}</span>
+                  {p.aktif && <span className="t-label-s text-blue-700">AKTIF</span>}
+                </button>
+              </li>
+            ))}
+            <li className="border-t-2 border-dashed border-ink">
+              <Link href="/preferensi/baru" className="block px-2.5 py-2 t-body-s font-bold text-blue-700">
+                + Tambah preferensi
+              </Link>
+            </li>
+          </ul>
         </>
       )}
     </div>

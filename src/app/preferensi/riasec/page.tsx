@@ -1,203 +1,119 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { TopBar } from '@/components/ui/TopBar';
-import { Icon, IconName } from '@/components/ui/Icon';
-import { usePreferensiStorage } from '@/components/preferensi/usePreferensiStorage';
-import { RIASEC_QUESTIONS } from '@/components/preferensi/riasecData';
+import BingkaiMobile from '@/components/ui/BingkaiMobile';
+import IkonFigma from '@/components/ui/IkonFigma';
+import { BarAksi, JudulWizard, Stepper } from '@/components/preferensi/BagianWizard';
+import { ITEM_MINAT } from '@/components/preferensi/itemMinat';
+import { useDraf } from '@/lib/klien/draf_preferensi';
 
-const FACE_ICONS: IconName[] = ['face-1', 'face-2', 'face-3', 'face-4', 'face-5'];
+const PER_LAYAR = 5;
+const JUMLAH_LAYAR = Math.ceil(ITEM_MINAT.length / PER_LAYAR);
+/** Skala jawaban 0..4 (Data/form_minat_config.json), ikon wajah 1–5. */
+const SKALA = [0, 1, 2, 3, 4];
+const LABEL_SKALA = ['Sangat tidak suka', 'Tidak suka', 'Ragu-ragu', 'Suka', 'Sangat suka'];
 
-export default function RiasecQuizPage() {
-  const router = useRouter();
-  const { draft, updateDraft } = usePreferensiStorage();
-  const [pageIndex, setPageIndex] = useState(0); // 0 sampai 5 (6 layar)
-  const [answers, setAnswers] = useState<Record<string, number>>(
-    draft.jawaban_minat || {}
+/** Kartu Minat (Figma `168:344`): nomor kotak ink, 5 kotak skala; terpilih blue + shadow. */
+function KartuMinat({ nomor, teks, nilai, onPilih }: { nomor: number; teks: string; nilai: number | undefined; onPilih: (v: number) => void }) {
+  const terjawab = nilai !== undefined;
+  return (
+    <fieldset className={`flex flex-col gap-3 border-2 bg-paper p-3.5 ${terjawab ? 'border-blue' : 'border-ink'}`}>
+      <legend className="sr-only">{teks}</legend>
+      <div className="flex items-center gap-3">
+        <span className={`flex size-9 shrink-0 items-center justify-center t-label-s text-paper ${terjawab ? 'bg-blue' : 'bg-ink'}`}>
+          {String(nomor).padStart(2, '0')}
+        </span>
+        <p className="flex-1 t-body-m font-semibold text-ink">{teks}</p>
+      </div>
+      <div className="flex gap-1.5">
+        {SKALA.map((v) => {
+          const pilih = nilai === v;
+          return (
+            <button
+              key={v}
+              type="button"
+              aria-label={LABEL_SKALA[v]}
+              aria-pressed={pilih}
+              onClick={() => onPilih(v)}
+              className={`flex h-11 min-w-0 flex-1 items-center justify-center border-ink cursor-pointer ${
+                pilih ? 'border-2 bg-blue shadow-pixel-sm' : 'border-[1.5px] bg-paper'
+              }`}
+            >
+              <IkonFigma src={`/figma/wajah-${v + 1}.svg`} ukuran={22} className={pilih ? 'text-paper' : 'text-ink'} />
+            </button>
+          );
+        })}
+      </div>
+      <div className="flex justify-between t-body-s text-muted">
+        <span>Sangat tidak suka</span>
+        <span>Ragu</span>
+        <span>Sangat suka</span>
+      </div>
+    </fieldset>
   );
+}
 
-  const ITEMS_PER_PAGE = 5;
-  const totalPages = Math.ceil(RIASEC_QUESTIONS.length / ITEMS_PER_PAGE); // 6
-  const startIdx = pageIndex * ITEMS_PER_PAGE;
-  const currentQuestions = RIASEC_QUESTIONS.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+/** M08 · Kuis minat RIASEC (Figma `173:696`): 30 kegiatan Mini-IP, 5 per layar. */
+export default function KuisRiasecPage() {
+  const router = useRouter();
+  const { draf, ubahIsi } = useDraf();
+  const [layar, setLayar] = useState(0);
 
-  const handleSelect = (questionId: string, val: number) => {
-    const updated = { ...answers, [questionId]: val };
-    setAnswers(updated);
-    updateDraft({ jawaban_minat: updated });
+  if (!draf) return null;
+  const jawaban = draf.isi.minat.jawaban_minat;
+  const item = ITEM_MINAT.slice(layar * PER_LAYAR, (layar + 1) * PER_LAYAR);
+  const lengkap = item.every((i) => jawaban[i.id] !== undefined);
+  const awal = layar * PER_LAYAR + 1;
+
+  const pindah = (l: number) => {
+    setLayar(l);
+    window.scrollTo({ top: 0 });
   };
-
-  const handlePrev = () => {
-    if (pageIndex > 0) {
-      setPageIndex((prev) => prev - 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      router.push('/preferensi/baru');
-    }
-  };
-
-  const handleNext = () => {
-    if (pageIndex < totalPages - 1) {
-      setPageIndex((prev) => prev + 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      router.push('/preferensi/minat');
-    }
-  };
-
-  const progressPercent = ((pageIndex + 1) / totalPages) * 100;
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] flex justify-center">
-      <div className="w-full max-w-[402px] bg-white border-x-2 border-[#151D21] flex flex-col min-h-screen">
-        {/* TopBar persis M08 */}
-        <TopBar
-          title={draft.nama || 'Informatika Impian'}
-          onBack={handlePrev}
+    <BingkaiMobile>
+      <TopBar title={draf.isi.nama} onBack={() => router.push('/preferensi')} />
+      <main className="flex flex-col gap-4 px-6 pt-6 pb-8">
+        <Stepper langkah={1} />
+        <JudulWizard
+          label="LANGKAH 1 · KUIS MINAT"
+          judul="Seberapa suka kamu dengan kegiatan ini?"
+          keterangan="Bayangkan kamu melakukannya sebagai pekerjaan. Jangan pikirkan gaji atau apakah kamu sudah bisa."
         />
-
-        <main className="p-6 pb-8 flex-1 flex flex-col font-['Outfit',sans-serif]">
-          {/* Stepper Header Persis Figma M08 */}
-          <div className="flex items-center justify-between mb-5">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-[#277EFD] border-2 border-[#151D21] flex items-center justify-center font-['Press_Start_2P',monospace] text-[10px] font-bold text-white shadow-[1px_1px_0px_#151D21]">
-                1
-              </div>
-              <span className="font-['Press_Start_2P',monospace] text-[10px] text-[#151D21] font-bold tracking-tight">
-                MINAT
-              </span>
-            </div>
-
-            <div className="flex-1 mx-3 h-0.5 bg-[#151D21]" />
-
-            <div className="flex items-center gap-2 opacity-60">
-              <div className="w-6 h-6 bg-white border-2 border-[#151D21] flex items-center justify-center font-['Press_Start_2P',monospace] text-[10px] font-bold text-[#6B7680]">
-                2
-              </div>
-              <span className="font-['Press_Start_2P',monospace] text-[10px] text-[#6B7680] tracking-tight">
-                BAHAN
-              </span>
-            </div>
-          </div>
-
-          {/* Heading */}
-          <div className="mb-4">
-            <span className="font-['Pixelify_Sans',sans-serif] text-[12px] font-medium text-[#277EFD] tracking-wider uppercase block mb-1">
-              LANGKAH 1 · KUIS MINAT
+        <div className="flex flex-col gap-1.5">
+          <div className="flex items-start gap-2">
+            <span className="t-label-s text-ink">
+              KEGIATAN {awal}–{awal + item.length - 1} DARI {ITEM_MINAT.length}
             </span>
-            <h1 className="font-['Press_Start_2P',monospace] text-xs sm:text-sm text-[#151D21] mb-2 leading-relaxed">
-              Seberapa suka kamu dengan kegiatan ini?
-            </h1>
-            <p className="font-['Plus_Jakarta_Sans',sans-serif] text-xs sm:text-sm text-[#6B7680] leading-relaxed">
-              Bayangkan kamu melakukannya sebagai pekerjaan. Jangan pikirkan gaji atau apakah kamu sudah bisa.
-            </p>
+            <span className="flex-1" />
+            <span className="t-body-s text-muted">
+              Layar {layar + 1} dari {JUMLAH_LAYAR}
+            </span>
           </div>
-
-          {/* Subheader Pagination Banner + Progress Bar */}
-          <div className="mb-4 flex flex-col gap-2">
-            <div className="flex items-center justify-between text-xs">
-              <span className="font-['Press_Start_2P',monospace] text-[9px] text-[#277EFD] tracking-wider uppercase">
-                KEGIATAN {startIdx + 1}–{Math.min(startIdx + ITEMS_PER_PAGE, RIASEC_QUESTIONS.length)} DARI 30
-              </span>
-              <span className="font-['Plus_Jakarta_Sans',sans-serif] text-xs text-[#6B7680] font-medium">
-                Layar {pageIndex + 1} dari {totalPages}
-              </span>
-            </div>
-            {/* Progress track */}
-            <div className="w-full h-1 bg-[#D3D6DA] rounded-full overflow-hidden">
-              <div
-                className="h-full bg-[#277EFD] transition-all duration-200"
-                style={{ width: `${progressPercent}%` }}
-              />
-            </div>
+          <div className="h-2 w-full bg-track">
+            <div className="h-2 bg-blue" style={{ width: `${((layar + 1) / JUMLAH_LAYAR) * 100}%` }} />
           </div>
-
-          {/* List 5 Pertanyaan Per Layar Persis Figma M08 */}
-          <div className="flex flex-col gap-4 mb-6">
-            {currentQuestions.map((q, idx) => {
-              const qNumber = startIdx + idx + 1;
-              const formattedNum = qNumber < 10 ? `0${qNumber}` : `${qNumber}`;
-              const currentVal = answers[q.id] || 0;
-              const isAnswered = currentVal > 0;
-
-              return (
-                <div
-                  key={q.id}
-                  className={`p-4 bg-white border-2 shadow-[4px_4px_0px_#151D21] flex flex-col gap-3.5 transition-all ${
-                    isAnswered ? 'border-[#277EFD]' : 'border-[#151D21]'
-                  }`}
-                >
-                  {/* Top: Nomor + Teks Kegiatan */}
-                  <div className="flex items-start gap-3">
-                    <span className="px-2 py-0.5 bg-[#277EFD] text-white font-['Press_Start_2P',monospace] text-[10px] shrink-0 font-bold">
-                      {formattedNum}
-                    </span>
-                    <p className="font-['Plus_Jakarta_Sans',sans-serif] text-xs sm:text-sm text-[#151D21] font-semibold leading-relaxed">
-                      {q.text}
-                    </p>
-                  </div>
-
-                  {/* Skala 5 Pilihan (Icon face 1 - 5) */}
-                  <div className="grid grid-cols-5 gap-2 pt-1">
-                    {[1, 2, 3, 4, 5].map((val, faceIdx) => {
-                      const isSelected = currentVal === val;
-                      const iconName = FACE_ICONS[faceIdx];
-
-                      return (
-                        <button
-                          key={val}
-                          type="button"
-                          onClick={() => handleSelect(q.id, val)}
-                          className={`h-10 border-2 border-[#151D21] flex items-center justify-center transition-all cursor-pointer ${
-                            isSelected
-                              ? 'bg-[#277EFD] text-white shadow-[2px_2px_0px_#151D21]'
-                              : 'bg-white text-[#151D21] hover:bg-gray-50'
-                          }`}
-                          aria-label={`Skala ${val}`}
-                        >
-                          <Icon
-                            name={iconName}
-                            className={`w-6 h-6 ${
-                              isSelected ? 'text-white' : 'text-[#151D21]'
-                            }`}
-                          />
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  {/* Keterangan Skala Bawah */}
-                  <div className="flex items-center justify-between font-['Plus_Jakarta_Sans',sans-serif] text-[10px] sm:text-[11px] text-[#6B7680] pt-0.5">
-                    <span>Sangat tidak suka</span>
-                    <span>Ragu</span>
-                    <span>Sangat suka</span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Sticky Bottom Action Bar Persis Figma M08 */}
-          <div className="mt-auto pt-4 pb-2 border-t border-gray-200 grid grid-cols-2 gap-3 sticky bottom-0 bg-white">
-            <button
-              type="button"
-              onClick={handlePrev}
-              className="py-3 bg-white hover:bg-gray-50 text-[#151D21] border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] active:translate-x-[1px] active:translate-y-[1px] font-['Press_Start_2P',monospace] text-[10px] text-center transition-all cursor-pointer"
-            >
-              KEMBALI
-            </button>
-            <button
-              type="button"
-              onClick={handleNext}
-              className="py-3 bg-[#277EFD] hover:bg-[#1E6FD9] text-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] active:translate-x-[1px] active:translate-y-[1px] font-['Press_Start_2P',monospace] text-[10px] text-center transition-all cursor-pointer flex items-center justify-center gap-1.5"
-            >
-              <span>LANJUT</span>
-              <Icon name="arrow-right" className="w-3.5 h-3.5 text-white" />
-            </button>
-          </div>
-        </main>
-      </div>
-    </div>
+        </div>
+        {item.map((i, k) => (
+          <KartuMinat
+            key={i.id}
+            nomor={awal + k}
+            teks={i.teks}
+            nilai={jawaban[i.id]}
+            onPilih={(v) =>
+              ubahIsi((isi) => ({ ...isi, minat: { ...isi.minat, jawaban_minat: { ...isi.minat.jawaban_minat, [i.id]: v } } }))
+            }
+          />
+        ))}
+        {!lengkap && <p className="t-body-s text-muted">Jawab kelima kegiatan untuk lanjut.</p>}
+      </main>
+      <BarAksi
+        onKembali={() => (layar === 0 ? router.push('/preferensi') : pindah(layar - 1))}
+        onLanjut={() => (layar + 1 < JUMLAH_LAYAR ? pindah(layar + 1) : router.push('/preferensi/minat'))}
+        nonaktif={!lengkap}
+      />
+    </BingkaiMobile>
   );
 }

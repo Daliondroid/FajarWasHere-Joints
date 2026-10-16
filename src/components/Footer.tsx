@@ -1,113 +1,128 @@
 'use client';
 
-import React from 'react';
-import Image from 'next/image';
+import { useState } from 'react';
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
-import { Icon } from '@/components/ui/Icon';
+import { signOut, useSession } from 'next-auth/react';
+import Logo from '@/components/ui/Logo';
+import Tombol from '@/components/ui/Tombol';
+import { RetroWindow } from '@/components/ui/RetroWindow';
 
-interface FooterProps {
-  onDeleteAccountClick?: () => void;
-}
+const JELAJAHI = [
+  { label: 'Beranda', href: '/' },
+  { label: 'Cocokin', href: '/cocokin' },
+  { label: 'Preferensi', href: '/preferensi' },
+  { label: 'Simulasi Jurusan', href: '/katalog' },
+];
 
-export default function Footer({ onDeleteAccountClick }: FooterProps) {
+const SUMBER_DATA = [
+  'snpmb.id (daya tampung, peminat, kuota sekolah)',
+  'PDDikti (akreditasi & kompetensi prodi)',
+  'O*NET Interest Profiler · CC BY 4.0',
+  'Kepmendikdasmen 102/M/2025',
+];
+
+/** Footer mobile (Figma `169:336`, PRD F-08, F-16 hapus akun, BR-13 sumber data). */
+export default function Footer() {
   const { status } = useSession();
-  const isAuthenticated = status === 'authenticated';
+  const [konfirmasi, setKonfirmasi] = useState(false);
+  const [menghapus, setMenghapus] = useState(false);
+  const [galat, setGalat] = useState<string | null>(null);
+
+  const hapusAkun = async () => {
+    setMenghapus(true);
+    setGalat(null);
+    try {
+      const res = await fetch('/api/akun', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ konfirmasi: 'HAPUS' }),
+      });
+      if (!res.ok) {
+        const isi = await res.json().catch(() => null);
+        throw new Error(isi?.error?.pesan ?? 'Akun gagal dihapus. Coba lagi.');
+      }
+      await signOut({ callbackUrl: '/' });
+    } catch (e) {
+      setGalat(e instanceof Error ? e.message : 'Akun gagal dihapus. Coba lagi.');
+      setMenghapus(false);
+    }
+  };
 
   return (
-    <footer className="w-full bg-[#151D21] text-white px-5 pt-8 pb-6 border-t-2 border-black flex flex-col gap-6 font-['Outfit',sans-serif]">
-      {/* Brand */}
-      <div className="flex flex-col gap-1.5">
-        <div className="flex items-center gap-2">
-          <Image
-            src="/assets/logo-cap.png"
-            alt="Cocokin Logo"
-            width={28}
-            height={28}
-            className="w-7 h-7 object-contain image-pixelated"
-          />
-          <span className="font-['Press_Start_2P',monospace] text-sm font-bold text-white tracking-wider">
-            Cocokin!
-          </span>
+    <footer className="flex w-full flex-col gap-6 bg-ink px-6 pt-8 pb-6">
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2.5">
+          <div className="flex items-center gap-2.5">
+            <Logo />
+            <span className="t-label-l text-paper">Cocokin!</span>
+          </div>
+          <p className="t-body-s text-line">Cari yang cocok, uji rasanya, tembus kampus impianmu.</p>
         </div>
-        <p className="text-xs text-[#D9D5CB] leading-relaxed">
-          Cari yang cocok, uji rasanya, tembus kampus impianmu.
-        </p>
-      </div>
-
-      {/* Kolom JELAJAHI & SUMBER DATA */}
-      <div className="grid grid-cols-2 gap-4 text-xs">
-        <div>
-          <h4 className="font-['Press_Start_2P',monospace] text-[9px] text-[#FEBD01] mb-2.5 uppercase tracking-wider">
-            JELAJAHI
-          </h4>
-          <ul className="space-y-2 text-white">
-            <li>
-              <Link href="/" className="hover:text-[#277EFD] transition-colors">
-                Beranda
-              </Link>
-            </li>
-            <li>
-              <Link href="/cocokin" className="hover:text-[#277EFD] transition-colors">
-                Cocokin
-              </Link>
-            </li>
-            <li>
-              <Link href="/preferensi" className="hover:text-[#277EFD] transition-colors">
-                Preferensi
-              </Link>
-            </li>
-            <li>
-              <Link href="/katalog" className="hover:text-[#277EFD] transition-colors">
-                Test Drive Jurusan
-              </Link>
-            </li>
-          </ul>
+        <div className="flex flex-col gap-2">
+          <p className="t-label-s text-yellow">JELAJAHI</p>
+          {JELAJAHI.map((j) => (
+            <Link key={j.href} href={j.href} className="t-body-s text-paper hover:underline">
+              {j.label}
+            </Link>
+          ))}
         </div>
-
-        <div>
-          <h4 className="font-['Press_Start_2P',monospace] text-[9px] text-[#FEBD01] mb-2.5 uppercase tracking-wider">
-            SUMBER DATA
-          </h4>
-          <ul className="space-y-2 text-white text-[11px] leading-tight">
-            <li>snpmb.id (daya tampung, peminat, kuota sekolah)</li>
-            <li>PDDikti (akreditasi &amp; kompetensi prodi)</li>
-            <li>O*NET Interest Profiler • CC BY 4.0</li>
-            <li>Kepmendikdasmen 102/M/2025</li>
-          </ul>
+        <div className="flex flex-col gap-2">
+          <p className="t-label-s text-yellow">SUMBER DATA</p>
+          {SUMBER_DATA.map((s) => (
+            <p key={s} className="t-body-s text-paper">
+              {s}
+            </p>
+          ))}
         </div>
       </div>
 
-      {/* Disclaimer Box dengan Border Kuning #FEBD01 */}
-      <div className="p-3 border border-[#FEBD01] flex items-start gap-2.5 bg-black/20">
-        <Icon name="info" className="w-4 h-4 text-[#FEBD01] shrink-0 mt-0.5" />
-        <p className="text-[11px] text-white leading-relaxed">
+      <div className="flex items-center gap-2.5 border-[1.5px] border-dashed border-yellow p-3">
+        <img src="/figma/icon-info.svg" alt="" width={16} height={16} className="shrink-0" />
+        <p className="flex-1 t-body-s text-paper">
           Semua angka peluang adalah estimasi berbasis data resmi, bukan jaminan kelulusan.
         </p>
       </div>
 
-      {/* Bawah */}
-      <div className="border-t border-gray-700 pt-3 flex flex-col gap-2 text-[11px] text-[#D9D5CB]">
-        <p>© 2026 Cocokin! • Hackathon JOINTS UGM 2026</p>
-        <div className="flex items-center justify-between">
-          <Link
-            href="/syarat-ketentuan"
-            className="text-white hover:underline font-bold"
-          >
-            Syarat &amp; ketentuan
-          </Link>
-          {isAuthenticated && onDeleteAccountClick && (
-            <button
-              type="button"
-              onClick={onDeleteAccountClick}
-              className="text-[#F1402E] hover:underline flex items-center gap-1 cursor-pointer font-bold"
-            >
-              <Icon name="trash" className="w-3.5 h-3.5 text-[#F1402E]" />
-              <span>Hapus akun &amp; data</span>
-            </button>
-          )}
-        </div>
+      <div className="flex flex-col items-start gap-2">
+        <p className="t-body-s text-line">© 2026 Cocokin! · Hackathon JOINTS UGM 2026</p>
+        <Link href="/syarat-ketentuan" className="t-body-s font-bold text-paper underline">
+          Syarat &amp; ketentuan
+        </Link>
+        {status === 'authenticated' && (
+          <button type="button" onClick={() => setKonfirmasi(true)} className="flex items-center gap-1.5 cursor-pointer">
+            <img src="/figma/icon-trash.svg" alt="" width={12} height={12} />
+            <span className="t-body-s font-bold text-red">Hapus akun &amp; data</span>
+          </button>
+        )}
       </div>
+
+      {konfirmasi && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Hapus akun dan data"
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-ink/55 px-6"
+          onClick={() => !menghapus && setKonfirmasi(false)}
+        >
+          <div className="w-full max-w-[354px]" onClick={(e) => e.stopPropagation()}>
+            <RetroWindow title="Hapus akun & data" variant="red" contentClassName="flex flex-col gap-4 p-5">
+              <p className="t-display-s text-ink">Yakin hapus akunmu?</p>
+              <p className="t-body-m text-ink-2">
+                Akun, semua preferensi, profil, dan riwayat chat dihapus permanen. Tindakan ini tidak bisa dibatalkan.
+              </p>
+              {galat && <p className="t-body-s font-bold text-red">{galat}</p>}
+              <div className="flex gap-3">
+                <Tombol jenis="secondary" ukuran="M" penuh onClick={() => setKonfirmasi(false)} disabled={menghapus}>
+                  Batal
+                </Tombol>
+                <Tombol jenis="danger" ukuran="M" penuh onClick={hapusAkun} disabled={menghapus}>
+                  {menghapus ? 'Menghapus…' : 'Hapus'}
+                </Tombol>
+              </div>
+            </RetroWindow>
+          </div>
+        </div>
+      )}
     </footer>
   );
 }

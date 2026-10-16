@@ -1,245 +1,108 @@
 'use client';
 
-import React from 'react';
-import Navbar from '@/components/Navbar';
+import { Fragment } from 'react';
+import { useRouter } from 'next/navigation';
+import { TopBar } from '@/components/ui/TopBar';
 import Footer from '@/components/Footer';
-import { Icon } from '@/components/ui/Icon';
+import BingkaiMobile from '@/components/ui/BingkaiMobile';
+
+/** Isi Halaman Syarat & Ketentuan (Figma M20 `215:3198`, PRD F-20). */
+const BAGIAN = [
+  {
+    judul: 'Angka peluang & estimasi',
+    ikon: '/figma/icon-chart.svg',
+    poin: [
+      'Semua angka peluang adalah estimasi dari data resmi tahun sebelumnya, bukan jaminan kelulusan.',
+      'Peluang selalu tampil sebagai rentang. Akreditasi sekolah dan reputasi alumni masing-masing menggeser hasil paling banyak ±5 poin persentil.',
+      'Prodi tanpa data histori memakai rata-rata rumpun yang sama di PTN itu dan diberi label "data terbatas".',
+      'Skala skor Try Out tiap bimbel berbeda dan bukan IRT, jadi peluang SNBT hanya perkiraan kasar.',
+    ],
+  },
+  {
+    judul: 'Aturan SNBP & SNBT',
+    ikon: '/figma/icon-check.svg',
+    poin: [
+      'Dua pilihan prodi SNBP sah hanya jika salah satu PTN berada di provinsi sekolahmu.',
+      'Lulusan 2024 dan 2025 hanya bisa ikut SNBT. Yang sudah lulus SNBP 2024–2026 tidak bisa ikut SNBT 2026.',
+      'Nilai TKA dipakai untuk memvalidasi nilai rapor. Dua mapel pilihan TKA bebas kamu pilih; menyamakannya dengan mapel pendukung prodi incaran hanya anjuran.',
+      'Mapel pendukung paling banyak 2, mengikuti Kepmendikdasmen 102/M/2025.',
+      '267 prodi seni dan olahraga mewajibkan portofolio.',
+    ],
+  },
+  {
+    judul: 'Kecocokan & preferensi',
+    ikon: '/figma/icon-spark.svg',
+    poin: [
+      'Skor kecocokan dihitung otomatis, bukan oleh AI: 80% dari profil minat RIASEC dan 20% dari hobi. Mapel favorit (maks. 3) hanya penentu urutan saat skor sama.',
+      'Satu preferensi punya satu jalur, SNBP atau SNBT, yang tidak bisa diubah. Untuk jalur lain, buat preferensi baru.',
+      'Hanya satu preferensi yang aktif. Jika preferensi aktif dihapus, preferensi yang terakhir diperbarui menjadi aktif.',
+    ],
+  },
+  {
+    judul: 'Data sekolah & alumni',
+    ikon: '/figma/icon-school.svg',
+    poin: [
+      'Kuota eligible sekolah diambil dari data resmi SNPMB berdasarkan NPSN.',
+      'Data alumni per sekolah tidak tersedia publik. Reputasi alumni berasal dari isianmu sendiri, dan data alumni di versi demo ini bersifat sintetis.',
+    ],
+  },
+  {
+    judul: 'Privasi',
+    ikon: '/figma/icon-lock-24.svg',
+    poin: [
+      'Kami hanya menyimpan nama dan email dari akun Google-mu.',
+      'Alamat cukup provinsi dan kabupaten/kota, terisi otomatis dari NPSN.',
+      'Foto atau PDF rapor dihapus setelah nilainya diekstrak. Cek ulang hasil ekstraksi sebelum disimpan.',
+      'Akun dan semua datamu bisa dihapus kapan saja lewat "Hapus akun & data" di footer.',
+    ],
+  },
+  {
+    judul: 'AI & sumber data',
+    ikon: '/figma/icon-info-24.svg',
+    poin: [
+      'AI hanya dipakai untuk membaca rapor dan teks hobi, serta menjawab chatbot. Angka di jawaban chatbot diambil dari data internal, bukan dikarang AI.',
+      'Soal Simulasi disusun dari kompetensi lulusan resmi (PDDikti) dan ditinjau tim. Soal buatan AI diberi label.',
+      'Kuis minat memakai O*NET Interest Profiler, lisensi CC BY 4.0.',
+    ],
+  },
+];
+
+const Pemisah = () => <img src="/figma/pemisah.svg" alt="" width={354} height={1.5} className="h-[1.5px] w-full" />;
 
 export default function SyaratKetentuanPage() {
+  const router = useRouter();
   return (
-    <div className="min-h-screen bg-[#FDFBF7] flex justify-center">
-      <div className="w-full max-w-[402px] bg-white border-x-2 border-[#151D21] flex flex-col min-h-screen">
-        {/* Navbar with centered title and back button (persis Figma M20 node 215:3198) */}
-        <Navbar backHref="/" title="Syarat & Ketentuan" />
-
-        <main className="p-6 pb-12 flex-1 flex flex-col gap-5 font-['Outfit',sans-serif]">
-          {/* Header Section */}
-          <div className="flex flex-col gap-2.5">
-            <h1 className="font-['Press_Start_2P',monospace] text-base text-[#151D21] leading-snug">
-              Syarat &amp; Ketentuan
-            </h1>
-            <p className="text-sm text-[#3A444B] leading-relaxed">
-              Rincian kecil di balik angka, aturan, dan datamu, dikumpulkan di satu tempat supaya halaman lain tetap ringkas.
-            </p>
-            <p className="text-xs text-[#6B7680]">
-              Diperbarui 15 Oktober 2026
-            </p>
-          </div>
-
-          <div className="border-t border-dashed border-[#D9D5CB] my-1" />
-
-          {/* Seksi 1: Angka peluang & estimasi */}
-          <section className="flex flex-col gap-3">
-            <div className="flex items-center gap-2.5">
-              <Icon name="chart" className="w-5 h-5 text-[#151D21] shrink-0" />
-              <h2 className="font-['Press_Start_2P',monospace] text-xs font-bold text-[#151D21]">
-                Angka peluang &amp; estimasi
+    <BingkaiMobile>
+      <TopBar title="Syarat & Ketentuan" onBack={() => (window.history.length > 1 ? router.back() : router.push('/'))} />
+      <main className="flex flex-col gap-5 px-6 pt-6 pb-10">
+        <div className="flex flex-col gap-2.5">
+          <h1 className="font-[family-name:var(--font-display)] text-[16px] leading-6 text-ink">Syarat &amp; Ketentuan</h1>
+          <p className="t-body-m text-ink-2">
+            Rincian kecil di balik angka, aturan, dan datamu, dikumpulkan di satu tempat supaya halaman lain tetap ringkas.
+          </p>
+          <p className="t-body-s text-muted">Diperbarui 15 Oktober 2026</p>
+        </div>
+        {BAGIAN.map((b) => (
+          <Fragment key={b.judul}>
+            <Pemisah />
+            <section className="flex flex-col gap-3">
+              <h2 className="flex items-center gap-2.5">
+                <img src={b.ikon} alt="" width={18} height={18} />
+                <span className="font-[family-name:var(--font-label)] text-[17px] font-semibold text-ink">{b.judul}</span>
               </h2>
-            </div>
-            <ul className="space-y-2.5 text-[13px] text-[#3A444B] leading-relaxed">
-              <li className="flex items-start gap-2.5">
-                <span className="w-1.5 h-1.5 bg-[#151D21] mt-2 shrink-0" />
-                <span>
-                  Semua angka peluang adalah estimasi dari data resmi tahun sebelumnya, bukan jaminan kelulusan.
-                </span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <span className="w-1.5 h-1.5 bg-[#151D21] mt-2 shrink-0" />
-                <span>
-                  Peluang selalu tampil sebagai rentang. Akreditasi sekolah dan reputasi alumni masing-masing menggeser hasil paling banyak ±5 poin persentil.
-                </span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <span className="w-1.5 h-1.5 bg-[#151D21] mt-2 shrink-0" />
-                <span>
-                  Prodi tanpa data histori memakai rata-rata rumpun yang sama di PTN itu dan diberi label &ldquo;data terbatas&rdquo;.
-                </span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <span className="w-1.5 h-1.5 bg-[#151D21] mt-2 shrink-0" />
-                <span>
-                  Skala skor Try Out tiap bimbel berbeda dan bukan IRT, jadi peluang SNBT hanya perkiraan kasar.
-                </span>
-              </li>
-            </ul>
-          </section>
-
-          <div className="border-t border-dashed border-[#D9D5CB] my-1" />
-
-          {/* Seksi 2: Aturan SNBP & SNBT */}
-          <section className="flex flex-col gap-3">
-            <div className="flex items-center gap-2.5">
-              <Icon name="check" className="w-5 h-5 text-[#151D21] shrink-0" />
-              <h2 className="font-['Press_Start_2P',monospace] text-xs font-bold text-[#151D21]">
-                Aturan SNBP &amp; SNBT
-              </h2>
-            </div>
-            <ul className="space-y-2.5 text-[13px] text-[#3A444B] leading-relaxed">
-              <li className="flex items-start gap-2.5">
-                <span className="w-1.5 h-1.5 bg-[#151D21] mt-2 shrink-0" />
-                <span>
-                  Dua pilihan prodi SNBP sah hanya jika salah satu PTN berada di provinsi sekolahmu.
-                </span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <span className="w-1.5 h-1.5 bg-[#151D21] mt-2 shrink-0" />
-                <span>
-                  Lulusan 2024 dan 2025 hanya bisa ikut SNBT. Yang sudah lulus SNBP 2024–2026 tidak bisa ikut SNBT 2026.
-                </span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <span className="w-1.5 h-1.5 bg-[#151D21] mt-2 shrink-0" />
-                <span>
-                  Nilai TKA dipakai untuk memvalidasi nilai rapor. Dua mapel pilihan TKA bebas kamu pilih; menyamakannya dengan mapel pendukung prodi incaran hanya anjuran.
-                </span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <span className="w-1.5 h-1.5 bg-[#151D21] mt-2 shrink-0" />
-                <span>
-                  Mapel pendukung paling banyak 2, mengikuti Kepmendikdasmen 102/M/2025.
-                </span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <span className="w-1.5 h-1.5 bg-[#151D21] mt-2 shrink-0" />
-                <span>
-                  267 prodi seni dan olahraga mewajibkan portofolio.
-                </span>
-              </li>
-            </ul>
-          </section>
-
-          <div className="border-t border-dashed border-[#D9D5CB] my-1" />
-
-          {/* Seksi 3: Kecocokan & preferensi */}
-          <section className="flex flex-col gap-3">
-            <div className="flex items-center gap-2.5">
-              <Icon name="spark" className="w-5 h-5 text-[#151D21] shrink-0" />
-              <h2 className="font-['Press_Start_2P',monospace] text-xs font-bold text-[#151D21]">
-                Kecocokan &amp; preferensi
-              </h2>
-            </div>
-            <ul className="space-y-2.5 text-[13px] text-[#3A444B] leading-relaxed">
-              <li className="flex items-start gap-2.5">
-                <span className="w-1.5 h-1.5 bg-[#151D21] mt-2 shrink-0" />
-                <span>
-                  Skor kecocokan dihitung otomatis, bukan oleh AI: 80% dari profil minat RIASEC dan 20% dari hobi. Mapel favorit (maks. 3) hanya penentu urutan saat skor sama.
-                </span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <span className="w-1.5 h-1.5 bg-[#151D21] mt-2 shrink-0" />
-                <span>
-                  Satu preferensi punya satu jalur, SNBP atau SNBT, yang tidak bisa diubah. Untuk jalur lain, buat preferensi baru.
-                </span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <span className="w-1.5 h-1.5 bg-[#151D21] mt-2 shrink-0" />
-                <span>
-                  Hanya satu preferensi yang aktif. Jika preferensi aktif dihapus, preferensi yang terakhir diperbarui menjadi aktif.
-                </span>
-              </li>
-            </ul>
-          </section>
-
-          <div className="border-t border-dashed border-[#D9D5CB] my-1" />
-
-          {/* Seksi 4: Data sekolah & alumni */}
-          <section className="flex flex-col gap-3">
-            <div className="flex items-center gap-2.5">
-              <Icon name="school" className="w-5 h-5 text-[#151D21] shrink-0" />
-              <h2 className="font-['Press_Start_2P',monospace] text-xs font-bold text-[#151D21]">
-                Data sekolah &amp; alumni
-              </h2>
-            </div>
-            <ul className="space-y-2.5 text-[13px] text-[#3A444B] leading-relaxed">
-              <li className="flex items-start gap-2.5">
-                <span className="w-1.5 h-1.5 bg-[#151D21] mt-2 shrink-0" />
-                <span>
-                  Kuota eligible sekolah diambil dari data resmi SNPMB berdasarkan NPSN.
-                </span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <span className="w-1.5 h-1.5 bg-[#151D21] mt-2 shrink-0" />
-                <span>
-                  Data alumni per sekolah tidak tersedia publik. Reputasi alumni berasal dari isianmu sendiri, dan data alumni di versi demo ini bersifat sintetis.
-                </span>
-              </li>
-            </ul>
-          </section>
-
-          <div className="border-t border-dashed border-[#D9D5CB] my-1" />
-
-          {/* Seksi 5: Privasi */}
-          <section className="flex flex-col gap-3">
-            <div className="flex items-center gap-2.5">
-              <Icon name="lock" className="w-5 h-5 text-[#151D21] shrink-0" />
-              <h2 className="font-['Press_Start_2P',monospace] text-xs font-bold text-[#151D21]">
-                Privasi
-              </h2>
-            </div>
-            <ul className="space-y-2.5 text-[13px] text-[#3A444B] leading-relaxed">
-              <li className="flex items-start gap-2.5">
-                <span className="w-1.5 h-1.5 bg-[#151D21] mt-2 shrink-0" />
-                <span>
-                  Kami hanya menyimpan nama dan email dari akun Google-mu.
-                </span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <span className="w-1.5 h-1.5 bg-[#151D21] mt-2 shrink-0" />
-                <span>
-                  Alamat cukup provinsi dan kabupaten/kota, terisi otomatis dari NPSN.
-                </span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <span className="w-1.5 h-1.5 bg-[#151D21] mt-2 shrink-0" />
-                <span>
-                  Foto atau PDF rapor dihapus setelah nilainya diekstrak. Cek ulang hasil ekstraksi sebelum disimpan.
-                </span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <span className="w-1.5 h-1.5 bg-[#151D21] mt-2 shrink-0" />
-                <span>
-                  Akun dan semua datamu bisa dihapus kapan saja lewat &ldquo;Hapus akun &amp; data&rdquo; di footer.
-                </span>
-              </li>
-            </ul>
-          </section>
-
-          <div className="border-t border-dashed border-[#D9D5CB] my-1" />
-
-          {/* Seksi 6: AI & sumber data */}
-          <section className="flex flex-col gap-3">
-            <div className="flex items-center gap-2.5">
-              <Icon name="info" className="w-5 h-5 text-[#151D21] shrink-0" />
-              <h2 className="font-['Press_Start_2P',monospace] text-xs font-bold text-[#151D21]">
-                AI &amp; sumber data
-              </h2>
-            </div>
-            <ul className="space-y-2.5 text-[13px] text-[#3A444B] leading-relaxed">
-              <li className="flex items-start gap-2.5">
-                <span className="w-1.5 h-1.5 bg-[#151D21] mt-2 shrink-0" />
-                <span>
-                  AI hanya dipakai untuk membaca rapor dan teks hobi, serta menjawab chatbot. Angka di jawaban chatbot diambil dari data internal, bukan dikarang AI.
-                </span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <span className="w-1.5 h-1.5 bg-[#151D21] mt-2 shrink-0" />
-                <span>
-                  Soal Test Drive disusun dari kompetensi lulusan resmi (PDDikti) dan ditinjau tim. Soal buatan AI diberi label.
-                </span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <span className="w-1.5 h-1.5 bg-[#151D21] mt-2 shrink-0" />
-                <span>
-                  Kuis minat memakai O*NET Interest Profiler, lisensi CC BY 4.0.
-                </span>
-              </li>
-            </ul>
-          </section>
-        </main>
-
-        {/* Footer Dark Theme Persis Komponen Footer Figma (169:336) */}
-        <Footer />
-      </div>
-    </div>
+              <ul className="flex flex-col gap-2.5">
+                {b.poin.map((p) => (
+                  <li key={p} className="flex items-start gap-2.5">
+                    <span className="mt-[7px] size-1.5 shrink-0 bg-ink" />
+                    <span className="flex-1 font-[family-name:var(--font-body)] text-[13px] leading-5 text-ink-2">{p}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          </Fragment>
+        ))}
+      </main>
+      <Footer />
+    </BingkaiMobile>
   );
 }
