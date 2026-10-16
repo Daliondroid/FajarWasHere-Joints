@@ -2,13 +2,26 @@
  * Implementasi ModelChat dengan Gemini (server saja). Kunci lewat GEMINI_API_KEY.
  * GEMINI_MODEL boleh berisi daftar model dipisah koma; kuota tingkat gratis dihitung per model per project,
  * jadi bila satu model kena 429, pesan diulang dengan model berikutnya dan model itu dijeda sampai kuotanya pulih.
+ * Galat sementara (503 high demand, 500, batas waktu) diulang dulu di model yang sama, lalu pindah ke model berikutnya;
+ * model yang sudah dihapus Google (404) dilewati (T-24).
  */
 import { GoogleGenAI, type Content, type Part } from '@google/genai';
 import { GalatKuota, type Bagian, type KeluaranModel, type MasukanModel, type ModelChat } from './model';
 
-/** Model Flash-Lite stabil yang mendukung function calling (dipilih farrelzaki 2026-10-16: tingkat gratis, hemat token). */
-export const MODEL_BAWAAN = ['gemini-3.5-flash-lite', 'gemini-3.1-flash-lite', 'gemini-2.5-flash-lite'];
+/**
+ * Model Flash-Lite yang mendukung function calling (dipilih farrelzaki 2026-10-16: tingkat gratis, hemat token).
+ * 2026-10-16: gemini-2.5-flash-lite sudah 404 untuk pengguna baru, diganti alias stabil `gemini-flash-lite-latest`.
+ */
+export const MODEL_BAWAAN = ['gemini-3.5-flash-lite', 'gemini-3.1-flash-lite', 'gemini-flash-lite-latest'];
 const JEDA_BAWAAN_MS = 60_000;
+/** Jeda model setelah galat sementara berulang (ms). */
+export const JEDA_SEMENTARA_MS = 20_000;
+/** Model tidak ada (404): jangan dicoba lagi sampai server dimulai ulang. */
+export const JEDA_TIDAK_ADA_MS = 24 * 60 * 60 * 1000;
+/** Jeda antar-ulang galat sementara di model yang sama (ms). */
+export const JEDA_ULANG_MS = [700, 1600];
+/** Batas satu panggilan Gemini (ms); lewat batas dianggap galat sementara. */
+export const BATAS_PANGGILAN_MS = 20_000;
 
 /** Model yang sedang dijeda karena kuota habis: nama -> waktu boleh dipakai lagi (ms). */
 const jeda = new Map<string, number>();
@@ -31,6 +44,43 @@ export function jedaKuota(e: unknown): number | null {
   return detik ? Math.ceil(Number(detik[1]) * 1000) : JEDA_BAWAAN_MS;
 }
 
+export type JenisGalatModel = 'kuota' | 'sementara' | 'tidak_ada';
+
+/** Golongkan galat Gemini: kuota (429), sementara (503/500/504/UNAVAILABLE/fetch gagal), tidak_ada (404); lainnya null. */
+export function jenisGalat(e: unknown): JenisGalatModel | null {
+  if (jedaKuota(e) !== null) return 'kuota';
+  const status = (e as { status?: number })?.status;
+  const pesan = typeof (e as { message?: unknown })?.message === 'string' ? (e as { message: string }).message : String(e);
+  if (status === 404 || /\b404\b|NOT_FOUND|no longer available/i.test(pesan)) return 'tidak_ada';
+  if ((status !== undefined && status >= 500) || /\b50[0234]\b|UNAVAILABLE|INTERNAL|DEADLINE_EXCEEDED|high demand|overloaded|fetch failed|ECONNRESET|ETIMEDOUT|aborted|AbortError|TimeoutError|timed out/i.test(pesan))
+    return 'sementara';
+  return null;
+}
+
+const tidur = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * Panggil model dengan ulang otomatis untuk galat sementara. Kuota/sementara berulang/404 -> model dijeda dan
+ * GalatKuota dilempar supaya pemanggil pindah ke model berikutnya. Galat lain diteruskan apa adanya.
+ */
+export async function panggilDenganUlang<T>(nama: string, fn: () => Promise<T>, petaJeda: Map<string, number>, jedaUlang: number[] = JEDA_ULANG_MS): Promise<T> {
+  for (let i = 0; ; i++) {
+    try {
+      return await fn();
+    } catch (e) {
+      const jenis = jenisGalat(e);
+      if (jenis === 'sementara' && i < jedaUlang.length) {
+        await tidur(jedaUlang[i]);
+        continue;
+      }
+      if (jenis === null) throw e;
+      const ms = jenis === 'kuota' ? jedaKuota(e)! : jenis === 'tidak_ada' ? JEDA_TIDAK_ADA_MS : JEDA_SEMENTARA_MS;
+      petaJeda.set(nama, Date.now() + ms);
+      throw new GalatKuota(nama, ms, jenis);
+    }
+  }
+}
+
 class ModelGemini implements ModelChat {
   constructor(
     private readonly ai: GoogleGenAI,
@@ -39,25 +89,23 @@ class ModelGemini implements ModelChat {
 
   async hasilkan(m: MasukanModel): Promise<KeluaranModel> {
     const contents: Content[] = m.konten.map((k) => ({ role: k.peran, parts: k.bagian.map(keBagianGemini) }));
-    let res;
-    try {
-      res = await this.ai.models.generateContent({
-        model: this.nama,
-        contents,
-        config: {
-          systemInstruction: m.sistem,
-          temperature: 0.4,
-          tools: m.alat.length
-            ? [{ functionDeclarations: m.alat.map((a) => ({ name: a.nama, description: a.deskripsi, parametersJsonSchema: a.parameter })) }]
-            : undefined,
-        },
-      });
-    } catch (e) {
-      const ms = jedaKuota(e);
-      if (ms === null) throw e;
-      jeda.set(this.nama, Date.now() + ms);
-      throw new GalatKuota(this.nama, ms);
-    }
+    const res = await panggilDenganUlang(
+      this.nama,
+      () =>
+        this.ai.models.generateContent({
+          model: this.nama,
+          contents,
+          config: {
+            systemInstruction: m.sistem,
+            temperature: 0.4,
+            abortSignal: AbortSignal.timeout(BATAS_PANGGILAN_MS),
+            tools: m.alat.length
+              ? [{ functionDeclarations: m.alat.map((a) => ({ name: a.nama, description: a.deskripsi, parametersJsonSchema: a.parameter })) }]
+              : undefined,
+          },
+        }),
+      jeda,
+    );
     // Baca dari parts (bukan res.functionCalls) agar thought signature ikut tersimpan.
     const parts = res.candidates?.[0]?.content?.parts ?? [];
     const panggilan = parts

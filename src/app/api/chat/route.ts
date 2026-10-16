@@ -8,6 +8,9 @@ import { repoSupabase } from '@/lib/db/repo_supabase';
 import { layananHapusRiwayatChat, layananKirimPesan, layananRiwayatChat } from '@/lib/layanan/chat';
 
 const pembatas = new PembatasLaju();
+
+/** Satu pesan bisa beberapa kali memanggil Gemini + alat data (T-24); jangan sampai terpotong batas bawaan fungsi. */
+export const maxDuration = 60;
 const depsRiwayat = { repoAkun: repoAkunSupabase, repoChat: repoChatSupabase };
 
 export async function POST(req: Request) {

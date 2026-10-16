@@ -18,6 +18,10 @@ export const MAKS_PANJANG_PESAN = 1000;
 export const KONTEKS_RIWAYAT = 10;
 export const RIWAYAT_DITAMPILKAN = 50;
 export const MAKS_PUTARAN_ALAT = 4;
+/** Galat bila model tidak memberi teks; layanan mencoba model berikutnya (T-24). */
+export const MODEL_KOSONG = 'Model tidak memberi jawaban.';
+/** Batas total satu pesan (ms), di bawah maxDuration fungsi (60 dtk); lewat batas -> jawaban cadangan (T-24). */
+export const BATAS_PESAN_MS = 55_000;
 
 export const INSTRUKSI_SISTEM = `Kamu adalah "Cocokin!", kakak tingkat yang ramah dan jujur yang membantu siswa SMA/SMK/MA kelas 12 memilih jurusan dan memahami peluang SNBP/SNBT 2026.
 Aturan wajib:
@@ -44,6 +48,8 @@ export interface DepsChat {
   repoChat: RepoChat;
   pembatas: PembatasLaju;
   sekarang?: () => Date;
+  /** Bawaan BATAS_PESAN_MS. */
+  batasMs?: number;
 }
 
 async function wajibPengguna(idSesi: string | null, repoAkun: RepoAkun): Promise<string> {
@@ -119,7 +125,7 @@ export async function jalankanPercakapan(
       balasan = k1.teks ?? '';
     }
   }
-  if (!balasan) throw new Error('Model tidak memberi jawaban.');
+  if (!balasan) throw new Error(MODEL_KOSONG);
 
   // BR-12: angka harus berasal dari hasil alat, konteks siswa, atau pesan siswa. Satu kali kesempatan memperbaiki.
   const sumber = [...hasilAlat, konteks, pesan];
@@ -152,20 +158,31 @@ export async function layananKirimPesan(idSesi: string | null, badan: unknown, d
     console.error('Chatbot memakai jawaban cadangan: GEMINI_API_KEY belum diisi atau kuota semua model habis.');
   } else {
     const konteks = await konteksSiswa(k);
-    // Satu pesan memakai satu model dari awal sampai akhir (thought signature terikat ke model).
-    for (const model of deps.model) {
-      try {
-        hasil = { ...(await jalankanPercakapan(model, riwayat, pesan, k, konteks)), cadangan: false };
-        break;
-      } catch (e) {
-        if (e instanceof GalatKuota) {
-          console.warn(e.message);
-          continue;
+    const coba = async () => {
+      // Satu pesan memakai satu model dari awal sampai akhir (thought signature terikat ke model).
+      for (const model of deps.model) {
+        try {
+          return { ...(await jalankanPercakapan(model, riwayat, pesan, k, konteks)), cadangan: false };
+        } catch (e) {
+          if (e instanceof GalatKuota || (e instanceof Error && e.message === MODEL_KOSONG)) {
+            console.warn(`Chatbot pindah dari ${model.nama ?? 'model'}:`, (e as Error).message);
+            continue;
+          }
+          console.error('Chatbot memakai jawaban cadangan:', model.nama, e instanceof Error ? e.message : e);
+          return null;
         }
-        console.error('Chatbot memakai jawaban cadangan:', e instanceof Error ? e.message : e);
-        break;
       }
-    }
+      return null;
+    };
+    let pewaktu: ReturnType<typeof setTimeout> | undefined;
+    const batas = new Promise<null>((r) => {
+      pewaktu = setTimeout(() => {
+        console.error(`Chatbot memakai jawaban cadangan: lewat batas ${deps.batasMs ?? BATAS_PESAN_MS} ms.`);
+        r(null);
+      }, deps.batasMs ?? BATAS_PESAN_MS);
+    });
+    hasil = await Promise.race([coba(), batas]);
+    clearTimeout(pewaktu);
   }
   hasil ??= { balasan: await jawabanCadangan(k), alat_dipakai: ['rekomendasi_saya'], angka_terverifikasi: true, cadangan: true };
 

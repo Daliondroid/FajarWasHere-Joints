@@ -14,10 +14,10 @@ export default function TiketJurusan({ k, onDetail, onSimulasi }: { k: KartuReko
   const skor = Math.round(k.kecocokan.skor);
   return (
     <article
-      className="relative h-[152px] w-[354px] shrink-0 lg:w-auto lg:min-w-0 lg:flex-1"
+      className="relative h-[152px] w-full max-w-[354px] shrink-0 lg:w-auto lg:max-w-none lg:min-w-0 lg:flex-1"
       aria-label={`#${k.peringkat} ${g.nama}: ${k.prodi.nama_prodi}`}
     >
-      <img src={g.latar} alt="" className="absolute top-0 left-0 h-[157px] w-[359px] max-w-none lg:hidden" />
+      <img src={g.latar} alt="" className="absolute top-0 left-0 h-[157px] w-[calc(100%+5px)] max-w-none lg:hidden" />
       <img src={g.latarLebar} alt="" className="absolute top-0 left-0 hidden h-[157px] w-[calc(100%+5px)] max-w-none lg:block" />
       <img src="/figma/perforasi.svg" alt="" className="absolute top-4 left-[77px] h-[120px] w-0.5" />
       <div className="absolute top-0 left-0 flex h-[152px] w-[78px] flex-col items-center justify-center gap-1">
@@ -38,11 +38,12 @@ export default function TiketJurusan({ k, onDetail, onSimulasi }: { k: KartuReko
           </span>
           <span className={`t-body-s font-bold ${g.teks}`}>{skor}%</span>
         </div>
+        {/* HP < 402 px: tombol berbagi lebar supaya tiket tidak terpotong (T-24) */}
         <div className="flex gap-2">
-          <Tombol jenis="danger" ukuran="M" onClick={onSimulasi}>
+          <Tombol jenis="danger" ukuran="M" onClick={onSimulasi} className="max-[401px]:min-w-0 max-[401px]:flex-1 max-[401px]:px-2">
             Simulasi
           </Tombol>
-          <Tombol jenis="secondary" ukuran="M" onClick={onDetail}>
+          <Tombol jenis="secondary" ukuran="M" onClick={onDetail} className="max-[401px]:min-w-0 max-[401px]:flex-1 max-[401px]:px-2">
             Detail
           </Tombol>
         </div>

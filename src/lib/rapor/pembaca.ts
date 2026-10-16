@@ -1,10 +1,13 @@
 /**
  * Pembaca rapor (F-13). Layanan hanya bergantung pada antarmuka ini sehingga test memakai pembaca palsu;
  * implementasi Gemini (multimodal, keluaran JSON) ada di bawah dan hanya untuk server.
+ * Kuota/galat sementara/404 ditangani panggilDenganUlang (dilempar sebagai GalatKuota -> pembaca berikutnya).
  */
 import { GoogleGenAI } from '@google/genai';
-import { MODEL_BAWAAN, jedaKuota } from '@/lib/chat/gemini';
-import { GalatKuota } from '@/lib/chat/model';
+import { MODEL_BAWAAN, panggilDenganUlang } from '@/lib/chat/gemini';
+
+/** Membaca gambar/PDF lebih lama dari chat. */
+const BATAS_BACA_MS = 40_000;
 import { INSTRUKSI_RAPOR, SKEMA_RAPOR } from './ekstraksi';
 
 export interface BerkasRapor {
@@ -28,19 +31,16 @@ class PembacaGemini implements PembacaRapor {
   ) {}
 
   async baca(berkas: BerkasRapor): Promise<unknown> {
-    let res;
-    try {
-      res = await this.ai.models.generateContent({
-        model: this.nama,
-        contents: [{ role: 'user', parts: [{ inlineData: { mimeType: berkas.mime, data: berkas.data } }, { text: INSTRUKSI_RAPOR }] }],
-        config: { temperature: 0, responseMimeType: 'application/json', responseJsonSchema: SKEMA_RAPOR },
-      });
-    } catch (e) {
-      const ms = jedaKuota(e);
-      if (ms === null) throw e;
-      jeda.set(this.nama, Date.now() + ms);
-      throw new GalatKuota(this.nama, ms);
-    }
+    const res = await panggilDenganUlang(
+      this.nama,
+      () =>
+        this.ai.models.generateContent({
+          model: this.nama,
+          contents: [{ role: 'user', parts: [{ inlineData: { mimeType: berkas.mime, data: berkas.data } }, { text: INSTRUKSI_RAPOR }] }],
+          config: { temperature: 0, responseMimeType: 'application/json', responseJsonSchema: SKEMA_RAPOR, abortSignal: AbortSignal.timeout(BATAS_BACA_MS) },
+        }),
+      jeda,
+    );
     const teks = res.text?.trim();
     if (!teks) return null;
     try {
