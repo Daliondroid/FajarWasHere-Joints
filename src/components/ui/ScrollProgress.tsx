@@ -45,7 +45,7 @@ export default function ScrollProgress({ className = '' }: ScrollProgressProps) 
 
   return (
     <div
-      className={`w-full max-w-[402px] mx-auto px-4 py-1.5 bg-white grid grid-cols-4 gap-2 ${className}`}
+      className={`w-full max-w-[402px] mx-auto px-4 h-1 bg-white grid grid-cols-4 gap-2 ${className}`}
       role="progressbar"
       aria-valuenow={Math.round(progress)}
       aria-valuemin={0}
