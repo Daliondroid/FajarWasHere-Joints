@@ -131,12 +131,11 @@ export function pilihKartu(k: KonteksRekomendasi) {
     ...(alternatif ? [{ jenis: 'alternatif' as const, b: alternatif }] : []),
   ].map((x) => ({ ...x, peluang: peluang(x.b) }));
 
-  if (kartu.some((x) => !x.peluang.dihitung)) {
-    catatan.push(
-      jalur === 'snbp'
-        ? 'Lengkapi rapor, peringkat paralel, dan sekolah agar peluang SNBP bisa dihitung.'
-        : 'Tambahkan skor try out agar peluang SNBT bisa dihitung.',
-    );
+  // Alasan peluang tidak dihitung diambil dari mesin peluang (mis. data kurang, di luar kuota eligible, syarat jalur).
+  const tanpaPeluang = kartu.filter((x) => !x.peluang.dihitung);
+  for (const x of tanpaPeluang) if (x.peluang.pesan) catatan.push(x.peluang.pesan);
+  if (tanpaPeluang.length && !tanpaPeluang.some((x) => x.peluang.pesan)) {
+    catatan.push(jalur === 'snbp' ? 'Peluang SNBP belum bisa dihitung.' : 'Peluang SNBT belum bisa dihitung.');
   }
 
   let validasi: ReturnType<typeof validasiProvinsiSnbp> | null = null;
