@@ -12,6 +12,46 @@ export const daftarMapel = (s: string | null) => (s ?? '').split(';').map((m) =>
  * Urai teks pencarian: token yang cocok alias PTN jadi pembatas PTN, alias prodi diganti artinya,
  * sisa teks dicari di nama prodi atau nama PTN.
  */
+const AWALAN_PTN = [
+  'universitas islam negeri ',
+  'universitas ',
+  'institut teknologi ',
+  'institut ',
+  'politeknik negeri ',
+  'politeknik ',
+  'sekolah tinggi ',
+];
+/** Inti nama PTN satu kata yang terlalu umum untuk dikenali dari teks bebas. */
+const INTI_UMUM = new Set(['indonesia', 'pendidikan', 'teknologi', 'negeri', 'islam', 'terbuka', 'kesehatan', 'pertanian', 'maritim', 'nasional', 'sains', 'seni', 'budaya']);
+const KATA_GENERIK = /\b(universitas|univ|institut|politeknik|kampus|di)\b/g;
+
+const esc = (t: string) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/**
+ * Kenali nama PTN yang ditulis di teks bebas ("Kedokteran Hewan Universitas Syiah Kuala", "Teknik Sipil Gadjah Mada").
+ * Mengembalikan id PTN dan sisa teks (dipakai sebagai nama prodi).
+ */
+export function pisahkanNamaPtn(teks: string, ptn: BarisPtn[]): { id_ptn: number[]; sisa: string } {
+  let sisa = ` ${teks.toLowerCase()} `;
+  const id: number[] = [];
+  const kandidat = ptn.flatMap((p) => {
+    const penuh = p.nama.toLowerCase().replace(/\s+/g, ' ').trim();
+    const awalan = AWALAN_PTN.find((a) => penuh.startsWith(a));
+    const inti = awalan ? penuh.slice(awalan.length) : penuh;
+    const intiLayak = inti.split(' ').length >= 2 || (inti.length >= 6 && !INTI_UMUM.has(inti));
+    return [penuh, ...(intiLayak && inti !== penuh ? [inti] : [])].map((frasa) => ({ frasa, id_ptn: p.id_ptn }));
+  });
+  // Frasa terpanjang dulu agar nama lengkap menang atas intinya.
+  for (const k of kandidat.sort((a, b) => b.frasa.length - a.frasa.length)) {
+    const pola = new RegExp(`\\b${esc(k.frasa)}\\b`);
+    if (pola.test(sisa)) {
+      id.push(k.id_ptn);
+      sisa = sisa.replace(pola, ' ');
+    }
+  }
+  return { id_ptn: [...new Set(id)], sisa: id.length ? sisa.replace(KATA_GENERIK, ' ').replace(/\s+/g, ' ').trim() : teks.trim() };
+}
+
 export function uraiKueri(q: string | undefined, alias: BarisAlias[], ptn: BarisPtn[]) {
   const peta = new Map(alias.map((a) => [a.alias.toLowerCase(), a]));
   const teksProdi: string[] = [];
@@ -23,15 +63,17 @@ export function uraiKueri(q: string | undefined, alias: BarisAlias[], ptn: Baris
     else if (a?.jenis === 'prodi') teksProdi.push(...a.arti.split('/').map((t) => t.trim()).filter(Boolean));
     else sisa.push(token);
   }
-  const bebas = sisa.join(' ');
+  // Nama PTN yang ditulis lengkap/sebagian di teks bebas diperlakukan seperti alias PTN.
+  const dariTeks = sisa.length ? pisahkanNamaPtn(sisa.join(' '), ptn) : { id_ptn: [], sisa: '' };
+  const bebas = dariTeks.sisa;
   if (bebas) teksProdi.push(bebas);
   const cocokPtn = (teks: string) =>
     ptn.filter((p) => p.nama.toLowerCase().includes(teks.toLowerCase())).map((p) => p.id_ptn);
   return {
     teks_prodi: teksProdi,
-    id_ptn_teks: bebas ? cocokPtn(bebas) : [],
-    id_ptn_alias: [...new Set(ptnAlias.flatMap(cocokPtn))],
-    ada_alias_ptn: ptnAlias.length > 0,
+    id_ptn_teks: bebas && !dariTeks.id_ptn.length ? cocokPtn(bebas) : [],
+    id_ptn_alias: [...new Set([...ptnAlias.flatMap(cocokPtn), ...dariTeks.id_ptn])],
+    ada_alias_ptn: ptnAlias.length > 0 || dariTeks.id_ptn.length > 0,
   };
 }
 
@@ -103,22 +145,38 @@ export async function ambilSerumpun(daftar: BarisProdi[], repo: Repo): Promise<B
   return repo.prodiSerumpun([...new Set(perlu.map((b) => b.id_ptn))], [...new Set(perlu.map((b) => b.rumpun_id))]);
 }
 
+/** id rumpun yang namanya mengandung salah satu teks pencarian (min. 4 huruf). */
+export function rumpunCocok(teks: string[], rumpun: Map<string, string>): string[] {
+  const kunci = teks.map((t) => t.trim().toLowerCase()).filter((t) => t.length >= 4);
+  return [...rumpun].filter(([, nama]) => kunci.some((t) => nama.toLowerCase().includes(t))).map(([id]) => id);
+}
+
 export async function layananDaftarProdi(sp: URLSearchParams, repo: Repo): Promise<ResponsDaftarProdi> {
   const { filter, halaman, per_halaman } = validasiQueryProdi(sp);
   const kueri = await bangunKueri(filter, repo);
   if (kueri === null) return { data: [], total: 0, halaman, per_halaman };
-  const { baris, total } = await repo.daftarProdi(kueri, (halaman - 1) * per_halaman, per_halaman);
-  return { data: baris.map((b) => keRingkas(b)), total, halaman, per_halaman };
+  const offset = (halaman - 1) * per_halaman;
+  // Cocokkan nama prodi dulu; nama rumpun hanya cadangan bila tidak ada yang cocok (mis. "Kedokteran Hewan" -> "PENDIDIKAN DOKTER HEWAN").
+  let hasil = await repo.daftarProdi({ ...kueri, rumpun_teks: [] }, offset, per_halaman);
+  if (hasil.total === 0 && kueri.rumpun_teks.length) hasil = await repo.daftarProdi(kueri, offset, per_halaman);
+  return { data: hasil.baris.map((b) => keRingkas(b)), total: hasil.total, halaman, per_halaman };
 }
 
 /** null = alias PTN dikenali tetapi tidak ada PTN yang cocok (hasil pasti kosong). */
 async function bangunKueri(filter: FilterProdi, repo: Repo): Promise<KueriProdi | null> {
   const { q, ...sisa } = filter;
-  if (!q) return { ...sisa, teks_prodi: [], id_ptn_teks: [], id_ptn_alias: [] };
-  const [alias, ptn] = await Promise.all([repo.aliasPencarian(), repo.semuaPtn()]);
+  if (!q) return { ...sisa, teks_prodi: [], id_ptn_teks: [], id_ptn_alias: [], rumpun_teks: [] };
+  const [alias, ptn, semua] = await Promise.all([repo.aliasPencarian(), repo.semuaPtn(), repo.semuaProdi()]);
   const u = uraiKueri(q, alias, ptn);
   if (u.ada_alias_ptn && u.id_ptn_alias.length === 0) return null;
-  return { ...sisa, teks_prodi: u.teks_prodi, id_ptn_teks: u.id_ptn_teks, id_ptn_alias: u.id_ptn_alias };
+  const rumpun = new Map(semua.map((b) => [b.rumpun_id, b.rumpun]));
+  return {
+    ...sisa,
+    teks_prodi: u.teks_prodi,
+    id_ptn_teks: u.id_ptn_teks,
+    id_ptn_alias: u.id_ptn_alias,
+    rumpun_teks: rumpunCocok(u.teks_prodi, rumpun),
+  };
 }
 
 export async function layananDetailProdi(idTeks: string, repo: Repo): Promise<{ data: ProdiDetail }> {

@@ -3,7 +3,7 @@ import type { GalatApi } from '@/types';
 
 type KodeGalat = GalatApi['error']['kode'];
 
-const STATUS: Record<KodeGalat, number> = { VALIDASI: 400, TIDAK_LOGIN: 401, TIDAK_DITEMUKAN: 404, SERVER: 500 };
+const STATUS: Record<KodeGalat, number> = { VALIDASI: 400, TIDAK_LOGIN: 401, TIDAK_DITEMUKAN: 404, TERLALU_SERING: 429, SERVER: 500 };
 
 export class ApiGalat extends Error {
   constructor(

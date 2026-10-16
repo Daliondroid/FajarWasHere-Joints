@@ -79,9 +79,11 @@ export interface KueriProdi {
   kode_bps?: string;
   id_ptn?: number;
   portofolio?: boolean;
-  /** Cocok jika nama prodi mengandung salah satu teks ATAU id_ptn ada di id_ptn_teks. */
+  /** Cocok jika nama prodi mengandung salah satu teks ATAU id_ptn ada di id_ptn_teks ATAU rumpun_id ada di rumpun_teks. */
   teks_prodi: string[];
   id_ptn_teks: number[];
+  /** Rumpun yang namanya cocok dengan teks (mis. "Kedokteran Hewan" untuk prodi "PENDIDIKAN DOKTER HEWAN"). */
+  rumpun_teks: string[];
   /** Pembatas wajib dari alias PTN (mis. "UI"); kosong = tanpa pembatas. */
   id_ptn_alias: number[];
 }

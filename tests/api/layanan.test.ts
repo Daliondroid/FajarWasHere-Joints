@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { layananKecocokan, jumlahMapelCocok } from '@/lib/layanan/kecocokan';
 import { layananPeluang, nilaiMapelPendukung } from '@/lib/layanan/peluang';
-import { keRingkas, layananDaftarProdi, layananDetailProdi, uraiKueri } from '@/lib/layanan/prodi';
+import { keRingkas, layananDaftarProdi, layananDetailProdi, rumpunCocok, uraiKueri } from '@/lib/layanan/prodi';
 import { kuotaJurusan, layananSekolah } from '@/lib/layanan/sekolah';
 import { ITEM, jawaban, prodi, repoPalsu, SEKOLAH } from './repo_palsu';
 
@@ -50,6 +50,26 @@ describe('/api/prodi', () => {
   it('uraiKueri: teks bebas dicari di nama prodi atau nama PTN', () => {
     expect(uraiKueri('gadjah', ALIAS, PTN)).toMatchObject({ teks_prodi: ['gadjah'], id_ptn_teks: [3], id_ptn_alias: [] });
   });
+  it('nama PTN di teks bebas dikenali sebagai filter PTN (lengkap atau inti)', () => {
+    const ptn = [
+      { id_ptn: 111, nama: 'UNIVERSITAS SYIAH KUALA' },
+      { id_ptn: 2, nama: 'UNIVERSITAS INDONESIA' },
+      { id_ptn: 3, nama: 'UNIVERSITAS GADJAH MADA' },
+    ];
+    expect(uraiKueri('Kedokteran Hewan Universitas Syiah Kuala', [], ptn)).toMatchObject({ teks_prodi: ['kedokteran hewan'], id_ptn_alias: [111], ada_alias_ptn: true });
+    expect(uraiKueri('teknik sipil gadjah mada', [], ptn)).toMatchObject({ teks_prodi: ['teknik sipil'], id_ptn_alias: [3] });
+    expect(uraiKueri('Universitas Syiah Kuala', [], ptn)).toMatchObject({ teks_prodi: [], id_ptn_alias: [111] });
+    // Inti satu kata yang umum ("indonesia") tidak dianggap nama PTN.
+    expect(uraiKueri('Pendidikan Bahasa Indonesia', [], ptn)).toMatchObject({ teks_prodi: ['Pendidikan Bahasa Indonesia'], id_ptn_alias: [] });
+    expect(uraiKueri('Ilmu Hukum Universitas Indonesia', [], ptn)).toMatchObject({ teks_prodi: ['ilmu hukum'], id_ptn_alias: [2] });
+  });
+
+  it('teks pencarian juga cocok ke nama rumpun', () => {
+    const rumpun = new Map([['kedokteran_hewan', 'Kedokteran Hewan'], ['hukum', 'Ilmu Hukum']]);
+    expect(rumpunCocok(['kedokteran hewan'], rumpun)).toEqual(['kedokteran_hewan']);
+    expect(rumpunCocok(['abc'], rumpun)).toEqual([]);
+  });
+
   it('alias PTN tanpa PTN cocok -> hasil kosong', async () => {
     const r = await layananDaftarProdi(new URLSearchParams('q=ITX'), repoPalsu([prodi({ id_prodi: 1 })]));
     expect(r).toMatchObject({ data: [], total: 0 });
