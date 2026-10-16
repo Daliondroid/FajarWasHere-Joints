@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { TopBar } from '@/components/ui/TopBar';
 import BingkaiMobile from '@/components/ui/BingkaiMobile';
 import IkonFigma from '@/components/ui/IkonFigma';
-import { BarAksi, JudulWizard, Stepper } from '@/components/preferensi/BagianWizard';
+import { BarAksi, JudulWizard, LayoutWizard, PenandaPreferensi, Stepper } from '@/components/preferensi/BagianWizard';
 import { ITEM_MINAT } from '@/components/preferensi/itemMinat';
 import { useDraf } from '@/lib/klien/draf_preferensi';
 
@@ -75,27 +75,33 @@ export default function KuisRiasecPage() {
   return (
     <BingkaiMobile>
       <TopBar title={draf.isi.nama} onBack={() => router.push('/preferensi')} />
-      <main className="flex flex-col gap-4 px-6 pt-6 pb-8">
-        <Stepper langkah={1} />
-        <JudulWizard
-          label="LANGKAH 1 · KUIS MINAT"
-          judul="Seberapa suka kamu dengan kegiatan ini?"
-          keterangan="Bayangkan kamu melakukannya sebagai pekerjaan. Jangan pikirkan gaji atau apakah kamu sudah bisa."
-        />
-        <div className="flex flex-col gap-1.5">
-          <div className="flex items-start gap-2">
-            <span className="t-label-s text-ink">
-              KEGIATAN {awal}–{awal + item.length - 1} DARI {ITEM_MINAT.length}
-            </span>
-            <span className="flex-1" />
-            <span className="t-body-s text-muted">
-              Layar {layar + 1} dari {JUMLAH_LAYAR}
-            </span>
-          </div>
-          <div className="h-2 w-full bg-track">
-            <div className="h-2 bg-blue" style={{ width: `${((layar + 1) / JUMLAH_LAYAR) * 100}%` }} />
-          </div>
-        </div>
+      <LayoutWizard
+        kiri={
+          <>
+            <PenandaPreferensi jalur={draf.isi.jalur} nama={draf.isi.nama} />
+            <Stepper langkah={1} />
+            <JudulWizard
+              label="LANGKAH 1 · KUIS MINAT"
+              judul="Seberapa suka kamu dengan kegiatan ini?"
+              keterangan="Bayangkan kamu melakukannya sebagai pekerjaan. Jangan pikirkan gaji atau apakah kamu sudah bisa."
+            />
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-start gap-2">
+                <span className="t-label-s text-ink">
+                  KEGIATAN {awal}–{awal + item.length - 1} DARI {ITEM_MINAT.length}
+                </span>
+                <span className="flex-1" />
+                <span className="t-body-s text-muted">
+                  Layar {layar + 1} dari {JUMLAH_LAYAR}
+                </span>
+              </div>
+              <div className="h-2 w-full bg-track">
+                <div className="h-2 bg-blue" style={{ width: `${((layar + 1) / JUMLAH_LAYAR) * 100}%` }} />
+              </div>
+            </div>
+          </>
+        }
+      >
         {item.map((i, k) => (
           <KartuMinat
             key={i.id}
@@ -108,7 +114,7 @@ export default function KuisRiasecPage() {
           />
         ))}
         {!lengkap && <p className="t-body-s text-muted">Jawab kelima kegiatan untuk lanjut.</p>}
-      </main>
+      </LayoutWizard>
       <BarAksi
         onKembali={() => (layar === 0 ? router.push('/preferensi') : pindah(layar - 1))}
         onLanjut={() => (layar + 1 < JUMLAH_LAYAR ? pindah(layar + 1) : router.push('/preferensi/minat'))}

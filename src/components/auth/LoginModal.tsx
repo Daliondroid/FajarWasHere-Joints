@@ -13,7 +13,7 @@ interface LoginModalProps {
   kembali?: string | null;
 }
 
-/** Modal Login Google (Figma M03 `172:579`, PRD F-02). Tutup lewat scrim atau Escape. */
+/** Modal Login Google (Figma M03 `172:579`, desktop D02 `184:2142`, PRD F-02). Tutup lewat scrim atau Escape. */
 export default function LoginModal({ isOpen, onClose, kembali }: LoginModalProps) {
   useEffect(() => {
     if (!isOpen) return;
@@ -32,7 +32,7 @@ export default function LoginModal({ isOpen, onClose, kembali }: LoginModalProps
       className="fixed inset-0 z-[60] flex items-center justify-center bg-ink/55 px-6"
       onClick={onClose}
     >
-      <div className="w-full max-w-[354px]" onClick={(e) => e.stopPropagation()}>
+      <div className="w-full max-w-[354px] lg:max-w-[440px]" onClick={(e) => e.stopPropagation()}>
         <RetroWindow title="Masuk ke Cocokin!" variant="blue" contentClassName="flex flex-col items-center gap-3.5 px-5 pt-6 pb-5">
           <Logo ukuran={64} />
           <p className="t-display-s text-ink">Masuk dulu, yuk!</p>

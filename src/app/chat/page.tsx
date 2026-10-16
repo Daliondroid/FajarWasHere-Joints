@@ -8,7 +8,7 @@ import BingkaiMobile from '@/components/ui/BingkaiMobile';
 import Logo from '@/components/ui/Logo';
 import PemilihPreferensi from '@/components/ui/PemilihPreferensi';
 import Tag from '@/components/ui/Tag';
-import LaciChat from '@/components/chat/LaciChat';
+import LaciChat, { IsiMenuChat } from '@/components/chat/LaciChat';
 import { panggilApi, pesanGalat } from '@/lib/klien/api';
 import { useDaftarPreferensi } from '@/lib/klien/preferensi';
 
@@ -35,17 +35,20 @@ function Gelembung({ p }: { p: Pesan }) {
   if (p.peran === 'pengguna') {
     return (
       <div className="flex w-full justify-end">
-        <p className="max-w-[250px] border-2 border-ink bg-blue p-3 t-body-m whitespace-pre-wrap text-paper shadow-pixel-sm">{p.isi}</p>
+        <p className="max-w-[250px] border-2 border-ink bg-blue p-3 t-body-m whitespace-pre-wrap text-paper shadow-pixel-sm lg:w-[420px] lg:max-w-full lg:px-4 lg:py-3.5">
+          {p.isi}
+        </p>
       </div>
     );
   }
   const i = p.info;
   return (
-    <div className="flex w-full items-start gap-2">
-      <span className="flex size-8 shrink-0 items-center justify-center border-[1.5px] border-ink bg-paper">
-        <Logo ukuran={24} />
+    <div className="flex w-full items-start gap-2 lg:gap-3">
+      <span className="flex size-8 shrink-0 items-center justify-center border-[1.5px] border-ink bg-paper lg:size-9">
+        <Logo ukuran={24} className="lg:hidden" />
+        <Logo ukuran={26} className="hidden lg:inline-block" />
       </span>
-      <div className="flex max-w-[290px] flex-col items-start gap-2 border-2 border-ink bg-paper p-3 shadow-pixel-sm">
+      <div className="flex max-w-[290px] flex-col items-start gap-2 border-2 border-ink bg-paper p-3 shadow-pixel-sm lg:w-[560px] lg:max-w-full lg:gap-2.5 lg:px-4 lg:py-3.5">
         <p className="t-body-m whitespace-pre-wrap text-ink">
           <TeksBalasan teks={p.isi} />
         </p>
@@ -57,7 +60,7 @@ function Gelembung({ p }: { p: Pesan }) {
   );
 }
 
-/** M15 · Cocokin AI chat (Figma `177:1569`, Hal. 10). POST/GET /api/chat; konteks = preferensi aktif. */
+/** M15 · Cocokin AI chat (Figma `177:1569`, Hal. 10); desktop D08 (`189:2794`) sidebar + percakapan. POST/GET /api/chat. */
 export default function ChatPage() {
   const router = useRouter();
   const { daftar, aktifkan } = useDaftarPreferensi(true);
@@ -108,6 +111,10 @@ export default function ChatPage() {
 
   const pertama = pesan.find((p) => p.peran === 'pengguna');
 
+  const chatBaru = () => {
+    if (!pesan.length || window.confirm('Mulai chat baru? Riwayat percakapan ini akan dihapus.')) void hapusRiwayat();
+  };
+
   const hapusRiwayat = async () => {
     try {
       await panggilApi('/api/chat', { method: 'DELETE' });
@@ -129,7 +136,21 @@ export default function ChatPage() {
           </button>
         }
       />
-      <div className="flex items-center border-b-[1.5px] border-line bg-canvas px-6 py-2.5">
+      <div className="flex flex-1 flex-col lg:flex-row">
+      {/* Sidebar desktop (Figma D08 `189:2829`) */}
+      <aside className="hidden w-[340px] shrink-0 flex-col gap-4 overflow-y-auto border-r-2 border-ink bg-canvas p-6 lg:sticky lg:top-20 lg:flex lg:h-[calc(100vh-80px)]">
+        <IsiMenuChat
+          daftar={daftar}
+          onPilih={aktifkan}
+          judulPercakapan={pertama?.isi ?? null}
+          tanggal={pertama ? new Date(pertama.dibuat_pada).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) : null}
+          onHapusRiwayat={hapusRiwayat}
+          onChatBaru={chatBaru}
+          ringkas
+        />
+      </aside>
+      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="flex items-center border-b-[1.5px] border-line bg-canvas px-6 py-2.5 lg:hidden">
         {daftar && daftar.length > 0 ? (
           <PemilihPreferensi daftar={daftar} onPilih={aktifkan} className="flex-1" />
         ) : (
@@ -137,7 +158,7 @@ export default function ChatPage() {
         )}
       </div>
 
-      <main className="flex flex-1 flex-col gap-3.5 px-6 py-5" aria-live="polite">
+      <main className="flex flex-1 flex-col gap-3.5 px-6 py-5 lg:gap-[18px] lg:px-[140px] lg:pt-8 lg:pb-6" aria-live="polite">
         <p className="text-center t-label-s text-muted">HARI INI · {jam(pesan[0]?.dibuat_pada ?? new Date().toISOString())}</p>
         <Gelembung
           p={{
@@ -149,7 +170,7 @@ export default function ChatPage() {
           }}
         />
         {pesan.length === 0 && (
-          <div className="flex flex-col items-start gap-2 pl-10">
+          <div className="flex flex-col items-start gap-2 pl-10 lg:flex-row lg:flex-wrap lg:gap-2.5 lg:pl-12">
             {saran.map((s) => (
               <button
                 key={s}
@@ -166,13 +187,13 @@ export default function ChatPage() {
         {pesan.map((p, i) => (
           <Gelembung key={`${p.dibuat_pada}-${i}`} p={p} />
         ))}
-        {mengirim && <p className="pl-10 t-body-s text-muted">Cocokin AI sedang mengetik…</p>}
+        {mengirim && <p className="pl-10 t-body-s text-muted lg:pl-12">Cocokin AI sedang mengetik…</p>}
         {galat && <p className="t-body-s font-bold text-red">{galat}</p>}
         <div ref={bawah} />
       </main>
 
       <form
-        className="sticky bottom-0 flex items-center gap-2.5 border-t-2 border-ink bg-paper px-6 pt-3.5 pb-[22px]"
+        className="sticky bottom-0 flex items-center gap-2.5 border-t-2 border-ink bg-paper px-6 pt-3.5 pb-[22px] lg:gap-3 lg:px-[140px] lg:pt-4 lg:pb-6"
         onSubmit={(e) => {
           e.preventDefault();
           void kirim(teks);
@@ -183,7 +204,7 @@ export default function ChatPage() {
           disabled
           title="Lampiran belum tersedia"
           aria-label="Lampiran (belum tersedia)"
-          className="flex size-12 shrink-0 items-center justify-center border-2 border-ink bg-paper opacity-50"
+          className="flex size-12 shrink-0 items-center justify-center border-2 border-ink bg-paper opacity-50 lg:size-[52px]"
         >
           <img src="/figma/icon-plus.svg" alt="" width={20} height={20} />
         </button>
@@ -193,17 +214,19 @@ export default function ChatPage() {
           maxLength={1000}
           placeholder="Ketik pertanyaanmu…"
           aria-label="Pertanyaan"
-          className="h-12 min-w-0 flex-1 border-2 border-ink bg-paper pr-3 pl-3.5 t-body-m text-ink outline-none placeholder:text-muted"
+          className="h-12 min-w-0 flex-1 border-2 border-ink bg-paper pr-3 pl-3.5 t-body-m text-ink outline-none placeholder:text-muted lg:h-[52px] lg:max-w-[400px] lg:pr-3.5 lg:pl-4"
         />
         <button
           type="submit"
           aria-label="Kirim"
           disabled={!teks.trim() || mengirim}
-          className="flex size-12 shrink-0 items-center justify-center border-2 border-ink bg-blue shadow-pixel-sm disabled:opacity-50 cursor-pointer"
+          className="flex size-12 shrink-0 items-center justify-center border-2 border-ink bg-blue shadow-pixel-sm disabled:opacity-50 cursor-pointer lg:size-[52px]"
         >
           <img src="/figma/icon-send.svg" alt="" width={20} height={20} />
         </button>
       </form>
+      </div>
+      </div>
       {laci && (
         <LaciChat
           daftar={daftar}

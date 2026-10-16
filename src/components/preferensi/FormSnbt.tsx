@@ -1,11 +1,12 @@
 'use client';
 
+import type { ReactNode } from 'react';
 import type { SkalaTo, TryOut } from '@/types';
 import { RetroWindow } from '@/components/ui/RetroWindow';
 import { Isian, Pilihan } from '@/components/ui/Isian';
 import Tag from '@/components/ui/Tag';
 import Tombol from '@/components/ui/Tombol';
-import { BarisNilai, JudulWizard, Stepper, ZonaUnggah } from '@/components/preferensi/BagianWizard';
+import { BarisNilai, GridKolom, JudulWizard, LayoutWizard, Stepper, ZonaUnggah } from '@/components/preferensi/BagianWizard';
 
 const SUBTES: { kunci: keyof TryOut['skor']; label: string }[] = [
   { kunci: 'pu', label: 'Penalaran Umum (PU)' },
@@ -41,7 +42,17 @@ const tanggalPendek = (iso: string) => new Date(`${iso}T00:00:00`).toLocaleDateS
 const WARNA_BATANG = ['bg-track', 'bg-blue-200', 'bg-blue'];
 
 /** Langkah 2 SNBT (M12 `175:1197`): skor try out 7 subtes, riwayat TO, portofolio. Yang diubah = TO terbaru. */
-export function FormSnbt({ riwayat, ubah }: { riwayat: TryOut[]; ubah: (r: TryOut[]) => void }) {
+export function FormSnbt({
+  riwayat,
+  ubah,
+  penanda,
+  bawah,
+}: {
+  riwayat: TryOut[];
+  ubah: (r: TryOut[]) => void;
+  penanda: ReactNode;
+  bawah?: ReactNode;
+}) {
   const urut = [...riwayat].sort((a, b) => a.tanggal.localeCompare(b.tanggal));
   const terbaru = urut[urut.length - 1] ?? toKosong();
   const ubahTerbaru = (to: TryOut) => ubah([...urut.slice(0, -1), to]);
@@ -51,14 +62,25 @@ export function FormSnbt({ riwayat, ubah }: { riwayat: TryOut[]; ubah: (r: TryOu
   const selisih = grafik.length > 1 ? grafik[grafik.length - 1].r - grafik[0].r : null;
 
   return (
-    <>
-      <Stepper langkah={2} />
-      <JudulWizard
-        label="LANGKAH 2 · BAHAN SNBT"
-        judul="Nilai try out terakhirmu"
-        keterangan="Peluang SNBT dihitung dari skor TO dibanding estimasi skor UTBK tiap prodi."
-      />
-      <RetroWindow title="Sumber & skor try out" variant="blue" contentClassName="flex flex-col gap-3.5 px-4 pt-4 pb-[18px]">
+    <LayoutWizard
+      lebarKiri={340}
+      jarak={6}
+      kiri={
+        <>
+          {penanda}
+          <Stepper langkah={2} />
+          <JudulWizard
+            label="LANGKAH 2 · BAHAN SNBT"
+            judul="Nilai try out terakhirmu"
+            keterangan="Peluang SNBT dihitung dari skor TO dibanding estimasi skor UTBK tiap prodi."
+          />
+        </>
+      }
+    >
+      <GridKolom
+        a={
+          <>
+            <RetroWindow title="Sumber & skor try out" variant="blue" contentClassName="flex flex-col gap-3.5 px-4 pt-4 pb-[18px]">
         <Pilihan label="Sumber try out" value={terbaru.skala} onChange={(e) => ubahTerbaru({ ...terbaru, skala: e.target.value as SkalaTo })}>
           {SKALA.map((s) => (
             <option key={s.id} value={s.id}>
@@ -84,8 +106,11 @@ export function FormSnbt({ riwayat, ubah }: { riwayat: TryOut[]; ubah: (r: TryOu
           <span className="t-display-s text-yellow">{rata ?? '–'}</span>
         </div>
       </RetroWindow>
-
-      <RetroWindow title="Riwayat try out" variant="green" contentClassName="flex flex-col gap-3.5 px-4 pt-4 pb-[18px]">
+          </>
+        }
+        b={
+          <>
+            <RetroWindow title="Riwayat try out" variant="green" contentClassName="flex flex-col gap-3.5 px-4 pt-4 pb-[18px]">
         {grafik.length > 0 && (
           <div className="flex items-end gap-4 border-[1.5px] border-ink bg-canvas px-4 pt-3 pb-2" aria-label="Grafik rata-rata try out">
             {grafik.map(({ t, r }, i) => (
@@ -118,10 +143,13 @@ export function FormSnbt({ riwayat, ubah }: { riwayat: TryOut[]; ubah: (r: TryOu
           + Tambah riwayat TO
         </Tombol>
       </RetroWindow>
-
-      <RetroWindow title="Portofolio" variant="yellow" contentClassName="flex flex-col gap-3.5 px-4 pt-4 pb-[18px]">
+            <RetroWindow title="Portofolio" variant="yellow" contentClassName="flex flex-col gap-3.5 px-4 pt-4 pb-[18px]">
         <ZonaUnggah judul="Unggah portofolio (prodi seni & olahraga)" />
       </RetroWindow>
-    </>
+          </>
+        }
+      />
+      <div className="order-last flex flex-col gap-3 empty:hidden">{bawah}</div>
+    </LayoutWizard>
   );
 }
