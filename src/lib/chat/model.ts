@@ -43,12 +43,19 @@ export interface ModelChat {
   hasilkan(masukan: MasukanModel): Promise<KeluaranModel>;
 }
 
-/** Kuota model habis (HTTP 429). Layanan lalu mencoba model berikutnya. */
+/** Model tidak bisa dipakai sementara: kuota habis (429), galat sementara berulang (503), atau model tidak ada (404). Layanan lalu mencoba model berikutnya. */
 export class GalatKuota extends Error {
   constructor(
     public readonly model: string,
     public readonly jedaMs: number,
+    public readonly jenis: 'kuota' | 'sementara' | 'tidak_ada' = 'kuota',
   ) {
-    super(`Kuota ${model} habis; coba lagi dalam ${Math.round(jedaMs / 1000)} detik.`);
+    super(
+      jenis === 'kuota'
+        ? `Kuota ${model} habis; coba lagi dalam ${Math.round(jedaMs / 1000)} detik.`
+        : jenis === 'tidak_ada'
+          ? `Model ${model} tidak tersedia (404); dilewati.`
+          : `Model ${model} sedang sibuk/galat sementara; dijeda ${Math.round(jedaMs / 1000)} detik.`,
+    );
   }
 }

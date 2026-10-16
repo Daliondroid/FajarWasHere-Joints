@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { DEKLARASI_ALAT, jalankanAlat } from '@/lib/chat/alat';
 import { angkaDariTeks, periksaAngka } from '@/lib/chat/grounding';
-import { jedaKuota } from '@/lib/chat/gemini';
+import { jedaKuota, jenisGalat, panggilDenganUlang } from '@/lib/chat/gemini';
 import { GalatKuota, type KeluaranModel, type MasukanModel, type ModelChat } from '@/lib/chat/model';
 import { PembatasLaju } from '@/lib/chat/pembatas';
 import { sinkronPengguna } from '@/lib/layanan/akun';
@@ -229,5 +229,61 @@ describe('rotasi model gratis dan konteks siswa', () => {
     expect(jedaKuota(new Error('RESOURCE_EXHAUSTED ... Please retry in 12.5s.'))).toBe(12_500);
     expect(jedaKuota({ status: 429, message: 'x' })).toBe(60_000);
     expect(jedaKuota(new Error('500 internal'))).toBeNull();
+  });
+});
+
+describe('ketahanan galat Gemini (T-24)', () => {
+  it('menggolongkan galat: kuota, sementara, tidak ada, lainnya', () => {
+    expect(jenisGalat({ status: 429, message: 'x' })).toBe('kuota');
+    expect(jenisGalat({ status: 503, message: 'This model is currently experiencing high demand.' })).toBe('sementara');
+    expect(jenisGalat(new Error('{"error":{"code":503,"status":"UNAVAILABLE"}}'))).toBe('sementara');
+    expect(jenisGalat(new TypeError('fetch failed'))).toBe('sementara');
+    expect(jenisGalat({ status: 404, message: 'models/gemini-2.5-flash-lite is no longer available to new users' })).toBe('tidak_ada');
+    expect(jenisGalat(new Error('400 INVALID_ARGUMENT'))).toBeNull();
+  });
+
+  it('galat sementara diulang di model yang sama sampai berhasil', async () => {
+    let n = 0;
+    const peta = new Map<string, number>();
+    const hasil = await panggilDenganUlang(
+      'm',
+      async () => {
+        n++;
+        if (n < 3) throw { status: 503, message: 'high demand' };
+        return 'ok';
+      },
+      peta,
+      [0, 0],
+    );
+    expect([hasil, n, peta.has('m')]).toEqual(['ok', 3, false]);
+  });
+
+  it('sementara berulang / 404 -> model dijeda dan GalatKuota dilempar; galat lain diteruskan', async () => {
+    const peta = new Map<string, number>();
+    await expect(panggilDenganUlang('a', async () => Promise.reject({ status: 503, message: 'x' }), peta, [0])).rejects.toMatchObject({
+      jenis: 'sementara',
+    });
+    await expect(panggilDenganUlang('b', async () => Promise.reject({ status: 404, message: 'NOT_FOUND' }), peta, [0])).rejects.toBeInstanceOf(GalatKuota);
+    expect([peta.has('a'), peta.has('b')]).toEqual([true, true]);
+    await expect(panggilDenganUlang('c', async () => Promise.reject(new Error('400 bad')), peta, [0])).rejects.toThrow('400 bad');
+    expect(peta.has('c')).toBe(false);
+  });
+
+  it('model pertama tidak memberi teks -> pindah ke model berikutnya, bukan cadangan', async () => {
+    const kosong = modelSkrip([{ teks: null, panggilan: [] }]);
+    const cadang = modelSkrip([{ teks: 'Halo dari model B.', panggilan: [] }]);
+    const { id, deps } = await siap(null);
+    const r = await layananKirimPesan(id, { pesan: 'Halo' }, { ...deps, model: [kosong.model, cadang.model] });
+    expect(r).toMatchObject({ balasan: 'Halo dari model B.', cadangan: false });
+  });
+  it('melewati batas waktu pesan -> jawaban cadangan, tidak menggantung', async () => {
+    const lambat: ModelChat = { hasilkan: () => new Promise(() => undefined) };
+    const { id, deps } = await siap(null);
+    const r = await layananKirimPesan(id, { pesan: 'Halo' }, { ...deps, model: [lambat], batasMs: 30 });
+    expect(r.cadangan).toBe(true);
+  });
+
+  it('batas waktu panggilan (abort) digolongkan sementara', () => {
+    expect(jenisGalat(new DOMException('The operation was aborted due to timeout', 'TimeoutError'))).toBe('sementara');
   });
 });
