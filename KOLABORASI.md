@@ -113,7 +113,7 @@ Aturan untuk agen:
 | T-29 | Rekomendasi dua tahap: (1) 3 rumpun jurusan dari minat RIASEC + pilihan jenjang S1/vokasi, (2) kampus per jurusan dikelompokkan Ambisius / Realistis / Aman dari peluang nilai siswa, diurutkan sinyal kualitas (PTN-BH, akreditasi, keketatan), plus tingkat kepercayaan estimasi. Mengganti Dream Goal = rasio keketatan terkecil dan pemecah seri `id_prodi` | farrelzaki | `[ ]` | | `docs/PRD.md`, `docs/ARSITEKTUR.md`, `src/lib/`, `src/app/api/rekomendasi/`, UI rekomendasi | 2026-10-16 | Diputuskan farrelzaki (opsi b), dikerjakan nanti. Perubahan besar: BR-01, BR-10, F-08, kontrak `/api/rekomendasi`. Pola acuan: O*NET Job Zone, Naviance, Gaokao 冲稳保, Kawaijuku A-E |
 | T-30 | F-13 unggah foto/PDF rapor + ekstraksi AI (dikonfirmasi siswa, file tidak disimpan) dan rekomendasi baru dihitung setelah bahan akademik lengkap (rapor, peringkat, TKA wajib) | farrelzaki | `[x]` | `main` (PR #15) | `src/app/api/`, `src/lib/`, `src/components/preferensi/`, `src/app/preferensi/` | 2026-10-16 | Rencana disetujui farrelzaki 2026-10-16 (Gemini gratis, rapor dummy). PR #15 merge |
 | T-31 | Chatbot lanjutan: percepat jawaban (sekarang 15–45 dtk karena 3–4 panggilan Gemini per pesan; mis. gabungkan cari_prodi + peluang_saya) dan kamus singkatan prodi ("TPL SV IPB" tertebak TPMP) | farrelzaki | `[ ]` | | `src/lib/chat/`, `src/lib/layanan/` | 2026-10-16 | Sisa T-24 |
-| T-32 | Tulis ulang README.md jadi README resmi proyek (ikhtisar, fitur, stack, cara menjalankan, data & metodologi), tanpa isi internal tim | farrelzaki | `[~]` | `docs/farrelzaki-T-32` | `README.md` | 2026-10-17 | Ditambah atas perintah farrelzaki |
+| T-32 | Tulis ulang README.md jadi README resmi proyek (ikhtisar, fitur, stack, cara menjalankan, data & metodologi), tanpa isi internal tim | farrelzaki | `[x]` | `main` (PR #19) | `README.md` | 2026-10-17 | Ditambah atas perintah farrelzaki. PR #19 merge |
 
 Rincian langkah task (rencana, checklist) ditulis di `TASK.md` pribadi, bukan di sini.
 
@@ -123,7 +123,6 @@ Sebelum menyunting file bersama (bagian 1), tambahkan baris di sini, commit, dan
 
 | File | Dikunci oleh | Sejak | Alasan |
 | --- | --- | --- | --- |
-| `README.md` | farrelzaki | 2026-10-17 | T-32 README resmi |
 
 Agen **tidak boleh** menyunting file bersama yang sedang dikunci orang lain.
 
@@ -258,6 +257,7 @@ Format: `- YYYY-MM-DD · T-xx · apa yang dikerjakan · hasil/verifikasi · cata
 - 2026-10-16 · T-23/T-28 · desktop v3 semua halaman (beranda, preferensi + modal, wizard 2 kolom D05–D06c, rekomendasi + popup, chat sidebar, katalog filter klaster, simulasi 2 kolom, S&K daftar isi); berganti otomatis di lg 1024 px, mobile tetap · tsc, lint, vitest 178, build 28 halaman, uji Chrome 1440 + 375/768/1100 · PR #17 · daliondroid: tidak ada perubahan API; filter akreditasi/provinsi/urut kecocokan katalog belum ada di API
 - 2026-10-16 · T-23/T-28/T-30 · PR #17 (1425d18) dan PR #16 rapor dummy (3206de8) squash-merge ke main atas perintah farrelzaki; branch fitur/farrelzaki-T-23 dan docs/farrelzaki-T-30 dihapus; T-23 & T-28 selesai · CI Vercel preview lulus · daliondroid: tarik main; produksi otomatis memakai tampilan desktop, contoh rapor di docs/contoh/
 - 2026-10-16 · T-24 · chatbot: galat 503/500/timeout diulang + pindah model, 404 dilewati, batas 20 dtk/panggilan & 55 dtk/pesan, gemini-2.5-flash-lite diganti gemini-flash-lite-latest; tiket rekomendasi muat di HP 360 px · vitest 184, build, uji produksi: "peluang informatika itb" & "tpl sv ipb" dijawab AI (cadangan:false) · PR #18 merge (df4a882) · daliondroid: tidak ada env baru
+- 2026-10-17 · T-32 · README.md ditulis ulang jadi README resmi proyek (ikhtisar, fitur, arsitektur, cara menjalankan, API, data & metodologi, privasi, atribusi); isi internal tim dipindah ke KOLABORASI saja · tautan diperiksa, hanya dokumen · PR #19 merge (4e3de2b), kunci README dilepas · daliondroid: tarik main
 
 ## 9. Mengubah File Ini
 
