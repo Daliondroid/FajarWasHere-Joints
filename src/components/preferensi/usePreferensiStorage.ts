@@ -55,6 +55,13 @@ export interface PreferensiSavedItem {
   ringkasan: string;
   skor_riasec?: { R: number; I: number; A: number; S: number; E: number; C: number };
   kode_holland?: string;
+  nama_karakter?: string;
+  rekomendasi_teratas?: {
+    prodi: string;
+    kampus: string;
+    cocok: number;
+    peluang: string;
+  };
   created_at: string;
   data: PreferensiDraft;
 }
@@ -66,20 +73,20 @@ export const INITIAL_DRAFT: PreferensiDraft = {
   nama: '',
   jalur: 'snbp',
   jawaban_minat: {},
-  chip_hobi: [],
-  hobbiesStory: '',
-  mapel_favorit: [],
-  npsn: '20403161', // default SMAN 1 Yogyakarta untuk kenyamanan demo
-  nama_sekolah: 'SMAN 1 YOGYAKARTA',
+  chip_hobi: ['Ngoprek Kode & Gadget', 'Eksperimen Sains & Riset'],
+  hobbiesStory: 'Aku suka main teka-teki logika dan pernah bikin game kecil pakai Scratch lalu Python. Lebih suka kerja sendiri dulu baru presentasi.',
+  mapel_favorit: ['Matematika', 'Fisika', 'Informatika'],
+  npsn: '20403161',
+  nama_sekolah: 'SMAN 8 Yogyakarta',
   provinsi: 'D.I. Yogyakarta',
   kabupaten: 'Kota Yogyakarta',
-  rapor_rata: 89.4,
-  nilai_mapel_pendukung: {},
+  rapor_rata: 88.4,
+  nilai_mapel_pendukung: { 'Matematika Tingkat Lanjut': 91 },
   nilai_tka: {
-    matematika: 88,
-    bahasa_indonesia: 86,
-    bahasa_inggris: 90,
-    pilihan: { Fisika: 85, Informatika: 92 },
+    matematika: 88.0,
+    bahasa_indonesia: 82.5,
+    bahasa_inggris: 85.0,
+    pilihan: { 'Matematika Tingkat Lanjut': 86.0, Fisika: 84.5 },
   },
   reputasi_alumni: 'sangat_tinggi',
   kampus_alumni: ['UGM', 'UNY', 'UPN "VETERAN" YK'],
@@ -94,8 +101,8 @@ export const INITIAL_DRAFT: PreferensiDraft = {
   },
   riwayat_to: [
     { bulan: 'AGU', tanggal: '08 Agu 2026', rata_rata: 612 },
-    { bulan: 'SEP', tanggal: '18 Agu 2026', rata_rata: 646 },
-    { bulan: 'OKT', tanggal: '19 Sep 2026', rata_rata: 684 },
+    { bulan: 'AGU', tanggal: '18 Agu 2026', rata_rata: 646 },
+    { bulan: 'SEP', tanggal: '19 Sep 2026', rata_rata: 684 },
   ],
 };
 
@@ -105,9 +112,16 @@ const DEFAULT_SAVED_LIST: PreferensiSavedItem[] = [
     nama: 'Informatika Impian',
     jalur: 'snbp',
     is_aktif: true,
-    ringkasan: '30/30 RIASEC • Rapor 89,4 • 2 Mapel TKA',
-    kode_holland: 'IRC',
-    created_at: '2026-10-15',
+    ringkasan: '30/30 RIASEC • Rapor 88,4 • 2 Mapel TKA',
+    kode_holland: 'ICR',
+    nama_karakter: 'Pemikir Sistematis',
+    rekomendasi_teratas: {
+      prodi: 'Teknologi Informasi',
+      kampus: 'UGM',
+      cocok: 94,
+      peluang: '10–20% (estimasi)',
+    },
+    created_at: '15 Okt 2026',
     data: {
       ...INITIAL_DRAFT,
       nama: 'Informatika Impian',
@@ -120,12 +134,40 @@ const DEFAULT_SAVED_LIST: PreferensiSavedItem[] = [
     jalur: 'snbt',
     is_aktif: false,
     ringkasan: '30/30 RIASEC • Skor TO 684 • 3 Riwayat TO',
-    kode_holland: 'IRC',
-    created_at: '2026-10-14',
+    kode_holland: 'ICR',
+    nama_karakter: 'Pemikir Sistematis',
+    rekomendasi_teratas: {
+      prodi: 'Ilmu Komputer',
+      kampus: 'UGM',
+      cocok: 92,
+      peluang: '40–55% (estimasi)',
+    },
+    created_at: '14 Okt 2026',
     data: {
       ...INITIAL_DRAFT,
       nama: 'Cadangan SNBT',
       jalur: 'snbt',
+    },
+  },
+  {
+    id: 'pref-default-3',
+    nama: 'Plan B Statistika',
+    jalur: 'snbp',
+    is_aktif: false,
+    ringkasan: '30/30 RIASEC • Rapor 88,4 • 2 Mapel TKA',
+    kode_holland: 'ICE',
+    nama_karakter: 'Analis Teliti',
+    rekomendasi_teratas: {
+      prodi: 'Statistika',
+      kampus: 'UGM',
+      cocok: 81,
+      peluang: '25–40% (estimasi)',
+    },
+    created_at: '12 Okt 2026',
+    data: {
+      ...INITIAL_DRAFT,
+      nama: 'Plan B Statistika',
+      jalur: 'snbp',
     },
   },
 ];

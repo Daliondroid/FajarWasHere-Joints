@@ -94,7 +94,7 @@ export default function Navbar({
             {!backHref && (
               isAuthenticated ? (
                 <div
-                  className="w-7 h-7 bg-[#EEF5FF] border-2 border-black flex items-center justify-center shadow-[1px_1px_0px_#000000] text-[10px] font-bold font-['Press_Start_2P',monospace] text-[#277EFD]"
+                  className="w-8 h-8 bg-[#FEBD01] border-2 border-[#151D21] flex items-center justify-center shadow-[1px_1px_0px_#151D21] text-[10px] font-bold font-['Press_Start_2P',monospace] text-[#151D21]"
                   title={userName}
                 >
                   {userInitials || 'AR'}
@@ -103,7 +103,7 @@ export default function Navbar({
                 <button
                   type="button"
                   onClick={() => setIsLoginModalOpen(true)}
-                  className="px-2.5 py-1 bg-[#4285F4] text-white border border-black shadow-[2px_2px_0px_#000000] active:translate-x-[1px] active:translate-y-[1px] font-['Press_Start_2P',monospace] text-[8px] hover:bg-[#277EFD] transition-colors cursor-pointer"
+                  className="px-2.5 py-1 bg-[#22A94F] text-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] active:translate-x-[1px] active:translate-y-[1px] font-['Press_Start_2P',monospace] text-[8px] hover:bg-[#1E9646] transition-colors cursor-pointer"
                 >
                   MASUK
                 </button>

@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
-import { Icon } from '@/components/ui/Icon';
 import { usePreferensiStorage } from '@/components/preferensi/usePreferensiStorage';
 
 export default function PreferensiBaruPage() {
@@ -11,6 +10,7 @@ export default function PreferensiBaruPage() {
   const { draft, updateDraft } = usePreferensiStorage();
   const [nama, setNama] = useState(draft.nama || '');
   const [jalur, setJalur] = useState<'snbp' | 'snbt'>(draft.jalur || 'snbp');
+  const [tahunLulus, setTahunLulus] = useState('2027 · kelas 12 sekarang');
   const [errorMsg, setErrorMsg] = useState('');
 
   const handleNext = () => {
@@ -22,126 +22,127 @@ export default function PreferensiBaruPage() {
     router.push('/preferensi/riasec');
   };
 
+  const handleBatal = () => {
+    router.push('/preferensi');
+  };
+
   return (
     <div className="min-h-screen bg-[#FDFBF7] flex justify-center">
       <div className="w-full max-w-[402px] bg-white border-x-2 border-black flex flex-col min-h-screen">
-        <Navbar backHref="/preferensi" title="Preferensi Baru" />
+        <Navbar backHref="/preferensi" title="Preferensi baru" />
 
         <main className="p-4 flex-1 flex flex-col font-['Outfit',sans-serif]">
           {/* Header */}
-          <div className="mb-6">
-            <span className="inline-block px-2 py-0.5 bg-[#EEF5FF] border border-black text-[#277EFD] font-['Press_Start_2P',monospace] text-[8px] mb-2 shadow-[1px_1px_0px_#000000]">
-              LANGKAH 0 • IDENTITAS
-            </span>
-            <h1 className="font-['Press_Start_2P',monospace] text-sm text-black mb-1.5 leading-snug">
-              Beri nama & pilih jalur
+          <div className="mb-5">
+            <h1 className="font-['Press_Start_2P',monospace] text-sm text-[#151D21] mb-1.5 leading-snug">
+              Preferensi baru
             </h1>
-            <p className="text-xs text-gray-600 leading-relaxed">
-              Satu preferensi mengunci satu jalur seleksi (SNBP atau SNBT) agar peluang kampus terhitung akurat.
+            <p className="text-xs text-[#6B7680] leading-relaxed">
+              Beri nama skenario dan pilih jalur masuknya. Kuis minat berikutnya akan menyesuaikan.
             </p>
           </div>
 
-          {/* Input Nama Preferensi */}
-          <div className="mb-6">
-            <label className="block font-['Press_Start_2P',monospace] text-[9px] text-black mb-2 uppercase">
-              Nama Preferensi:
-            </label>
-            <input
-              type="text"
-              value={nama}
-              onChange={(e) => {
-                setNama(e.target.value);
-                if (errorMsg) setErrorMsg('');
-              }}
-              placeholder="Misal: Rencana Utama SNBP / Teknik UI"
-              maxLength={40}
-              className="w-full p-3 bg-white border-2 border-black shadow-[3px_3px_0px_#000000] text-sm font-bold text-black placeholder:text-gray-400 focus:outline-none focus:bg-[#EEF5FF]"
-            />
-            {errorMsg && (
-              <p className="text-xs text-red-600 font-bold mt-1.5">{errorMsg}</p>
-            )}
-          </div>
-
-          {/* Pilihan Kartu Jalur */}
-          <div className="mb-6 space-y-3.5">
-            <label className="block font-['Press_Start_2P',monospace] text-[9px] text-black uppercase">
-              PILIH JALUR SELEKSI:
-            </label>
-
-            {/* Kartu SNBP */}
-            <div
-              onClick={() => setJalur('snbp')}
-              className={`p-3.5 border-2 border-black shadow-[3px_3px_0px_#000000] cursor-pointer transition-all ${
-                jalur === 'snbp'
-                  ? 'bg-[#FFFDF0] ring-2 ring-black'
-                  : 'bg-white hover:bg-gray-50 opacity-80'
-              }`}
-            >
-              <div className="flex items-center justify-between mb-2">
-                <span className="px-2 py-0.5 bg-[#FBBC05] border border-black font-['Press_Start_2P',monospace] text-[8px] font-bold text-black">
-                  SNBP • JALUR PRESTASI
-                </span>
-                <div
-                  className={`w-4 h-4 rounded-full border-2 border-black flex items-center justify-center ${
-                    jalur === 'snbp' ? 'bg-[#FBBC05]' : 'bg-white'
-                  }`}
-                >
-                  {jalur === 'snbp' && (
-                    <div className="w-1.5 h-1.5 bg-black rounded-full" />
-                  )}
-                </div>
-              </div>
-
-              <h3 className="font-['Outfit',sans-serif] font-bold text-sm text-black mb-1">
-                Seleksi Nasional Berdasarkan Prestasi
-              </h3>
-              <p className="text-xs text-gray-600 leading-relaxed">
-                Seleksi berbasis nilai rapor semester 1–5, kuota eligible akreditasi sekolahmu, dan nilai validasi TKA Kemendikdasmen.
-              </p>
+          {/* Form Content */}
+          <div className="space-y-5">
+            {/* Field 1: Nama Preferensi */}
+            <div>
+              <label className="block text-xs font-bold text-[#151D21] mb-2">
+                Nama preferensi
+              </label>
+              <input
+                type="text"
+                value={nama}
+                onChange={(e) => {
+                  setNama(e.target.value);
+                  if (errorMsg) setErrorMsg('');
+                }}
+                placeholder="Informatika Impian"
+                maxLength={40}
+                className="w-full p-3 bg-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] text-sm font-medium text-[#151D21] placeholder:text-gray-400 focus:outline-none focus:bg-[#EEF5FF]"
+              />
+              {errorMsg && (
+                <p className="text-xs text-[#F1402E] font-bold mt-1.5">{errorMsg}</p>
+              )}
             </div>
 
-            {/* Kartu SNBT */}
-            <div
-              onClick={() => setJalur('snbt')}
-              className={`p-3.5 border-2 border-black shadow-[3px_3px_0px_#000000] cursor-pointer transition-all ${
-                jalur === 'snbt'
-                  ? 'bg-[#EEF5FF] ring-2 ring-black'
-                  : 'bg-white hover:bg-gray-50 opacity-80'
-              }`}
-            >
-              <div className="flex items-center justify-between mb-2">
-                <span className="px-2 py-0.5 bg-[#4285F4] border border-black font-['Press_Start_2P',monospace] text-[8px] font-bold text-white">
-                  SNBT • JALUR TES UTBK
-                </span>
+            {/* Field 2: Pilih Jalur */}
+            <div>
+              <label className="block font-bold text-sm text-[#151D21] mb-2.5">
+                Pilih jalur
+              </label>
+              <div className="flex flex-col gap-3">
+                {/* Opsi SNBP */}
                 <div
-                  className={`w-4 h-4 rounded-full border-2 border-black flex items-center justify-center ${
-                    jalur === 'snbt' ? 'bg-[#4285F4]' : 'bg-white'
+                  onClick={() => setJalur('snbp')}
+                  className={`p-3.5 border-2 border-[#151D21] shadow-[3px_3px_0px_#151D21] cursor-pointer transition-all flex items-center gap-3.5 ${
+                    jalur === 'snbp'
+                      ? 'bg-[#FFFDF0] ring-2 ring-[#FEBD01]'
+                      : 'bg-white hover:bg-gray-50'
                   }`}
                 >
-                  {jalur === 'snbt' && (
-                    <div className="w-1.5 h-1.5 bg-white rounded-full" />
-                  )}
+                  <div className="px-3 py-1.5 bg-[#FEBD01] border-2 border-[#151D21] font-['Press_Start_2P',monospace] text-xs font-bold text-[#151D21] shrink-0">
+                    SNBP
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-xs text-[#151D21] font-medium leading-relaxed">
+                      Rapor smt 1–5, TKA & prestasi
+                    </span>
+                  </div>
+                </div>
+
+                {/* Opsi SNBT */}
+                <div
+                  onClick={() => setJalur('snbt')}
+                  className={`p-3.5 border-2 border-[#151D21] shadow-[3px_3px_0px_#151D21] cursor-pointer transition-all flex items-center gap-3.5 ${
+                    jalur === 'snbt'
+                      ? 'bg-[#EEF5FF] ring-2 ring-[#277EFD]'
+                      : 'bg-white hover:bg-gray-50'
+                  }`}
+                >
+                  <div className="px-3 py-1.5 bg-[#277EFD] border-2 border-[#151D21] font-['Press_Start_2P',monospace] text-xs font-bold text-white shrink-0">
+                    SNBT
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-xs text-[#151D21] font-medium leading-relaxed">
+                      Nilai try out 7 subtes UTBK
+                    </span>
+                  </div>
                 </div>
               </div>
+            </div>
 
-              <h3 className="font-['Outfit',sans-serif] font-bold text-sm text-black mb-1">
-                Seleksi Nasional Berdasarkan Tes
-              </h3>
-              <p className="text-xs text-gray-600 leading-relaxed">
-                Seleksi murni berbasis skor Tes Potensi Skolastik & Literasi UTBK (7 subtes). Terbuka tanpa batas kuota eligible sekolah.
-              </p>
+            {/* Field 3: Tahun lulus SMA/SMK/MA */}
+            <div>
+              <label className="block text-xs font-bold text-[#151D21] mb-2">
+                Tahun lulus SMA/SMK/MA
+              </label>
+              <select
+                value={tahunLulus}
+                onChange={(e) => setTahunLulus(e.target.value)}
+                className="w-full p-3 bg-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] text-xs font-medium text-[#151D21] focus:outline-none cursor-pointer"
+              >
+                <option value="2027 · kelas 12 sekarang">2027 · kelas 12 sekarang</option>
+                <option value="2026 · alumni 1 tahun">2026 · alumni 1 tahun</option>
+                <option value="2025 · alumni 2 tahun">2025 · alumni 2 tahun</option>
+              </select>
             </div>
           </div>
 
-          {/* Action Button */}
-          <div className="mt-auto pt-4">
+          {/* Sticky Bottom Bar Persis Figma M07 */}
+          <div className="mt-auto pt-6 pb-2 border-t border-gray-200 grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={handleBatal}
+              className="py-3 bg-white hover:bg-gray-50 text-[#151D21] border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] active:translate-x-[1px] active:translate-y-[1px] font-['Press_Start_2P',monospace] text-[10px] sm:text-[11px] text-center transition-all cursor-pointer"
+            >
+              BATAL
+            </button>
             <button
               type="button"
               onClick={handleNext}
-              className="w-full py-3.5 bg-[#4285F4] hover:bg-[#277EFD] text-white border-2 border-black shadow-[4px_4px_0px_#000000] active:translate-x-[2px] active:translate-y-[2px] font-['Press_Start_2P',monospace] text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+              className="py-3 bg-[#22A94F] hover:bg-[#1E9646] text-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] active:translate-x-[1px] active:translate-y-[1px] font-['Press_Start_2P',monospace] text-[10px] sm:text-[11px] text-center transition-all cursor-pointer"
             >
-              <span>LANJUT KE KUIS MINAT</span>
-              <Icon name="arrow-right" className="w-4 h-4 text-white" />
+              BUAT & MULAI
             </button>
           </div>
         </main>
