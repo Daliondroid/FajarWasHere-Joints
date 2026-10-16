@@ -111,7 +111,7 @@ Aturan untuk agen:
 | T-27 | Pitch deck: tambah mockup layar dan slide fitur berurutan (beranda, preferensi, kuis, rekomendasi, simulasi, chat) | farrelzaki | `[~]` | | di luar repo | 2026-10-16 | Menunggu file/link deck dari farrelzaki. Prioritas di atas T-24 sampai T-26 (tenggat dekat) |
 | T-28 | Deteksi otomatis mode mobile dan mode PC: tampilan menyesuaikan lebar layar tanpa pilihan manual, termasuk rentang tablet (768–1023 px) dan layar PC sempit/lebar | farrelzaki | `[ ]` | | `src/app/`, `src/components/` | 2026-10-16 | Dasarnya sudah ada di T-23 (breakpoint `lg` 1024 px lewat Tailwind). Sisanya: selesaikan D05–D11, uji di tablet, dan pastikan situs yang di-deploy memakai versi responsif setelah T-23 merge |
 | T-29 | Rekomendasi dua tahap: (1) 3 rumpun jurusan dari minat RIASEC + pilihan jenjang S1/vokasi, (2) kampus per jurusan dikelompokkan Ambisius / Realistis / Aman dari peluang nilai siswa, diurutkan sinyal kualitas (PTN-BH, akreditasi, keketatan), plus tingkat kepercayaan estimasi. Mengganti Dream Goal = rasio keketatan terkecil dan pemecah seri `id_prodi` | farrelzaki | `[ ]` | | `docs/PRD.md`, `docs/ARSITEKTUR.md`, `src/lib/`, `src/app/api/rekomendasi/`, UI rekomendasi | 2026-10-16 | Diputuskan farrelzaki (opsi b), dikerjakan nanti. Perubahan besar: BR-01, BR-10, F-08, kontrak `/api/rekomendasi`. Pola acuan: O*NET Job Zone, Naviance, Gaokao 冲稳保, Kawaijuku A-E |
-| T-30 | F-13 unggah foto/PDF rapor + ekstraksi AI (dikonfirmasi siswa, file tidak disimpan) dan rekomendasi baru dihitung setelah bahan akademik lengkap (rapor, peringkat, TKA wajib) | farrelzaki | `[~]` | `fitur/farrelzaki-T-30` | `src/app/api/`, `src/lib/`, `src/components/preferensi/`, `src/app/preferensi/` | 2026-10-16 | Rencana disetujui farrelzaki 2026-10-16 (Gemini gratis, rapor dummy). PR #15 terbuka, menunggu izin merge |
+| T-30 | F-13 unggah foto/PDF rapor + ekstraksi AI (dikonfirmasi siswa, file tidak disimpan) dan rekomendasi baru dihitung setelah bahan akademik lengkap (rapor, peringkat, TKA wajib) | farrelzaki | `[x]` | `main` (PR #15) | `src/app/api/`, `src/lib/`, `src/components/preferensi/`, `src/app/preferensi/` | 2026-10-16 | Rencana disetujui farrelzaki 2026-10-16 (Gemini gratis, rapor dummy). PR #15 merge |
 
 Rincian langkah task (rencana, checklist) ditulis di `TASK.md` pribadi, bukan di sini.
 
@@ -121,7 +121,6 @@ Sebelum menyunting file bersama (bagian 1), tambahkan baris di sini, commit, dan
 
 | File | Dikunci oleh | Sejak | Alasan |
 | --- | --- | --- | --- |
-| `src/types/api.ts`, `docs/ARSITEKTUR.md` (kontrak) | farrelzaki | 2026-10-16 | T-30: tambah `POST /api/rapor/ekstrak` dan field opsional `bahan_kurang` di `/api/rekomendasi` |
 
 Agen **tidak boleh** menyunting file bersama yang sedang dikunci orang lain.
 
@@ -252,6 +251,7 @@ Format: `- YYYY-MM-DD · T-xx · apa yang dikerjakan · hasil/verifikasi · cata
 - 2026-10-16 · T-21 · Safety Net dibatasi kecocokan ≤ 5 poin di bawah Dream Goal (lalu 10, lalu tanpa batas + catatan) di /api/rekomendasi; QA Q-5 selesai; kunci ARSITEKTUR dilepas · npm test 162 lulus, tsc & lint bersih, PR #12 merge · daliondroid: tidak ada perubahan kontrak respons
 - 2026-10-16 · T-17 · README.md & docs/ARSITEKTUR.md: "Test Drive 60 detik" diganti "Simulasi" (K-11, K-06); T-22 dialihkan ke farrelzaki · PR #13 merge, kunci README & ARSITEKTUR dilepas · daliondroid: sisa "Test Drive" di UI (katalog, /cocokin, metadata layout) ditangani lewat T-22 setelah T-20 merge
 - 2026-10-16 · T-30 · rekomendasi menunggu bahan wajib (SNBP: sekolah, rapor, peringkat; SNBT: skor TO) + `bahan_kurang` di /api/rekomendasi; unggah & ekstraksi rapor F-13 lewat POST /api/rapor/ekstrak (Gemini, berkas tidak disimpan, rata-rata dihitung ulang server, wajib dikonfirmasi); kunci tipe & ARSITEKTUR dipegang sampai merge · tsc, lint, vitest 178, build, uji Chrome rapor dummy PDF/PNG 65/65 nilai benar · PR #15 · daliondroid: deploy berikutnya butuh env yang sama (GEMINI_API_KEY); tidak ada env baru
+- 2026-10-16 · T-30 · PR #15 squash-merge ke main (febf2e4) atas perintah farrelzaki, branch fitur/farrelzaki-T-30 dihapus, kunci `src/types/api.ts` & ARSITEKTUR dilepas; T-30 selesai · CI Vercel preview lulus · daliondroid: tarik main; produksi otomatis ter-deploy dengan fitur unggah rapor
 
 ## 9. Mengubah File Ini
 
