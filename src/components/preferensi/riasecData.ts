@@ -207,6 +207,12 @@ export const RIASEC_SCALE_OPTIONS = [
   { value: 4, label: 'Sangat Suka', emoji: '🤩', color: '#4285F4' },
 ];
 
+export const RIASEC_3_OPTIONS = [
+  { value: 1, label: 'Sangat tidak suka', icon: 'close' },
+  { value: 3, label: 'Ragu', icon: 'info' },
+  { value: 5, label: 'Sangat suka', icon: 'check' },
+];
+
 export const MAPEL_PILIHAN_TKA_OPTIONS = [
   'Fisika',
   'Kimia',

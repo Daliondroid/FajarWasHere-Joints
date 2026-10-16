@@ -34,7 +34,7 @@ export default function ScrollProgress({ className = '' }: ScrollProgressProps) 
 
   return (
     <div
-      className={`w-full h-[3px] bg-[#E5E7EB] relative overflow-hidden ${className}`}
+      className={`w-full h-1 bg-[#D3D6DA] relative overflow-hidden ${className}`}
       role="progressbar"
       aria-valuenow={Math.round(progress)}
       aria-valuemin={0}
@@ -46,10 +46,10 @@ export default function ScrollProgress({ className = '' }: ScrollProgressProps) 
         style={{ width: `${progress}%` }}
       >
         <div className="w-screen max-w-[402px] h-full grid grid-cols-4">
-          <div className="bg-[#4285F4]"></div>
-          <div className="bg-[#EA4335]"></div>
-          <div className="bg-[#FBBC05]"></div>
-          <div className="bg-[#34A853]"></div>
+          <div className="bg-[#277EFD]"></div>
+          <div className="bg-[#F1402E]"></div>
+          <div className="bg-[#FEBD01]"></div>
+          <div className="bg-[#22A94F]"></div>
         </div>
       </div>
     </div>
