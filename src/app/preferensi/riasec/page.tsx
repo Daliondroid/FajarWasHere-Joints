@@ -2,9 +2,12 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Navbar from '@/components/Navbar';
+import { TopBar } from '@/components/ui/TopBar';
+import { Icon, IconName } from '@/components/ui/Icon';
 import { usePreferensiStorage } from '@/components/preferensi/usePreferensiStorage';
-import { RIASEC_QUESTIONS, RIASEC_3_OPTIONS } from '@/components/preferensi/riasecData';
+import { RIASEC_QUESTIONS } from '@/components/preferensi/riasecData';
+
+const FACE_ICONS: IconName[] = ['face-1', 'face-2', 'face-3', 'face-4', 'face-5'];
 
 export default function RiasecQuizPage() {
   const router = useRouter();
@@ -43,30 +46,36 @@ export default function RiasecQuizPage() {
     }
   };
 
+  const progressPercent = ((pageIndex + 1) / totalPages) * 100;
+
   return (
     <div className="min-h-screen bg-[#FDFBF7] flex justify-center">
-      <div className="w-full max-w-[402px] bg-white border-x-2 border-black flex flex-col min-h-screen">
-        <Navbar backHref="/preferensi/baru" title={draft.nama || 'Informatika Impian'} />
+      <div className="w-full max-w-[402px] bg-white border-x-2 border-[#151D21] flex flex-col min-h-screen">
+        {/* TopBar persis M08 */}
+        <TopBar
+          title={draft.nama || 'Informatika Impian'}
+          onBack={handlePrev}
+        />
 
-        <main className="p-4 flex-1 flex flex-col font-['Outfit',sans-serif]">
-          {/* Stepper Header (M08) */}
-          <div className="flex items-center justify-between mb-5 px-1">
+        <main className="p-6 pb-8 flex-1 flex flex-col font-['Outfit',sans-serif]">
+          {/* Stepper Header Persis Figma M08 */}
+          <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-[#FEBD01] border-2 border-[#151D21] flex items-center justify-center font-['Press_Start_2P',monospace] text-[10px] font-bold text-[#151D21] shadow-[1px_1px_0px_#151D21]">
+              <div className="w-6 h-6 bg-[#277EFD] border-2 border-[#151D21] flex items-center justify-center font-['Press_Start_2P',monospace] text-[10px] font-bold text-white shadow-[1px_1px_0px_#151D21]">
                 1
               </div>
-              <span className="font-['Press_Start_2P',monospace] text-[9px] text-[#151D21] font-bold">
+              <span className="font-['Press_Start_2P',monospace] text-[10px] text-[#151D21] font-bold tracking-tight">
                 MINAT
               </span>
             </div>
 
             <div className="flex-1 mx-3 h-0.5 bg-[#151D21]" />
 
-            <div className="flex items-center gap-2 opacity-50">
-              <div className="w-6 h-6 bg-gray-100 border-2 border-[#151D21] flex items-center justify-center font-['Press_Start_2P',monospace] text-[10px] font-bold text-gray-500">
+            <div className="flex items-center gap-2 opacity-60">
+              <div className="w-6 h-6 bg-white border-2 border-[#151D21] flex items-center justify-center font-['Press_Start_2P',monospace] text-[10px] font-bold text-[#6B7680]">
                 2
               </div>
-              <span className="font-['Press_Start_2P',monospace] text-[9px] text-gray-500">
+              <span className="font-['Press_Start_2P',monospace] text-[10px] text-[#6B7680] tracking-tight">
                 BAHAN
               </span>
             </div>
@@ -74,25 +83,34 @@ export default function RiasecQuizPage() {
 
           {/* Heading */}
           <div className="mb-4">
-            <span className="font-['Press_Start_2P',monospace] text-[8px] sm:text-[9px] text-[#277EFD] tracking-wider uppercase block mb-1.5">
+            <span className="font-['Pixelify_Sans',sans-serif] text-[12px] font-medium text-[#277EFD] tracking-wider uppercase block mb-1">
               LANGKAH 1 · KUIS MINAT
             </span>
             <h1 className="font-['Press_Start_2P',monospace] text-xs sm:text-sm text-[#151D21] mb-2 leading-relaxed">
               Seberapa suka kamu dengan kegiatan ini?
             </h1>
-            <p className="text-xs text-[#6B7680] leading-relaxed">
+            <p className="font-['Plus_Jakarta_Sans',sans-serif] text-xs sm:text-sm text-[#6B7680] leading-relaxed">
               Bayangkan kamu melakukannya sebagai pekerjaan. Jangan pikirkan gaji atau apakah kamu sudah bisa.
             </p>
           </div>
 
-          {/* Subheader Pagination Banner */}
-          <div className="flex items-center justify-between py-2 mb-3 border-y border-gray-200">
-            <span className="font-['Press_Start_2P',monospace] text-[8px] text-[#277EFD] tracking-wider uppercase">
-              KEGIATAN {startIdx + 1}–{Math.min(startIdx + ITEMS_PER_PAGE, RIASEC_QUESTIONS.length)} DARI 30
-            </span>
-            <span className="text-xs text-[#6B7680] font-medium">
-              Layar {pageIndex + 1} dari {totalPages}
-            </span>
+          {/* Subheader Pagination Banner + Progress Bar */}
+          <div className="mb-4 flex flex-col gap-2">
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-['Press_Start_2P',monospace] text-[9px] text-[#277EFD] tracking-wider uppercase">
+                KEGIATAN {startIdx + 1}–{Math.min(startIdx + ITEMS_PER_PAGE, RIASEC_QUESTIONS.length)} DARI 30
+              </span>
+              <span className="font-['Plus_Jakarta_Sans',sans-serif] text-xs text-[#6B7680] font-medium">
+                Layar {pageIndex + 1} dari {totalPages}
+              </span>
+            </div>
+            {/* Progress track */}
+            <div className="w-full h-1 bg-[#D3D6DA] rounded-full overflow-hidden">
+              <div
+                className="h-full bg-[#277EFD] transition-all duration-200"
+                style={{ width: `${progressPercent}%` }}
+              />
+            </div>
           </div>
 
           {/* List 5 Pertanyaan Per Layar Persis Figma M08 */}
@@ -100,45 +118,60 @@ export default function RiasecQuizPage() {
             {currentQuestions.map((q, idx) => {
               const qNumber = startIdx + idx + 1;
               const formattedNum = qNumber < 10 ? `0${qNumber}` : `${qNumber}`;
-              const currentVal = answers[q.id] || 3;
+              const currentVal = answers[q.id] || 0;
+              const isAnswered = currentVal > 0;
 
               return (
                 <div
                   key={q.id}
-                  className="p-3.5 bg-white border-2 border-[#151D21] shadow-[3px_3px_0px_#151D21] flex flex-col gap-2.5"
+                  className={`p-4 bg-white border-2 shadow-[4px_4px_0px_#151D21] flex flex-col gap-3.5 transition-all ${
+                    isAnswered ? 'border-[#277EFD]' : 'border-[#151D21]'
+                  }`}
                 >
-                  <div className="flex items-start gap-2.5">
-                    <span className="font-['Press_Start_2P',monospace] text-[10px] text-[#277EFD] pt-0.5 shrink-0">
+                  {/* Top: Nomor + Teks Kegiatan */}
+                  <div className="flex items-start gap-3">
+                    <span className="px-2 py-0.5 bg-[#277EFD] text-white font-['Press_Start_2P',monospace] text-[10px] shrink-0 font-bold">
                       {formattedNum}
                     </span>
-                    <p className="text-xs sm:text-sm text-[#151D21] font-medium leading-relaxed">
+                    <p className="font-['Plus_Jakarta_Sans',sans-serif] text-xs sm:text-sm text-[#151D21] font-semibold leading-relaxed">
                       {q.text}
                     </p>
                   </div>
 
-                  {/* 3 Opsi Respon (Sangat tidak suka, Ragu, Sangat suka) */}
-                  <div className="grid grid-cols-3 gap-1.5 pt-1.5">
-                    {RIASEC_3_OPTIONS.map((opt) => {
-                      const isSelected = currentVal === opt.value;
+                  {/* Skala 5 Pilihan (Icon face 1 - 5) */}
+                  <div className="grid grid-cols-5 gap-2 pt-1">
+                    {[1, 2, 3, 4, 5].map((val, faceIdx) => {
+                      const isSelected = currentVal === val;
+                      const iconName = FACE_ICONS[faceIdx];
+
                       return (
                         <button
-                          key={opt.value}
+                          key={val}
                           type="button"
-                          onClick={() => handleSelect(q.id, opt.value)}
-                          className={`py-2 px-1 text-center text-[10px] sm:text-[11px] font-medium border-2 border-[#151D21] transition-all cursor-pointer ${
+                          onClick={() => handleSelect(q.id, val)}
+                          className={`h-10 border-2 border-[#151D21] flex items-center justify-center transition-all cursor-pointer ${
                             isSelected
-                              ? opt.value === 5
-                                ? 'bg-[#22A94F] text-white shadow-[2px_2px_0px_#151D21] font-bold'
-                                : opt.value === 1
-                                ? 'bg-[#F1402E] text-white shadow-[2px_2px_0px_#151D21] font-bold'
-                                : 'bg-[#FEBD01] text-[#151D21] shadow-[2px_2px_0px_#151D21] font-bold'
+                              ? 'bg-[#277EFD] text-white shadow-[2px_2px_0px_#151D21]'
                               : 'bg-white text-[#151D21] hover:bg-gray-50'
                           }`}
+                          aria-label={`Skala ${val}`}
                         >
-                          {opt.label}
+                          <Icon
+                            name={iconName}
+                            className={`w-6 h-6 ${
+                              isSelected ? 'text-white' : 'text-[#151D21]'
+                            }`}
+                          />
                         </button>
                       );
                     })}
+                  </div>
+
+                  {/* Keterangan Skala Bawah */}
+                  <div className="flex items-center justify-between font-['Plus_Jakarta_Sans',sans-serif] text-[10px] sm:text-[11px] text-[#6B7680] pt-0.5">
+                    <span>Sangat tidak suka</span>
+                    <span>Ragu</span>
+                    <span>Sangat suka</span>
                   </div>
                 </div>
               );
@@ -157,9 +190,10 @@ export default function RiasecQuizPage() {
             <button
               type="button"
               onClick={handleNext}
-              className="py-3 bg-[#22A94F] hover:bg-[#1E9646] text-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] active:translate-x-[1px] active:translate-y-[1px] font-['Press_Start_2P',monospace] text-[10px] text-center transition-all cursor-pointer"
+              className="py-3 bg-[#277EFD] hover:bg-[#1E6FD9] text-white border-2 border-[#151D21] shadow-[2px_2px_0px_#151D21] active:translate-x-[1px] active:translate-y-[1px] font-['Press_Start_2P',monospace] text-[10px] text-center transition-all cursor-pointer flex items-center justify-center gap-1.5"
             >
-              LANJUT
+              <span>LANJUT</span>
+              <Icon name="arrow-right" className="w-3.5 h-3.5 text-white" />
             </button>
           </div>
         </main>

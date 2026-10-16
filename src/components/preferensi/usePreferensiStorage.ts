@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 export interface PreferensiDraft {
   nama: string;
   jalur: 'snbp' | 'snbt';
+  tahun_lulus?: string;
   
   // RIASEC answers: "IP01" .. "IP30" -> 0..4
   jawaban_minat: Record<string, number>;
@@ -72,6 +73,7 @@ const SAVED_KEY = 'cocokin_v3_saved_preferensi';
 export const INITIAL_DRAFT: PreferensiDraft = {
   nama: '',
   jalur: 'snbp',
+  tahun_lulus: '2027 · kelas 12 sekarang',
   jawaban_minat: {},
   chip_hobi: ['Ngoprek Kode & Gadget', 'Eksperimen Sains & Riset'],
   hobbiesStory: 'Aku suka main teka-teki logika dan pernah bikin game kecil pakai Scratch lalu Python. Lebih suka kerja sendiri dulu baru presentasi.',
