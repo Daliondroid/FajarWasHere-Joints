@@ -20,6 +20,7 @@ import { hitungSnbp, hitungSnbt } from './peluang';
 import { hitungFallback, keRingkas } from './prodi';
 import type { BarisProdi, BarisSekolah, Repo } from './repo';
 import type { RepoAkun } from './repo_akun';
+import { kekuranganBahan } from './kelengkapan';
 import { skorToTerbaru } from './preferensi';
 
 type Peluang = HasilPeluangSnbp | HasilPeluangSnbt;
@@ -164,6 +165,21 @@ export async function layananRekomendasi(idSesi: string | null, deps: { repo: Re
   const mentah = await repoAkun.ambilPreferensi(idSesi, idAktif);
   if (!mentah) return { data: null };
   const pref: PreferensiDetail = { ...mentah, skor_to_terbaru: skorToTerbaru(mentah.riwayat_to) };
+
+  // T-30: jangan menyimpulkan sebelum bahan akademik wajib terisi.
+  const bahanKurang = kekuranganBahan(pref);
+  if (bahanKurang.length) {
+    return {
+      data: {
+        preferensi: { id: pref.id, nama: pref.nama, jalur: pref.jalur },
+        kode_holland: pref.kode_holland,
+        kartu: [],
+        validasi_provinsi_snbp: null,
+        catatan: [`Lengkapi dulu: ${bahanKurang.join(', ')}. Rekomendasi dihitung setelah bahan ini terisi.`],
+        bahan_kurang: bahanKurang,
+      },
+    };
+  }
 
   const [semuaProdi, sekolah] = await Promise.all([
     repo.semuaProdi(),

@@ -10,6 +10,7 @@ import { AKADEMIK_KOSONG, FormSnbpAlumni, FormSnbpSekolah } from '@/components/p
 import { FormSnbt } from '@/components/preferensi/FormSnbt';
 import { panggilApi, pesanGalat } from '@/lib/klien/api';
 import { kirimDraf, useDraf } from '@/lib/klien/draf_preferensi';
+import { kekuranganBahan } from '@/lib/layanan/kelengkapan';
 
 /** Langkah 2 · Bahan jalur: SNBP = M10 (+M10b) lalu M11; SNBT = M12. Tombol terakhir menyimpan preferensi. */
 export default function BahanJalurPage() {
@@ -35,6 +36,8 @@ export default function BahanJalurPage() {
   const ubahAkademik = (baru: typeof a) => ubahIsi((isi) => ({ ...isi, akademik: baru }));
   const pilihanTka = a.nilai_tka.pilihan?.length ?? 0;
   const terakhir = !snbp || layar === 2;
+  // T-30: rapor, peringkat, dan sekolah (SNBP) atau nilai TO (SNBT) wajib sebelum lanjut / dicocokkan.
+  const kurang = kekuranganBahan({ jalur: draf.isi.jalur, akademik: snbp ? a : null, riwayat_to: draf.isi.riwayat_to });
 
   const simpan = async () => {
     setSibuk(true);
@@ -76,13 +79,23 @@ export default function BahanJalurPage() {
           <FormSnbt riwayat={draf.isi.riwayat_to} ubah={(r) => ubahIsi((isi) => ({ ...isi, riwayat_to: r }))} />
         )}
         {snbp && layar === 1 && pilihanTka === 1 && <p className="t-body-s font-bold text-red">Pilih tepat 2 mapel pilihan TKA.</p>}
+        {kurang.length > 0 && (
+          <div className="flex flex-col gap-1 border-[1.5px] border-yellow bg-yellow-50 p-3" role="status">
+            <p className="t-body-s font-bold text-ink">Lengkapi dulu sebelum dicocokkan:</p>
+            <ul className="list-disc pl-5 t-body-s text-ink-2">
+              {kurang.map((k) => (
+                <li key={k}>{k}</li>
+              ))}
+            </ul>
+          </div>
+        )}
         {galat && <p className="t-body-s font-bold text-red">{galat}</p>}
       </main>
       <BarAksi
         onKembali={kembali}
         onLanjut={lanjut}
         label={terakhir ? 'Cocokkan!' : 'Lanjut'}
-        nonaktif={snbp && layar === 1 && (!sekolah || pilihanTka === 1)}
+        nonaktif={kurang.length > 0 || (snbp && layar === 1 && (!sekolah || pilihanTka === 1))}
         sibuk={sibuk}
       />
     </BingkaiMobile>

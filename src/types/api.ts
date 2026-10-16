@@ -477,7 +477,43 @@ export interface ResponsRekomendasi {
     validasi_provinsi_snbp: HasilValidasiProvinsi | null;
     /** Pemberitahuan data kurang, mis. bahan akademik belum diisi sehingga peluang tidak dihitung. */
     catatan: string[];
+    /**
+     * Bahan wajib yang belum diisi (T-30). Bila tidak kosong, `kartu` kosong: rekomendasi baru dihitung
+     * setelah siswa melengkapi rapor/peringkat/sekolah (SNBP) atau nilai try out (SNBT).
+     */
+    bahan_kurang?: string[];
   } | null;
+}
+
+// ---------- Ekstraksi rapor (T-30, F-13, BR-12, BR-14). Wajib login ----------
+// POST /api/rapor/ekstrak  multipart/form-data, field "berkas": PDF/JPG/PNG/WEBP maks 4 MB -> ResponsEkstrakRapor
+// Berkas tidak disimpan. Hasil adalah bacaan AI yang wajib dikonfirmasi siswa sebelum dipakai di preferensi.
+// 400 VALIDASI (format/ukuran), 401, 429 TERLALU_SERING (maks 10 unggahan / 10 menit).
+
+export interface NilaiMapelRapor {
+  mapel: string;
+  /** Nilai semester 1–5 (indeks 0–4), 0–100; null bila tidak terbaca. */
+  nilai: (number | null)[];
+  /** Rerata nilai yang terbaca. */
+  rata: number | null;
+}
+
+export interface HasilEkstraksiRapor {
+  mapel: NilaiMapelRapor[];
+  /** Rerata semua nilai mapel yang terbaca (dihitung server, bukan dari AI). */
+  rata_rata: number;
+  semester_terbaca: number[];
+  /** Hanya bila tertulis jelas di rapor. */
+  peringkat_paralel: number | null;
+  jumlah_siswa: number | null;
+  peringatan: string[];
+}
+
+export interface ResponsEkstrakRapor {
+  /** null bila rapor tidak terbaca atau AI tidak tersedia; siswa tetap bisa isi manual. */
+  data: HasilEkstraksiRapor | null;
+  /** Penjelasan bila data null. */
+  pesan: string | null;
 }
 
 // ---------- Chatbot (T-09, Hal. 9–11: F-09, BR-12, BR-16). Wajib login ----------

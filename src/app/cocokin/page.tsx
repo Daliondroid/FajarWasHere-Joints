@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import type { KartuRekomendasi, ResponsRekomendasi } from '@/types';
+import type { KartuRekomendasi, ResponsPreferensi, ResponsRekomendasi } from '@/types';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import BingkaiMobile from '@/components/ui/BingkaiMobile';
@@ -14,6 +14,7 @@ import TiketJurusan from '@/components/rekomendasi/TiketJurusan';
 import PopupDetail from '@/components/rekomendasi/PopupDetail';
 import { panggilApi, pesanGalat } from '@/lib/klien/api';
 import { useDaftarPreferensi } from '@/lib/klien/preferensi';
+import { drafDariPreferensi, simpanDraf } from '@/lib/klien/draf_preferensi';
 
 /** Bintang ilustrasi ajakan chat (Figma `205:3368`). */
 const BINTANG = [
@@ -60,6 +61,19 @@ export default function RekomendasiPage() {
 
   const keSimulasi = (k: KartuRekomendasi) => router.push(`/test-drive/${k.prodi.id_prodi}`);
 
+  /** Buka wizard langsung di langkah bahan jalur untuk preferensi aktif (T-30). */
+  const lengkapi = async () => {
+    if (!data) return;
+    try {
+      const { data: d } = await panggilApi<ResponsPreferensi>(`/api/preferensi/${data.preferensi.id}`);
+      if (d) simpanDraf(drafDariPreferensi(d));
+      router.push('/preferensi/akademik');
+    } catch (e) {
+      setGalat(pesanGalat(e));
+    }
+  };
+  const kurang = data?.bahan_kurang ?? [];
+
   return (
     <BingkaiMobile>
       <Navbar />
@@ -86,7 +100,24 @@ export default function RekomendasiPage() {
           </div>
         )}
 
-        {data && (
+        {data && kurang.length > 0 && (
+          <div className="flex flex-col gap-3 border-2 border-ink bg-yellow-50 p-5 shadow-pixel-sm">
+            <p className="t-display-s text-ink">Lengkapi bahanmu dulu</p>
+            <p className="t-body-m text-ink-2">
+              Cocokin! belum bisa menghitung rekomendasi untuk &quot;{data.preferensi.nama}&quot; karena data ini masih kosong:
+            </p>
+            <ul className="list-disc pl-5 t-body-m text-ink">
+              {kurang.map((k) => (
+                <li key={k}>{k}</li>
+              ))}
+            </ul>
+            <Tombol ikon penuh onClick={lengkapi}>
+              Lengkapi sekarang
+            </Tombol>
+          </div>
+        )}
+
+        {data && kurang.length === 0 && (
           <>
             {data.catatan.length > 0 && (
               <div className="flex flex-col gap-1.5 border-[1.5px] border-yellow bg-yellow-50 p-3">
