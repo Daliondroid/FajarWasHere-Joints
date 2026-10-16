@@ -35,7 +35,7 @@ Versi diverifikasi ke registry resmi saat scaffolding, bukan dari ingatan.
    └──> [Gemini 2.5 Flash]
           • AI 1 Ekstraktor: teks hobi bebas / foto rapor → data terstruktur (dikonfirmasi siswa)
           • AI 2 Chatbot: function calling ke /api/prodi, /api/peluang (tidak mengarang angka)
-          • AI 3 Skenario Test Drive (opsional): grounding ke kompetensi prodi, divalidasi skema JSON
+          • AI 3 Skenario Simulasi (opsional): grounding ke kompetensi prodi, divalidasi skema JSON
 ```
 
 Diagram lengkap: PRD sumber bagian 7.
