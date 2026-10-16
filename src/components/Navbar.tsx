@@ -85,8 +85,8 @@ export default function Navbar({
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-white border-b-2 border-[#151D21]">
-        <div className="w-full max-w-[402px] mx-auto px-4 py-2.5 flex items-center justify-between">
+      <header className={`sticky top-0 z-50 bg-white ${isOpen ? '' : 'border-b-2 border-[#151D21]'}`}>
+        <div className="w-full max-w-[402px] mx-auto px-4 h-[60px] flex items-center justify-between">
           {backHref ? (
             /* Mode Halaman Detail / Sub-page (persis Figma M20 node 215:3198) */
             <>
@@ -167,17 +167,17 @@ export default function Navbar({
         </div>
 
         {/* 4-Color Segmented Scroll Progress Bar (F-01, Figma 167:105) */}
-        <ScrollProgress />
+        <ScrollProgress className="pb-1" />
       </header>
 
       {/* Menu Overlay Drawer (Figma M02 / node 172:344 & 172:467) */}
       {isOpen && (
         <div
-          className="fixed inset-0 top-[49px] z-40 bg-[#151D21]/60 backdrop-blur-[1px] flex justify-center animate-fade-in"
+          className="fixed inset-0 top-[64px] z-40 bg-[#151D21]/60 backdrop-blur-[1px] flex justify-center animate-fade-in"
           onClick={closeMenu}
         >
           <div
-            className="w-full max-w-[402px] bg-white border-b-2 border-[#151D21] shadow-[0_8px_0_0_#151D21] flex flex-col max-h-[calc(100vh-49px)] overflow-y-auto px-6 pt-4 pb-6"
+            className="w-full max-w-[402px] bg-white border-b-2 border-[#151D21] shadow-[0_8px_0_0_#151D21] flex flex-col max-h-[calc(100vh-64px)] overflow-y-auto px-6 pt-4 pb-6"
             onClick={(e) => e.stopPropagation()}
           >
             {/* User Session Info if authenticated */}
