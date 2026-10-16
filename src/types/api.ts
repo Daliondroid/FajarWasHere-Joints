@@ -18,9 +18,9 @@ export type { HasilJalur, HasilPeluangSnbp, HasilPeluangSnbt, HasilValidasiProvi
 /** Label sumber angka (BR-13). */
 export type LabelData = 'resmi' | 'estimasi' | 'sintetis';
 
-/** Semua galat: HTTP 400 / 401 / 404 / 500 dengan badan ini. */
+/** Semua galat: HTTP 400 / 401 / 404 / 429 / 500 dengan badan ini. */
 export interface GalatApi {
-  error: { kode: 'VALIDASI' | 'TIDAK_LOGIN' | 'TIDAK_DITEMUKAN' | 'SERVER'; pesan: string };
+  error: { kode: 'VALIDASI' | 'TIDAK_LOGIN' | 'TIDAK_DITEMUKAN' | 'TERLALU_SERING' | 'SERVER'; pesan: string };
 }
 
 // ---------- GET /api/school ----------
@@ -478,4 +478,39 @@ export interface ResponsRekomendasi {
     /** Pemberitahuan data kurang, mis. bahan akademik belum diisi sehingga peluang tidak dihitung. */
     catatan: string[];
   } | null;
+}
+
+// ---------- Chatbot (T-09, Hal. 9–11: F-09, BR-12, BR-16). Wajib login ----------
+// POST   /api/chat  (PermintaanChat) -> ResponsChat; maks 20 pesan per 5 menit (429 TERLALU_SERING)
+// GET    /api/chat  -> ResponsRiwayatChat (50 pesan terakhir, urut lama -> baru)
+// DELETE /api/chat  -> ResponsHapusRiwayatChat
+
+export interface PermintaanChat {
+  /** 1–1000 karakter. */
+  pesan: string;
+}
+
+export interface ResponsChat {
+  balasan: string;
+  /** Nama alat (API internal) yang dipanggil untuk menyusun jawaban. */
+  alat_dipakai: string[];
+  /** false bila balasan memuat angka yang tidak ditemukan di hasil alat (BR-12); UI sebaiknya memberi peringatan. */
+  angka_terverifikasi: boolean;
+  /** true bila jawaban dari cadangan non-AI (kunci Gemini kosong atau Gemini gagal). */
+  cadangan: boolean;
+  dibuat_pada: string;
+}
+
+export interface PesanChat {
+  peran: 'pengguna' | 'asisten';
+  isi: string;
+  dibuat_pada: string;
+}
+
+export interface ResponsRiwayatChat {
+  data: PesanChat[];
+}
+
+export interface ResponsHapusRiwayatChat {
+  terhapus: true;
 }
