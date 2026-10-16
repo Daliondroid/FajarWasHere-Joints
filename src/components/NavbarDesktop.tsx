@@ -71,7 +71,7 @@ export default function NavbarDesktop({ className = '' }: { className?: string }
               {akunTerbuka && (
                 <div
                   role="menu"
-                  className="absolute top-full right-0 mt-2 flex w-[200px] flex-col gap-1 border-2 border-ink bg-paper p-2 shadow-pixel-sm"
+                  className="absolute top-full right-0 z-10 mt-2 flex w-[200px] flex-col gap-1 border-2 border-ink bg-paper p-2 shadow-pixel-sm"
                 >
                   <Link role="menuitem" href="/preferensi" onClick={() => setAkunTerbuka(false)} className="px-3 py-2 t-label-m text-ink hover:bg-blue-50">
                     Kelola preferensi
