@@ -1,12 +1,12 @@
 'use client';
 
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { TopBar } from '@/components/ui/TopBar';
 import Footer from '@/components/Footer';
 import BingkaiMobile from '@/components/ui/BingkaiMobile';
 
-/** Isi Halaman Syarat & Ketentuan (Figma M20 `215:3198`, PRD F-20). */
+/** Isi Halaman Syarat & Ketentuan (Figma M20 `215:3198`, desktop D11 `215:3387`, PRD F-20). */
 const BAGIAN = [
   {
     judul: 'Angka peluang & estimasi',
@@ -67,16 +67,57 @@ const BAGIAN = [
   },
 ];
 
+const idBagian = (judul: string) =>
+  judul
+    .toLowerCase()
+    .replace(/&/g, 'dan')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+
 const Pemisah = () => <img src="/figma/pemisah.svg" alt="" width={354} height={1.5} className="h-[1.5px] w-full" />;
 
 export default function SyaratKetentuanPage() {
   const router = useRouter();
+  const [aktif, setAktif] = useState(idBagian(BAGIAN[0].judul));
+
+  // Daftar isi desktop (D11 `215:3422`): sorot bagian yang sedang terbaca.
+  useEffect(() => {
+    const pantau = () => {
+      const lewat = BAGIAN.map((b) => idBagian(b.judul)).filter((id) => {
+        const el = document.getElementById(id);
+        return el && el.getBoundingClientRect().top < 160;
+      });
+      setAktif(lewat[lewat.length - 1] ?? idBagian(BAGIAN[0].judul));
+    };
+    window.addEventListener('scroll', pantau, { passive: true });
+    pantau();
+    return () => window.removeEventListener('scroll', pantau);
+  }, []);
+
   return (
     <BingkaiMobile>
       <TopBar title="Syarat & Ketentuan" onBack={() => (window.history.length > 1 ? router.back() : router.push('/'))} />
-      <main className="flex flex-col gap-5 px-6 pt-6 pb-10">
+      <div className="lg:flex lg:items-start lg:gap-20 lg:px-konten lg:pt-14 lg:pb-20">
+      <nav className="hidden w-[260px] shrink-0 flex-col gap-1 lg:sticky lg:top-24 lg:flex" aria-label="Di halaman ini">
+        <p className="mb-2 t-label-s text-muted">Di halaman ini</p>
+        {BAGIAN.map((b) => {
+          const id = idBagian(b.judul);
+          const pilih = aktif === id;
+          return (
+            <a
+              key={id}
+              href={`#${id}`}
+              aria-current={pilih ? 'true' : undefined}
+              className={`px-3 py-2 font-body text-[14px] leading-5 ${pilih ? 'border-l-[3px] border-blue bg-blue-50 font-semibold text-blue-700' : 'text-ink-2 hover:text-ink'}`}
+            >
+              {b.judul}
+            </a>
+          );
+        })}
+      </nav>
+      <main className="flex flex-col gap-5 px-6 pt-6 pb-10 lg:w-[760px] lg:min-w-0 lg:gap-7 lg:p-0">
         <div className="flex flex-col gap-2.5">
-          <h1 className="font-[family-name:var(--font-display)] text-[16px] leading-6 text-ink">Syarat &amp; Ketentuan</h1>
+          <h1 className="font-[family-name:var(--font-display)] text-[16px] leading-6 text-ink lg:text-[24px] lg:leading-[34px]">Syarat &amp; Ketentuan</h1>
           <p className="t-body-m text-ink-2">
             Rincian kecil di balik angka, aturan, dan datamu, dikumpulkan di satu tempat supaya halaman lain tetap ringkas.
           </p>
@@ -85,7 +126,7 @@ export default function SyaratKetentuanPage() {
         {BAGIAN.map((b) => (
           <Fragment key={b.judul}>
             <Pemisah />
-            <section className="flex flex-col gap-3">
+            <section id={idBagian(b.judul)} className="flex scroll-mt-24 flex-col gap-3">
               <h2 className="flex items-center gap-2.5">
                 <img src={b.ikon} alt="" width={18} height={18} />
                 <span className="font-[family-name:var(--font-label)] text-[17px] font-semibold text-ink">{b.judul}</span>
@@ -102,6 +143,7 @@ export default function SyaratKetentuanPage() {
           </Fragment>
         ))}
       </main>
+      </div>
       <Footer />
     </BingkaiMobile>
   );
