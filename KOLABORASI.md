@@ -100,7 +100,7 @@ Aturan untuk agen:
 | T-10 | QA 10 skenario siswa + tinjau soal 3–5 prodi demo | farrelzaki | `[ ]` | | `src/lib/`, `Data/` | | R-02 |
 | T-17 | Revisi PRD 2.2: scroll progress navbar, modal login & CTA sudah login, banyak preferensi + preferensi aktif, desktop, mapel pilihan TKA, hapus riwayat alumni | farrelzaki | `[x]` | `main` | `docs/PRD.md` | 2026-10-15 | Langsung ke main tanpa PR atas izin farrelzaki. Desain: Figma page "HIFI v3 — PRD 2.2" |
 | T-18 | DB + API banyak preferensi per akun (nama, jalur tunggal, status aktif) + pemilih preferensi aktif | farrelzaki | `[x]` | `main` (PR #8) | `supabase/migrations/`, `src/app/api/preferensi/`, `src/lib/`, `docs/ARSITEKTUR.md` | 2026-10-16 | F-18, F-19, BR-16, BR-17. Perubahan besar: skema `preferensi` kini satu baris per akun Scope + TKA 2 mapel pilihan (BR-18), hapus alumni tidak daftar ulang (K-04), data TO per preferensi SNBT, hapus refleksi & durasi simulasi (K-06, K-08, R-06), atas perintah farrelzaki |
-| T-19 | API rekomendasi 3 kartu (Dream Goal, Safety Net serumpun, Alternatif) + data popup DETAIL dari preferensi aktif | farrelzaki | `[~]` | `fitur/farrelzaki-T-19` | `src/app/api/rekomendasi/`, `src/lib/` | 2026-10-16 | F-08, K-07, K-10, BR-01. Ditambah atas perintah farrelzaki |
+| T-19 | API rekomendasi 3 kartu (Dream Goal, Safety Net serumpun, Alternatif) + data popup DETAIL dari preferensi aktif | farrelzaki | `[x]` | `main` (PR #9) | `src/app/api/rekomendasi/`, `src/lib/` | 2026-10-16 | F-08, K-07, K-10, BR-01. Ditambah atas perintah farrelzaki |
 | T-20 | UI 8-bit Mobile v3 (Tahap A–C): fondasi, beranda v3, modal login, wizard preferensi multi-preferensi & RIASEC | daliondroid | `[~]` | `fitur/daliondroid-T-20` | `src/app/`, `src/components/`, `src/styles/`, `public/` | 2026-10-16 | Sesuai Figma HIFI v3 M01–M12, M10b, M20 |
 
 Rincian langkah task (rencana, checklist) ditulis di `TASK.md` pribadi, bukan di sini.
@@ -111,7 +111,6 @@ Sebelum menyunting file bersama (bagian 1), tambahkan baris di sini, commit, dan
 
 | File | Dikunci oleh | Sejak | Alasan |
 | --- | --- | --- | --- |
-| `src/types/`, `docs/ARSITEKTUR.md` | farrelzaki | 2026-10-16 | T-19: kontrak /api/rekomendasi |
 
 Agen **tidak boleh** menyunting file bersama yang sedang dikunci orang lain.
 
@@ -225,6 +224,7 @@ Format: `- YYYY-MM-DD · T-xx · apa yang dikerjakan · hasil/verifikasi · cata
 - 2026-10-15 · T-06/07/08/15 · gabungkan branch fitur/daliondroid-T-07 ke main lewat PR #6 (squash, branch dibiarkan) · uji gabung: npm test 100/100, tsc, lint, build lulus · UI belum memanggil API; Test Drive akan memakai /test-drive/[id_prodi]
 - 2026-10-15 · T-14 · /api/test-drive (maks 3 soal tanpa kunci, berlapis spesifik/umum → rumpun → cadangan; reality check), /jawab, /refleksi (wajib login); refleksi jadi tie-breaker /api/kecocokan; kunci dilepas · npm test 117/117, build, e2e Supabase + login Google lulus · daliondroid: Hal. 13 pakai /test-drive/[id_prodi]; kunci & pembahasan diambil dari /jawab
 - 2026-10-16 · T-18 · banyak preferensi per akun (nama unik, jalur tetap, tepat satu aktif) via migrasi 20261015020000 + fungsi SQL atomik; /api/preferensi (+/aktif, /[id], /[id]/aktif); TO per preferensi SNBT; TKA 2 mapel pilihan; reputasi alumni; simulasi tanpa timer & refleksi; kunci dilepas · npm test 127/127, build, e2e login Google lulus · daliondroid: wizard simpan via POST /api/preferensi (edit: PUT /[id]); Hal. 8/chat/katalog pakai GET /api/preferensi/aktif; pemilih: POST /api/preferensi/[id]/aktif
+- 2026-10-16 · T-19 · GET /api/rekomendasi: 3 kartu (dream_goal, safety_net serumpun patuh BR-01, alternatif rumpun lain) + `detail` popup (kode Holland, keketatan, peluang sesuai jalur, 3 alasan, PDDikti) dari preferensi aktif; kunci dilepas · npm test 137/137, build, e2e data nyata lulus · daliondroid (T-20): Hal. 8 cukup GET /api/rekomendasi, popup pakai kartu[i].detail; catatan "minat 40%, gaya belajar 25%, peluang 35%" di /cocokin tidak sesuai BR-10 (kecocokan = 0,8 RIASEC + 0,2 hobi; peluang terpisah)
 - 2026-10-15 · T-17 · docs/PRD.md 2.2: F-01 progres scroll, F-02 modal login + CTA sudah login, F-18/F-19/BR-16/BR-17 banyak preferensi (1 aktif, 1 jalur), BR-18 2 mapel pilihan TKA dipilih siswa, riwayat alumni tidak daftar ulang dihapus (K-04) · diff ditinjau; langsung ke main atas izin farrelzaki · daliondroid: UI perlu ikut Figma "HIFI v3 — PRD 2.2" (R-05); T-18 untuk DB/API
 - 2026-10-15 · T-17 · docs/PRD.md: Test Drive tanpa timer (F-11, K-06), rekomendasi ringkas + popup DETAIL (F-08, K-07) · diff ditinjau; langsung ke main atas izin farrelzaki · daliondroid: ikuti Figma HIFI v3 M13/M14/M18/M19
 - 2026-10-15 · T-17 · docs/PRD.md: hasil Test Drive = versi koreksi layar soal, tanpa rating/refleksi (F-11, K-08) · diff ditinjau · R-06: endpoint/field refleksi dari T-14 perlu dihapus
