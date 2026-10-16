@@ -3,7 +3,7 @@
 *"Cari yang Cocok, Uji Rasanya, Tembus Kampus Impianmu!"*
 
 Platform web untuk siswa SMA/SMK/MA kelas 12: cek kecocokan jurusan (minat RIASEC/O*NET), estimasi peluang
-masuk PTN lewat SNBP/SNBT berbasis data resmi snpmb.id dan PDDikti, serta *Test Drive* 60 detik untuk
+masuk PTN lewat SNBP/SNBT berbasis data resmi snpmb.id dan PDDikti, serta *Simulasi* (studi kasus singkat, tanpa batas waktu) untuk
 merasakan cara berpikir mahasiswa di 5.150 prodi dari 146 PTN. Dibuat untuk Hackathon JOINTS UGM 2026.
 
 **Status:** tahap dokumen dan dataset. Belum ada kode aplikasi.
