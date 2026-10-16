@@ -40,3 +40,14 @@ Skrip ini untuk database **kosong**; memuat ulang ke tabel yang sudah berisi aka
 - `Data/rumpun_klaster.csv` — pemetaan 78 rumpun ke klaster. Hasilnya sama persis dengan jumlah per klaster di PRD.
 - 237 prodi kependidikan tanpa `rumpun_id` di `ak_prodi_master.csv` dipetakan lewat nama rumpun ke `edu:*`
   di `rumpun_riasec.csv`, sehingga semua prodi punya rumpun dan soal rumpun.
+
+## `tinjau_soal_demo.sql` — hasil tinjauan soal prodi demo (T-10)
+
+Perbaikan soal Simulasi untuk prodi demo (STEI-K ITB, Teknik Informatika ITS, Teknologi Informasi UGM) dan status
+`ditinjau_tim`. `Data/` tidak diubah, jadi **jalankan ulang setiap selesai `muat.sql`**:
+
+```bash
+psql "$SUPABASE_DB_URL" -f scripts/tinjau_soal_demo.sql
+```
+
+Rincian tinjauan: `docs/QA_SOAL_DEMO.md`.
